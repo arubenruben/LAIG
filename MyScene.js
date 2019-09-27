@@ -24,7 +24,7 @@ class MyScene extends CGFscene {
 
         //Initialize scene objects  
         this.axis = new CGFaxis(this);    
-        this.sphere = new MySphere(this, 10, 60, 60);
+        this.sphere = new MySphere(this, 10, 40, 40);
         this.point_1 = [1, 2, 5];
         this.point_2 = [1, 2, -2];
         this.point_3 = [2, 1 ,0];
@@ -96,7 +96,7 @@ class MyScene extends CGFscene {
 
         // ---- BEGIN Primitive drawing section
         //this.quadMaterial.apply();
-        this.sphere.enableNormalViz();
+        //this.sphere.enableNormalViz();
         this.triangle_material.apply(); 
         this.sphere.display();
        // this.triangle.display();

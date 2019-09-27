@@ -7,7 +7,7 @@ class MySphere extends CGFobject {
         super(scene);
         this.scene = scene;
 
-        var r = radius;
+        this.r = radius;
         this.slices = slices;
         this.stacks = stacks;
 
@@ -19,7 +19,8 @@ class MySphere extends CGFobject {
 
         this.vertices = [];
         this.indices = [];
-
+        this.texCoords=[];
+        
 
         var lon, lat, x, y, z;
 
@@ -27,45 +28,43 @@ class MySphere extends CGFobject {
         var increment_lat = (Math.PI / 2.0) / this.stacks;
 
 
-        for (var i = 0; i < this.stacks + 1; i++) {
+        for (var i = 0; i <= 2*this.stacks+2; i++) {
 
             lat = i * increment_lat;
 
-            for (var j = 0; j < this.slices + 1; j++) {
+            for (var j = 0; j <= this.slices; j++) {
 
 
                 lon = j * increment_lon;
 
-                y = r * Math.cos(lat);
-                z = r * Math.sin(lon) * Math.sin(lat);
-                x = r * Math.cos(lon) * Math.sin(lat);
+                z = this.r * Math.cos(lat);
+                y = this.r * Math.sin(lon) * Math.sin(lat);
+                x = this.r * Math.cos(lon) * Math.sin(lat);
                 
-                if (i == 0 || i == this.stacks) {
-                    //Desenhar o primeiro triangulo
-                    this.vertices.push(x,y,z);
-                    break;
+                this.vertices.push(x,y,z);
+                
 
-                }else{
-                    this.vertices.push(x,y,z);
-
+                
+                if(i!=0){
+                    this.indices.push((i-1)*this.slices+j,i*this.slices+j+1,i*this.slices+j);
+                    this.indices.push((i-1)*this.slices+j,(i-1)*this.slices+j+1,i*this.slices+j+1);
                 }
+                    
+                this.texCoords1 = [
+                    0, 0,
+                    0, 1,
+                    1, 0,
+                    1, 1
+                ];
 
+                this.texCoords.push(...this.texCoords1);
             }
-
+            
             
             
         }
 
-
-
-
-        this.texCoords1 = [
-            0, 0,
-            0, 1,
-            1, 0,
-            1, 1
-        ];
-
+        
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
