@@ -20,34 +20,35 @@ class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.texCoords=[];
+        this.normals=[];
         
 
-        var lon, lat, x, y, z;
+        var teta, fi, x, y, z;
 
-        var increment_lon = 2 * Math.PI / this.slices;
-        var increment_lat = (Math.PI / 2.0) / this.stacks;
+        var increment_teta = (Math.PI/2.0) / this.stacks;
+        var increment_fi=(2*Math.PI)/this.slices;
 
 
-        for (var i = 0; i <= 2*this.stacks+2; i++) {
+        for (var i = 0; i <= 4*this.stacks; i++) {
 
-            lat = i * increment_lat;
+            teta = i * increment_teta;
 
             for (var j = 0; j <= this.slices; j++) {
 
 
-                lon = j * increment_lon;
+                fi = j * increment_fi;
 
-                z = this.r * Math.cos(lat);
-                y = this.r * Math.sin(lon) * Math.sin(lat);
-                x = this.r * Math.cos(lon) * Math.sin(lat);
+                z = this.r * Math.sin(teta);
+                y = this.r * Math.cos(teta) * Math.sin(fi);
+                x = this.r * Math.cos(teta) * Math.cos(fi);
                 
                 this.vertices.push(x,y,z);
                 
 
                 
                 if(i!=0){
-                    this.indices.push((i-1)*this.slices+j,i*this.slices+j+1,i*this.slices+j);
-                    this.indices.push((i-1)*this.slices+j,(i-1)*this.slices+j+1,i*this.slices+j+1);
+                     //this.indices.push((i-1)*this.slices+j,i*this.slices+j+1,i*this.slices+j);
+                     this.indices.push((i-1)*this.slices+j,(i-1)*this.slices+j+1,i*this.slices+j+1);
                 }
                     
                 this.texCoords1 = [
@@ -56,6 +57,8 @@ class MySphere extends CGFobject {
                     1, 0,
                     1, 1
                 ];
+
+                this.normals.push(x/this.r,y/this.r,z/this.r);
 
                 this.texCoords.push(...this.texCoords1);
             }
