@@ -29,7 +29,7 @@ class MySphere extends CGFobject {
         var increment_fi=(2*Math.PI)/this.slices;
 
 
-        for (var i = 0; i <= 4*this.stacks; i++) {
+        for (var i = 0; i <= 2*this.stacks; i++) {
 
             teta = i * increment_teta;
 
@@ -43,12 +43,13 @@ class MySphere extends CGFobject {
                 x = this.r * Math.cos(teta) * Math.cos(fi);
                 
                 this.vertices.push(x,y,z);
+                this.vertices.push(x,y,-z);
                 
 
                 
                 if(i!=0){
-                     //this.indices.push((i-1)*this.slices+j,i*this.slices+j+1,i*this.slices+j);
-                     this.indices.push((i-1)*this.slices+j,(i-1)*this.slices+j+1,i*this.slices+j+1);
+                     this.indices.push((i-1)*this.slices+j,i*this.slices+j+2,i*this.slices+j);
+                     //this.indices.push((i-1)*this.slices+j,(i-1)*this.slices+j+1,i*this.slices+j+1);
                 }
                     
                 this.texCoords1 = [
