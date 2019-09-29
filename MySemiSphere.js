@@ -42,7 +42,7 @@ class MySemiSphere extends CGFobject {
                 z = this.r * Math.sin(teta);
 
                 this.vertices.push(x, y, z);
-                
+
 
 
 
@@ -50,10 +50,10 @@ class MySemiSphere extends CGFobject {
 
                 //Ate la desenha retangulos
 
-                if (i < this.stacks-1&&j<this.slices-1) {
-                    this.indices.push(i*this.stacks+j,i*this.stacks+j+1,(i+1)*this.stacks+j);
-                    
-                    this.indices.push((i+1)*this.stacks+j,i*this.stacks+j+1,(i+1)*this.stacks+j+1);
+                if (i < this.stacks - 1 && j < this.slices - 1) {
+                    this.indices.push(i * this.stacks + j, i * this.stacks + j + 1, (i + 1) * this.stacks + j);
+
+                    this.indices.push((i + 1) * this.stacks + j, i * this.stacks + j + 1, (i + 1) * this.stacks + j + 1);
                 }
 
                 this.normals.push(x / this.r, y / this.r, z / this.r);
@@ -66,13 +66,26 @@ class MySemiSphere extends CGFobject {
                 this.texCoords.push(...this.texCoords1);
 
             }
-                if(i<this.stacks-1){
-                    j--;
-                    this.indices.push(i*this.stacks+j,i*this.stacks,(i+1)*this.stacks+j);
-                    this.indices.push((i+1)*this.stacks+j,i*this.stacks,(i+1)*this.stacks);
-                }
-                
+
+            
+            if (i < this.stacks - 1) {
+                j--;
+                this.indices.push(i * this.stacks + j, i * this.stacks, (i + 1) * this.stacks + j);
+                this.indices.push((i + 1) * this.stacks + j, i * this.stacks, (i + 1) * this.stacks);
+            }
+            
+            
+            
         }
+        
+        this.vertices.push(0, 0, 1);
+        i--;
+        for(var k=0;k<this.slices-1;k++){
+
+            this.indices.push(i*this.stacks+k-1,i*this.stacks+k,i*this.stacks+this.slices-1);
+
+        }
+
 
 
         // for (var i = 0; i <= this.stacks + 1; i++) {
