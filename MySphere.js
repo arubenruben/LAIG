@@ -11,7 +11,6 @@ class MySphere extends CGFobject {
         this.slices = slices;
         this.stacks = stacks;
 
-
         this.initBuffers();
     }
 
@@ -19,54 +18,52 @@ class MySphere extends CGFobject {
 
         this.vertices = [];
         this.indices = [];
-        this.texCoords=[];
         this.normals=[];
+        this.texCoords=[];
         
-
         var teta, fi, x, y, z;
-
+        
         var increment_teta = (Math.PI/2.0) / this.stacks;
         var increment_fi=(2*Math.PI)/this.slices;
 
 
-        for (var i = 0; i <= 2*this.stacks; i++) {
+        for (var i =0; i <=this.stacks+1; i++) {
 
-            teta = i * increment_teta;
+            teta=i*increment_teta;
 
             for (var j = 0; j <= this.slices; j++) {
 
+                fi=j*increment_fi;
 
-                fi = j * increment_fi;
-
-                z = this.r * Math.sin(teta);
-                y = this.r * Math.cos(teta) * Math.sin(fi);
                 x = this.r * Math.cos(teta) * Math.cos(fi);
+                y = this.r * Math.cos(teta) * Math.sin(fi);
+                z = this.r * Math.sin(teta);
                 
                 this.vertices.push(x,y,z);
-                this.vertices.push(x,y,-z);
                 
+                //Na primeira iteracao nao iremos desenhar   
+                                
+                if(i<=this.stacks){
+                    this.indices.push(i*this.stacks+j,i*this.stacks+j+1,(i+1)*this.stacks+j+1);
+                    this.indices.push(i*this.stacks+j+1,(i+1)*this.stacks+j+2,(i+1)*this.stacks+j+1);
 
-                
-                if(i!=0){
-                     this.indices.push((i-1)*this.slices+j,i*this.slices+j+2,i*this.slices+j);
-                     //this.indices.push((i-1)*this.slices+j,(i-1)*this.slices+j+1,i*this.slices+j+1);
                 }
-                    
+                
+                this.normals.push(x/this.r,y/this.r,z/this.r);
                 this.texCoords1 = [
                     0, 0,
                     0, 1,
                     1, 0,
                     1, 1
                 ];
-
-                this.normals.push(x/this.r,y/this.r,z/this.r);
-
                 this.texCoords.push(...this.texCoords1);
+               
             }
-            
-            
+           
             
         }
+
+        
 
         
 
