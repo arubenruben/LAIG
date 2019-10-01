@@ -72,19 +72,19 @@ class MySemiSphere extends CGFobject {
             }
 
         }
-
+        
         this.vertices.push(0, 0, this.r);
         this.normals.push(0, 0, 1);
         i--;
         for (var k = 0; k < this.slices - 1; k++) {
-
+            
             this.indices.push(i * this.stacks + k - 1, i * this.stacks + k, i * this.stacks + this.slices - 1);
-
+            
         }
-
-
+        
+        
         let count_n_vertices = this.vertices.length / 3;
-
+    
         for (var i = 0; i < this.stacks; i++) {
 
             teta = i * increment_teta;
@@ -120,27 +120,24 @@ class MySemiSphere extends CGFobject {
 
             }
 
-
             if (i < this.stacks - 1) {
                 j--;
-                //this.indices.push(i * this.stacks + j+count_n_vertices,  (i + 1) * this.stacks + j+1+count_n_vertices,i * this.stacks+count_n_vertices);
-                //this.indices.push((i + 1) * this.stacks + j, i * this.stacks, (i + 1) * this.stacks);
+              
+                this.indices.push(i * this.stacks + j+count_n_vertices,  (i + 1) * this.stacks + j+count_n_vertices,i * this.stacks+count_n_vertices);
+                this.indices.push( (i+1)  * this.stacks + j+count_n_vertices, (i+1) * this.stacks+count_n_vertices, i * this.stacks+count_n_vertices);
             }
+            
 
         }
 
         this.vertices.push(0, 0, -this.r);
         this.normals.push(0, 0, -1);
         i--;
-        for (var k = 0; k < this.slices - 1; k++) {
+        for (var k = 1; k < this.slices ; k++) {
 
-
+            this.indices.push(i * this.stacks + this.slices - 1+count_n_vertices, i * this.stacks + k+count_n_vertices,i * this.stacks + k - 1+count_n_vertices);
 
         }
-
-
-
-
 
 
         this.primitiveType = this.scene.gl.TRIANGLES;
