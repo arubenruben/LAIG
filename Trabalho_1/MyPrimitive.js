@@ -17,7 +17,7 @@ class MyPrimitive{
             
             case "rectangle":
                 args = this.parse_rectangle_attributes(primitive_element , graph);
-                this.primitive = new MyRectangle(this.graph.scene, args[0], args[1], args[2], args[3]);
+                this.primitive = new MyRectangle(this.graph.scene,0, args[0], args[1], args[2], args[3]);
             break;
             
             case "triangle":

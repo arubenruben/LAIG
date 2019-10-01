@@ -1113,23 +1113,42 @@ class MySceneGraph {
 
         
 
-        this.scene.pushMatrix();
+      /*this.scene.pushMatrix();
         this.scene.multMatrix(this.transformations[this.components['demoRoot'].transformations]);
-        this.scene.enableTextures(true);
+        this.scene.enableTextures(true);*/
        /* this.materials['demoMaterial'].setTexture(this.textures['demoTexture']); 
-        this.materials['demoMaterial'].apply();*/
-        this.primitives['demoRectangle'].primitive.enableNormalViz();
-        
-        this.primitives['demoRectangle'].primitive.display();
+       this.materials['demoMaterial'].apply();*/
+    /* this.primitives['demoRectangle'].primitive.enableNormalViz();
+       this.primitives['demoRectangle'].primitive.display();
+        this.scene.popMatrix();*/
 
-       //this.displaySceneRecursive(this.idRoot, this.materials[this.idRoot], this.textures[this.idRoot]);
+        this.displaySceneRecursive(this.idRoot, this.materials[this.idRoot], this.textures[this.idRoot]);
 
-        this.scene.popMatrix();
+       
     }
 
     displaySceneRecursive(idNode, idmaterial_father, idtexture_father){
 
+        var current_node = this.components[idNode];
+    
+       this.scene.multMatrix(this.transformations[current_node.transformations[0]]);
+
+        for(let i = 0; i < current_node.children_primitives.length; i++){
+            this.primitives[current_node.children_primitives[i]].primitive.display();
+       }
+        
+       for(let i = 0 ; i < current_node.children_component.length; i++){
+            this.scene.pushMatrix();
+            this.displaySceneRecursive(current_node.children_component[i], this.materials[current_node.materials[0]], this.textures[this.components[idNode].texture[0]])
+            this.scene.popMatrix();
+            
+        }
+}
+
+
+     
+
+
+
 
     }
-
-}

@@ -59,6 +59,13 @@
             <rotate axis="x" angle="0" />
             <rotate axis="z" angle="0" />
         </transformation>
+
+        <transformation id="demoTransform1">
+            <translate x= "0" y="0" z="3"/>
+            <scale x="10" y="3" z="5" />
+            <rotate axis="x" angle="0" />
+            <rotate axis="z" angle="0" />
+        </transformation>
     </transformations>
 
     <primitives>
@@ -72,6 +79,22 @@
             <transformation>
                 
                 <transformationref id="demoTransform"/>
+            
+            </transformation>
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <component id="level1" />
+            </children>
+        </component>
+
+
+        <component id = "level1">
+        <transformation>
+                
+                <transformationref id="demoTransform1"/>
             
             </transformation>
             <materials>
