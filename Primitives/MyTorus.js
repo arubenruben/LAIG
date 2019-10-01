@@ -2,10 +2,6 @@
  * MyTorus
  * @constructor
  */
-/**
- * MySemiSphere
- * @constructor
- */
 class MyTorus extends CGFobject {
     constructor(scene, radius_inner, radius_outter, slices, loops) {
         super(scene);
@@ -22,7 +18,7 @@ class MyTorus extends CGFobject {
 
         this.vertices = [];
         this.indices = [];
-        //this.normals = [];
+        this.normals = [];
         this.texCoords = [];
 
         let incremeto_teta=(2*Math.PI)/this.slices;
@@ -32,7 +28,7 @@ class MyTorus extends CGFobject {
         let x,y,z;
 
 
-        for(let i=0;i<this.loops;i++){
+        for(let i=0;i<=this.loops+1;i++){
             
             
             for(let j=0;j<this.slices;j++){
@@ -46,12 +42,29 @@ class MyTorus extends CGFobject {
 
               
                 this.vertices.push(x,y,z);
+                
 
+                //Retificar
+                this.normals.push(0,0,1);
+                //
                 
                 
-                //this.indices=[0,1,2];
+
+
+                //this.indices.push(1,this.slices,this.slices+1);
                 
+                if(i<this.loops){
+                    this.indices.push(i*this.loops+j,(i+1)*this.loops+j,i*this.loops+j+1);
+
+                    this.indices.push(i*this.loops+j+1,(i+1)*this.loops+j,(i+1)*this.loops+j+1);
+                    
+
+                }
+                    
+            
             }
+
+            //break;
         
         }
 
@@ -63,5 +76,4 @@ class MyTorus extends CGFobject {
 
 
 }
-
 
