@@ -3,12 +3,12 @@
  * @constructor
  */
 class MyTorus extends CGFobject {
-    constructor(scene, radius_inner, radius_outter, stacks, loops) {
+    constructor(scene, radius_inner, radius_outter, slices, loops) {
         super(scene);
         this.scene = scene;
         this.radius_inner = radius_inner;
         this.radius_outter = radius_outter;
-        this.stacks = stacks;
+        this.slices = slices;
         this.loops = loops;
 
         this.initBuffers();
@@ -21,8 +21,8 @@ class MyTorus extends CGFobject {
         //this.normals = [];
         this.texCoords = [];
 
-        let incremeto_teta=this.stacks/2.0;
-        let incremento_fi=this.loops/2.0;
+        let incremeto_teta=(2*Math.PI)/this.slices;
+        let incremento_fi=(2*Math.PI)/this.loops;
         let teta=0;
         let fi=0;
         let x,y,z;
@@ -30,24 +30,25 @@ class MyTorus extends CGFobject {
 
         for(let i=0;i<this.loops;i++){
             
-            fi=i*incremento_fi;
-
-            for(let j=0;j<this.stacks;j++){
             
+            for(let j=0;j<this.slices;j++){
+                
+                fi=i*incremento_fi;
                 teta=j*incremeto_teta;
 
                 z=this.radius_inner*Math.sin(teta);
                 y=(this.radius_outter+this.radius_inner*Math.cos(teta))*Math.sin(fi);
                 x=(this.radius_outter+this.radius_inner*Math.cos(teta))*Math.cos(fi)
 
-
+              
                 this.vertices.push(x,y,z);
 
                 
                 
+                //this.indices=[0,1,2];
                 
             }
-           
+        
         }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
