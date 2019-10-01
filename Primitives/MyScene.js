@@ -22,36 +22,29 @@ class MyScene extends CGFscene {
         this.enableTextures(true);
 
 
-        //Initialize scene objects  
-        this.axis = new CGFaxis(this);    
-        this.sphere = new MySphere(this, 10, 3, 3);
-        this.point_1 = [1, 2, 5];
-        this.point_2 = [1, 2, -2];
-        this.point_3 = [2, 1 ,0];
-        this.triangle = new MyTriangle(this , this.point_1, this.point_2, this.point_3);
-        this.quadMaterial = new CGFappearance(this);
-        this.triangle_material=new CGFappearance(this);
-        this.torus = new MyTorus(this, 3, 1, 10,10);
-
-        this.triangle_material = new CGFappearance(this);
-        this.triangle_material.setAmbient(1, 1, 1, 1);
-        this.triangle_material.setDiffuse(1, 0, 0, 1);
-        this.triangle_material.setSpecular(0.1, 0.1, 0.1, 1);
-        this.triangle_material.setShininess(100.0);
-        this.triangle_material.loadTexture('image1.jpg');
-       // this.triangle_material.setTextureWrap('REPEAT', 'REPEAT');
-        //------
+        //Initialize scene objects
+        this.axis = new CGFaxis(this);
+        this.sphere = new MySemiSphere(this, 2, 20 , 20);
+        this.torus = new MyTorus(this, 3, 1, 4, 4);
+        this.quadMaterial = new CGFappearance(this)
+        this.quadMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        this.quadMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.quadMaterial.setSpecular(0.1, 0.1, 0.1, 1);
+        this.quadMaterial.setShininess(10.0);
+       // this.quadMaterial.loadTexture('images/image1.png');
+      //  this.quadMaterial.setTextureWrap('REPEAT', 'REPEAT');
         
-        //------ Textures
         
-        //-------
 
         //-------Objects connected to MyInterface
         this.displayAxis = true;
         this.scaleFactor = 1;
-       
+        
+        
+        
+
       }
-      
+
     initLights() {
         this.lights[0].setPosition(5, 2, 5, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
@@ -64,11 +57,13 @@ class MyScene extends CGFscene {
     }
 
     setDefaultAppearance() {
-        this.setAmbient(0.2, 0.4, 0.8, 1.0);
+        this.setAmbient(0.1, 0.1, 0.1, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.setShininess(10.0);
+        this.setShininess(5.0);
     }
+
+   
 
     display() {
   
@@ -85,7 +80,6 @@ class MyScene extends CGFscene {
         this.lights[0].update();
         
         // Draw axis
-      
         if (this.displayAxis)
             this.axis.display();
 
@@ -93,21 +87,9 @@ class MyScene extends CGFscene {
 
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
-
         // ---- BEGIN Primitive drawing section
-        //this.quadMaterial.apply();
-        //this.sphere.enableNormalViz();
-        //this.triangle_material.apply(); 
-        this.sphere.display();
-       // this.triangle.display();
-        //this.torus.display();
 
-        // Default texture filtering in WebCGF is LINEAR. 
-        // Uncomment next line for NEAREST when magnifying, or 
-        // add a checkbox in the GUI to alternate in real time
-        
-        // this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-        
-        // ---- END Primitive drawing section
+        this.torus.enableNormalViz();
+        this.torus.display();
     }
 }

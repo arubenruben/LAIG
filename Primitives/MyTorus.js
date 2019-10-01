@@ -2,8 +2,73 @@
  * MyTorus
  * @constructor
  */
+/**
+ * MySemiSphere
+ * @constructor
+ */
 class MyTorus extends CGFobject {
-    constructor(scene, radius_outer, radius_inner, stacks, slices)
+    constructor(scene, radius_outter, radius_inner, loops, slices) {
+        super(scene);
+        this.scene = scene;
+
+        this.r_inner = radius_inner;
+        this.r_outter = radius_outter;
+        this.slices = slices;
+        this.loops = loops;
+    
+
+        this.initBuffers();
+    }
+
+    initBuffers() {
+
+        this.vertices = [];
+        this.indices = [];
+        this.normals = [];
+        this.texCoords = [];
+
+        var teta, fi, x, y, z;
+
+        var increment_teta = (2* Math.PI) / this.slices;
+        var increment_fi = (2 * Math.PI) / this.loops;
+
+
+
+        for (var i = 0; i < this.loops; i++) {
+            
+            fi = i * increment_fi;
+        for (var j = 0; j <1; j++) {
+            
+            teta = j * increment_teta;
+            
+                
+                x= (this.r_outter + this.r_inner * Math.cos(teta))*Math.cos(fi);
+                z = this.r_inner*Math.sin(teta);
+                y = (this.r_outter + this.r_inner * Math.cos(teta))*Math.sin(fi);
+                this.vertices.push(x, y, z);
+
+               
+                this.indices.push()
+                this.normals.push(x , y , z );
+              
+               // this.texCoords.push(...this.texCoords1);
+
+            
+            }
+
+        }
+        
+      
+       
+
+
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
+    }
+}
+
+/*class MyTorus extends CGFobject {
+    constructor(scene, radius_outer, radius_inner, loops, slices)
     {
         super(scene);
         this.scene = scene;
@@ -11,25 +76,25 @@ class MyTorus extends CGFobject {
         var r_outer = radius_outer;
         var r_inner = radius_inner;
         this.slices = slices;
-        this.stacks = stacks;
+        this.loops= loops;
         
         this.points = [];
         
-        for(var i = 0; i <  this.stacks+1 ; i++){
+        for(var i = 0; i <  this.loops+1 ; i++){
             this.points[i] = [];
             
         }
-        for(var i = 0; i < this.stacks+1 ; i++){
+        for(var i = 0; i < this.loops+1 ; i++){
             for(var j = 0; j < this.slices+1 ; j++){
                 this.points[i][j] = [0, 0 ,0];
             }
         }
         
         var increment_lon = 2*Math.PI/this.slices;
-        var increment_lat = 2*Math.PI/this.stacks;
+        var increment_lat = 2*Math.PI/this.loops;
         var lon, lat, x, y, z;
         
-        for(var i = 0; i < this.stacks+1; i++){
+        for(var i = 0; i < this.loops+1; i++){
             lat =  i * increment_lat;
             for(var j = 0; j < this.slices+1; j++){
                 lon = j * increment_lon;
@@ -54,7 +119,7 @@ class MyTorus extends CGFobject {
         this.texCoords = [];
                 
             
-        for(var i = 0; i < this.stacks; i++){
+        for(var i = 0; i < this.loops; i++){
             console.log('Change lat');
             for(var j = 0; j < this.slices; j++){
 
@@ -99,6 +164,4 @@ class MyTorus extends CGFobject {
     }
 
   
-}
-
-
+}*/

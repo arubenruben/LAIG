@@ -9,6 +9,7 @@ serialInclude(['../lib/CGF.js',
                 'MyTriangle.js',
                 'MySphere.js',
                 'MyTorus.js',
+                'MySemiSphere.js',
                 
 
 

@@ -3,14 +3,14 @@
  * @constructor
  */
 class MySemiSphere extends CGFobject {
-    constructor(scene, radius, stacks, slices, pos_ou_neg_z) {
+    constructor(scene, radius, stacks, slices) {
         super(scene);
         this.scene = scene;
 
         this.r = radius;
         this.slices = slices;
         this.stacks = stacks;
-        this.pos_neg = pos_ou_neg_z;
+   
 
         this.initBuffers();
     }
