@@ -40,13 +40,30 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+
+       this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+
+      /*  for (var key in this.graph.View) {
+                        
+
+            if (this.graph.Views.hasOwnProperty(key)) {
+                var View = this.graph.Views[key];
+            }
+            
+            if(View[0] == "perspective"){
+                this.camera = new CGFcamera(View[3]*DEGREE_TO_RAD, View[1], View[2], vec3.fromValues(View[4][0],View[4][1],View[4][2]), vec3.fromValues(View[5][0], View[5][1], View[5][1]));
+            }
+            else{
+                this.camera = new CGFcameraOrtho()
+            }
+        }*/
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
         var i = 0;
+        var aux;
         // Lights index.
 
         // Reads the lights from the scene graph.
@@ -61,11 +78,24 @@ class XMLscene extends CGFscene {
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+                
+                if(light[6][0] != null){
+                    this.lights[i].setConstantAttenuation(light[6][0]);
+                }
+                if(light[6][1]!= null){
+                    this.lights[i].setLinearAttenuation(light[6][1]);
+
+                }
+                if(light[6][2]!= null){
+                    this.lights[i].setQuadraticAttenuation(light[6][2]);
+                }
+
+                
 
                 if (light[1] == "spot") {
-                    this.lights[i].setSpotCutOff(light[6]);
-                    this.lights[i].setSpotExponent(light[7]);
-                    this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
+                    this.lights[i].setSpotCutOff(light[7]);
+                    this.lights[i].setSpotExponent(light[8]);
+                    this.lights[i].setSpotDirection(light[9][0], light[9][1], light[9][2]);
                 }
 
                 this.lights[i].setVisible(true);
@@ -98,6 +128,8 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
         this.initLights();
+
+        //this.initCameras();
 
         this.sceneInited = true;
     }

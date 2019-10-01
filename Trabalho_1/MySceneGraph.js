@@ -85,13 +85,19 @@ class MySceneGraph {
 
         var error;
 
+        this.transformations = [];
+
         // Processes each node, verifying errors.
 
         // <scene>
         var index;
+
+        //*****Check if the order is completed is already done******
+
         if ((index = nodeNames.indexOf("scene")) == -1)
             return "tag <scene> missing";
         else {
+            //Is made here
             if (index != SCENE_INDEX)
                 this.onXMLMinorError("tag <scene> out of order " + index);
 
@@ -167,7 +173,7 @@ class MySceneGraph {
                 this.onXMLMinorError("tag <transformations> out of order");
 
             //Parse transformations block
-            if ((error = this.parseTransformations(nodes[index])) != null)
+            if ((error = this.parseTransformations(nodes[index], this.transformations)) != null)
                 return error;
         }
 
@@ -214,7 +220,8 @@ class MySceneGraph {
         var axis_length = this.reader.getFloat(sceneNode, 'axis_length');
         if (axis_length == null)
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
-
+        
+        //Magics of JS, se tiver definido fica axis_lenght, se nao fica 1
         this.referenceLength = axis_length || 1;
 
         this.log("Parsed scene");
@@ -227,9 +234,173 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
 
+        var view_root = this.reader.getString(viewsNode, 'default');
+
+        if (view_root == null) {
+            return "default view is not defined";
+        }
+
+        var children = viewsNode.children; //Tem de existir um vista ortogonal ou em prespetiva
+
+        if(children.length>2){
+            return "So podem existir 2 tipos no maximo de vista";
+        }
+
+        this.Views = [];
+
+        this.idview = view_root;
+
+        var numViews = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        var perspective_set = false;
+        var ortho_set = false;
+
+        for (var i = 0; i < children.length; i++) {
+
+            // Storing camera information
+            var global = [];
+            var attributeNames = [];
+
+            //Check type of light
+
+            if (children[i].nodeName == "perspective" && perspective_set == false) {
+
+                //preeche os cabecalhos que iremos encontrar para ajudar no parsing
+
+                attributeNames.push(...["from", "to"]);
+                //Nao sei que nome meter nestes dois de baixo
+                //Ja sei, nas cores os atributos podem ser de dois tipos, posicoes e cores, e para automizar o processamento
+                perspective_set = true;
+
+            } else if (children[i].nodeName == "ortho" && ortho_set == false) {
+
+                attributeNames.push(...["from", "to", "up"]);
+                //Nao sei que nome meter nestes dois de baixo
+                ortho_set = true;
+
+
+            }
+            else if ((children[i].nodeName == "perspective" && perspective_set == true) || children[i].nodeName == "ortho" && ortho_set == true) {
+                this.onXMLError("Nao era suposto existirem duas tags do mesmo tipo (perspetive ou ortho) na vista");
+            }
+            else {
+                //Nao e ortho nem perspective
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+
+            }
+
+            // Get id of the current view.
+            var ViewId = this.reader.getString(children[i], 'id');
+            if (ViewId == null)
+                return "no ID defined for View";
+
+            // Checks for repeated IDs.
+            if (this.Views[ViewId] != null)
+                return "ID must be unique for each View (conflict: ID = " + ViewId + ")";
+
+            global.push(children[i].nodeName);
+            global.push(ViewId);
+
+            /*Falta processar os near/fars, etc...*/
+            var array_view_def = [];
+
+            var aux_ret;
+
+            aux_ret = this.reader.getFloat(children[i], 'near');
+            if (aux_ret == null) {
+                return "Near attribute not defined";
+            } else {
+                array_view_def.push(aux_ret);
+            }
+
+            aux_ret = this.reader.getFloat(children[i], 'far');
+            if (aux_ret == null) {
+                return "far attribute not defined";
+            } else {
+                array_view_def.push(aux_ret);
+            }
+
+            if (children[i].nodeName == "perspective") {
+
+                aux_ret = this.reader.getFloat(children[i], 'angle');
+                if (aux_ret == null) {
+                    return "angle attribute not defined";
+                } else {
+                    array_view_def.push(aux_ret);
+                }
+
+            } else if (children[i].nodeName == "ortho") {
+
+                aux_ret = this.reader.getFloat(children[i], 'left');
+                if (aux_ret == null) {
+                    return "left attribute not defined";
+                } else {
+                    array_view_def.push(aux_ret);
+                }
+
+                aux_ret = this.reader.getFloat(children[i], 'right');
+                if (aux_ret == null) {
+                    return "right attribute not defined";
+                } else {
+                    array_view_def.push(aux_ret);
+                }
+
+                aux_ret = this.reader.getFloat(children[i], 'top');
+                if (aux_ret == null) {
+                    return "top attribute not defined";
+                } else {
+                    array_view_def.push(aux_ret);
+                }
+
+                aux_ret = this.reader.getFloat(children[i], 'bottom');
+                if (aux_ret == null) {
+                    return "bottom attribute not defined";
+                } else {
+                    array_view_def.push(aux_ret);
+                }
+
+            }
+            global.push(...array_view_def);
+
+            grandChildren = children[i].children;
+            // Specifications for the current view.
+
+            nodeNames = [];
+            //Array dos filhos
+
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            for (var j = 0; j < attributeNames.length; j++) {
+                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+
+                if (attributeIndex != -1) {
+
+                    var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "View position" + ViewId);
+
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    global.push(aux);
+                }
+                else
+                    return "View " + attributeNames[i] + " undefined for ID = " + ViewId;
+            }
+
+            this.Views[ViewId] = global;
+           
+
+        }
+        
+        this.log("Parsed View");
         return null;
+
     }
 
     /**
@@ -281,6 +452,10 @@ class MySceneGraph {
         var grandChildren = [];
         var nodeNames = [];
 
+        if (children.length == 0) {
+            return "Error: must have at least one light";
+        }
+
         // Any number of lights.
         for (var i = 0; i < children.length; i++) {
 
@@ -295,7 +470,7 @@ class MySceneGraph {
                 continue;
             }
             else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
+                attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
                 attributeTypes.push(...["position", "color", "color", "color"]);
             }
 
@@ -314,6 +489,7 @@ class MySceneGraph {
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 
+            // SUSPEITO
             enableLight = aux || 1;
 
             //Add enabled boolean and type name to light info
@@ -334,6 +510,28 @@ class MySceneGraph {
                 if (attributeIndex != -1) {
                     if (attributeTypes[j] == "position")
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
+                    
+                    else if (attributeNames[j] == "attenuation") {
+                        var aux = [];
+
+                        var decomp_atten = this.reader.getFloat(grandChildren[j], 'constant');
+                        if (aux > 1 || aux < 0) {
+                            return "Error in " + attributeNames[j];
+                        }
+                        aux.push(decomp_atten);
+                        decomp_atten = this.reader.getFloat(grandChildren[j], 'linear');
+                        if (aux > 1 || aux < 0) {
+                            return "Error in " + attributeNames[j];
+                        }
+                        aux.push(decomp_atten);
+                        decomp_atten = this.reader.getFloat(grandChildren[j], 'quadratic');
+                        if (aux > 1 || aux < 0) {
+                            return "Error in " + attributeNames[j];
+                        }
+                        aux.push(decomp_atten);
+
+
+                    }
                     else
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
 
@@ -385,15 +583,25 @@ class MySceneGraph {
         this.log("Parsed lights");
         return null;
     }
-
     /**
      * Parses the <textures> block. 
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
+        var children = texturesNode.children;
+        this.textures = [];
 
+        for(var i = 0; i < children.length; i++){
+            var textureID = this.reader.getString(children[i], 'id');
+            var filepath = this.reader.getString(children[i], 'file');
+
+
+            var new_texture = new CGFtexture(this.scene, filepath);
+            this.textures[textureID] = new_texture;
+        }
+       
         //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        //this.onXMLMinorError("To do: Parse textures.");
         return null;
     }
 
@@ -407,7 +615,11 @@ class MySceneGraph {
         this.materials = [];
 
         var grandChildren = [];
-        var nodeNames = [];
+        var ambient = [];
+        var diffuse = [];
+        var specular = [];
+        var emission = [];
+        var one_material_defined = false;
 
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
@@ -425,9 +637,40 @@ class MySceneGraph {
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+            
+            var shininess = this.reader.getString(children[i], 'shininess');
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            grandChildren = children[i].children;
+
+            var nodeNames = [];
+
+            for (var j = 0; j < grandChildren.length; j++)
+                nodeNames.push(grandChildren[j].nodeName);
+    
+           
+
+            var emissionIndex = nodeNames.indexOf("emission");
+            var ambientIndex = nodeNames.indexOf("ambient");
+            var diffuseIndex = nodeNames.indexOf("shininess");
+            var specularIndex = nodeNames.indexOf("shininess");
+
+            emission = this.parseColor(grandChildren[emissionIndex], "emission error in material of id " + materialID);
+            ambient =  this.parseColor(grandChildren[ambientIndex], "ambient error in material of id " + materialID);
+            diffuse =  this.parseColor(grandChildren[diffuseIndex], " diffuse error in material of id " + materialID);
+            specular  =  this.parseColor(grandChildren[specularIndex], " specular error in material of id " + materialID);
+
+    
+            var new_material = new CGFappearance(this.scene);
+            new_material.setShininess(shininess);
+            new_material.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+            new_material.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+            new_material.setSpecular(specular[0], specular[1], specular[2], specular[3]);
+            new_material.setEmission(emission[0], emission[1], emission[2], emission[3]);
+            this.materials[materialID] = new_material;
+            one_material_defined = true;
+        }
+        if(one_material_defined == false){
+            return "At least one material must be defined";
         }
 
         //this.log("Parsed materials");
@@ -438,14 +681,19 @@ class MySceneGraph {
      * Parses the <transformations> block.
      * @param {transformations block element} transformationsNode
      */
-    parseTransformations(transformationsNode) {
+    parseTransformations(transformationsNode, transformations_array) {
         var children = transformationsNode.children;
 
-        this.transformations = [];
+        var transformations = transformations_array;
 
         var grandChildren = [];
 
         // Any number of transformations.
+
+        if(children.length==0){
+            return "Nao pode existir 0 transformacoes";
+        }
+        
         for (var i = 0; i < children.length; i++) {
 
             if (children[i].nodeName != "transformation") {
@@ -459,7 +707,7 @@ class MySceneGraph {
                 return "no ID defined for transformation";
 
             // Checks for repeated IDs.
-            if (this.transformations[transformationID] != null)
+            if (transformations[transformationID] != null)
                 return "ID must be unique for each transformation (conflict: ID = " + transformationID + ")";
 
             grandChildren = children[i].children;
@@ -476,16 +724,55 @@ class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                    case 'scale':
+
+                        var coordinates= this.parseCoordinates3D(grandChildren[j],"Scale tranformation for ID"+transformationID);
+
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+                    
+                        transfMatrix=mat4.scale(transfMatrix,transfMatrix,coordinates);
+                    
                         break;
                     case 'rotate':
                         // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        //Os angulos e preciso converter para radianos
+                        var x=0,y=0,z=0;
+                        var aux_array_axis=[];
+                        
+                        var axis= this.reader.getString(grandChildren[j],'axis');
+                        
+                        if(axis==null){
+                            return "Erro a encontrar a tag axis na rotacao";
+                        }
+
+                        var angle=this.reader.getFloat(grandChildren[j],'angle');
+                        if(angle==null){
+                            return "Erro a encontrar a tag angle na rotacao";
+                        }
+
+                        if(axis=='x'){
+                            x=1;
+                        }else if(axis=='y'){
+                            y=1;
+                        }else if(axis=='z'){
+                            z=1;
+                        }else{
+                            return "Axis invalido na rotacao";
+                        }
+                        
+                        aux_array_axis.push(...[x,y,z]);
+
+                        if (!Array.isArray(aux_array_axis))
+                            return aux_array_axis;
+                        
+                        transfMatrix=mat4.rotate(transfMatrix,transfMatrix,angle*DEGREE_TO_RAD,aux_array_axis);
+                        
+                    
                         break;
                 }
             }
-            this.transformations[transformationID] = transfMatrix;
+            transformations[transformationID] = transfMatrix;
         }
 
         this.log("Parsed transformations");
@@ -573,51 +860,161 @@ class MySceneGraph {
    * @param {components block element} componentsNode
    */
     parseComponents(componentsNode) {
+        
         var children = componentsNode.children;
 
         this.components = [];
-
+        
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
-
+        var componentID;
+        
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
+
 
             if (children[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
 
+    
             // Get id of the current component.
-            var componentID = this.reader.getString(children[i], 'id');
+            componentID = this.reader.getString(children[i], 'id');
             if (componentID == null)
-                return "no ID defined for componentID";
-
+            return "no ID defined for componentID";
+            
+            
             // Checks for repeated IDs.
             if (this.components[componentID] != null)
-                return "ID must be unique for each component (conflict: ID = " + componentID + ")";
-
+            return "ID must be unique for each component (conflict: ID = " + componentID + ")";
+            
+            
+            var component_aux = new MyComponent(componentID);
             grandChildren = children[i].children;
-
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
+            
+            
+            if(grandChildren.length == 0){
+                return "Blocks Transformation, Materials, Texture, Children need to be declared";
             }
 
-            var transformationIndex = nodeNames.indexOf("transformation");
-            var materialsIndex = nodeNames.indexOf("materials");
-            var textureIndex = nodeNames.indexOf("texture");
-            var childrenIndex = nodeNames.indexOf("children");
+            var block_transformation = false;
+            var block_materials = false;
+            var block_texture= false;
+            var block_children = false;
 
-            this.onXMLMinorError("To do: Parse components.");
-            // Transformations
+            
+            for (var j = 0; j < grandChildren.length; j++) {
+                
+                
+                grandgrandChildren = grandChildren[j].children;
+                
+                if(grandChildren[j].nodeName == "transformation"){
 
-            // Materials
+                    block_transformation = true;
 
-            // Texture
+                    if(grandgrandChildren.length == 0){
+                        return "At least one reference to a transformation or a explicit transformation must be declared";
+                    }
 
-            // Children
+                    for (var k = 0; k < grandgrandChildren.length; k++){
+
+                        
+                        if(grandgrandChildren[0].nodeName == "transformationref" && j==0){
+                            component_aux.transformations_ref = true;
+                        }
+                    
+                        if(component_aux.transformations_ref == true){
+                            var transformation_id = this.reader.getString(grandgrandChildren[k],'id');
+                            if(this.transformations[transformation_id]  == null){
+                                return "ID in the transformations Block for component of id " + componentID + "must be a valid reference";
+                            }
+                            component_aux.transformations.push(transformation_id);
+                        }
+                        else{
+                            this.parseTransformations(grandChildren[j], component_aux.transformations);
+                        }
+                    }
+                }
+            
+                else if(grandChildren[j].nodeName == "materials"){
+
+                    block_materials = true;
+                    
+                    if(grandgrandChildren.length == 0)
+                        return "At least one material must be defined";
+                    
+                    for (var k = 0; k < grandgrandChildren.length; k++){
+                        
+                        var material_id = this.reader.getString(grandgrandChildren[k], 'id'); 
+                        if(this.materials[material_id]  == null){
+                            return "ID in the material Block for component of id" + componentID + "must be a valid reference";
+                        }
+                        component_aux.materials.push(material_id);  
+                        
+                    }
+                   
+                }
+                else if(grandChildren[j].nodeName == "texture"){
+
+                    block_texture = true;
+                    var texture_id = this.reader.getString(grandChildren[j], 'id'); 
+                    if(this.textures[texture_id]  == null){
+                        return "ID in the material Block for component of id" + componentID + "must be a valid reference";
+                    }
+                    
+                    var length_s = this.reader.getString(grandChildren[i], 'length_s'); 
+                    var length_t = this.reader.getString(grandChildren[i], 'length_t'); 
+                    
+                    
+                    component_aux.texture.push(texture_id);
+                    component_aux.texture.push(length_s);
+                    component_aux.texture.push(length_t);
+
+                }
+                else{
+                    
+                    block_children = true;
+
+                    if(grandgrandChildren.length == 0){
+                        return "At least one of the following tags must be defined <componetref> or <primitiveref>";
+                    }
+                    for (var k = 0; k < grandgrandChildren.length; k++){
+                
+                        if(grandgrandChildren[k].nodeName == "componentref"){
+
+                        var children_component_id = this.reader.getString(grandgrandChildren[k], 'id'); 
+                        if(this.components[componentID] == null){
+                            return "ID in the children Block for component of id" + componentID + "must be a valid reference";
+                        }
+                            component_aux.children_component.push(children_component_id);
+                        }
+                        else{
+                            var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id'); 
+                            if(this.textures[texture_id]  == null){
+                                return "ID in the children Block for component of id" + componentID + "must be a valid reference";
+                            }
+                            component_aux.children_primitives.push(children_primitive_id);
+                        }
+                    }
+                }
+            }
+            
+            if(block_transformation == false){
+                return "Block Transformation needs to be declared";
+            }
+            else if(block_materials == false){
+                return "Block Materials needs to be declared";
+            }
+            else if(block_texture == false){
+                return "Block Textures needs to be declared";
+            }
+            else if(block_children == false){
+                return "Block Children needs to be declared";
+            }
+
+            this.components[componentID] = component_aux;
         }
     }
 
@@ -738,8 +1135,14 @@ class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-
-        //To test the parsing/creation of the primitives, call the display function directly
+        
+        this.scene.pushMatrix();
+        this.scene.multMatrix(this.transformations[this.components['demoRoot'].transformations]);
+        this.scene.enableTextures(true);
+        this.materials['demoMaterial'].setTexture(this.textures['demoTexture']);    ~
+        this.materials['demoMaterial'].apply();
         this.primitives['demoRectangle'].display();
+
+        this.scene.popMatrix();
     }
 }
