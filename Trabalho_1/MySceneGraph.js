@@ -238,14 +238,14 @@ class MySceneGraph {
         var view_root = this.reader.getString(viewsNode, 'default');
 
         if (view_root == null) {
-            return "default view is not defined";
+            return "Default view is not defined";
         }
 
         var children = viewsNode.children; //Tem de existir um vista ortogonal ou em prespetiva
 
-        if(children.length>2){
-            return "So podem existir 2 tipos no maximo de vista";
-        }
+        if(children.length == 0)
+            return "At least one View must be defined, either perspective or orthogonal";
+        
 
         this.Views = [];
 
@@ -306,7 +306,7 @@ class MySceneGraph {
             global.push(children[i].nodeName);
             global.push(ViewId);
 
-            /*Falta processar os near/fars, etc...*/
+            //Falta processar os near/fars, etc...
             var array_view_def = [];
 
             var aux_ret;
@@ -459,7 +459,7 @@ class MySceneGraph {
         // Any number of lights.
         for (var i = 0; i < children.length; i++) {
 
-            // Storing light information
+           // Storing light information
             var global = [];
             var attributeNames = [];
             var attributeTypes = [];
@@ -505,10 +505,11 @@ class MySceneGraph {
             }
 
             for (var j = 0; j < attributeNames.length; j++) {
+                
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
 
                 if (attributeIndex != -1) {
-                    if (attributeTypes[j] == "position")
+                    if (attributeNames[j] == "location")
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
                     
                     else if (attributeNames[j] == "attenuation") {
@@ -541,7 +542,7 @@ class MySceneGraph {
                     global.push(aux);
                 }
                 else
-                    return "light " + attributeNames[i] + " undefined for ID = " + lightId;
+                    return "light " + attributeNames[j] + " undefined for ID = " + lightId;
             }
 
             // Gets the additional attributes of the spot light
@@ -621,6 +622,10 @@ class MySceneGraph {
         var emission = [];
         var one_material_defined = false;
 
+        if(children.length == 0){
+            return "At least one material must be defined";
+        }
+
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
 
@@ -639,6 +644,8 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
             
             var shininess = this.reader.getString(children[i], 'shininess');
+            if(!(shininess != null && !isNaN(shininess)))
+                return "Attribute shininess is either missing or wrong for material of id: " + materialID;
 
             grandChildren = children[i].children;
 
@@ -647,18 +654,49 @@ class MySceneGraph {
             for (var j = 0; j < grandChildren.length; j++)
                 nodeNames.push(grandChildren[j].nodeName);
     
-           
-
             var emissionIndex = nodeNames.indexOf("emission");
+            if(emissionIndex == null){
+                return "Tag emission for material of id " + materialID; 
+            }
+
             var ambientIndex = nodeNames.indexOf("ambient");
-            var diffuseIndex = nodeNames.indexOf("shininess");
-            var specularIndex = nodeNames.indexOf("shininess");
+            if(ambientIndex == null){
+                return "Tag ambient for material of id " + materialID;
+            }
 
+            var diffuseIndex = nodeNames.indexOf("diffuse");
+            if(diffuseIndex == null){
+                return "Tag diffuse for material of id " + materialID;
+            }
+            
+            var specularIndex = nodeNames.indexOf("specular");
+            if(specularIndex == null){
+                return "Tag specular for material of id " + materialID;
+            }
+
+            if(nodeNames.length > 4){
+                this.onXMLMinorError("There are other tags besides emission, ambient, diffuse, specular for material of id: " + materialID);
+            }
+            
             emission = this.parseColor(grandChildren[emissionIndex], "emission error in material of id " + materialID);
+            if(!Array.isArray(emission)){
+                return emission;
+            }
+            
             ambient =  this.parseColor(grandChildren[ambientIndex], "ambient error in material of id " + materialID);
-            diffuse =  this.parseColor(grandChildren[diffuseIndex], " diffuse error in material of id " + materialID);
-            specular  =  this.parseColor(grandChildren[specularIndex], " specular error in material of id " + materialID);
-
+            if(!Array.isArray(ambient)){
+                return ambient;
+            }
+            
+            diffuse =  this.parseColor(grandChildren[diffuseIndex], "diffuse error in material of id " + materialID);
+            if(!Array.isArray(diffuse)){
+                return diffuse;
+            }
+            
+            specular  =  this.parseColor(grandChildren[specularIndex], "specular error in material of id " + materialID);
+            if(!Array.isArray(specular)){
+                return specular;
+            }
     
             var new_material = new CGFappearance(this.scene);
             new_material.setShininess(shininess);
@@ -668,12 +706,14 @@ class MySceneGraph {
             new_material.setEmission(emission[0], emission[1], emission[2], emission[3]);
             this.materials[materialID] = new_material;
             one_material_defined = true;
+        
         }
+        
         if(one_material_defined == false){
             return "At least one material must be defined";
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -801,7 +841,7 @@ class MySceneGraph {
             // Get id of the current primitive.
             var primitiveId = this.reader.getString(children[i], 'id');
             if (primitiveId == null)
-                return "no ID defined for texture";
+                return "no ID defined for the primitive";
 
             // Checks for repeated IDs.
             if (this.primitives[primitiveId] != null)
@@ -816,11 +856,12 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'torus')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
             }
-
             
             var new_primitive = new MyPrimitive(this, grandChildren[i]);
-           
-
+            
+            if(new_primitive.error == true){
+                return new_primitive.args + " with id: " + primitiveId;
+            }
 
             this.primitives[primitiveId] = new_primitive;
         
@@ -949,7 +990,6 @@ class MySceneGraph {
 
                 }
                 else{
-                    
                     block_children = true;
 
                     if(grandgrandChildren.length == 0){
@@ -1057,22 +1097,22 @@ class MySceneGraph {
 
         // R
         var r = this.reader.getFloat(node, 'r');
-        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+        if (!(r != null && !isNaN(r)) && r >= 0 && r <= 1)
             return "unable to parse R component of the " + messageError;
 
         // G
         var g = this.reader.getFloat(node, 'g');
-        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+        if (!(g != null && !isNaN(g)) && g >= 0 && g <= 1)
             return "unable to parse G component of the " + messageError;
 
         // B
         var b = this.reader.getFloat(node, 'b');
-        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+        if (!(b != null && !isNaN(b)) && b >= 0 && b <= 1)
             return "unable to parse B component of the " + messageError;
 
         // A
         var a = this.reader.getFloat(node, 'a');
-        if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+        if (!(a != null && !isNaN(a)) && a >= 0 && a <= 1)
             return "unable to parse A component of the " + messageError;
 
         color.push(...[r, g, b, a]);
@@ -1113,16 +1153,16 @@ class MySceneGraph {
 
         
 
-      /*this.scene.pushMatrix();
-        this.scene.multMatrix(this.transformations[this.components['demoRoot'].transformations]);
-        this.scene.enableTextures(true);*/
-       /* this.materials['demoMaterial'].setTexture(this.textures['demoTexture']); 
-       this.materials['demoMaterial'].apply();*/
-    /* this.primitives['demoRectangle'].primitive.enableNormalViz();
-       this.primitives['demoRectangle'].primitive.display();
-        this.scene.popMatrix();*/
+        this.scene.pushMatrix();
+        this.scene.multMatrix(this.transformations[this.components['demoRoot'].transformations[0]]);
+        this.scene.enableTextures(true);
+        this.materials['demoMaterial'].setTexture(this.textures['demoTexture']); 
+        this.materials['demoMaterial'].apply();
+        this.primitives['demoRectangle'].primitive.enableNormalViz();
+        this.primitives['demoRectangle'].primitive.display();
+        this.scene.popMatrix();
 
-        this.displaySceneRecursive(this.idRoot, this.materials[this.idRoot], this.textures[this.idRoot]);
+       // this.displaySceneRecursive(this.idRoot, this.materials[this.idRoot], this.textures[this.idRoot]);
 
        
     }
@@ -1143,12 +1183,6 @@ class MySceneGraph {
             this.scene.popMatrix();
             
         }
-}
-
-
-     
-
-
-
-
     }
+
+}

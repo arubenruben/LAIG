@@ -6,11 +6,6 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
-        <ortho id="ortho_id" near="0.1" far="0.5" left="0.78" right="0.15" top="0.55" bottom="0.7">
-            <from x="0.1" y="0.1" z="0.5"/>
-            <to x="0" y="0" z="0"/>
-            <up x="0" y="0" z="0"/>
-        </ortho>
     </views>
 
     <ambient>
@@ -24,19 +19,8 @@
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation constant="1.0" linear="1.0" quadratic="1.0" />
+            <attenuation constant ="1.0" linear = "0.0" quadratic = "0.0"/>
         </omni>
-        <spot id="demospot" enabled="1" angle="45" exponent="1">    
-            <location x="0" y="0" z="0" w="0"/>
-            <target x="0" y="0" z="0"/>
-            <ambient r="0" g="0" b="0" a="0"/>
-            <diffuse r="1" g="1" b="1" a="1"/>
-            <specular r="1" g="1" b="1" a="1"/>
-            <attenuation constant="1" linear="1" quadratic="1"/>
-        </spot>
-
-
-
     </lights>
 
     <textures>
@@ -54,17 +38,10 @@
 
     <transformations>
         <transformation id="demoTransform">
-            <translate x= "0" y="0" z="3"/>
-            <scale x="1" y="1" z="5" />
-            <rotate axis="x" angle="0" />
-            <rotate axis="z" angle="0" />
-        </transformation>
-
-        <transformation id="demoTransform1">
-            <translate x= "0" y="0" z="3"/>
-            <scale x="10" y="3" z="5" />
-            <rotate axis="x" angle="0" />
-            <rotate axis="z" angle="0" />
+            <translate x="5" y="2" z="2" />
+            <scale x="5" y="1" z="5" />
+            <rotate axis="x" angle="-45" />
+            <rotate axis="z" angle="-45" />
         </transformation>
     </transformations>
 
@@ -77,28 +54,10 @@
     <components>
         <component id="demoRoot">
             <transformation>
-                
-                <transformationref id="demoTransform"/>
-            
+                <transformationref id="demoTransform" />
             </transformation>
             <materials>
-                <material id="demoMaterial"/>
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <component id="level1" />
-            </children>
-        </component>
-
-
-        <component id = "level1">
-        <transformation>
-                
-                <transformationref id="demoTransform1"/>
-            
-            </transformation>
-            <materials>
-                <material id="demoMaterial"/>
+                <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>
