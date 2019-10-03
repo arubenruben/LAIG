@@ -31,7 +31,7 @@ class MyCilinder extends CGFobject {
         let cos_value;
         let sin_value;
         
-        for(let i = 0; i < this.stacks; i++){
+        for(let i = 0; i <= this.stacks+2; i++){
             
             let radius=this.radiusbottom-i*delta_r;
             
@@ -43,14 +43,26 @@ class MyCilinder extends CGFobject {
                 sin_value=Math.sin(j*var_teta);
                 y=radius*sin_value;
                 this.vertices.push(x,y,z);
-                
+                if(j<this.slices-1&&i<this.stacks){
+                    this.indices.push(i*this.slices+j,i*this.slices+j+1,(i+1)*this.slices+j);
+                    this.indices.push(i*this.slices+j+1,(i+1)*this.slices+j+1,(i+1)*this.slices+j);
+
+                }else if(j==this.slices-1&&i<this.stacks){
+
+                    this.indices.push(i*this.slices+j,i*this.slices,(i+1)*this.slices+j);
+                    this.indices.push(i*this.slices,(i+1)*this.slices,(i+1)*this.slices+j);
+                    
+                }
                 this.normals.push(cos_value,sin_value,0);
 
-             
-                
             }    
             
+            
+            
         }
+
+
+
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
