@@ -9,13 +9,9 @@ class MyComponent {
 		
 		// component id
 		this.id = id;
-
-		//boolean to differentiate normal transformations with <translate> <rotate> and <scale> from those who just
-		//refere to other transformations in the transformation part in xml
-		this.transformations_ref = false;
 		
 		// array to hold either the id of transformations refered or to hold information about the trasnformation
-		this.transformations = [];
+		this.transformations;
 
 		// array to hold the id of the materials used, if id == "inherit" then the material would be that of the
 		// father.
