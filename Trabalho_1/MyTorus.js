@@ -19,7 +19,7 @@ class MyTorus extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        this.texCoords = [];
+     //   this.texCoords = [];
 
         let incremeto_teta=(2*Math.PI)/this.slices;
         let incremento_fi=(2*Math.PI)/this.loops;

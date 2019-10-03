@@ -978,7 +978,7 @@ class MySceneGraph {
 
                     block_texture = true;
                     var texture_id = this.reader.getString(grandChildren[j], 'id'); 
-                    if(this.textures[texture_id]  == null){
+                    if(this.textures[texture_id]  == null  && texture_id!="inherit"){
                         return "ID in the material Block for component of id" + componentID + "must be a valid reference";
                     }
                     
@@ -1184,7 +1184,7 @@ class MySceneGraph {
         this.scene.multMatrix(current_node.transformations);
         
         for(let i = 0; i < current_node.children_primitives.length; i++){
-            current_node.children_primitives[i].primitive.enableNormalViz();
+            //current_node.children_primitives[i].primitive.enableNormalViz();
             current_node.children_primitives[i].primitive.display();
         }
         

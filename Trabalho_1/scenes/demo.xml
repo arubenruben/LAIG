@@ -30,19 +30,27 @@
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </material>
     </materials>
 
     <transformations>
         <transformation id="demoTransform">
-            <translate x="0" y="1" z="0" />
+            <translate x="0" y="0" z="0" />
         </transformation>
 
          <transformation id="demoTransform1">
-            <translate x="0" y="0" z="2" />
+            <translate x="5" y="0" z="0" />
+        </transformation>
+
+         <transformation id="demoTransform2">
+            <translate x="-5" y="0" z="0" />
+        </transformation>
+
+        <transformation id="transform_torus">
+            <rotate axis="x" angle="90" />
         </transformation>
 
     </transformations>
@@ -52,15 +60,28 @@
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
         <primitive id="demoSphere">
-            <sphere radius="3" slices="10" stacks="10" />
+            <sphere radius="3" slices="50" stacks="50" />
         </primitive>
         <primitive id="demoTorus">
-            <torus inner="3" outer= "4" slices="50" loops="50" />
+            <torus inner="0.5" outer= "4" slices="50" loops="50" />
         </primitive>
 
     </primitives>
 
     <components>
+
+        <component id="demo_torus">
+            <transformation>
+                <transformationref id="transform_torus" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoTorus" />
+            </children>
+        </component>
          
          <component id="demoRoot1">
             <transformation>
@@ -72,6 +93,21 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoSphere" />
+                <componentref id="demo_torus" />
+            </children>
+        </component>
+
+        <component id="demoRoot2">
+            <transformation>
+                <transformationref id="demoTransform2" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoSphere" />
+                <componentref id="demo_torus" />
             </children>
         </component>
 
@@ -85,8 +121,10 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="demoRoot1" />
+                <componentref id="demoRoot2" />
             </children>
         </component>
+
 
     </components>
 </lxs>
