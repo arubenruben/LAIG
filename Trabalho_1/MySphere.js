@@ -147,4 +147,3 @@ class MySemiSphere extends CGFobject {
 
 }
 
-
