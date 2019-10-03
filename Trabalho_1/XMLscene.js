@@ -43,7 +43,7 @@ class XMLscene extends CGFscene {
 
        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 
-      /*  for (var key in this.graph.View) {
+        /*for (var key in this.graph.View) {
                         
 
             if (this.graph.Views.hasOwnProperty(key)) {

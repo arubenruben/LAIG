@@ -4,6 +4,8 @@
  */
 class MyComponent {
 	constructor(id) {
+
+		this.loaded = false;
 		
 		// component id
 		this.id = id;

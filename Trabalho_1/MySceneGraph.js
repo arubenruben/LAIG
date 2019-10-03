@@ -598,6 +598,7 @@ class MySceneGraph {
 
 
             var new_texture = new CGFtexture(this.scene, filepath);
+
             this.textures[textureID] = new_texture;
         }
        
@@ -614,6 +615,8 @@ class MySceneGraph {
         var children = materialsNode.children;
 
         this.materials = [];
+
+        
 
         var grandChildren = [];
         var ambient = [];
@@ -1000,9 +1003,9 @@ class MySceneGraph {
                         if(grandgrandChildren[k].nodeName == "componentref"){
 
                         var children_component_id = this.reader.getString(grandgrandChildren[k], 'id'); 
-                        if(this.components[componentID] == null){
+                        /*if(this.components[componentID] == null){
                             return "ID in the children Block for component of id" + componentID + "must be a valid reference";
-                        }
+                        }*/
                             component_aux.children_component.push(children_component_id);
                         }
                         else{
@@ -1151,37 +1154,63 @@ class MySceneGraph {
     displayScene() {
         //To do: Create display loop for transversing the scene graph
 
-        
-
-        this.scene.pushMatrix();
+       /* this.scene.pushMatrix();
         this.scene.multMatrix(this.transformations[this.components['demoRoot'].transformations[0]]);
         this.scene.enableTextures(true);
         this.materials['demoMaterial'].setTexture(this.textures['demoTexture']); 
         this.materials['demoMaterial'].apply();
         this.primitives['demoRectangle'].primitive.enableNormalViz();
         this.primitives['demoRectangle'].primitive.display();
-        this.scene.popMatrix();
+        this.scene.popMatrix();*/
 
-       // this.displaySceneRecursive(this.idRoot, this.materials[this.idRoot], this.textures[this.idRoot]);
+
+        this.scene.pushMatrix();
+        this.displaySceneRecursive(this.idRoot, this.materials[this.idRoot], this.textures[this.idRoot]);
+        this.scene.popMatrix();
 
        
     }
 
-    displaySceneRecursive(idNode, idmaterial_father, idtexture_father){
+    displaySceneRecursive(idNode, idmaterial_father, idtexture_father, ls, lt){
 
         var current_node = this.components[idNode];
-    
-       this.scene.multMatrix(this.transformations[current_node.transformations[0]]);
+        
+        if(current_node.materials[0] == "inherit"){
+            this.materials[idmaterial_father].apply()
+        }
+        else{
+            this.materials[current_node.materials[0]].apply();
+        }
 
+        if(current_node.texture[0] == "inherit"){
+            this.textures[idtexture_father].bind();
+        }
+        else if(current_node.texture[0] == "none"){
+            this.textures[idtexture_father].unbind();
+        }
+        else{
+            this.textures[current_node.texture[0]].bind();
+        }
+        
+
+
+
+        
+       
+
+    
+
+
+        this.scene.multMatrix(this.transformations[current_node.transformations[0]]);
+        
         for(let i = 0; i < current_node.children_primitives.length; i++){
             this.primitives[current_node.children_primitives[i]].primitive.display();
-       }
+        }
         
        for(let i = 0 ; i < current_node.children_component.length; i++){
             this.scene.pushMatrix();
-            this.displaySceneRecursive(current_node.children_component[i], this.materials[current_node.materials[0]], this.textures[this.components[idNode].texture[0]])
+            this.displaySceneRecursive(current_node.children_component[i], this.materials[current_node.materials[0]], this.textures[current_node.texture[0]])
             this.scene.popMatrix();
-            
         }
     }
 
