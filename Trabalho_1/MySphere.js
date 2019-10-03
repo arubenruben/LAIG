@@ -1,8 +1,8 @@
 /**
- * MySemiSphere
+ * MySphere
  * @constructor
  */
-class MySemiSphere extends CGFobject {
+class MySphere extends CGFobject {
     constructor(scene, radius, stacks, slices) {
         super(scene);
         this.scene = scene;

@@ -185,12 +185,12 @@ class MyPrimitive{
             return "No attribute height or incorrect value for it, ";
         }
         
-        slices = this.graph.reader.getInt(primitive_element, 'slices');
+        slices = this.graph.reader.getFloat(primitive_element, 'slices');
         if (!(slices != null && !isNaN(slices))){
             return "No attribute slices or incorrect value for it, ";
         }
         
-        stacks = this.graph.reader.getInt(primitive_element, 'stacks');
+        stacks = this.graph.reader.getFloat(primitive_element, 'stacks');
 
         args_aux.push(...[base, top, height, slices, stacks]);
 
@@ -207,17 +207,17 @@ class MyPrimitive{
             return "No attribute radius or incorrect value for it, ";
         }
         
-        slices = this.graph.reader.getInt(primitive_element, 'slices');
+        slices = this.graph.reader.getFloat(primitive_element, 'slices');
         if (!(slices != null && !isNaN(slices))){
             return "No attribute slices or incorrect value for it, ";
         }
         
-        stacks = this.graph.reader.getInt(primitive_element, 'stacks');
+        stacks = this.graph.reader.getFloat(primitive_element, 'stacks');
         if (!(stacks != null && !isNaN(stacks))){
             return "No attribute stacks or incorrect value for it, ";
         }
 
-        args_aux.push(...[base, slices, stacks]);
+        args_aux.push(...[radius, slices, stacks]);
 
         return args_aux;
     }
@@ -237,12 +237,12 @@ class MyPrimitive{
             return "No attribute outer or incorrect value for it, ";
         }
 
-        slices = this.graph.reader.getInt(primitive_element, 'slices');
+        slices = this.graph.reader.getFloat(primitive_element, 'slices');
         if (!(slices != null && !isNaN(slices))){
             return "No attribute slices or incorrect value for it, ";
         }
         
-        loops = this.graph.reader.getInt(primitive_element, 'loops');
+        loops = this.graph.reader.getFloat(primitive_element, 'loops');
         if (!(loops != null && !isNaN(loops))){
             return "No attribute loops or incorrect value for it, ";
         }

@@ -25,7 +25,7 @@ class MyTorus extends CGFobject {
         let incremento_fi=(2*Math.PI)/this.loops;
         let teta=0;
         let fi=0;
-        let x,y,z;
+        let x,y,z, nx, ny, nz;
 
 
         for(let i=0;i<=this.loops+1;i++){
@@ -38,27 +38,20 @@ class MyTorus extends CGFobject {
 
                 z=this.radius_inner*Math.sin(teta);
                 y=(this.radius_outter+this.radius_inner*Math.cos(teta))*Math.sin(fi);
-                x=(this.radius_outter+this.radius_inner*Math.cos(teta))*Math.cos(fi)
+                x=(this.radius_outter+this.radius_inner*Math.cos(teta))*Math.cos(fi);
 
-              
+                nx = Math.cos(teta)*Math.cos(fi);
+                ny = Math.cos(teta)*Math.sin(fi);
+                nz = Math.sin(teta);
+
                 this.vertices.push(x,y,z);
-                
-
+            
                 //Retificar
-                this.normals.push(0,0,1);
-                //
-                
-                
-
-
-                //this.indices.push(1,this.slices,this.slices+1);
+                this.normals.push(nx, ny, nz);
                 
                 if(i<this.loops){
                     this.indices.push(i*this.loops+j,(i+1)*this.loops+j,i*this.loops+j+1);
-
                     this.indices.push(i*this.loops+j+1,(i+1)*this.loops+j,(i+1)*this.loops+j+1);
-                    
-
                 }
                     
             

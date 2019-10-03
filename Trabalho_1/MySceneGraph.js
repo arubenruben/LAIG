@@ -859,7 +859,7 @@ class MySceneGraph {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
             }
             
-            var new_primitive = new MyPrimitive(this, grandChildren[i]);
+            var new_primitive = new MyPrimitive(this, grandChildren[0]);
             
             if(new_primitive.error == true){
                 return new_primitive.args + " with id: " + primitiveId;
@@ -1005,14 +1005,15 @@ class MySceneGraph {
                         /*if(this.components[componentID] == null){
                             return "ID in the children Block for component of id" + componentID + "must be a valid reference";
                         }*/
-                            component_aux.children_component.push(children_component_id);
+                            component_aux.children_component.push(this.components[children_component_id]);
                         }
                         else{
+
                             var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id'); 
-                            if(this.textures[texture_id]  == null){
+                            if(this.primitives[children_primitive_id]  == null){
                                 return "ID in the children Block for component of id" + componentID + "must be a valid reference";
                             }
-                            component_aux.children_primitives.push(children_primitive_id);
+                            component_aux.children_primitives.push(this.primitives[children_primitive_id]);
                         }
                     }
                 }
@@ -1153,18 +1154,18 @@ class MySceneGraph {
     displayScene() {
 
         this.scene.pushMatrix();
-        this.displaySceneRecursive(this.idRoot, this.components[this.idRoot].materials[0], this.components[this.idRoot].texture[0]);
+        this.displaySceneRecursive(this.components[this.idRoot], this.components[this.idRoot].materials[0], this.components[this.idRoot].texture[0]);
         this.scene.popMatrix();
 
        
     }
 
-    displaySceneRecursive(idNode, material_father, texture_father, ls, lt){
+    displaySceneRecursive(Node, material_father, texture_father, ls, lt){
 
-        var current_node = this.components[idNode];
+        var current_node = Node;
         
         if(current_node.materials[0] == "inherit"){
-        material_father.apply()
+            material_father.apply()
         }
         else{
             current_node.materials[0].apply();
@@ -1183,7 +1184,8 @@ class MySceneGraph {
         this.scene.multMatrix(current_node.transformations);
         
         for(let i = 0; i < current_node.children_primitives.length; i++){
-            this.primitives[current_node.children_primitives[i]].primitive.display();
+            current_node.children_primitives[i].primitive.enableNormalViz();
+            current_node.children_primitives[i].primitive.display();
         }
         
        for(let i = 0 ; i < current_node.children_component.length; i++){
