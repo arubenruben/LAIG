@@ -84,7 +84,7 @@
 
         <transformation id="length_transf">
             <rotate axis="x" angle="-90" />
-            <scale x="0.5" y="8" z="1" />
+            <scale x="0.7" y="8" z="1" />
         </transformation>
 
         <transformation id = "width_translation">
@@ -96,12 +96,42 @@
         </transformation>
 
           <transformation id = "length_translation_2">
-            <translate x="4.5" y="0" z="0"   />
+            <translate x="4.3" y="0" z="0"   />
         </transformation>
 
          <transformation id = "scale_the_terrain">
             <scale x="1.5" y="1" z="1"   />
         </transformation>
+
+
+
+        <transformation id = "left_side_terrain_transf">
+            <translate x="0" y="0" z="-1"/>
+            <rotate axis="y" angle="-90" />
+            <scale x="10" y="1" z="1"/>
+            <translate x="0" y="-1" z="0" />
+        </transformation>
+
+        <transformation id = "right_side_terrain_transf">
+            <translate x="5" y="0" z="-1"/>
+            <rotate axis="y" angle="-90" />
+            <scale x="10" y="1" z="1"/>
+            <translate x="0" y="-1" z="0" />
+        </transformation>
+
+
+        <transformation id = "front_side_terrain_transf">
+            <translate x="0" y="0" z="9"/>
+            <scale x="5" y="1" z="1"/>
+            <translate x="0" y="-1" z="0" />
+        </transformation>
+
+        <transformation id = "back_side_terrain_transf">
+            <translate x="0" y="0" z="-1"/>
+            <scale x="5" y="1" z="1"/>
+            <translate x="0" y="-1" z="0" />
+        </transformation>
+
 
     </transformations>
 
@@ -143,23 +173,7 @@
             </children>
         </component>
 
-
-
-
-        <component id="first_width">
-            <transformation>
-                <transformationref id="identity"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <componentref id="scale_rotate_width"/>
-            </children>
-        </component>
-
-        <component id="second_width">
+        <component id="floor_front_width">
             <transformation>
                 <transformationref id="width_translation"/>
             </transformation>
@@ -172,7 +186,22 @@
             </children>
         </component>
 
-        <component id="second_length">
+        <component id="floor_back_width">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="scale_rotate_width"/>
+                <componentref id="floor_front_width"/>
+            </children>
+        </component>
+
+
+        <component id="floor_right_length">
             <transformation>
                 <transformationref id="length_translation_2"/>
             </transformation>
@@ -186,7 +215,7 @@
         </component>
 
 
-        <component id="first_length">
+        <component id="floor_left_length">
             <transformation>
                 <transformationref id="length_translation"/>
             </transformation>
@@ -196,7 +225,7 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="scale_rotate_length"/>
-                <componentref id="second_length"/>
+                <componentref id="floor_right_length"/>
             </children>
         </component>
 
@@ -210,10 +239,9 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="first_width" />
-                <componentref id="second_width" />
-                <componentref id="first_length" />
-              <!--  <componentref id="second_length" /> -->
+                <componentref id="floor_back_width" />
+                <componentref id="floor_left_length" />
+
             </children>
         </component>
 
@@ -232,6 +260,60 @@
             </children>
         </component>
 
+        <component id="right_side">
+            <transformation>
+                <transformationref id="right_side_terrain_transf" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="left_side">
+            <transformation>
+                <transformationref id="left_side_terrain_transf" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="back_side">
+            <transformation>
+                <transformationref id="back_side_terrain_transf" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="front_side">
+            <transformation>
+                <transformationref id="front_side_terrain_transf" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+
+
         <component id="terrain">
           <transformation>
                 <transformationref id="scale_the_terrain" />
@@ -243,6 +325,11 @@
             <children>
                 <componentref id="underground"/>
                 <componentref id="floor"/>
+                <componentref id="left_side"/>
+                 <componentref id="right_side"/>
+                <componentref id="front_side"/>
+                 <componentref id="back_side"/>
+              
 
             </children>
         </component>
