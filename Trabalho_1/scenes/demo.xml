@@ -58,16 +58,16 @@
         </transformation>
 
         <transformation id="underground_transf">
-            <translate x="-10" y="-5" z="-20" />
+            <translate x="0" y="-1" z="-1" />
             <rotate axis="x" angle="90" />
-            <scale x="30" y="40" z="1" />
+            <scale x="5" y="10" z="1" />
             
         </transformation>
 
         <transformation id="floor_transf">
             <translate x="-10" y="-5" z="20" />
             <rotate axis="x" angle="-90" />
-            <scale x="30" y="40" z="1" />
+            <scale x="5" y="40" z="1" />
             
         </transformation>
 
@@ -75,15 +75,33 @@
             <translate x="-10" y="0" z="-20" />
             <rotate axis="x" angle="-90" />
             <scale x="5" y="10" z="1" />
-            
         </transformation>
 
         <transformation id="width_transf">
             <rotate axis="x" angle="-90" />
-            <scale x="30" y="1" z="1" />
-
+            <scale x="5" y="1" z="1" />
         </transformation >
 
+        <transformation id="length_transf">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.5" y="8" z="1" />
+        </transformation>
+
+        <transformation id = "width_translation">
+            <translate x="0" y="0" z="9"   />
+        </transformation>
+
+        <transformation id = "length_translation">
+            <translate x="0" y="0" z="8"   />
+        </transformation>
+
+          <transformation id = "length_translation_2">
+            <translate x="4.5" y="0" z="0"   />
+        </transformation>
+
+         <transformation id = "scale_the_terrain">
+            <scale x="1.5" y="1" z="1"   />
+        </transformation>
 
     </transformations>
 
@@ -112,20 +130,20 @@
         </component>
 
 
-
-
-        <component id="second_width">
+        <component id="scale_rotate_length">
             <transformation>
-                <translate x="0" y="0" z="10" />
+                <transformationref id="length_transf"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="scale_rotate_width"/>
+                <primitive id="square"/>
             </children>
         </component>
+
+
 
 
         <component id="first_width">
@@ -141,6 +159,48 @@
             </children>
         </component>
 
+        <component id="second_width">
+            <transformation>
+                <transformationref id="width_translation"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="scale_rotate_width"/>
+            </children>
+        </component>
+
+        <component id="second_length">
+            <transformation>
+                <transformationref id="length_translation_2"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="scale_rotate_length"/>
+            </children>
+        </component>
+
+
+        <component id="first_length">
+            <transformation>
+                <transformationref id="length_translation"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="scale_rotate_length"/>
+                <componentref id="second_length"/>
+            </children>
+        </component>
+
+
         <component id="floor">
             <transformation>
                 <transformationref id="identity"/>
@@ -150,8 +210,10 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-            
                 <componentref id="first_width" />
+                <componentref id="second_width" />
+                <componentref id="first_length" />
+              <!--  <componentref id="second_length" /> -->
             </children>
         </component>
 
@@ -172,7 +234,7 @@
 
         <component id="terrain">
           <transformation>
-                <transformationref id="identity" />
+                <transformationref id="scale_the_terrain" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />

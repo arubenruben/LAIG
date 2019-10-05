@@ -55,14 +55,8 @@ class MyCilinder extends CGFobject {
                 }
                 this.normals.push(cos_value,sin_value,0);
 
-            }    
-            
-            
-            
+            }          
         }
-
-
-
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
