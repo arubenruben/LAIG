@@ -23,121 +23,85 @@ class MySphere extends CGFobject {
         this.texCoords = [];
 
         var teta, fi, x, y, z;
-
+        this.slices = 5;
         var increment_teta = (Math.PI / 2.0) / this.stacks;
         var increment_fi = (2 * Math.PI) / this.slices;
+      
+        //2*this.stacks+1
+        
 
+        for (var i = 0; i < 2*this.stacks+1; i++) {
 
+            teta =  Math.PI/2.0 + i * increment_teta;
 
-        for (var i = 0; i < this.stacks; i++) {
-
-            teta = i * increment_teta;
-
-            for (var j = 0; j < this.slices; j++) {
+            for (var j = 0; j < this.slices; j++){
 
                 fi = j * increment_fi;
-
                 x = this.r * Math.cos(teta) * Math.cos(fi);
                 y = this.r * Math.cos(teta) * Math.sin(fi);
                 z = this.r * Math.sin(teta);
-
-                this.vertices.push(x, y, z);
-
-                /*Em cima so desenha um triangulo*/
-
-                //Ate la desenha retangulos
-
-                if (i < this.stacks - 1 && j < this.slices - 1) {
-                    this.indices.push(i * this.stacks + j, i * this.stacks + j + 1, (i + 1) * this.stacks + j);
-
-                    this.indices.push((i + 1) * this.stacks + j, i * this.stacks + j + 1, (i + 1) * this.stacks + j + 1);
+                if(i != 2*this.stacks){
+                    this.vertices.push(x, y, z);
+                    this.normals.push(x / this.r, y / this.r, z / this.r);
+                }
+                
+                if(i == 0 ){
+                    break;
+                }
+                else if (i==1){
+                    this.indices.push(0, j, j+1);
+                }
+                else if(i <= 2*this.stacks - 1 && j < this.slices  -1){
+                    this.indices.push(i * this.slices - (this.slices-1)+j, i * this.slices - (this.slices -1) +j+1,  (i-1) * this.slices - (this.slices-1)+j);
+                    this.indices.push(i * this.slices - (this.slices-1)+j+1, (i-1) * this.slices - (this.slices -1) +j+1,  (i-1) * this.slices - (this.slices-1)+j);
+                }
+                else if(i == 2*this.stacks && j < this.slices  -1){
+                    if(j == 0){
+                        this.vertices.push(x, y, z);
+                        this.normals.push(x / this.r, y / this.r, z / this.r);
+                    }
+                    this.indices.push(2*this.slices*this.stacks - (this.slices-1), (i-1)*this.slices -(this.slices-1) +j+1, (i-1)*this.slices -(this.slices-1) +j );
                 }
 
-                this.normals.push(x / this.r, y / this.r, z / this.r);
-                this.texCoords1 = [
+                if(i == 0){
+
+                }
+                else if(i == 2*this.stacks){
+
+                }
+                else{
+                
+                    
+                }
+                /*this.texCoords1 = [
                     0, 0,
                     0, 1,
                     1, 0,
                     1, 1
                 ];
-                this.texCoords.push(...this.texCoords1);
+                this.texCoords.push(...this.texCoords1);*/
 
             }
+            if(i!= 0){
+                if(i == 1){
+                this.indices.push(0, this.slices, 1);
+                }
+                else if (i > 1 && i < 2*this.stacks){
+                    this.indices.push(i*this.slices -(this.slices-1), (i-1)*this.slices - (this.slices-1) + this.slices-1, (i)*this.slices - (this.slices-1) + this.slices-1); 
+                    this.indices.push(i * this.slices - (this.slices-1), (i-1) * this.slices - (this.slices-1), (i-1) * this.slices - (this.slices-1) + this.slices-1);
+                }
+                else if(i == 2*this.stacks){
+                  this.indices.push(2*this.slices*this.stacks - (this.slices-1),(i-1)*this.slices -(this.slices-1), (i-1)*this.slices -(this.slices-1) +this.slices-1 );
 
-
-            if (i < this.stacks - 1) {
-                j--;
-                this.indices.push(i * this.stacks + j, i * this.stacks, (i + 1) * this.stacks + j);
-                this.indices.push((i + 1) * this.stacks + j, i * this.stacks, (i + 1) * this.stacks);
-            }
-
-        }
-        
-        this.vertices.push(0, 0, this.r);
-        this.normals.push(0, 0, 1);
-        i--;
-        for (var k = 0; k < this.slices - 1; k++) {
-            
-            this.indices.push(i * this.stacks + k - 1, i * this.stacks + k, i * this.stacks + this.slices - 1);
-            
-        }
-        
-        
-        let count_n_vertices = this.vertices.length / 3;
-    
-        for (var i = 0; i < this.stacks; i++) {
-
-            teta = i * increment_teta;
-
-            for (var j = 0; j < this.slices; j++) {
-
-                fi = j * increment_fi;
-
-                x = this.r * Math.cos(teta) * Math.cos(fi);
-                y = this.r * Math.cos(teta) * Math.sin(fi);
-                z = -this.r * Math.sin(teta);
-
-                this.vertices.push(x, y, z);
-
-                /*Em cima so desenha um triangulo*/
-
-                //Ate la desenha retangulos
-
-                if (i < this.stacks - 1 && j < this.slices - 1) {
-                    this.indices.push(i * this.stacks + j + count_n_vertices, (i + 1) * this.stacks + j + count_n_vertices, i * this.stacks + j + 1 + count_n_vertices);
-
-                    this.indices.push((i + 1) * this.stacks + j + count_n_vertices, (i + 1) * this.stacks + j + 1 + count_n_vertices, i * this.stacks + j + 1 + count_n_vertices);
                 }
 
-                this.normals.push(x / this.r, y / this.r, z / this.r);
-                this.texCoords1 = [
-                    0, 0,
-                    0, 1,
-                    1, 0,
-                    1, 1
-                ];
-                this.texCoords.push(...this.texCoords1);
-
             }
-
-            if (i < this.stacks - 1) {
-                j--;
-              
-                this.indices.push(i * this.stacks + j+count_n_vertices,  (i + 1) * this.stacks + j+count_n_vertices,i * this.stacks+count_n_vertices);
-                this.indices.push( (i+1)  * this.stacks + j+count_n_vertices, (i+1) * this.stacks+count_n_vertices, i * this.stacks+count_n_vertices);
-            }
-            
-
         }
 
-        this.vertices.push(0, 0, -this.r);
-        this.normals.push(0, 0, -1);
-        i--;
-        for (var k = 1; k < this.slices ; k++) {
+       /* this.vertices.push(0, 0, this.r * (-1));
+        this.normals.push(0, 0,-1);*/
 
-            this.indices.push(i * this.stacks + this.slices - 1+count_n_vertices, i * this.stacks + k+count_n_vertices,i * this.stacks + k - 1+count_n_vertices);
-
-        }
+     
 
 
         this.primitiveType = this.scene.gl.TRIANGLES;
@@ -146,4 +110,3 @@ class MySphere extends CGFobject {
 
 
 }
-

@@ -221,7 +221,7 @@ class MySceneGraph {
         if (axis_length == null)
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
         
-        //Magics of JS, se tiver definido fica axis_lenght, se nao fica 1
+        //Assuming axis length is one
         this.referenceLength = axis_length || 1;
 
         this.log("Parsed scene");
@@ -284,6 +284,7 @@ class MySceneGraph {
 
 
             }
+
             else if ((children[i].nodeName == "perspective" && perspective_set == true) || children[i].nodeName == "ortho" && ortho_set == true) {
                 this.onXMLError("Nao era suposto existirem duas tags do mesmo tipo (perspetive ou ortho) na vista");
             }
@@ -1184,7 +1185,7 @@ class MySceneGraph {
         this.scene.multMatrix(current_node.transformations);
         
         for(let i = 0; i < current_node.children_primitives.length; i++){
-            //current_node.children_primitives[i].primitive.enableNormalViz();
+            current_node.children_primitives[i].primitive.enableNormalViz();
             current_node.children_primitives[i].primitive.display();
         }
         
