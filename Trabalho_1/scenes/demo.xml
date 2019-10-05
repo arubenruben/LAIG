@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="demoRoot" axis_length="5"/>
+    <scene root="terrain" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -27,6 +27,7 @@
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
         <texture id="dirt" file="scenes/images/dirt.jpg" />
         <texture id="grass" file="scenes/images/grass.jpg" />
+        <texture id="marble" file="scenes/images/marble.jpg" />
 
     </textures>
 
@@ -58,13 +59,6 @@
 
         <transformation id="identity">
             <translate x="0" y="0" z="0"/>
-        </transformation>
-
-        <transformation id="underground_transf">
-            <translate x="0" y="-1" z="-1" />
-            <rotate axis="x" angle="90" />
-            <scale x="5" y="10" z="1" />
-            
         </transformation>
 
         <transformation id="floor_transf">
@@ -108,32 +102,29 @@
 
 
 
-        <transformation id = "left_side_terrain_transf">
-            <translate x="0" y="0" z="-1"/>
-            <rotate axis="y" angle="-90" />
-            <scale x="10" y="1" z="1"/>
-            <translate x="0" y="-1" z="0" />
-        </transformation>
 
-        <transformation id = "right_side_terrain_transf">
-            <translate x="5" y="0" z="-1"/>
-            <rotate axis="y" angle="-90" />
-            <scale x="10" y="1" z="1"/>
-            <translate x="0" y="-1" z="0" />
+        <transformation id ="floor_around_pool_transf">
+            <translate x="0.5" y="0" z="0"/>
+            <scale x= "0.7" y="1" z="0.8"/> 
+            <translate x="0" y="0" z="1"/>
         </transformation>
 
 
-        <transformation id = "front_side_terrain_transf">
-            <translate x="0" y="0" z="9"/>
-            <scale x="5" y="1" z="1"/>
+        <!-- VERIFICADAS-->
+
+        <transformation id="underground_transf">
             <translate x="0" y="-1" z="0" />
+            <rotate axis="x" angle="90" />
+            <scale x="14" y="20" z="1" />
+            
         </transformation>
 
-        <transformation id = "back_side_terrain_transf">
-            <translate x="0" y="0" z="-1"/>
-            <scale x="5" y="1" z="1"/>
-            <translate x="0" y="-1" z="0" />
+        <transformation id ="terrain_transf">
+            <translate x="0" y="0" z="0"/>
         </transformation>
+
+        
+
 
 
     </transformations>
@@ -232,6 +223,21 @@
             </children>
         </component>
 
+          <component id="floor1">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="floor_back_width" />
+                <componentref id="floor_left_length" />
+
+            </children>
+        </component>
+
 
         <component id="floor">
             <transformation>
@@ -248,11 +254,25 @@
             </children>
         </component>
 
+        <component id="floor_around_pool">
+            <transformation>
+                <transformationref id="floor_around_pool_transf"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="marble"/>
+            <children>
+                <componentref id="floor1"/>
+            </children>
+        </component>
+            
+
 
         
         <component id="underground">
             <transformation>
-                <transformationref id="underground_transf" />
+                <transformationref id="underground_transf"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -263,22 +283,54 @@
             </children>
         </component>
 
+        <!--SIDES-->
+
+        <component id="left_right_side_primitive">
+                <transformation>
+                        <translate x="0" y="-1" z="0" />
+                        <scale x="1" y="2" z="20"/>
+                        <rotate axis="y" angle="-90"/>
+                </transformation>
+                <materials>
+                    <material id="demoMaterial" />
+                </materials>
+                <texture id="inherit"/>
+                <children>
+                    <primitiveref id="square" />
+                </children>
+            </component>
+
         <component id="right_side">
             <transformation>
-                <transformationref id="right_side_terrain_transf" />
+                    <translate x="14" y="0" z="0"/>
+                    <rotate axis="z" angle="180"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square" />
+                <componentref id="left_right_side_primitive"/>
             </children>
         </component>
 
         <component id="left_side">
             <transformation>
-                <transformationref id="left_side_terrain_transf" />
+                    <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="left_right_side_primitive"/>
+            </children>
+        </component>
+
+        <component id="back_front_side_primitive">
+            <transformation>
+                    <translate x="0" y="-1" z="0" />
+                    <scale x="14" y="2" z="1"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -290,64 +342,78 @@
         </component>
 
         <component id="back_side">
-            <transformation>
-                <transformationref id="back_side_terrain_transf" />
+            <transformation>  
+                <!-- putting normals the correct way-->
+                <translate x="0" y="0" z="0"/> 
+                <rotate axis="x" angle ="180"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square" />
+                <componentref id="back_front_side_primitive"/>
             </children>
         </component>
 
         <component id="front_side">
             <transformation>
-                <transformationref id="front_side_terrain_transf" />
+                <translate x="0" y="0" z="20"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square" />
+                <componentref id="back_front_side_primitive"/>
             </children>
         </component>
 
+        <component id="sides">
+            <transformation>
+                <transformationref id="identity" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="left_side"/>
+                <componentref id="right_side"/>
+               <componentref id="front_side"/>
+               <componentref id="back_side"/>
+            </children>
+        </component>
+
+        <!-- TERRAIN ITSELF / ROOT OF XML-->
+
         <component id="terrain">
           <transformation>
-                <transformationref id="scale_the_terrain" />
+                <transformationref id="identity" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="dirt"/>
             <children>
-                <componentref id="underground"/>
-                <componentref id="floor"/>
-                <componentref id="left_side"/>
-                 <componentref id="right_side"/>
-                <componentref id="front_side"/>
-                 <componentref id="back_side"/>
+                
+               <componentref id="underground"/>
+            <!--   <componentref id="floor"/> -->
+              <componentref id="sides"/> 
               
 
-            </children>
-        </component>
-
-        <component id="demoRoot">
-            <transformation>
-                <transformationref id="demoTransform" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial"/>
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <componentref id="terrain" />   
             </children>
         </component>
 
 
     </components>
 </lxs>
+
+
+
+
+
+
+
+
+

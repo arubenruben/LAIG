@@ -720,6 +720,77 @@ class MySceneGraph {
         return null;
     }
 
+    parseTransformations_components(transformationsNode, transformation = [], id) {
+        
+        var children = transformationsNode.children;
+            // Specifications for the current transformation.
+
+            var transfMatrix = mat4.create();
+
+            for (var j = 0; j < children.length; j++) {
+                switch (children[j].nodeName) {
+                    case 'translate':
+                        var coordinates = this.parseCoordinates3D(children[j], "translate transformation for component of " + id);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+
+                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        break;
+                    case 'scale':
+
+                        var coordinates= this.parseCoordinates3D(children[j],"Scale tranformation for component of " + id);
+
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+                    
+                        transfMatrix=mat4.scale(transfMatrix,transfMatrix,coordinates);
+                    
+                        break;
+                    case 'rotate':
+                        // angle
+                        //Os angulos e preciso converter para radianos
+                        var x=0,y=0,z=0;
+                        var aux_array_axis=[];
+                        
+                        var axis= this.reader.getString(children[j],'axis');
+                        
+                        if(axis==null){
+                            return "Erro a encontrar a tag axis na rotacao";
+                        }
+
+                        var angle=this.reader.getFloat(children[j],'angle');
+                        if(angle==null){
+                            return "Erro a encontrar a tag angle na rotacao";
+                        }
+
+                        if(axis=='x'){
+                            x=1;
+                        }else if(axis=='y'){
+                            y=1;
+                        }else if(axis=='z'){
+                            z=1;
+                        }else{
+                            return "Axis invalido na rotacao";
+                        }
+                        
+                        aux_array_axis.push(...[x,y,z]);
+
+                        if (!Array.isArray(aux_array_axis))
+                            return aux_array_axis;
+                        
+                        transfMatrix=mat4.rotate(transfMatrix,transfMatrix,angle*DEGREE_TO_RAD,aux_array_axis);
+                        
+                    
+                        break;
+                }
+            }
+            transformation.push(transfMatrix);
+
+        this.log("Parsed transformations for component of id "  + id);
+            return null;
+    }
+
+
     /**
      * Parses the <transformations> block.
      * @param {transformations block element} transformationsNode
@@ -949,10 +1020,10 @@ class MySceneGraph {
                             if(this.transformations[transformation_id]  == null){
                                 return "ID in the transformations Block for component of id " + componentID + "must be a valid reference";
                             }
-                            component_aux.transformations = this.transformations[transformation_id];
+                            component_aux.transformations.push(this.transformations[transformation_id]);
                         }
                         else{
-                            this.parseTransformations(grandChildren[j], component_aux.transformations);
+                            this.parseTransformations_components(grandChildren[j], component_aux.transformations,  componentID);
                         }
                     }
                 }
@@ -1190,7 +1261,7 @@ class MySceneGraph {
             current_node.texture[0].bind();
         }
     
-        this.scene.multMatrix(current_node.transformations);
+        this.scene.multMatrix(current_node.transformations[0]);
         
         for(let i = 0; i < current_node.children_primitives.length; i++){
             current_node.children_primitives[i].primitive.enableNormalViz();

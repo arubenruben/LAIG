@@ -11,7 +11,7 @@ class MyComponent {
 		this.id = id;
 		
 		// array to hold either the id of transformations refered or to hold information about the trasnformation
-		this.transformations;
+		this.transformations = [];
 
 		// array to hold the id of the materials used, if id == "inherit" then the material would be that of the
 		// father.
