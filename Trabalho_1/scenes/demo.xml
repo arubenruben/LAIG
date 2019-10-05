@@ -25,6 +25,9 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="dirt" file="scenes/images/dirt.jpg" />
+        <texture id="grass" file="scenes/images/grass.jpg" />
+
     </textures>
 
     <materials>
@@ -153,7 +156,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitive id="square"/>
             </children>
@@ -167,7 +170,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitive id="square"/>
             </children>
@@ -180,7 +183,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="scale_rotate_width"/>
             </children>
@@ -193,7 +196,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="scale_rotate_width"/>
                 <componentref id="floor_front_width"/>
@@ -208,7 +211,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="scale_rotate_length"/>
             </children>
@@ -222,7 +225,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="scale_rotate_length"/>
                 <componentref id="floor_right_length"/>
@@ -237,7 +240,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="grass"/>
             <children>
                 <componentref id="floor_back_width" />
                 <componentref id="floor_left_length" />
@@ -254,7 +257,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="square" />
             </children>
@@ -267,7 +270,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="square" />
             </children>
@@ -280,7 +283,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="square" />
             </children>
@@ -293,7 +296,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="square" />
             </children>
@@ -306,13 +309,11 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="square" />
             </children>
         </component>
-
-
 
         <component id="terrain">
           <transformation>
@@ -321,7 +322,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="dirt"/>
             <children>
                 <componentref id="underground"/>
                 <componentref id="floor"/>

@@ -982,6 +982,14 @@ class MySceneGraph {
                     if(this.textures[texture_id]  == null  && texture_id!="inherit"){
                         return "ID in the material Block for component of id" + componentID + "must be a valid reference";
                     }
+                    else if(texture_id == "inherit"){
+                        component_aux.texture.push(texture_id);
+
+                    }
+                    else if(texture_id == "none"){
+                        component_aux.texture.push(texture_id);
+
+                    }
                     
                     var length_s = this.reader.getString(grandChildren[i], 'length_s'); 
                     var length_t = this.reader.getString(grandChildren[i], 'length_t'); 
@@ -1191,7 +1199,13 @@ class MySceneGraph {
         
        for(let i = 0 ; i < current_node.children_component.length; i++){
             this.scene.pushMatrix();
-            this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0]);
+            if(current_node.texture[0] == "inherit"){
+                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father);
+            }
+            else{
+                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0]);
+            }
+
             this.scene.popMatrix();
         }
     }
