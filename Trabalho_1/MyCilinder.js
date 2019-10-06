@@ -25,6 +25,7 @@ class MyCilinder extends CGFobject {
         let var_teta=2*Math.PI/this.slices;
         let var_height=this.height/this.stacks;
         let x=0,y=0,z=0;
+        var texture_parameter = 1.0 / this.slices;
         
         //Comeco a desenhar a base
 
@@ -54,6 +55,14 @@ class MyCilinder extends CGFobject {
                     
                 }
                 this.normals.push(cos_value,sin_value,0);
+
+                var textcoords1 =[
+                    i * texture_parameter,0,
+                    i*texture_parameter,1,
+                    texture_parameter+ i*texture_parameter,1,
+                    texture_parameter+ i*texture_parameter,0
+                ];
+                this.texCoords.push(...textcoords1);
 
             }    
             

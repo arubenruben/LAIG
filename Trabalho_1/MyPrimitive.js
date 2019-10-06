@@ -52,7 +52,17 @@ class MyPrimitive{
                 else
                     this.primitive = new MySphere(this.graph.scene, this.args[0], this.args[1], this.args[2]); 
             break;
-            
+
+            case "semisphere":
+                this.args = this.parse_sphere_attributes(primitive_element);
+                if(!Array.isArray(this.args)){
+                    this.args = this.args + " primitive of type " +  this.primitiveType;
+                    this.error = true;
+                }
+                else
+                    this.primitive = new MySemiSphere(this.graph.scene, this.args[0], this.args[1], this.args[2]); 
+            break;
+                        
             case "torus":
                 this.args =this.parse_torus_attributes(primitive_element);
                 if(!Array.isArray(this.args)){
@@ -192,7 +202,7 @@ class MyPrimitive{
         
         stacks = this.graph.reader.getFloat(primitive_element, 'stacks');
 
-        args_aux.push(...[base, top, height, slices, stacks]);
+        args_aux.push(...[slices, stacks, height, top, base]);
 
         return args_aux;
     }

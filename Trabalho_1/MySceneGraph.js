@@ -1264,7 +1264,7 @@ class MySceneGraph {
         this.scene.multMatrix(current_node.transformations[0]);
         
         for(let i = 0; i < current_node.children_primitives.length; i++){
-            current_node.children_primitives[i].primitive.enableNormalViz();
+            //current_node.children_primitives[i].primitive.enableNormalViz();
             current_node.children_primitives[i].primitive.display();
         }
         
