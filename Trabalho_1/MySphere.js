@@ -23,7 +23,6 @@ class MySphere extends CGFobject {
         this.texCoords = [];
 
         var teta, fi, x, y, z;
-        this.slices = 5;
         var increment_teta = (Math.PI / 2.0) / this.stacks;
         var increment_fi = (2 * Math.PI) / this.slices;
       

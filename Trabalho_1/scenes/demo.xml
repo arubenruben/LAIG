@@ -9,8 +9,8 @@
     </views>
 
     <ambient>
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+        <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
+        <background r="0.1" g="0.3" b="0.6" a="1.0" />
     </ambient>
 
     <lights>
@@ -28,7 +28,8 @@
         <texture id="dirt" file="scenes/images/dirt.jpg" />
         <texture id="grass" file="scenes/images/grass.jpg" />
         <texture id="marble" file="scenes/images/marble.jpg" />
-
+        <texture id="water" file="scenes/images/water.jpg" />
+        <texture id="pool_tiles" file="scenes/images/pool_tiles.jpg" />
     </textures>
 
     <materials>
@@ -38,6 +39,27 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </material>
+
+        <material id="orange_material" shininess="10">
+                <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+                <ambient r="1.0" g="0.5" b="0.0" a="1.0" />
+                <diffuse r="1.0" g="0.5" b="0.0" a="1.0" />
+                <specular r="1.0" g="0.5" b="0.0" a="1.0" />
+            </material>
+
+            <material id="red_material" shininess="10">
+                    <emission r="1" g="0" b="0.2" a="1.0" />
+                    <ambient r="1" g="0" b="0.2" a="1.0" />
+                    <diffuse r="1" g="0" b="0.2" a="1.0" />
+                    <specular r="1" g="0" b="0.2" a="1.0" />
+                </material>
+
+            <material id="magenta_material" shininess="10">
+                        <emission r="0.7" g="0" b="0.2" a="1.0" />
+                        <ambient r="0.7" g="0" b="0.2" a="1.0" />
+                        <diffuse r="0.7" g="0" b="0.2" a="1.0" />
+                        <specular r="0.7" g="0" b="0.2" a="1.0" />
+            </material>
     </materials>
 
     <transformations>
@@ -77,6 +99,14 @@
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
         
+        <primitive id="torus_bouy">
+            <torus inner="0.2" outer="0.4" slices="10" loops="10"/>
+        </primitive>
+
+        <primitive id="sphere_ball">
+                <sphere radius="0.3" slices="20" stacks="20"/>
+            </primitive>
+        
     </primitives>
 
     <components>
@@ -112,6 +142,21 @@
                                 <primitiveref id="square"/>
                         </children>
                     </component>
+
+                    <component id="marble_width_2">
+                            <transformation>
+                                <translate x="4" y="0" z="6"/>
+                                <rotate axis="x" angle="-90"/>
+                                <scale x="6" y="4" z="1"/>
+                            </transformation>
+                            <materials>
+                                <material id="demoMaterial" />
+                            </materials>
+                            <texture id="marble"/>
+                            <children>
+                                    <primitiveref id="square"/>
+                            </children>
+                        </component>
 
                     <component id="grass_length">
                             <transformation>
@@ -169,6 +214,7 @@
                         <texture id="inherit"/>
                         <children>
                                 <componentref id="grass_width"/>
+                                <componentref id="marble_width_2"/>
                         </children>
                     </component>
 
@@ -360,6 +406,116 @@
             </children>
         </component>
 
+         <component id="ramp">
+                <transformation>
+                     <translate x="3" y="0" z="18"/> 
+                     <rotate axis="x" angle="-105"/>
+                     <scale x="7" y="5" z="0"/>
+                </transformation>
+                <materials>
+                    <material id="demoMaterial" />
+                </materials>
+                <texture id="pool_tiles"/>
+                <children>
+                   <primiteref id="square"/>
+                </children>
+            </component>
+        
+
+        <component id="sides1">
+                <transformation>
+                    <translate x="4" y="0" z="6"/>
+                    <scale x="0.430" y="0.5" z="0.6"/>
+                </transformation>
+                <materials>
+                    <material id="demoMaterial" />
+                </materials>
+                <texture id="pool_tiles"/>
+                <children>
+                    <componentref id="left_side"/>
+                    <componentref id="right_side"/>
+                   <componentref id="back_side"/>
+                   <componentref id="underground"/> 
+                    
+                </children>
+            </component>
+        
+        <component id="water">
+                <transformation>
+                        <translate x="4" y="-0.3" z="20"/>
+                        <rotate axis="x" angle="-90"/>
+                        <scale x="6" y="20" z="1"/>
+                    </transformation>
+                    <materials>
+                        <material id="demoMaterial" />
+                    </materials>
+                    <texture id="water"/>
+                    <children>
+                        <primitiveref id="square"/>
+                    </children>
+        </component>
+
+        <component id="water_ball">
+                <transformation>
+                        <translate x="7" y="-0.1" z="8"/>
+                        <scale x="2" y="2" z="2"/>
+                        
+                    </transformation>
+                    <materials>
+                        <material id="red_material" />
+                    </materials>
+                    <texture id="water"/>
+                    <children>
+                        <primitiveref id="sphere_ball"/>
+                    </children>
+        </component>
+
+         <component id="water_bouy">
+                <transformation>
+                    <translate x="8" y="-0.3" z="13"/>
+                        <rotate axis="x" angle="90"/>
+                    </transformation>
+                    <materials>
+                        <material id="orange_material"/>
+                    </materials>
+                    <texture id="water"/>
+                    <children>
+                        <primitiveref id="torus_bouy"/>
+                    </children>
+        </component>
+
+        <component id="water_bouy_2">
+                <transformation>
+                    <translate x="6" y="-0.3" z="15"/>
+                        <rotate axis="x" angle="90"/>
+                    </transformation>
+                    <materials>
+                        <material id="magenta_material"/>
+                    </materials>
+                    <texture id="water"/>
+                    <children>
+                        <primitiveref id="torus_bouy"/>
+                    </children>
+        </component>
+
+        <component id="pool">
+                <transformation>
+                        <transformationref id="identity" />  
+                    </transformation>
+                    <materials>
+                        <material id="demoMaterial" />
+                    </materials>
+                    <texture id="water"/>
+                    <children>
+                        <componentref id="sides1"/>
+                        <componentref id="ramp"/>
+                        <componentref id="water"/>
+                        <componentref id="water_ball"/>
+                        <componentref id="water_bouy"/>
+                        <componentref id="water_bouy_2"/>
+                    </children>
+        </component>
+
         <!-- TERRAIN ITSELF / ROOT OF XML-->
 
         <component id="terrain">
@@ -375,6 +531,7 @@
                <componentref id="underground"/>
                 <componentref id="floor"/> 
               <componentref id="sides"/> 
+                <componentref id="pool"/>
               
 
             </children>
