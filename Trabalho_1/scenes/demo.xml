@@ -28,6 +28,7 @@
         <texture id="dirt" file="scenes/images/dirt.jpg" />
         <texture id="grass" file="scenes/images/grass.jpg" />
         <texture id="marble" file="scenes/images/marble.jpg" />
+        <texture id="esperguicadeira" file="scenes/images/esperguicadeira.png"/>
 
     </textures>
 
@@ -41,149 +42,377 @@
     </materials>
 
     <transformations>
-        
-        
-        
-        
+
+
         <!-- VERIFICADAS-->
         <transformation id="demoTransform">
             <translate x="0" y="0" z="0" />
         </transformation>
 
-      
+
         <transformation id="identity">
             <translate x="0" y="0" z="0"/>
         </transformation>
-        
+
         <transformation id="underground_transf">
             <translate x="0" y="-2" z="0" />
             <rotate axis="x" angle="90" />
             <scale x="14" y="20" z="1" />
-            
+
         </transformation>
 
         <transformation id ="terrain_transf">
             <translate x="0" y="0" z="0"/>
         </transformation>
 
-        
+
 
 
 
     </transformations>
 
     <primitives>
-       <primitive id="square">
+        <primitive id="square">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
-        
+
+        <primitive id="cilinder">
+            <cylinder base="5" top="5" height="5" slices="60" stacks="60" />
+        </primitive>
+
     </primitives>
 
     <components>
 
-            <component id="grass_width">
-                    <transformation>
-                        
-                            <translate x="2" y="0" z="2"/>
-                            <rotate axis="x" angle="-90"/>
-                            <scale x="10" y="2" z="1"/>
-
-                    </transformation>
-                    <materials>
-                        <material id="demoMaterial" />
-                    </materials>
-                    <texture id="grass"/>
-                    <children>
-                        <primitiveref id="square"/>
-                    </children>
-                </component>
-
-                <component id="marble_width">
-                        <transformation>
-                            <translate x="2" y="0" z="20"/>
-                            <rotate axis="x" angle="-90"/>
-                            <scale x="10" y="2" z="1"/>
-                        </transformation>
-                        <materials>
-                            <material id="demoMaterial" />
-                        </materials>
-                        <texture id="marble"/>
-                        <children>
-                                <primitiveref id="square"/>
-                        </children>
-                    </component>
-
-                    <component id="grass_length">
-                            <transformation>
-                                <rotate axis="y" angle="-90"/>
-                                <rotate axis="x" angle="-90"/>
-                                <scale x="20" y="2" z="1"/>
-        
-                            </transformation>
-                            <materials>
-                                <material id="demoMaterial" />
-                            </materials>
-                            <texture id="grass"/>
-                            <children>
-                                <primitiveref id="square"/>
-                            </children>
-                        </component>
-        
-                        <component id="marble_length">
-                                <transformation>
-                                    <translate x="2" y="0" z="2"/>
-                                    <rotate axis="y" angle="-90"/>
-                                    <rotate axis="x" angle="-90"/>
-                                    <scale x="16" y="2" z="1"/>
-                                </transformation>
-                                <materials>
-                                    <material id="demoMaterial" />
-                                </materials>
-                                <texture id="marble"/>
-                                <children>
-                                        <primitiveref id="square"/>
-                                </children>
-                            </component>
-        
-
-            <component id="floor_width_front">
-                    <transformation>
-                            <transformationref id="identity"/>
-                    </transformation>
-                    <materials>
-                        <material id="demoMaterial" />
-                    </materials>
-                    <texture id="inherit"/>
-                    <children>
-                            <componentref id="marble_width"/>
-                    </children>
-                </component>
-
-            <component id="floor_width_back">
-                        <transformation>
-                                <transformationref id="identity"/>
-                        </transformation>
-                        <materials>
-                            <material id="demoMaterial" />
-                        </materials>
-                        <texture id="inherit"/>
-                        <children>
-                                <componentref id="grass_width"/>
-                        </children>
-                    </component>
 
 
-        <component id="floor_width">
+        <component id="costas">
             <transformation>
-                    <transformationref id="identity"/>
+                <translate x="0" y="1" z="-0.5" />
+                <rotate axis="z" angle="120"/>
+                <rotate axis="y" angle="-90"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="2" y="3" z="0"/>
+
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
-                    <componentref id="floor_width_front"/>
-                    <componentref id="floor_width_back"/> 
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="tabua">
+            <transformation>
+                <translate x="0" y="1" z="-0.5" />
+                <rotate axis="y" angle="-90"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="2" y="5" z="0"/>
+
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+
+        <component id="frente_esq">
+            <transformation>
+                <translate x="3" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="frente_dir">
+            <transformation>
+                <translate x="3" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+
+
+        <component id="anterior_esq">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="anterior_dir">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+
+        <component id="esperguicadeira">
+            <transformation>
+                <translate x="0" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="esperguicadeira"/>
+            <children>
+                <componentref id="anterior_esq"/>
+                <componentref id="anterior_dir"/>
+                <componentref id="frente_esq"/>
+                <componentref id="frente_dir"/>
+                <componentref id="tabua"/>
+                <componentref id="costas"/>
+            </children>
+        </component>
+
+
+
+        <!--
+
+
+
+
+        
+-->
+
+
+        <component id="chapeu_dir">
+            <transformation>
+                <translate x="0" y="0" z="-2.1"/>
+                 <rotate axis="x" angle="45"/>
+                 <scale x="1.5" y="3" z="1"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+                
+            </children>
+        </component>
+
+        <component id="chapeu_esq">
+            <transformation>
+                <translate x="0" y="0" z="2.15"/>
+                 <rotate axis="x" angle="-45"/>
+                 <scale x="1.5" y="3" z="1"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+                
+            </children>
+        </component>
+
+
+        <component id="chapeu_shape">
+            <transformation>
+                 <translate x="0" y="3" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <componentref id="chapeu_esq"/>
+                <componentref id="chapeu_dir"/>
+            </children>
+        </component>
+
+
+         <component id="pau">
+            <transformation>
+                 <translate x="0" y="0" z="0"/>
+                 <scale x="1" y="5" z="1"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="guarda_sol">
+            <transformation>
+                <translate x="0" y="5" z="2"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <componentref id="pau"/>
+                <componentref id="chapeu_shape"/>
+                
+                
+            </children>
+        </component>
+
+
+
+
+
+
+
+        <component id="mobiliario">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <componentref id="esperguicadeira"/>
+                <componentref id="guarda_sol"/>
+            </children>
+        </component>
+
+
+
+
+
+
+        <component id="grass_width">
+            <transformation>
+
+                <translate x="2" y="0" z="2"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="10" y="2" z="1"/>
+
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="marble_width">
+            <transformation>
+                <translate x="2" y="0" z="20"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="10" y="2" z="1"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="marble"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="grass_length">
+            <transformation>
+                <rotate axis="y" angle="-90"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="20" y="2" z="1"/>
+
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="grass"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="marble_length">
+            <transformation>
+                <translate x="2" y="0" z="2"/>
+                <rotate axis="y" angle="-90"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="16" y="2" z="1"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="marble"/>
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+
+        <component id="floor_width_front">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="marble_width"/>
+                <componentref id="mobiliario"/>
+            </children>
+        </component>
+
+        <component id="floor_width_back">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="grass_width"/>
+            </children>
+        </component>
+
+
+        <component id="floor_width">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="floor_width_front"/>
+                <componentref id="floor_width_back"/>
             </children>
         </component>
 
@@ -201,10 +430,10 @@
                 <componentref id="marble_length"/>
             </children>
         </component>
-        
+
         <component id="floor_length_left">
             <transformation>
-                    <transformationref id="identity"/>
+                <transformationref id="identity"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -218,7 +447,7 @@
 
         <component id="floor_length">
             <transformation>
-                    <transformationref id="identity"/>
+                <transformationref id="identity"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -232,7 +461,7 @@
 
         <component id="floor">
             <transformation>
-                   <transformationref id="identity"/>
+                <transformationref id="identity"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -244,7 +473,7 @@
 
             </children>
         </component>
-        
+
         <component id="underground">
             <transformation>
                 <transformationref id="underground_transf"/>
@@ -261,24 +490,24 @@
         <!--SIDES-->
 
         <component id="left_right_side_primitive">
-                <transformation>
-                        <translate x="0" y="-2" z="0" />
-                        <scale x="1" y="2" z="20"/>
-                        <rotate axis="y" angle="-90"/>
-                </transformation>
-                <materials>
-                    <material id="demoMaterial" />
-                </materials>
-                <texture id="inherit"/>
-                <children>
-                    <primitiveref id="square" />
-                </children>
-            </component>
+            <transformation>
+                <translate x="0" y="-2" z="0" />
+                <scale x="1" y="2" z="20"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
 
         <component id="right_side">
             <transformation>
-                    <translate x="14" y="-2" z="0"/>
-                    <rotate axis="z" angle="180"/>
+                <translate x="14" y="-2" z="0"/>
+                <rotate axis="z" angle="180"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -291,7 +520,7 @@
 
         <component id="left_side">
             <transformation>
-                    <translate x="0" y="0" z="0"/>
+                <translate x="0" y="0" z="0"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -304,8 +533,8 @@
 
         <component id="back_front_side_primitive">
             <transformation>
-                    <translate x="0" y="-2" z="0" />
-                    <scale x="14" y="2" z="1"/>
+                <translate x="0" y="-2" z="0" />
+                <scale x="14" y="2" z="1"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -317,9 +546,9 @@
         </component>
 
         <component id="back_side">
-            <transformation>  
+            <transformation>
                 <!-- putting normals the correct way-->
-                <translate x="0" y="-2" z="0"/> 
+                <translate x="0" y="-2" z="0"/>
                 <rotate axis="x" angle ="180"/>
             </transformation>
             <materials>
@@ -355,15 +584,15 @@
             <children>
                 <componentref id="left_side"/>
                 <componentref id="right_side"/>
-               <componentref id="front_side"/>
-               <componentref id="back_side"/>
+                <componentref id="front_side"/>
+                <componentref id="back_side"/>
             </children>
         </component>
 
         <!-- TERRAIN ITSELF / ROOT OF XML-->
 
         <component id="terrain">
-          <transformation>
+            <transformation>
                 <transformationref id="identity" />
             </transformation>
             <materials>
@@ -371,11 +600,11 @@
             </materials>
             <texture id="dirt"/>
             <children>
-                
-               <componentref id="underground"/>
-                <componentref id="floor"/> 
-              <componentref id="sides"/> 
-              
+
+                <componentref id="underground"/>
+                <componentref id="floor"/>
+                <componentref id="sides"/>
+
 
             </children>
         </component>
