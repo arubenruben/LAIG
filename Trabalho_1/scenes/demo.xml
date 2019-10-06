@@ -165,7 +165,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="plastic"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -179,7 +179,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="plastic"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -195,7 +195,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="plastic"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -209,7 +209,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="plastic"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
