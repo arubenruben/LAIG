@@ -119,13 +119,13 @@ class MySceneGraph {
         }
 
         // <ambient>
-        if ((index = nodeNames.indexOf("ambient")) == -1)
-            return "tag <ambient> missing";
+        if ((index = nodeNames.indexOf("globals")) == -1)
+            return "tag <globals> missing";
         else {
             if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+                this.onXMLMinorError("tag <globals> out of order");
 
-            //Parse ambient block
+            //Parse globals block
             if ((error = this.parseAmbient(nodes[index])) != null)
                 return error;
         }
@@ -235,173 +235,185 @@ class MySceneGraph {
      */
     parseView(viewsNode) {
 
+        var one_view_defined = false;
+
         var view_root = this.reader.getString(viewsNode, 'default');
 
-        if (view_root == null) {
+        if (view_root == null) 
             return "Default view is not defined";
-        }
-
+        
         var children = viewsNode.children; //Tem de existir um vista ortogonal ou em prespetiva
-
+            
         if(children.length == 0)
             return "At least one View must be defined, either perspective or orthogonal";
         
-
+        //array to store the cameras
         this.Views = [];
 
-        this.idview = view_root;
-
-        var numViews = 0;
-
+        this.view_default = view_root;
+        this.active_camera = view_root;
         var grandChildren = [];
-        var nodeNames = [];
-
-        var perspective_set = false;
-        var ortho_set = false;
-
+        var view_id, view_type;
+        var near, far, angle,  left, right, top, bottom;
+        var from = [];
+        var to = [];
+        var up = [];
+        var index_from, index_up, index_to;
+        var camera;
+        var attributeNames = ["from", "to", "up"];
+            
+        
         for (var i = 0; i < children.length; i++) {
 
-            // Storing camera information
-            var global = [];
-            var attributeNames = [];
-
-            //Check type of light
-
-            if (children[i].nodeName == "perspective" && perspective_set == false) {
-
-                //preeche os cabecalhos que iremos encontrar para ajudar no parsing
-
-                attributeNames.push(...["from", "to"]);
-                //Nao sei que nome meter nestes dois de baixo
-                //Ja sei, nas cores os atributos podem ser de dois tipos, posicoes e cores, e para automizar o processamento
-                perspective_set = true;
-
-            } else if (children[i].nodeName == "ortho" && ortho_set == false) {
-
-                attributeNames.push(...["from", "to", "up"]);
-                //Nao sei que nome meter nestes dois de baixo
-                ortho_set = true;
-
-
-            }
-
-            else if ((children[i].nodeName == "perspective" && perspective_set == true) || children[i].nodeName == "ortho" && ortho_set == true) {
-                this.onXMLError("Nao era suposto existirem duas tags do mesmo tipo (perspetive ou ortho) na vista");
-            }
-            else {
-                //Nao e ortho nem perspective
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
-                continue;
-
-            }
-
-            // Get id of the current view.
-            var ViewId = this.reader.getString(children[i], 'id');
-            if (ViewId == null)
-                return "no ID defined for View";
-
-            // Checks for repeated IDs.
-            if (this.Views[ViewId] != null)
-                return "ID must be unique for each View (conflict: ID = " + ViewId + ")";
-
-            global.push(children[i].nodeName);
-            global.push(ViewId);
-
-            //Falta processar os near/fars, etc...
             var array_view_def = [];
 
-            var aux_ret;
-
-            aux_ret = this.reader.getFloat(children[i], 'near');
-            if (aux_ret == null) {
-                return "Near attribute not defined";
-            } else {
-                array_view_def.push(aux_ret);
+            view_type = children[i].nodeName;
+            
+            if (view_type != "perspective" && view_type != "ortho"){
+                this.onXMLMinorError("unknown tag <" + view_type + "> in the views Node, valid tags (perspective or ortho), view not added");
+                continue;
             }
 
-            aux_ret = this.reader.getFloat(children[i], 'far');
-            if (aux_ret == null) {
-                return "far attribute not defined";
-            } else {
-                array_view_def.push(aux_ret);
+            
+            // Get id of the current view.
+            view_id = this.reader.getString(children[i], 'id');
+            if (view_id == null){
+                this.onXMLError("id not found for element of type " + view_type + " in views Node, view not added");
+                continue;
+            }
+            
+            // Checks for repeated IDs.
+            if (this.Views[view_id] != null){
+                this.onXMLError("id for element of type " + view_type + "is already in use, view not added, first view with same id remains");
+                continue;
             }
 
-            if (children[i].nodeName == "perspective") {
+            // common attributes and elements for both type of views
+            near = this.reader.getFloat(children[i], 'near');
+            if (near == null || isNaN(near)) {
+                this.onXMLMinorError("near attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                continue;
+            } 
 
-                aux_ret = this.reader.getFloat(children[i], 'angle');
-                if (aux_ret == null) {
-                    return "angle attribute not defined";
-                } else {
-                    array_view_def.push(aux_ret);
-                }
+            far = this.reader.getFloat(children[i], 'far');
+            if (far == null || isNaN(far)) {
+                this.onXMLMinorError("far attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                continue;
+            } 
+        
+            //starting to parse specific attributes and elements for view of type perspective
+            if (view_type == "perspective") {
+                angle = this.reader.getFloat(children[i], 'angle');
+                if (angle == null || isNaN(angle)) {
+                    this.onXMLMinorError("perspective attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                    continue;
+                } 
+            }
+            
+            
+            //starting to parse specific attributes and elements for view of type ortho
+            else if (view_type == "ortho") {
 
-            } else if (children[i].nodeName == "ortho") {
+                left = this.reader.getFloat(children[i], 'left');
+                if (left == null || isNaN(left)) {
+                    this.onXMLMinorError("left attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                    continue;            
+                } 
 
-                aux_ret = this.reader.getFloat(children[i], 'left');
-                if (aux_ret == null) {
-                    return "left attribute not defined";
-                } else {
-                    array_view_def.push(aux_ret);
-                }
-
-                aux_ret = this.reader.getFloat(children[i], 'right');
-                if (aux_ret == null) {
-                    return "right attribute not defined";
-                } else {
-                    array_view_def.push(aux_ret);
-                }
-
-                aux_ret = this.reader.getFloat(children[i], 'top');
-                if (aux_ret == null) {
-                    return "top attribute not defined";
-                } else {
-                    array_view_def.push(aux_ret);
-                }
-
-                aux_ret = this.reader.getFloat(children[i], 'bottom');
-                if (aux_ret == null) {
-                    return "bottom attribute not defined";
-                } else {
-                    array_view_def.push(aux_ret);
-                }
+                right = this.reader.getFloat(children[i], 'right');
+                if (right == null || isNaN(right)) {
+                    this.onXMLMinorError("right attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                    continue;
+                } 
+               
+                top = this.reader.getFloat(children[i], 'top');
+                if (top == null || isNaN(top)) {
+                    this.onXMLMinorError("top attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                    continue;           
+                } 
+            
+                bottom = this.reader.getFloat(children[i], 'bottom');
+                if (bottom == null || isNaN(bottom)) {
+                    this.onXMLMinorError("bottom attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
+                    continue;
+                } 
 
             }
-            global.push(...array_view_def);
-
+            
+            //grandchildren (from , to ,up)
             grandChildren = children[i].children;
+            
             // Specifications for the current view.
-
-            nodeNames = [];
-            //Array dos filhos
+            var nodeNames = [];
 
             for (var j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
-            }
-
-            for (var j = 0; j < attributeNames.length; j++) {
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
-
-                if (attributeIndex != -1) {
-
-                    var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "View position" + ViewId);
-
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    global.push(aux);
+                if(grandChildren[j].nodeName != attributeNames[0] && grandChildren[j].nodeName != attributeNames[1] && grandChildren[j].nodeName != attributeNames[2]){
+                    this.onXMLMinorError("Tag unknown found for view of id " + view_id + ", view will still be added if it has no errors");
                 }
-                else
-                    return "View " + attributeNames[i] + " undefined for ID = " + ViewId;
+            }
+            
+            index_from = nodeNames.indexOf(attributeNames[0]);
+            if(index_from == -1){
+                this.onXMLMinorError("Tag  from not found for view of id " + view_id + ", view not added");
+                continue;
+            }
+            from = this.parseCoordinates3D(grandChildren[index_from], "View position" + view_id);
+            if (!Array.isArray(from)){
+                    this.onXMLMinorError(from + " , view not added");
+                    continue;
+            }
+            
+            index_to = nodeNames.indexOf(attributeNames[1]);
+            if(index_to == -1){
+                this.onXMLMinorError("Tag to not found for view of id " + view_id + ", view not added");
+                continue;
+            }
+            to = this.parseCoordinates3D(grandChildren[index_to], "View position" + view_id);
+            if (!Array.isArray(to)){
+                this.onXMLMinorError(to + " , view not added");
+                continue;
             }
 
-            this.Views[ViewId] = global;
-           
+            if(view_type == "ortho"){
+                index_up = nodeNames.indexOf(attributeNames[2]);
+                if(index_up == -1){
+                    this.onXMLMinorError("Tag  up not found for view of id " + view_id + ", view not added");
+                    continue;
+                }
+                up = this.parseCoordinates3D(grandChildren[index_up], "View position" + view_id);
+                if (!Array.isArray(up)){
+                    this.onXMLMinorError(up + " , view not added");
+                    continue;
+                }   
+            }
 
+            var camera;
+            //CGFcamera( fov, near, far, position, target )
+            if(view_type == "perspective"){
+                camera = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+            }
+
+            // CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up)
+            else if(graph_views[idview_root][0] == "ortho"){
+                camera = new CGFcameraOrtho(left, right, bottom, top , near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
+            }
+
+            this.Views[this.view_default] = camera;
+            one_view_defined = true;
+            
+        }
+
+        // Since our approach was if it was a error but theres still more views , its possible that the default view has a error and wasnt added
+        // this feature is done so that the program doesnt end if there one error in another view that inst the default one
+        // this may need to be correct since if our program wants to change views it will not know the view is not defined
+        
+        if(this.Views[this.view_default] == null){
+            return "unable to start program as default view as issues or is not defined";
         }
         
         this.log("Parsed View");
         return null;
-
     }
 
     /**
@@ -417,23 +429,29 @@ class MySceneGraph {
 
         var nodeNames = [];
 
-        for (var i = 0; i < children.length; i++)
+        for (var i = 0; i < children.length; i++){
             nodeNames.push(children[i].nodeName);
+            if(children[i].nodeName != "ambient" && children[i].nodeName != "background")
+                this.onXMLMinorError("unkown tag " + children[i].nodeName + " in globals block");
+        }
 
         var ambientIndex = nodeNames.indexOf("ambient");
-        var backgroundIndex = nodeNames.indexOf("background");
-
+        if(ambientIndex == -1){
+            return ("tag ambient must be present in globals block");
+        }
         var color = this.parseColor(children[ambientIndex], "ambient");
         if (!Array.isArray(color))
             return color;
-        else
-            this.ambient = color;
-
+        this.ambient = color;
+        
+        var backgroundIndex = nodeNames.indexOf("background");
+        if(backgroundIndex == -1){
+            return ("tag background must be present in globals block");
+        }
         color = this.parseColor(children[backgroundIndex], "background");
         if (!Array.isArray(color))
             return color;
-        else
-            this.background = color;
+        this.background = color;
 
         this.log("Parsed ambient");
 
@@ -452,6 +470,7 @@ class MySceneGraph {
 
         var grandChildren = [];
         var nodeNames = [];
+        var light_is_invalid;
 
         if (children.length == 0) {
             return "Error: must have at least one light";
@@ -464,7 +483,7 @@ class MySceneGraph {
             var global = [];
             var attributeNames = [];
             var attributeTypes = [];
-
+            light_is_invalid = false;
             //Check type of light
             if (children[i].nodeName != "omni" && children[i].nodeName != "spot") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -477,12 +496,16 @@ class MySceneGraph {
 
             // Get id of the current light.
             var lightId = this.reader.getString(children[i], 'id');
-            if (lightId == null)
-                return "no ID defined for light";
+            if (lightId == null){
+                this.onXMLMinorError("no ID defined for light of type "+ children[i].nodeName + ", light not added");
+                continue;
+            }
 
             // Checks for repeated IDs.
-            if (this.lights[lightId] != null)
-                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+            if (this.lights[lightId] != null){
+                this.onXMLMinorError("ID must be unique for each light (conflict: ID = " + lightId + "), light not added, first light with same id remains");
+                continue;
+            }
 
             // Light enable/disable
             var enableLight = true;
@@ -490,7 +513,7 @@ class MySceneGraph {
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 
-            // SUSPEITO
+            // assuming enable value is 1 or true
             enableLight = aux || 1;
 
             //Add enabled boolean and type name to light info
@@ -510,77 +533,103 @@ class MySceneGraph {
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
 
                 if (attributeIndex != -1) {
-                    if (attributeNames[j] == "location")
-                        var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
+                    
+                    if (attributeNames[j] == "location"){
+                        
+                        var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID " + lightId + ", light not added");
+                        if (!Array.isArray(aux)){
+                            this.onXMLMinorError(aux);
+                            light_is_invalid = true;
+                            break;
+                        }
+                        
+                    }
                     
                     else if (attributeNames[j] == "attenuation") {
+                        
                         var aux = [];
 
                         var decomp_atten = this.reader.getFloat(grandChildren[j], 'constant');
-                        if (aux > 1 || aux < 0) {
-                            return "Error in " + attributeNames[j];
+                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+                            this.onXMLMinorError("constant attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+                            light_is_invalid = true;
+                            break;
                         }
                         aux.push(decomp_atten);
+
                         decomp_atten = this.reader.getFloat(grandChildren[j], 'linear');
-                        if (aux > 1 || aux < 0) {
-                            return "Error in " + attributeNames[j];
+                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+                            this.onXMLMinorError("linear attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+                            light_is_invalid = true;
+                            break;
                         }
                         aux.push(decomp_atten);
+
                         decomp_atten = this.reader.getFloat(grandChildren[j], 'quadratic');
-                        if (aux > 1 || aux < 0) {
-                            return "Error in " + attributeNames[j];
+                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+                            this.onXMLMinorError("quadratic attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+                            light_is_invalid = true;
+                            break;
                         }
                         aux.push(decomp_atten);
 
 
                     }
-                    else
+                    else if (attributeNames[j] == "target"){
+                        var aux = this.parseCoordinates3D(grandChildren[j], "target light for ID " + lightId);
+                            if (!Array.isArray(aux)){
+                            light_is_invalid = true;    
+                            this.onXMLMinorError(aux + ", light not added");
+                        }
+                    
+                    }
+                    else{
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
-
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    global.push(aux);
+                        if (!Array.isArray(aux)){
+                            this.onXMLMinorError(aux + ", light not added");
+                            light_is_invalid = true;
+                            break;
+                        }
+                    }
                 }
-                else
-                    return "light " + attributeNames[j] + " undefined for ID = " + lightId;
-            }
+                    
+                else{
+                    this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
+                    continue;
+                }
+            
+                global.push(aux);
 
+            }
+            
             // Gets the additional attributes of the spot light
-            if (children[i].nodeName == "spot") {
+            if (children[i].nodeName == "spot"){
                 var angle = this.reader.getFloat(children[i], 'angle');
-                if (!(angle != null && !isNaN(angle)))
-                    return "unable to parse angle of the light for ID = " + lightId;
-
-                var exponent = this.reader.getFloat(children[i], 'exponent');
-                if (!(exponent != null && !isNaN(exponent)))
-                    return "unable to parse exponent of the light for ID = " + lightId;
-
-                var targetIndex = nodeNames.indexOf("target");
-
-                // Retrieves the light target.
-                var targetLight = [];
-                if (targetIndex != -1) {
-                    var aux = this.parseCoordinates3D(grandChildren[targetIndex], "target light for ID " + lightId);
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    targetLight = aux;
+                if (!(angle != null && !isNaN(angle))){
+                    light_is_invalid = true;
+                    this.onXMLMinorError("unable to parse angle of the light for ID = " + lightId + ", light not added");
+                    continue;
                 }
-                else
-                    return "light target undefined for ID = " + lightId;
-
-                global.push(...[angle, exponent, targetLight])
+                var exponent = this.reader.getFloat(children[i], 'exponent');
+                if (!(exponent != null && !isNaN(exponent))){
+                    light_is_invalid = true;
+                    this.onXMLMinorError("unable to parse exponent of the light for ID = " + lightId + ", light not added");
+                    continue;
+                }
+                global.push(...[angle, exponent]);
             }
 
+            
+            if(light_is_invalid == true){
+                continue;
+            }
             this.lights[lightId] = global;
             numLights++;
         }
 
-        if (numLights == 0)
-            return "at least one light must be defined";
-        else if (numLights > 8)
-            this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
+        if (numLights > 8)
+            return ("too many lights defined; WebGL imposes a limit of 8 lights");
+        
 
         this.log("Parsed lights");
         return null;
@@ -592,19 +641,44 @@ class MySceneGraph {
     parseTextures(texturesNode) {
         var children = texturesNode.children;
         this.textures = [];
+        var one_texture_defined = false;
+
+        if(children.length == 0){
+            return "there must be at least one texture declared in the textures block";
+        }
 
         for(var i = 0; i < children.length; i++){
-            var textureID = this.reader.getString(children[i], 'id');
-            var filepath = this.reader.getString(children[i], 'file');
 
+            if(children[i].nodeName != "texture"){
+                this.onXMLMinorError("unkown tag inside textures block");               
+                continue;
+            }
+            
+            var textureID = this.reader.getString(children[i], 'id');
+            if(textureID == null){
+                this.onXMLMinorError("texture id is not defined or is a invalid value, texture not added");
+                continue;
+            }
+            
+            var filepath = this.reader.getString(children[i], 'file');
+            if(filepath == null){
+                this.onXMLMinorError("texture file is not defined or is a invalid value, texture not added");
+                continue;
+            }
 
             var new_texture = new CGFtexture(this.scene, filepath);
 
             this.textures[textureID] = new_texture;
+            one_texture_defined = true;
+
+        }
+
+        if(one_texture_defined == false){
+            return ("A texture is defined but it must contain errors so it wasnt added, fix the errors");
         }
        
-        //For each texture in textures block, check ID and file URL
-        //this.onXMLMinorError("To do: Parse textures.");
+    
+        this.onXMLMinorError("Parsed textures.");
         return null;
     }
 
@@ -613,16 +687,19 @@ class MySceneGraph {
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
-        var children = materialsNode.children;
-
-        this.materials = [];
-
         
+        var children = materialsNode.children;
+        this.materials = [];    
         var grandChildren = [];
         var ambient = [];
         var diffuse = [];
         var specular = [];
         var emission = [];
+        var emissionIndex;
+        var ambientIndex;
+        var diffuseIndex;
+        var specularIndex;
+
         var one_material_defined = false;
 
         if(children.length == 0){
@@ -639,16 +716,23 @@ class MySceneGraph {
 
             // Get id of the current material.
             var materialID = this.reader.getString(children[i], 'id');
-            if (materialID == null)
-                return "no ID defined for material";
+            if (materialID == null){
+                this.onXMLMinorError("no ID defined or invalid value for material, material not added");
+                continue;
+            }
+
 
             // Checks for repeated IDs.
-            if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
-            
+            if (this.materials[materialID] != null){
+                this.onXMLMinorError("ID must be unique for each light (conflict: ID = " + materialID + "), material not added, first one still remains");
+                continue;
+            }
+
             var shininess = this.reader.getString(children[i], 'shininess');
-            if(!(shininess != null && !isNaN(shininess)))
-                return "Attribute shininess is either missing or wrong for material of id: " + materialID;
+            if(!(shininess != null && !isNaN(shininess))){
+                this.onXMLMinorError("Attribute shininess is either missing or wrong for material of id: " + materialID);
+                continue;
+            }
 
             grandChildren = children[i].children;
 
@@ -657,50 +741,56 @@ class MySceneGraph {
             for (var j = 0; j < grandChildren.length; j++)
                 nodeNames.push(grandChildren[j].nodeName);
     
-            var emissionIndex = nodeNames.indexOf("emission");
-            if(emissionIndex == null){
-                return "Tag emission for material of id " + materialID; 
+            
+            emissionIndex = nodeNames.indexOf("emission");
+            if(emissionIndex == -1){
+                this.onXMLMinorError("Tag emission not found for material of id " + materialID + ", material not added");
+                continue; 
             }
-
-            var ambientIndex = nodeNames.indexOf("ambient");
-            if(ambientIndex == null){
-                return "Tag ambient for material of id " + materialID;
-            }
-
-            var diffuseIndex = nodeNames.indexOf("diffuse");
-            if(diffuseIndex == null){
-                return "Tag diffuse for material of id " + materialID;
+            emission = this.parseColor(grandChildren[emissionIndex], "emission error in material of id " + materialID);
+            if(!Array.isArray(emission)){
+                this.onXMLMinorError(emission + ", material not added");
+                continue;
             }
             
-            var specularIndex = nodeNames.indexOf("specular");
-            if(specularIndex == null){
-                return "Tag specular for material of id " + materialID;
+            ambientIndex = nodeNames.indexOf("ambient");
+            if(ambientIndex == -1){
+                this.onXMLMinorError("Tag  ambient not found for material of id " + materialID + ", material not added");
+                continue;
+            }
+            ambient =  this.parseColor(grandChildren[ambientIndex], "ambient error in material of id " + materialID);
+            if(!Array.isArray(ambient)){
+                this.onXMLMinorError(ambient + ", material not added");
+                continue;
+            }
+
+            diffuseIndex = nodeNames.indexOf("diffuse");
+            if(diffuseIndex == -1){
+                this.onXMLMinorError("Tag  diffuse not found or material of id " + materialID + ", material not added");
+                continue;
+            }
+            diffuse =  this.parseColor(grandChildren[diffuseIndex], "diffuse error in material of id " + materialID);
+            if(!Array.isArray(diffuse)){
+                this.onXMLMinorError(diffuse + ", material not added");
+                continue;
+            }
+            
+            specularIndex = nodeNames.indexOf("specular");
+            if(specularIndex == -1){
+                this.onXMLMinorError("Tag specular not found for material of id " + materialID + ", material not added");
+                continue;
+            }
+            specular  =  this.parseColor(grandChildren[specularIndex], "specular error in material of id " + materialID);
+            if(!Array.isArray(specular)){
+                this.onXMLMinorError(specular + ", material not added");
+                continue;
             }
 
             if(nodeNames.length > 4){
                 this.onXMLMinorError("There are other tags besides emission, ambient, diffuse, specular for material of id: " + materialID);
+                continue;
             }
             
-            emission = this.parseColor(grandChildren[emissionIndex], "emission error in material of id " + materialID);
-            if(!Array.isArray(emission)){
-                return emission;
-            }
-            
-            ambient =  this.parseColor(grandChildren[ambientIndex], "ambient error in material of id " + materialID);
-            if(!Array.isArray(ambient)){
-                return ambient;
-            }
-            
-            diffuse =  this.parseColor(grandChildren[diffuseIndex], "diffuse error in material of id " + materialID);
-            if(!Array.isArray(diffuse)){
-                return diffuse;
-            }
-            
-            specular  =  this.parseColor(grandChildren[specularIndex], "specular error in material of id " + materialID);
-            if(!Array.isArray(specular)){
-                return specular;
-            }
-    
             var new_material = new CGFappearance(this.scene);
             new_material.setShininess(shininess);
             new_material.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
