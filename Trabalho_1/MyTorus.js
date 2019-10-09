@@ -19,7 +19,7 @@ class MyTorus extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-     //   this.texCoords = [];
+        this.texCoords = [];
 
         let incremeto_teta=(2*Math.PI)/this.slices;
         let incremento_fi=(2*Math.PI)/this.loops;
@@ -27,13 +27,13 @@ class MyTorus extends CGFobject {
         let fi=0;
         let x,y,z, nx, ny, nz;
 
-
-        for(let i=0;i<=this.loops+1;i++){
+        //Desenha origem duplicada por causa dos texcoords
+        for(let i=0;i<=this.loops;i++){
             
+            fi=i*incremento_fi;
             
-            for(let j=0;j<this.slices;j++){
+            for(let j=0;j<=this.slices;j++){
                 
-                fi=i*incremento_fi;
                 teta=j*incremeto_teta;
 
                 z=this.radius_inner*Math.sin(teta);
@@ -45,21 +45,22 @@ class MyTorus extends CGFobject {
                 nz = Math.sin(teta);
 
                 this.vertices.push(x,y,z);
-            
-                //Retificar
+        
                 this.normals.push(nx, ny, nz);
                 
-                if(i<this.loops){
-                    this.indices.push(i*this.loops+j,(i+1)*this.loops+j,i*this.loops+j+1);
-                    this.indices.push(i*this.loops+j+1,(i+1)*this.loops+j,(i+1)*this.loops+j+1);
-                }
+                this.texCoords.push(i/this.loops,j/this.slices);
+               if(i<this.loops||(i==this.slices&&j<this.slices-1)){
+                   this.indices.push(i*this.slices+j,(i+1)*this.slices+j+1,i*this.slices+j+1);
+                   this.indices.push(i*this.slices+j+1,(i+1)*this.slices+j+1,(i+1)*this.slices+j+1+1);
+
+               } 
                     
             
             }
-
-            //break;
         
         }
+
+
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
