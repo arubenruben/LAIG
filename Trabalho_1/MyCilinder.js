@@ -50,10 +50,10 @@ class MyCilinder extends CGFobject {
                 this.vertices.push(x, y, z);
 
 
-
-                this.indices.push(i * this.slices + j, i * this.slices + j + 1, i * this.slices + j + 1 + this.slices);
-                this.indices.push(i * this.slices + j + this.stacks + 1, i * this.slices + j + 1, i * this.slices + j + this.stacks + 2);
-
+                if(i!=this.stacks){
+                    this.indices.push(i * this.stacks + j, i * this.stacks + j + 1, (i+1) * this.stacks + j + 1);
+                    this.indices.push(i * this.stacks + j + this.slices + 1, i * this.slices + j + 1, i * this.slices + j + this.stacks + 2);
+                }
 
 
 
