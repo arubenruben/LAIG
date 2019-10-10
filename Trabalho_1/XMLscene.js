@@ -94,6 +94,61 @@ class XMLscene extends CGFscene {
         }
     }
 
+    // initLights() {
+        
+    //     var i = 0;
+    //     var location_index, ambient_index, diffuse_index, specular_index, attenuation_index, target_index;
+    //     var enable_index, angle_index, exponent_index, type_index;
+    //     var attributeNames = ["location", "target", "ambient", "diffuse", "specular", "attenuation", "enable", "exponent" , "angle", "type"];
+    //     // Reads the lights from the scene graph.
+    //     for (var key in this.graph.lights) {
+    //         // Only eight lights allowed by WebGL.
+    //         if (i >= 8)
+    //             break;              
+
+    //         if (this.graph.lights.hasOwnProperty(key)) {
+    //             var light = this.graph.Lights[key];
+
+    //             location_index = light.indexOf(attributeNames[0]);
+    //             target_index = light.indexOf(attributeNames[1]);
+    //             ambient_index =  light.indexOf(attributeNames[2]);
+    //             diffuse_index = light.indexOf(attributeNames[3]); 
+    //             specular_index = light.indexOf(attributeNames[4]);
+    //             attenuation_index = light.indexOf(attributeNames[5]);
+    //             enable_index = light.indexOf(attributeNames[6]);
+    //             exponent_index =   light.indexOf(attributeNames[7]);
+    //             angle_index = light.indexOf(attributeNames[8]);
+    //             type_index =  light.indexOf(attributeNames[9]);
+
+    //             // atributes that are common betteewn lights (omin and spot)
+    //             this.lights[i].setPosition(light[location_index][0], light[location_index][1], light[location_index][2], light[location_index][3]);
+    //             this.lights[i].setAmbient(light[ambient_index][0], light[ambient_index][1], light[ambient_index][2], light[ambient_index][3]);
+    //             this.lights[i].setDiffuse(light[diffuse_index][0], light[diffuse_index][1], light[diffuse_index][2], light[diffuse_index][3]);
+    //             this.lights[i].setSpecular(light[specular_index][0], light[specular_index][1], light[specular_index][2], light[specular_index][3]);
+    //             this.lights[i].setConstantAttenuation(light[attenuation_index][0]);
+    //             this.lights[i].setLinearAttenuation(light[attenuation_index][1]);
+    //             this.lights[i].setQuadraticAttenuation(light[attenuation_index][2]);
+                
+    //             if (light[type_index] == "spot") {
+    //                 this.lights[i].setSpotCutOff(light[angle_index]);
+    //                 this.lights[i].setSpotExponent(light[exponent_index]);
+    //                 this.lights[i].setSpotDirection(light[target_index][0], light[target_index][1], light[target_index][2]);
+    //             }
+
+    //             if (light[enable] == true){
+    //                 this.lights[i].setVisible(true);
+    //                 this.lights[i].enable();
+    //             }
+    //             else{
+    //                 this.lights[i].disable();
+    //             }
+                
+    //             this.lights[i].update();
+    //             i++;
+    //         }
+    //     }
+    // }
+
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);

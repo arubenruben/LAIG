@@ -435,6 +435,7 @@ class MySceneGraph {
                 this.onXMLMinorError("unkown tag " + children[i].nodeName + " in globals block");
         }
 
+        
         var ambientIndex = nodeNames.indexOf("ambient");
         if(ambientIndex == -1){
             return ("tag ambient must be present in globals block");
@@ -443,6 +444,7 @@ class MySceneGraph {
         if (!Array.isArray(color))
             return color;
         this.ambient = color;
+        
         
         var backgroundIndex = nodeNames.indexOf("background");
         if(backgroundIndex == -1){
@@ -463,6 +465,7 @@ class MySceneGraph {
      * @param {lights block element} lightsNode
      */
     parseLights(lightsNode) {
+
         var children = lightsNode.children;
 
         this.lights = [];
@@ -633,6 +636,195 @@ class MySceneGraph {
 
         this.log("Parsed lights");
         return null;
+
+        // var children = lightsNode.children;
+
+        // this.Lights = [];
+        // var numLights = 0;
+
+        // var grandChildren = [];
+        // var nodeNames = [];
+        // var one_light_defined = false;
+    
+
+        // if (children.length == 0) {
+        //     return "Error: must have at least one light";
+        // }
+
+        // // Any number of lights.
+        // for (var i = 0; i < children.length; i++) {
+
+        //    // Storing light information
+        //     var global = [];
+        //     var attributeNames = [];
+        //     var attributeTypes = [];
+        //     var store_light_info = [];
+        //     var light_is_invalid = false;
+        //     //Check type of light
+        //     if (children[i].nodeName != "omni" && children[i].nodeName != "spot") {
+        //         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+        //         continue;
+        //     }
+        //     else {
+        //         attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
+        //         attributeTypes.push(...["position", "color", "color", "color"]);
+        //     }
+
+
+        //     // Get id of the current light.
+        //     var lightId = this.reader.getString(children[i], 'id');
+        //     if (lightId == null){
+        //         this.onXMLMinorError("no ID defined for light of type "+ children[i].nodeName + ", light not added");
+        //         continue;
+        //     }
+
+        //     // Checks for repeated IDs.
+        //     if (this.Lights[lightId] != null){
+        //         this.onXMLMinorError("ID must be unique for each light (conflict: ID = " + lightId + "), light not added, first light with same id remains");
+        //         continue;
+        //     }
+
+        //     store_light_info["type"] = children[i].nodeName;
+
+        //     // Light enable/disable
+        //     var enableLight = true;
+        //     var aux = this.reader.getBoolean(children[i], 'enabled');
+        //     if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
+        //         this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+
+        //     // assuming enable value is 1 or true
+        //     enableLight = aux || 1;
+
+        //     store_light_info["enable"] = enableLight;
+
+        //     //Add enabled boolean and type name to light info
+        //     global.push(enableLight);
+        //     global.push(children[i].nodeName);
+
+        //     grandChildren = children[i].children;
+        //     // Specifications for the current light.
+
+            
+        //     // Gets the additional attributes of the spot light
+        //     if (children[i].nodeName == "spot"){
+        //         var angle = this.reader.getFloat(children[i], 'angle');
+        //         if (!(angle != null && !isNaN(angle))){
+        //             this.onXMLMinorError("unable to parse angle of the light for ID = " + lightId + ", light not added");
+        //             continue;
+        //         }
+        //         store_light_info["angle"] = angle;
+                
+        //         var exponent = this.reader.getFloat(children[i], 'exponent');
+        //         if (!(exponent != null && !isNaN(exponent))){
+        //             this.onXMLMinorError("unable to parse exponent of the light for ID = " + lightId + ", light not added");
+        //             continue;
+        //         }
+        //         global.push(...[angle, exponent]);
+        //         store_light_info["exponent"] = exponent;
+                
+        //     }
+            
+        //     nodeNames = [];
+        //     for (var j = 0; j < grandChildren.length; j++) {
+        //         nodeNames.push(grandChildren[j].nodeName);
+        //     }
+
+        //     for (var j = 0; j < attributeNames.length; j++) {
+                
+                
+        //         var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+
+        //         if (attributeIndex != -1) {
+                    
+        //             if (attributeNames[j] == "location"){
+                        
+        //                 var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID " + lightId + ", light not added");
+        //                 if (!Array.isArray(aux)){
+        //                     this.onXMLMinorError(aux);
+        //                     light_is_invalid = true;
+        //                     break;
+        //                 }
+        //                 store_light_info["location"] = aux;
+                        
+        //             }
+                    
+        //             else if (attributeNames[j] == "attenuation") {
+                        
+        //                 var aux = [];
+
+        //                 var decomp_atten = this.reader.getFloat(grandChildren[j], 'constant');
+        //                 if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+        //                     this.onXMLMinorError("constant attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+        //                     light_is_invalid = true;
+        //                     break;
+        //                 }
+        //                 aux.push(decomp_atten);
+
+        //                 decomp_atten = this.reader.getFloat(grandChildren[j], 'linear');
+        //                 if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+        //                     this.onXMLMinorError("linear attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+        //                     light_is_invalid = true;
+        //                     break;
+        //                 }
+        //                 aux.push(decomp_atten);
+
+        //                 decomp_atten = this.reader.getFloat(grandChildren[j], 'quadratic');
+        //                 if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+        //                     this.onXMLMinorError("quadratic attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+        //                     light_is_invalid = true;
+        //                     break;
+        //                 }
+        //                 aux.push(decomp_atten);
+
+        //                 store_light_info["attenuation"] = aux;
+
+
+        //             }
+
+        //             else if (attributeNames[j] == "target"){
+        //                 var aux = this.parseCoordinates3D(grandChildren[j], "target light for ID " + lightId);
+        //                     if (!Array.isArray(aux)){
+        //                     light_is_invalid = true;    
+        //                     this.onXMLMinorError(aux + ", light not added");
+        //                 }
+        //                 store_light_info["target"] = aux;
+                    
+        //             }
+        //             else{
+        //                 var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
+        //                 if (!Array.isArray(aux)){
+        //                     this.onXMLMinorError(aux + ", light not added");
+        //                     light_is_invalid = true;
+        //                     break;
+        //                 }
+        //                 store_light_info[attributeNames[j]] = aux;
+        //             }
+        //         }
+                    
+        //         else{
+        //             this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
+        //             continue;
+        //         }
+            
+
+        //     }
+            
+        //     if(light_is_invalid == true){
+        //         continue;
+        //     }
+            
+        //     this.Lights[lightId] = store_light_info;
+        //     one_light_defined = true;
+        //     numLights++;
+        // }
+
+        // if (numLights > 8)
+        //     return ("too many lights defined; WebGL imposes a limit of 8 lights");
+        // if(one_light_defined == false)
+        //     return ("At least one light must be defined without erros - reminder elements with errors are not added");
+
+        // this.log("Parsed lights");
+        // return null;
     }
     /**
      * Parses the <textures> block. 
@@ -797,6 +989,8 @@ class MySceneGraph {
             new_material.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
             new_material.setSpecular(specular[0], specular[1], specular[2], specular[3]);
             new_material.setEmission(emission[0], emission[1], emission[2], emission[3]);
+           
+            new_material.setTextureWrap('REPEAT', 'REPEAT');
             this.materials[materialID] = new_material;
             one_material_defined = true;
         
@@ -1323,48 +1517,51 @@ class MySceneGraph {
      */
     displayScene() {
 
+        var  root = this.components[this.idRoot];
+
         this.scene.pushMatrix();
-        this.displaySceneRecursive(this.components[this.idRoot], this.components[this.idRoot].materials[0], this.components[this.idRoot].texture[0]);
+        this.displaySceneRecursive(root, root.materials[0], root.texture[0], root.texture[1], root.texture[2]);
         this.scene.popMatrix();
 
        
     }
 
-    displaySceneRecursive(Node, material_father, texture_father, ls, lt){
+    displaySceneRecursive(Node, material_father, texture_father){
 
         var current_node = Node;
         
-        if(current_node.materials[0] == "inherit"){
-            material_father.apply()
-        }
-        else{
-            current_node.materials[0].apply();
-        }
 
-        if(current_node.texture[0] == "inherit"){
+        
+        if(current_node.materials[0] == "inherit")
+            material_father.apply();
+        else
+            current_node.materials[0].apply();
+        
+        if(current_node.texture[0] == "inherit")
             texture_father.bind();
-        }
-        else if(current_node.texture[0] == "none"){
+        else if(current_node.texture[0] == "none")
             texture_father.unbind();
-        }
-        else{
+        else
             current_node.texture[0].bind();
-        }
-    
+        
         this.scene.multMatrix(current_node.transformations[0]);
         
         for(let i = 0; i < current_node.children_primitives.length; i++){
             //current_node.children_primitives[i].primitive.enableNormalViz();
+            if(current_node.texture[0] == "inherit"  || current_node.texture[1] != "none"){
+                //current_node.children_primitives[i].primitive.updatetexcoords(current_node.texture[1] , current_node.texture[2]);
+            }
             current_node.children_primitives[i].primitive.display();
+
         }
         
        for(let i = 0 ; i < current_node.children_component.length; i++){
             this.scene.pushMatrix();
             if(current_node.texture[0] == "inherit"){
-                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father);
+                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father, current_node.texture[1], current_node.texture[2]);
             }
             else{
-                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0]);
+                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0], current_node.texture[1], current_node.texture[2]);
             }
 
             this.scene.popMatrix();
