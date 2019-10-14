@@ -54,6 +54,7 @@ class XMLscene extends CGFscene {
         var enable_index, angle_index, exponent_index, type_index;
         var attributeNames = ["location", "target", "ambient", "diffuse", "specular", "attenuation", "enable", "exponent" , "angle", "type"];
         // Reads the lights from the scene graph.
+           
         for (var key in this.graph.Lights) {
             // Only eight lights allowed by WebGL.
             if (i >= 8)
@@ -74,10 +75,10 @@ class XMLscene extends CGFscene {
                 type_index = attributeNames[9];
 
                 // atributes that are common betteewn lights (omin and spot)
-                this.lights[i].setPosition(light[location_index][0], light[location_index][1], light[location_index][2], light[location_index][3]);
-                this.lights[i].setAmbient(light[ambient_index][0], light[ambient_index][1], light[ambient_index][2], light[ambient_index][3]);
-                this.lights[i].setDiffuse(light[diffuse_index][0], light[diffuse_index][1], light[diffuse_index][2], light[diffuse_index][3]);
-                this.lights[i].setSpecular(light[specular_index][0], light[specular_index][1], light[specular_index][2], light[specular_index][3]);
+                this.lights[i].setPosition(light[location_index][0], light[location_index][1], light[location_index][2], light[location_index][3], light[location_index][4]);
+                this.lights[i].setAmbient(light[ambient_index][0], light[ambient_index][1], light[ambient_index][2], light[ambient_index][3] , light[ambient_index][4]);
+                this.lights[i].setDiffuse(light[diffuse_index][0], light[diffuse_index][1], light[diffuse_index][2], light[diffuse_index][3], light[diffuse_index][4]);
+                this.lights[i].setSpecular(light[specular_index][0], light[specular_index][1], light[specular_index][2], light[specular_index][3], light[specular_index][4]);
                 this.lights[i].setConstantAttenuation(light[attenuation_index][0]);
                 this.lights[i].setLinearAttenuation(light[attenuation_index][1]);
                 this.lights[i].setQuadraticAttenuation(light[attenuation_index][2]);
@@ -149,9 +150,7 @@ class XMLscene extends CGFscene {
         if(this.displayAxis)
             this.axis.display();
 
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
+        for (var i = 0; i < this.graph.numLights; i++) {
             this.lights[i].update();
         }
 

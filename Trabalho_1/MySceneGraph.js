@@ -525,11 +525,12 @@ class MySceneGraph {
         var children = lightsNode.children;
 
         this.Lights = [];
-        var numLights = 0;
+        this.numLights = 0;
 
         var grandChildren = [];
         var nodeNames = [];
         var one_light_defined = false;
+        
     
 
         if (children.length == 0) {
@@ -693,10 +694,10 @@ class MySceneGraph {
             
             this.Lights[lightId] = store_light_info;
             one_light_defined = true;
-            numLights++;
+            this.numLights++;
         }
 
-        if (numLights > 8)
+        if (this.numLights > 8)
             return ("too many lights defined; WebGL imposes a limit of 8 lights");
         if(one_light_defined == false)
             return ("At least one light must be defined without erros - reminder elements with errors are not added");
