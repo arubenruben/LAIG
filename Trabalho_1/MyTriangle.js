@@ -20,15 +20,15 @@ class MyTriangle extends CGFobject {
 		this.ponto3 = ponto3;
 		this.initBuffers();
 	}
-	updatetexcoords(ls , lt){
+	
+	updatetexCoords(ls , lt){
 
 		this.texCoords = [
 			0,0,
-			this.a/ls, 0,
-			this.c * this.alpha_cos/lt, this.c * this.alpha_sin/lt
+			this.a * ls, 0,
+			this.c * ls *  this.alpha_cos, this.c * this.alpha_sin * lt
 		];
-
-		this.initGLBuffers();
+		this.updateTexCoordsGLBuffers();
 	}
 
 	norma(vetor = []){
@@ -54,7 +54,7 @@ class MyTriangle extends CGFobject {
 		this.vetor2_3 = [this.ponto3[0]-this.ponto2[0],this.ponto3[1]-this.ponto2[1], this.ponto3[2]-this.ponto2[2]];
 		this.b = this.norma(this.vetor2_3);
 
-		this.alpha_cos = (Math.pow(this.a,2) - Math.pow(this.b, 2) + Math.pow(this.c, 2)) / 2*this.a*this.c;
+		this.alpha_cos = (Math.pow(this.a,2) - Math.pow(this.b, 2) + Math.pow(this.c, 2)) / (2*this.a*this.c);
 		this.alpha_sin = Math.sqrt(1- Math.pow(this.alpha_cos,2));
 		this.vetor_normal = [this.vetor1_2[1] * this.vetor1_3[2] - this.vetor1_2[2] * this.vetor1_3[1], (this.vetor1_2[2] * this.vetor1_3[0] - this.vetor1_2[0] * this.vetor1_3[2]) , this.vetor1_2[0] * this.vetor1_3[1] - this.vetor1_2[1] * this.vetor1_2[0]];
 		this.vetor_normal_norma = this.norma(this.vetor_normal);
@@ -77,8 +77,8 @@ class MyTriangle extends CGFobject {
 
 		this.texCoords = [
 			0,0,
-			2,0,
-			2,2
+			1,0,
+			0.5,1
 		];
 
 		this.primitiveType = this.scene.gl.TRIANGLES;

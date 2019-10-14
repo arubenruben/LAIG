@@ -12,8 +12,24 @@ class MyRectangle extends CGFobject {
 		this.x2 = x2;
 		this.y1 = y1;
 		this.y2 = y2;
-
+		
 		this.initBuffers();
+	}
+	
+	/**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the rectangle
+	 */
+	updatetexCoords(ls, lt){
+		
+		this.texCoords = [
+			0, 1 * lt,
+			1 * ls, 1 * lt,
+			0, 0,
+			1 * ls, 0
+		];
+		this.updateTexCoordsGLBuffers();
+
 	}
 	
 	initBuffers() {
@@ -55,19 +71,11 @@ class MyRectangle extends CGFobject {
 			1, 1,
 			0, 0,
 			1, 0
-		]
+		];
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
 
-	/**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
-		this.updateTexCoordsGLBuffers();
-	}
+
 }
 

@@ -21,8 +21,18 @@ class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         // add a group of controls (and open/expand by defult)
+        this.gui.add(this.scene, 'displayAxis').name("Display axis");
+        this.gui.add(this.scene, 'displayNormals').name("Display Normals");
+        
+        
+      /*  this.gui.add(this.scene, 'selectedCamera', this.graph.camera).name('Selected Object').onChange(this.scene.updateObjectComplexity.bind(this.scene));
+        var f0 = this.gui.addFolder('Lights');
+        f0.add(this.scene.lights[0], 'enabled').name("Enabled");
+*/
 
         this.initKeys();
+    
+      
 
         return true;
     }

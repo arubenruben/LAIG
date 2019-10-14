@@ -13,6 +13,19 @@ class MyTorus extends CGFobject {
 
         this.initBuffers();
     }
+    
+    updatetexCoords(ls, lt){
+
+        this.texCoords = [];
+        for(let i=0;i<=this.loops;i++){
+            for(let j=0;j<=this.slices;j++){
+                this.texCoords.push(i * ls/this.loops,j * lt/this.slices);
+            }
+        }
+        this.updateTexCoordsGLBuffers();
+
+
+    }
 
     initBuffers() {
 
