@@ -867,7 +867,6 @@ class MySceneGraph {
             new_material.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
             new_material.setSpecular(specular[0], specular[1], specular[2], specular[3]);
             new_material.setEmission(emission[0], emission[1], emission[2], emission[3]);
-           
             new_material.setTextureWrap('REPEAT', 'REPEAT');
             this.materials[materialID] = new_material;
             one_material_defined = true;
@@ -1120,7 +1119,6 @@ class MySceneGraph {
 
         var grandChildren = [];
         var grandgrandChildren = [];
-        var nodeNames = [];
         var componentID;
 
         // Any number of components.
@@ -1149,7 +1147,7 @@ class MySceneGraph {
 
 
             if (grandChildren.length == 0) {
-                return "Blocks Transformation, Materials, Texture, Children need to be declared";
+                return "Blocks Transformation, Materials, Texture, Children need to be declared for component of id "+ componentID;
             }
 
             var block_transformation = false;
@@ -1451,7 +1449,7 @@ class MySceneGraph {
                 current_node.children_primitives[i].primitive.enableNormalViz();
             }
             if(current_node.texture[0] != "inherit" && current_node.texture[0] != "none"){
-                current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1] , current_node.texture[2]);
+                //current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1] , current_node.texture[2]);
             }
             current_node.children_primitives[i].primitive.display();
 
