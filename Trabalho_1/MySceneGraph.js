@@ -434,7 +434,7 @@ class MySceneGraph {
             }
 
             // CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up)
-            else if (graph_views[idview_root][0] == "ortho") {
+            else if (view_type == "ortho") {
                 camera = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
             }
 
@@ -526,11 +526,10 @@ class MySceneGraph {
 
         this.Lights = [];
         this.numLights = 0;
-
         var grandChildren = [];
         var nodeNames = [];
         var one_light_defined = false;
-        
+        var decomp_atten;
     
 
         if (children.length == 0) {
@@ -600,7 +599,6 @@ class MySceneGraph {
                     this.onXMLMinorError("unable to parse exponent of the light for ID = " + lightId + ", light not added");
                     continue;
                 }
-                global.push(...[angle, exponent]);
                 store_light_info["exponent"] = exponent;
                 
             }
@@ -632,25 +630,25 @@ class MySceneGraph {
                     else if (attributeNames[j] == "attenuation") {
                         
                         var aux = [];
-
-                        var decomp_atten = this.reader.getFloat(grandChildren[j], 'constant');
-                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+                        
+                        decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'constant');
+                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
                             this.onXMLMinorError("constant attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
                             light_is_invalid = true;
                             break;
                         }
                         aux.push(decomp_atten);
 
-                        decomp_atten = this.reader.getFloat(grandChildren[j], 'linear');
-                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+                        decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'linear');
+                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
                             this.onXMLMinorError("linear attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
                             light_is_invalid = true;
                             break;
                         }
                         aux.push(decomp_atten);
 
-                        decomp_atten = this.reader.getFloat(grandChildren[j], 'quadratic');
-                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten)) {
+                        decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'quadratic');
+                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
                             this.onXMLMinorError("quadratic attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
                             light_is_invalid = true;
                             break;
@@ -663,7 +661,7 @@ class MySceneGraph {
                     }
 
                     else if (attributeNames[j] == "target"){
-                        var aux = this.parseCoordinates3D(grandChildren[j], "target light for ID " + lightId);
+                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "target light for ID " + lightId);
                             if (!Array.isArray(aux)){
                             light_is_invalid = true;    
                             this.onXMLMinorError(aux + ", light not added");
@@ -750,7 +748,7 @@ class MySceneGraph {
         }
 
 
-        this.onXMLMinorError("Parsed textures.");
+        this.log("Parsed textures.");
         return null;
     }
 
@@ -894,7 +892,7 @@ class MySceneGraph {
         for (var j = 0; j < children.length; j++) {
             switch (children[j].nodeName) {
                 case 'translate':
-                    var coordinates = this.parseCoordinates3D(children[j], "translate transformation for component of " + id);
+                    var coordinates = this.parseCoordinates3D(children[j], "translate transformation in transformations block for component of id " + id);
                     if (!Array.isArray(coordinates))
                         return coordinates;
 
@@ -902,7 +900,7 @@ class MySceneGraph {
                     break;
                 case 'scale':
 
-                    var coordinates = this.parseCoordinates3D(children[j], "Scale tranformation for component of " + id);
+                    var coordinates = this.parseCoordinates3D(children[j], "Scale tranformation in transformations block for component of id " + id);
 
                     if (!Array.isArray(coordinates))
                         return coordinates;
@@ -919,12 +917,12 @@ class MySceneGraph {
                     var axis = this.reader.getString(children[j], 'axis');
 
                     if (axis == null) {
-                        return "Erro a encontrar a tag axis na rotacao";
+                        return "Error finding the tag axis in rotation in transformations block for component of id " + id;
                     }
 
                     var angle = this.reader.getFloat(children[j], 'angle');
-                    if (angle == null) {
-                        return "Erro a encontrar a tag angle na rotacao";
+                    if (angle == null || isNaN(angle)) {
+                        return "Error finding the tag angle in rotation in transformations block for component of id " + id;;
                     }
 
                     if (axis == 'x') {
@@ -934,7 +932,7 @@ class MySceneGraph {
                     } else if (axis == 'z') {
                         z = 1;
                     } else {
-                        return "Axis invalido na rotacao";
+                        return "Invalid axis in transformations block for component of id " + id;
                     }
 
                     aux_array_axis.push(...[x, y, z]);
@@ -996,7 +994,7 @@ class MySceneGraph {
             for (var j = 0; j < grandChildren.length; j++) {
                 switch (grandChildren[j].nodeName) {
                     case 'translate':
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
+                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate for transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
@@ -1004,7 +1002,7 @@ class MySceneGraph {
                         break;
                     case 'scale':
 
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "Scale tranformation for ID" + transformationID);
+                        var coordinates = this.parseCoordinates3D(grandChildren[j], "Scale for tranformation for ID" + transformationID);
 
                         if (!Array.isArray(coordinates))
                             return coordinates;
@@ -1021,12 +1019,13 @@ class MySceneGraph {
                         var axis = this.reader.getString(grandChildren[j], 'axis');
 
                         if (axis == null) {
-                            return "Erro a encontrar a tag axis na rotacao";
+                            return "Error finding the tag axis in rotation in transformation of id " + transformationID;
                         }
 
+        
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
                         if (angle == null) {
-                            return "Erro a encontrar a tag angle na rotacao";
+                            return "Error finding the tag angle in rotation in transformation of id " + transformationID;
                         }
 
                         if (axis == 'x') {
@@ -1036,7 +1035,7 @@ class MySceneGraph {
                         } else if (axis == 'z') {
                             z = 1;
                         } else {
-                            return "Axis invalido na rotacao";
+                            return "Invalid axis in transformation of id " + transformationID;
                         }
 
                         aux_array_axis.push(...[x, y, z]);
@@ -1169,7 +1168,7 @@ class MySceneGraph {
                     block_transformation = true;
 
                     if (grandgrandChildren.length == 0) {
-                        return "At least one reference to a transformation or a explicit transformation must be declared";
+                        return "At least one reference to a transformation or a explicit transformation must be declared for component of id" + componentID;
                     }
 
                     for (var k = 0; k < grandgrandChildren.length; k++) {
@@ -1202,8 +1201,10 @@ class MySceneGraph {
                     for (var k = 0; k < grandgrandChildren.length; k++) {
 
                         var material_id = this.reader.getString(grandgrandChildren[k], 'id');
-                        if (this.materials[material_id] == null) {
-                            return "ID in the material Block for component of id" + componentID + "must be a valid reference";
+                        if(material_id != "inherit"){
+                            if (this.materials[material_id] == null) {
+                                return "ID in the material Block for component of id" + componentID + "must be a valid reference";
+                            }
                         }
                         component_aux.materials.push(this.materials[material_id]);
 
@@ -1214,25 +1215,25 @@ class MySceneGraph {
 
                     block_texture = true;
                     var texture_id = this.reader.getString(grandChildren[j], 'id');
-                    if (this.textures[texture_id] == null && texture_id != "inherit") {
-                        return "ID in the material Block for component of id" + componentID + "must be a valid reference";
-                    }
-                    else if (texture_id == "inherit") {
+                    if (texture_id == "inherit") {
                         component_aux.texture.push(texture_id);
 
                     }
                     else if (texture_id == "none") {
                         component_aux.texture.push(texture_id);
-
                     }
-
-                    var length_s = this.reader.getString(grandChildren[j], 'length_s');
-                    var length_t = this.reader.getString(grandChildren[j], 'length_t');
-
-
+                    else if (this.textures[texture_id] == null) {
+                        return "ID in the texture Block for component of id" + componentID + "must be a valid reference";
+                    }
+                    
                     component_aux.texture.push(this.textures[texture_id]);
-                    component_aux.texture.push(length_s);
-                    component_aux.texture.push(length_t);
+                    
+                    if(texture_id != "inherit" && texture_id != "none"){
+                        var length_s = this.reader.getString(grandChildren[j], 'length_s');
+                        var length_t = this.reader.getString(grandChildren[j], 'length_t');
+                        component_aux.texture.push(length_s);
+                        component_aux.texture.push(length_t);
+                    }
 
                 }
                 else {
@@ -1254,9 +1255,9 @@ class MySceneGraph {
                         else {
 
                             var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id');
-                            if (this.primitives[children_primitive_id] == null) {
+                           /* if (this.primitives[children_primitive_id] == null) {
                                 return "ID in the children Block for component of id" + componentID + "must be a valid reference";
-                            }
+                            }*/
                             component_aux.children_primitives.push(this.primitives[children_primitive_id]);
                         }
                     }
@@ -1398,7 +1399,6 @@ class MySceneGraph {
     displayScene() {
 
         var  root = this.components[this.idRoot];
-
         this.scene.pushMatrix();
         this.displaySceneRecursive(root, root.materials[0], root.texture[0], root.texture[1], root.texture[2]);
         this.scene.popMatrix();
