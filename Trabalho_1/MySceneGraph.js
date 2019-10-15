@@ -906,28 +906,31 @@ class MySceneGraph {
         return null;
     }
 
-    parseTransformations_components(transformationsNode, transformation = [], id) {
+    parseTransformations_components(transformationsNode, id) {
 
         var children = transformationsNode.children;
         // Specifications for the current transformation.
-
+        var transformation;
         var transfMatrix = mat4.create();
 
         for (var j = 0; j < children.length; j++) {
             switch (children[j].nodeName) {
                 case 'translate':
                     var coordinates = this.parseCoordinates3D(children[j], "translate transformation in transformations block for component of id " + id);
-                    if (!Array.isArray(coordinates))
-                        return coordinates;
-
+                    if (!Array.isArray(coordinates)){
+                        this.onXMLError(coordinates);
+                        return -1;
+                    }
                     transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                     break;
                 case 'scale':
 
                     var coordinates = this.parseCoordinates3D(children[j], "Scale tranformation in transformations block for component of id " + id);
 
-                    if (!Array.isArray(coordinates))
-                        return coordinates;
+                    if (!Array.isArray(coordinates)){
+                        this.onXMLError(coordinates);
+                        return -1;
+                    }
 
                     transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
 
@@ -941,12 +944,14 @@ class MySceneGraph {
                     var axis = this.reader.getString(children[j], 'axis');
 
                     if (axis == null) {
-                        return "Error finding the tag axis in rotation in transformations block for component of id " + id;
+                        this.onXMLError("Error finding the tag axis in rotation in transformations block for component of id " + id);
+                        return -1;
                     }
 
                     var angle = this.reader.getFloat(children[j], 'angle');
                     if (angle == null || isNaN(angle)) {
-                        return "Error finding the tag angle in rotation in transformations block for component of id " + id;;
+                        this.onXMLError("Error finding the tag angle in rotation in transformations block for component of id " + id);
+                        return -1;
                     }
 
                     if (axis == 'x') {
@@ -956,24 +961,28 @@ class MySceneGraph {
                     } else if (axis == 'z') {
                         z = 1;
                     } else {
-                        return "Invalid axis in transformations block for component of id " + id;
+                        this.onXMLError("Invalid axis in transformations block for component of id " + id);
+                        return -1;
                     }
 
                     aux_array_axis.push(...[x, y, z]);
 
-                    if (!Array.isArray(aux_array_axis))
-                        return aux_array_axis;
+                    if (!Array.isArray(aux_array_axis)){
+                        this.onXMLError(aux_array_axis);
+                        return -1;
+                    }
 
                     transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, aux_array_axis);
-
-
                     break;
-            }
+                case 'transformationref':
+                    this.onXMLError("There is a transformation ref in the component of id "+ id + " after a explicit transformations");
+                    return -1;
+                }
         }
-        transformation.push(transfMatrix);
+        transformation = transfMatrix;
 
         this.log("Parsed transformations for component of id " + id);
-        return null;
+        return transformation;
     }
 
 
@@ -1192,49 +1201,46 @@ class MySceneGraph {
             var block_materials = false;
             var block_texture = false;
             var block_children = false;
-
+            var return_value;
 
             for (var j = 0; j < grandChildren.length; j++) {
 
-
                 grandgrandChildren = grandChildren[j].children;
-                
 
+                
                 //Processar o bloco de transformacoes em componets
                 if (grandChildren[j].nodeName == "transformation") {
 
-                    if (grandgrandChildren.length == 0) {
-                        return "At least one reference to a transformation or a explicit transformation must be declared for component of id" + componentID;
-                    }
-                    
-                    for (var k = 0; k < grandgrandChildren.length; k++) {
-                        
-                        //Podemos definir transformacoes de duas formas . Por id ou explicitamente
+                        block_transformation = true;
 
-                        //Por id
-                        if (grandgrandChildren[0].nodeName == "transformationref" && j == 0) {
-                            component_aux.transformations_ref = true;
-                        }
-                        //Explicitamente
-                        else {
-                            this.parseTransformations_components(grandChildren[j], component_aux.transformations, componentID);
-
+                        if(grandgrandChildren.length == 0){
+                            component_aux.transformations = -2;
+                            continue;
                         }
                         
-                        //Se for por id
-                        if (component_aux.transformations_ref == true) {
+                        if (grandgrandChildren[0].nodeName == "transformationref") {
                             
-                            var transformation_id = this.reader.getString(grandgrandChildren[k], 'id');
+                            if(grandgrandChildren.length > 1){
+                                return "There can only one transformation ref or there is only one transformation ref but there are also explicit transformations  for components of id " + componentID;
+                            }
+                            var transformation_id = this.reader.getString(grandgrandChildren[0], 'id');
                             
                             if (this.transformations[transformation_id] == null) {
+                                if(transformation_id == "identity")
                                 return "ID in the transformations Block for component of id " + componentID + "must be a valid reference";
                             }
                             //Vou buscar ao array de transformacoes e faco push para a transformacao associada ao component
-                            component_aux.transformations.push(this.transformations[transformation_id]);
+                            component_aux.transformations = this.transformations[transformation_id];
                         }
-                    }
-                    //Meti isto no fim pq so vale a pena fazer true se nao houver erros
-                    block_transformation = true;
+                        //Explicitamente
+                        else {
+                            component_aux.transformations = this.parseTransformations_components(grandChildren[j], componentID);
+                            if(component_aux.transformations == -1){
+                                return "Fix Errors";
+                            }
+                        }
+
+
                 }
                 
                 //component_aux.materials fica com a lista de materiais do bloco
@@ -1245,17 +1251,20 @@ class MySceneGraph {
                     block_materials = true;
 
                     if (grandgrandChildren.length == 0)
-                        return "At least one material must be defined";
+                        return "At least one material must be defined for component of id " + componentID;
 
                     for (var k = 0; k < grandgrandChildren.length; k++) {
 
                         var material_id = this.reader.getString(grandgrandChildren[k], 'id');
-                        if(material_id != "inherit"){
+                        if(material_id != "inherit" && material_id != "none"){
                             if (this.materials[material_id] == null) {
                                 return "ID in the material Block for component of id" + componentID + "must be a valid reference";
                             }
+                            component_aux.materials.push(this.materials[material_id]);
                         }
-                        component_aux.materials.push(this.materials[material_id]);
+                        else{
+                            component_aux.materials.push(material_id);
+                        }
 
                     }
 
@@ -1321,7 +1330,7 @@ class MySceneGraph {
                         if (grandgrandChildren[k].nodeName == "componentref") {
 
                             var children_component_id = this.reader.getString(grandgrandChildren[k], 'id');
-                            component_aux.children_component.push(this.components[children_component_id]);
+                            component_aux.children_component.push(children_component_id);
                         }
                         else {
                             //Aqui acho que faz sentido ver se eles sao null ref ous nao. Nos components nao pq damos flexibilidade de taggar coisas desconhecidas. No display temos de testar se e valido
@@ -1352,7 +1361,7 @@ class MySceneGraph {
             else if (block_children == false) {
                 return "Block Children needs to be declared";
             }
-
+            
             this.components[componentID] = component_aux;
         }
     }
@@ -1478,7 +1487,7 @@ class MySceneGraph {
         
         this.scene.pushMatrix();
         
-        this.displaySceneRecursive(root, root.materials[0], root.texture[0], root.texture[1], root.texture[2]);
+        this.displaySceneRecursive(root, root.materials[0], root.texture[0]);
         
         this.scene.popMatrix();
 
@@ -1489,40 +1498,52 @@ class MySceneGraph {
         var current_node = Node;
 
         if (current_node.materials[0] == "inherit") {
-            material_father.setTextureWrap('REPEAT', 'REPEAT');
+            if(material_father != "inherit")
+                material_father.setTextureWrap('REPEAT', 'REPEAT');
             
             if (current_node.texture[0] == "inherit") {
+                if(texture_father != "none"){
                 material_father.setTexture(texture_father);
-                texture_father.bind();
+                    texture_father.bind();
+                }
             }
             else if (current_node.texture[0] == "none") {
-                texture_father.unbind();
+                if(texture_father != "none"){
+                    texture_father.unbind();
+                }
             }
             else {
                 material_father.setTexture(current_node.texture[0]);
                 current_node.texture[0].bind();
             }
-            
-            material_father.apply()
+            if(material_father != "inherit")
+                material_father.apply()
         }
         else {
-            current_node.materials[0].setTextureWrap('REPEAT', 'REPEAT');
+            if(material_father != "inherit")
+                current_node.materials[0].setTextureWrap('REPEAT', 'REPEAT');
             
             if (current_node.texture[0] == "inherit") {
+                if(texture_father != "none"){
                 current_node.materials[0].setTexture(texture_father);
-                texture_father.bind();
+                    texture_father.bind();
+                }
             }
             else if (current_node.texture[0] == "none") {
-                texture_father.unbind();
+                if(texture_father != "none"){
+                    texture_father.unbind();
+                }
             }
             else {
                 current_node.materials[0].setTexture(current_node.texture[0]);
                 current_node.texture[0].bind();
             }
-            current_node.materials[0].apply();
+            if(material_father != "inherit")
+                current_node.materials[0].apply();
         }
-
-        this.scene.multMatrix(current_node.transformations[0]);
+        if(current_node.transformation != -2)
+            this.scene.multMatrix(current_node.transformations);
+    
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
             if(this.scene.displayNormals){
@@ -1537,12 +1558,29 @@ class MySceneGraph {
 
         for (let i = 0; i < current_node.children_component.length; i++) {
             this.scene.pushMatrix();
-            
-            if(current_node.texture[0] == "inherit"||current_node.texture[0]=="none"){
-                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father);
+            if(current_node.materials[0] == "inherit"){
+                if(current_node.texture[0] == "inherit"){
+                    this.displaySceneRecursive(this.components[current_node.children_component[i]], material_father, texture_father);
+                }
+                else if(current_node.texture[0] != "none"){
+                    this.displaySceneRecursive(this.components[current_node.children_component[i]], material_father, current_node.texture[0]);
+                }
+                else{
+                    this.displaySceneRecursive(this.components[current_node.children_component[i]], material_father, current_node.texture[0]);
+                }
             }
             else{
-                this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0]);
+
+                if(current_node.texture[0] == "inherit"){
+                    this.displaySceneRecursive(this.components[current_node.children_component[i]], current_node.materials[0], texture_father);
+                }
+                else if(current_node.texture[0] != "none"){
+                    this.displaySceneRecursive(this.components[current_node.children_component[i]], current_node.materials[0], current_node.texture[0]);
+                }
+                else{
+                    this.displaySceneRecursive(this.components[current_node.children_component[i]], current_node.materials[0], current_node.texture[0]);
+                }
+            
             }
 
             this.scene.popMatrix();
