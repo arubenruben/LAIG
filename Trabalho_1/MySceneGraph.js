@@ -1298,11 +1298,11 @@ class MySceneGraph {
                     else if(texture_id=="inherit"||texture_id=="none"){
                         
                         if(this.reader.getString(grandChildren[j], 'length_s')!=null){
-                            this.reader.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
+                            this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
                         }  
 
                         if(this.reader.getString(grandChildren[j], 'length_t')!=null){
-                            this.reader.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
+                            this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
                         }
                         
                     }
@@ -1475,10 +1475,12 @@ class MySceneGraph {
     displayScene() {
 
         var  root = this.components[this.idRoot];
+        
         this.scene.pushMatrix();
+        
         this.displaySceneRecursive(root, root.materials[0], root.texture[0], root.texture[1], root.texture[2]);
+        
         this.scene.popMatrix();
-
 
     }
 
@@ -1535,7 +1537,8 @@ class MySceneGraph {
 
         for (let i = 0; i < current_node.children_component.length; i++) {
             this.scene.pushMatrix();
-            if(current_node.texture[0] == "inherit"){
+            
+            if(current_node.texture[0] == "inherit"||current_node.texture[0]=="none"){
                 this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father);
             }
             else{

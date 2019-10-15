@@ -19,7 +19,7 @@ class MyComponent {
 
 		// variable to hold the id of the texture used, if id == "inherit" then the texture would be that of the
 		// father. if id == "none" no texture is applicable
-		// this.texture[0] = id of the texture;
+		// this.texture[0] = value of texture/object;
 		// this.texture[1] = lenght_s;
 		// this.texture[2] = lenght_t;
 		this.texture = [];

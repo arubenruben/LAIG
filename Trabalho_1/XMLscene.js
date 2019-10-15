@@ -40,8 +40,8 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-        //this.camera = this.graph.Views[this.graph.view_default];
+        //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = this.graph.Views[this.graph.view_default];
         this.interface.setActiveCamera(this.camera);
     }
     /**
@@ -134,15 +134,15 @@ class XMLscene extends CGFscene {
 
         // Clear image and depth buffer everytime we update the scene
         if(this.sceneInited){
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-        // Initialize Model-View matrix as identity (no transformation
-        this.updateProjectionMatrix();
-        this.loadIdentity();
-        
-        // Apply transformations corresponding to the camera position relative to the origin
-        this.applyViewMatrix();
+            // Initialize Model-View matrix as identity (no transformation
+            this.updateProjectionMatrix();
+            this.loadIdentity();
+            
+            // Apply transformations corresponding to the camera position relative to the origin
+            this.applyViewMatrix();
         }
         
         this.pushMatrix();
