@@ -996,6 +996,8 @@ class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
 
+            //Processa cada bloco transformacao
+
             if (children[i].nodeName != "transformation") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
@@ -1013,17 +1015,25 @@ class MySceneGraph {
             grandChildren = children[i].children;
             // Specifications for the current transformation.
 
-            var transfMatrix = mat4.create();
+            //Cada bloco transformacao. Comeca com uma instaciacao de uma mat4 e depois processar os diferentes componentes que dele podem fazer parte
+            
+            
+            let transfMatrix = mat4.create();
+
 
             for (var j = 0; j < grandChildren.length; j++) {
+                
                 switch (grandChildren[j].nodeName) {
+                    
                     case 'translate':
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate for transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
+                    
+                    break;
+                    
                     case 'scale':
 
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "Scale for tranformation for ID" + transformationID);
@@ -1061,6 +1071,9 @@ class MySceneGraph {
                         } else {
                             return "Invalid axis in transformation of id " + transformationID;
                         }
+
+
+                        //Aux array fica com o valor do eixo sobre o qual o objeto roda
 
                         aux_array_axis.push(...[x, y, z]);
 
@@ -1155,7 +1168,6 @@ class MySceneGraph {
                 continue;
             }
 
-
             // Get id of the current component.
             componentID = this.reader.getString(children[i], 'id');
             if (componentID == null)
@@ -1166,6 +1178,7 @@ class MySceneGraph {
             if (this.components[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
 
+            //Objeto do tipo component_aux
 
             var component_aux = new MyComponent(componentID);
             grandChildren = children[i].children;
@@ -1185,34 +1198,47 @@ class MySceneGraph {
 
 
                 grandgrandChildren = grandChildren[j].children;
+                
 
+                //Processar o bloco de transformacoes em componets
                 if (grandChildren[j].nodeName == "transformation") {
-
-                    block_transformation = true;
 
                     if (grandgrandChildren.length == 0) {
                         return "At least one reference to a transformation or a explicit transformation must be declared for component of id" + componentID;
                     }
-
+                    
                     for (var k = 0; k < grandgrandChildren.length; k++) {
+                        
+                        //Podemos definir transformacoes de duas formas . Por id ou explicitamente
 
-
+                        //Por id
                         if (grandgrandChildren[0].nodeName == "transformationref" && j == 0) {
                             component_aux.transformations_ref = true;
                         }
+                        //Explicitamente
+                        else {
+                            this.parseTransformations_components(grandChildren[j], component_aux.transformations, componentID);
 
+                        }
+                        
+                        //Se for por id
                         if (component_aux.transformations_ref == true) {
+                            
                             var transformation_id = this.reader.getString(grandgrandChildren[k], 'id');
+                            
                             if (this.transformations[transformation_id] == null) {
                                 return "ID in the transformations Block for component of id " + componentID + "must be a valid reference";
                             }
+                            //Vou buscar ao array de transformacoes e faco push para a transformacao associada ao component
                             component_aux.transformations.push(this.transformations[transformation_id]);
                         }
-                        else {
-                            this.parseTransformations_components(grandChildren[j], component_aux.transformations, componentID);
-                        }
                     }
+                    //Meti isto no fim pq so vale a pena fazer true se nao houver erros
+                    block_transformation = true;
                 }
+                
+                //component_aux.materials fica com a lista de materiais do bloco
+
 
                 else if (grandChildren[j].nodeName == "materials") {
 
@@ -1234,9 +1260,11 @@ class MySceneGraph {
                     }
 
                 }
+                
                 else if (grandChildren[j].nodeName == "texture") {
 
                     block_texture = true;
+                    
                     var texture_id = this.reader.getString(grandChildren[j], 'id');
                     if (texture_id == "inherit") {
                         component_aux.texture.push(texture_id);
@@ -1245,12 +1273,19 @@ class MySceneGraph {
                     else if (texture_id == "none") {
                         component_aux.texture.push(texture_id);
                     }
+                    
+                    //Nao existe entao textures no array de texturas
+
                     else if (this.textures[texture_id] == null) {
                         return "ID in the texture Block for component of id" + componentID + "must be a valid reference";
                     }
                     
+
+                    //Se a textura estiver definida, entao. Associamos a textura ao bloco component
                     component_aux.texture.push(this.textures[texture_id]);
                     
+
+                    //Ja esta com as novas diretivas do prof se for inherit ou none nao puxa as coordenas de lenght t e s
                     if(texture_id != "inherit" && texture_id != "none"){
                         var length_s = this.reader.getString(grandChildren[j], 'length_s');
                         var length_t = this.reader.getString(grandChildren[j], 'length_t');
@@ -1258,8 +1293,24 @@ class MySceneGraph {
                         component_aux.texture.push(length_t);
                     }
 
+                    //Seguir as diretivas do stor que deve dar erro/warning
+
+                    else if(texture_id=="inherit"||texture_id=="none"){
+                        
+                        if(this.reader.getString(grandChildren[j], 'length_s')!=null){
+                            this.reader.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
+                        }  
+
+                        if(this.reader.getString(grandChildren[j], 'length_t')!=null){
+                            this.reader.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
+                        }
+                        
+                    }
+
                 }
-                else {
+
+                else if(grandChildren[j].nodeName == "children"){
+
                     block_children = true;
 
                     if (grandgrandChildren.length == 0) {
@@ -1270,20 +1321,22 @@ class MySceneGraph {
                         if (grandgrandChildren[k].nodeName == "componentref") {
 
                             var children_component_id = this.reader.getString(grandgrandChildren[k], 'id');
-                            /*if(this.components[componentID] == null){
-                                return "ID in the children Block for component of id" + componentID + "must be a valid reference";
-                            }*/
                             component_aux.children_component.push(this.components[children_component_id]);
                         }
                         else {
-
+                            //Aqui acho que faz sentido ver se eles sao null ref ous nao. Nos components nao pq damos flexibilidade de taggar coisas desconhecidas. No display temos de testar se e valido
                             var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id');
-                           /* if (this.primitives[children_primitive_id] == null) {
+                            
+                            if (this.primitives[children_primitive_id] == null) {
                                 return "ID in the children Block for component of id" + componentID + "must be a valid reference";
-                            }*/
+                            }
                             component_aux.children_primitives.push(this.primitives[children_primitive_id]);
                         }
                     }
+                
+                }
+                else{
+                    return "Bloco de component desconhecido";
                 }
             }
 
