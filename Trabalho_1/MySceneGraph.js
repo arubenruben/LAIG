@@ -523,40 +523,41 @@ class MySceneGraph {
     parseLights(lightsNode) {
 
         var children = lightsNode.children;
-
+        let attributeNames = ["location", "ambient", "diffuse", "specular", "attenuation","target"];
+        let attributeTypes = ["position", "color", "color", "color"];
+        
+        
+        
+        
         this.Lights = [];
         this.numLights = 0;
         var grandChildren = [];
-        var nodeNames = [];
         var one_light_defined = false;
         var decomp_atten;
-    
-
+        
+        
         if (children.length == 0) {
             return "Error: must have at least one light";
         }
-
+        
         // Any number of lights.
         for (var i = 0; i < children.length; i++) {
-
-           // Storing light information
-            var attributeNames = [];
-            var attributeTypes = [];
+            
+            
+            // Storing light information
             var store_light_info = [];
+            let nodeNames = [];
+            
             var light_is_invalid = false;
             //Check type of light
             if (children[i].nodeName != "omni" && children[i].nodeName != "spot") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-            else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
-                attributeTypes.push(...["position", "color", "color", "color"]);
-            }
-
-
+            
             // Get id of the current light.
             var lightId = this.reader.getString(children[i], 'id');
+            
             if (lightId == null){
                 this.onXMLMinorError("no ID defined for light of type "+ children[i].nodeName + ", light not added");
                 continue;
@@ -568,16 +569,23 @@ class MySceneGraph {
                 continue;
             }
 
+
+            //store_light_info fica com a info temporaria
             store_light_info["type"] = children[i].nodeName;
 
             // Light enable/disable
-            var enableLight = true;
+            var enableLight = false;
             var aux = this.reader.getBoolean(children[i], 'enabled');
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
+            
+            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))){
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+                enableLight = aux || 1;
+
+            }else{
+                enableLight=aux;
+            }
 
             // assuming enable value is 1 or true
-            enableLight = aux || 1;
 
             store_light_info["enable"] = enableLight;
 
@@ -587,14 +595,19 @@ class MySceneGraph {
             
             // Gets the additional attributes of the spot light
             if (children[i].nodeName == "spot"){
+                
+                
                 var angle = this.reader.getFloat(children[i], 'angle');
+                
                 if (!(angle != null && !isNaN(angle))){
                     this.onXMLMinorError("unable to parse angle of the light for ID = " + lightId + ", light not added");
                     continue;
                 }
+                
                 store_light_info["angle"] = angle;
                 
                 var exponent = this.reader.getFloat(children[i], 'exponent');
+                
                 if (!(exponent != null && !isNaN(exponent))){
                     this.onXMLMinorError("unable to parse exponent of the light for ID = " + lightId + ", light not added");
                     continue;
@@ -604,12 +617,13 @@ class MySceneGraph {
             }
             
             nodeNames = [];
+            
             for (var j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
+
             for (var j = 0; j < attributeNames.length; j++) {
-                
                 
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
 
@@ -618,6 +632,7 @@ class MySceneGraph {
                     if (attributeNames[j] == "location"){
                         
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID " + lightId + ", light not added");
+                        
                         if (!Array.isArray(aux)){
                             this.onXMLMinorError(aux);
                             light_is_invalid = true;
@@ -632,6 +647,7 @@ class MySceneGraph {
                         var aux = [];
                         
                         decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'constant');
+                        
                         if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
                             this.onXMLMinorError("constant attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
                             light_is_invalid = true;
@@ -654,13 +670,16 @@ class MySceneGraph {
                             break;
                         }
                         aux.push(decomp_atten);
+                        
 
+                        //atenuation e um array
                         store_light_info["attenuation"] = aux;
 
 
                     }
 
                     else if (attributeNames[j] == "target"){
+                        
                         var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "target light for ID " + lightId);
                             if (!Array.isArray(aux)){
                             light_is_invalid = true;    
@@ -669,7 +688,10 @@ class MySceneGraph {
                         store_light_info["target"] = aux;
                     
                     }
+
+                    //Se nao for nenhum dos acima, entao e uma cor
                     else{
+                        
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
                         if (!Array.isArray(aux)){
                             this.onXMLMinorError(aux + ", light not added");
@@ -691,13 +713,16 @@ class MySceneGraph {
             }
             
             this.Lights[lightId] = store_light_info;
+            
             one_light_defined = true;
+            
             this.numLights++;
         }
 
         if (this.numLights > 8)
             return ("too many lights defined; WebGL imposes a limit of 8 lights");
-        if(one_light_defined == false)
+        
+            if(one_light_defined == false)
             return ("At least one light must be defined without erros - reminder elements with errors are not added");
 
         this.log("Parsed lights");
