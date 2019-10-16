@@ -85,7 +85,9 @@ class MySceneGraph {
                 if (this.components[key].children_component[i].definition_made == false) {
 
                     this.components[key].children_component[i] = this.components[this.components[key].children_component[i].id];
+                    
                 }
+
                 
             }
             
@@ -651,6 +653,7 @@ class MySceneGraph {
             }
 
 
+
             for (var j = 0; j < attributeNames.length; j++) {
 
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
@@ -731,8 +734,12 @@ class MySceneGraph {
                 }
 
                 else {
-                    this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
-                    continue;
+                    //Por causa de so o spot ter target o index retorna -1, para nao estar a mudar tudo
+                    if(attributeNames[j]!="target"&&children[i].nodeName!="spot"){
+
+                        this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
+                        continue;
+                    }
                 }
             }
 
@@ -1195,6 +1202,7 @@ class MySceneGraph {
         var grandChildren = [];
         var grandgrandChildren = [];
         var componentID;
+        let current_node_transformation
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
@@ -1229,7 +1237,7 @@ class MySceneGraph {
             var block_texture = false;
             var block_children = false;
             var return_value;
-
+           
             for (var j = 0; j < grandChildren.length; j++) {
 
                 grandgrandChildren = grandChildren[j].children;
@@ -1241,31 +1249,33 @@ class MySceneGraph {
                     block_transformation = true;
 
                     if (grandgrandChildren.length == 0) {
-                        component_aux.transformations = -2;
-                        continue;
+                        component_aux.transformations=mat4.create();
+                        
+                    }else{
+
+                        if (grandgrandChildren[0].nodeName == "transformationref") {
+    
+                            if (grandgrandChildren.length > 1) {
+                                return "There can only one transformation ref or there is only one transformation ref but there are also explicit transformations  for components of id " + componentID;
+                            }
+                            var transformation_id = this.reader.getString(grandgrandChildren[0], 'id');
+    
+                            if (this.transformations[transformation_id] == null) {
+                                if (transformation_id == "identity")
+                                    return "ID in the transformations Block for component of id " + componentID + "must be a valid reference";
+                            }
+                            //Vou buscar ao array de transformacoes e faco push para a transformacao associada ao component
+                            component_aux.transformations = this.transformations[transformation_id];
+                        }
+                        //Explicitamente
+                        else {
+                            component_aux.transformations = this.parseTransformations_components(grandChildren[j], componentID);
+                            if (component_aux.transformations == -1) {
+                                return "Fix Errors";
+                            }
+                        }
                     }
 
-                    if (grandgrandChildren[0].nodeName == "transformationref") {
-
-                        if (grandgrandChildren.length > 1) {
-                            return "There can only one transformation ref or there is only one transformation ref but there are also explicit transformations  for components of id " + componentID;
-                        }
-                        var transformation_id = this.reader.getString(grandgrandChildren[0], 'id');
-
-                        if (this.transformations[transformation_id] == null) {
-                            if (transformation_id == "identity")
-                                return "ID in the transformations Block for component of id " + componentID + "must be a valid reference";
-                        }
-                        //Vou buscar ao array de transformacoes e faco push para a transformacao associada ao component
-                        component_aux.transformations = this.transformations[transformation_id];
-                    }
-                    //Explicitamente
-                    else {
-                        component_aux.transformations = this.parseTransformations_components(grandChildren[j], componentID);
-                        if (component_aux.transformations == -1) {
-                            return "Fix Errors";
-                        }
-                    }
 
 
                 }
@@ -1539,8 +1549,11 @@ class MySceneGraph {
         var current_node = Node;
 
         if (current_node.materials[0] == "inherit") {
-            if (material_father != "inherit")
+            
+            if (material_father != "inherit"){
+
                 material_father.setTextureWrap('REPEAT', 'REPEAT');
+            }
 
             if (current_node.texture[0] == "inherit") {
                 if (texture_father != "none") {
@@ -1561,45 +1574,53 @@ class MySceneGraph {
                 material_father.apply()
         }
         else {
-            if (material_father != "inherit")
-                current_node.materials[0].setTextureWrap('REPEAT', 'REPEAT');
 
             if (current_node.texture[0] == "inherit") {
+                
                 if (texture_father != "none") {
                     current_node.materials[0].setTexture(texture_father);
                     texture_father.bind();
                 }
             }
             else if (current_node.texture[0] == "none") {
+                
                 if (texture_father != "none") {
-                    texture_father.unbind();
+                   texture_father.unbind();
                 }
             }
+
             else {
                 current_node.materials[0].setTexture(current_node.texture[0]);
                 current_node.texture[0].bind();
             }
-            if (material_father != "inherit")
-                current_node.materials[0].apply();
+            
+            current_node.materials[0].apply();
         }
-        if (current_node.transformation != -2)
+
+
+     
             this.scene.multMatrix(current_node.transformations);
 
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
+            
             if (this.scene.displayNormals) {
                 current_node.children_primitives[i].primitive.enableNormalViz();
             }
             if (current_node.texture[0] != "inherit" && current_node.texture[0] != "none") {
                 //current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1] , current_node.texture[2]);
             }
+
             current_node.children_primitives[i].primitive.display();
 
         }
 
         for (let i = 0; i < current_node.children_component.length; i++) {
+            
             this.scene.pushMatrix();
+            
             if (current_node.materials[0] == "inherit") {
+                
                 if (current_node.texture[0] == "inherit") {
                     this.displaySceneRecursive(current_node.children_component[i], material_father, texture_father);
                 }
@@ -1611,6 +1632,8 @@ class MySceneGraph {
                 }
             }
             else {
+
+                //Ou seja ha material novo
 
                 if (current_node.texture[0] == "inherit") {
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father);

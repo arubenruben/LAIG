@@ -62,9 +62,7 @@ class MyTriangle extends CGFobject {
 		
 		//this.vetor_normal_norma = Math.sqrt(Math.pow(this.vetor_normal_normalizado[0],2)+ Math.pow(this.vetor_normal_normalizado[1],2) + Math.pow(this.vetor_normal_normalizado[2],2));
 		this.vetor_inverso = -1 * this.vetor_normal;
-		console.log(this.vetor_normal_norma);
-
-
+	
 		//Counter-clockwise reference of vertices*/
 		this.indices = [
 			0, 1, 2,
