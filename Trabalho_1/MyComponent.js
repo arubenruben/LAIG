@@ -3,7 +3,7 @@
  * @constructor
  */
 class MyComponent {
-	constructor(id) {
+	constructor(id,is_defined) {
 
 		this.loaded = false;
 		
@@ -29,6 +29,8 @@ class MyComponent {
 
 		// array to hold children that are primitives
 		this.children_primitives = []
+
+		this.definition_made=is_defined;
 	}
 }
 
