@@ -78,21 +78,12 @@
 
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="104/256" g="50/256" b="14/256" a="1.0" />
+            <diffuse r="0.41" g="0.19" b="0.05" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
 
 
         </material>
 
-        <material id="fence_wood2" shininess="0.5">
-
-            <emission r="0" g="0" b="0" a="1.0" />
-            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="216/256" g="216/256" b="216/256" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
-
-
-        </material>
 
     </materials>
 
@@ -154,6 +145,21 @@
 
     <components>
 
+         <component id="spot_pub">
+            <transformation>
+                <translate x="5" y="2" z="0.5"/>
+                <scale x="5" y="2" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <primitiveref id="square"/>
+
+            </children>
+        </component>
 
         <component id="tronco_fence">
             <transformation>
@@ -466,7 +472,7 @@
                 <rotate axis="y" angle="90"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1" />
             </materials>
             <texture id="inherit"/>
 
@@ -491,7 +497,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1" />
             </materials>
             <texture id="inherit"/>
 
@@ -506,7 +512,7 @@
                 <translate x="0" y="0" z="20"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="fence_wood1" />
             </materials>
             <texture id="inherit"/>
 
@@ -1268,13 +1274,14 @@
             </materials>
             <texture id="dirt"/>
             <children>
-
+        
                 <componentref id="underground"/>
                 <componentref id="floor"/>
                 <componentref id="sides"/>
                 <componentref id="pool"/>
-                <componentref id= "fence_core"/>
+                  <componentref id="spot_pub"/>
 
+                <componentref id= "fence_core"/>
 
             </children>
         </component>
