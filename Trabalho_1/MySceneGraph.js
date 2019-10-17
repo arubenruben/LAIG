@@ -473,7 +473,7 @@ class MySceneGraph {
 
 
             //O array de views fica no indice "nome da camara" com o objeto do tipo camara
-            this.Views[this.view_default] = camera;
+            this.Views[view_id] = camera;
 
 
         }
