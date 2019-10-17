@@ -15,6 +15,9 @@ class MyComponent {
 
 		// array to hold the id of the materials used, if id == "inherit" then the material would be that of the
 		// father.
+
+		this.material_active;
+		
 		this.materials = [];
 
 		// variable to hold the id of the texture used, if id == "inherit" then the texture would be that of the
