@@ -14,7 +14,7 @@
     </globals>
 
     <lights>
-        <omni id="sol" enabled="1">
+        <omni id="sol" enabled="0">
             <location x="7" y="5" z="10" w="1.0" />
             <ambient r="0.9" g="0.5" b="0" a="1.0" />
             <diffuse r="0.9" g="0.5" b="0" a="1.0" />
@@ -22,13 +22,22 @@
             <attenuation constant ="1.0" linear = "0" quadratic = "0.0"/>
         </omni>
 
-        <spot id="sol1" enabled="0" angle="45" exponent="10">
-            <location x="7" y="3" z="10" w="1.0" />
-            <target x="1" y= "1" z="1"/>
-            <ambient r="0" g="0" b="1" a="1.0" />
-            <diffuse r="0.9" g="0.5" b="0" a="1.0" />
-            <specular r="0.9" g="0.5" b="0" a="1.0" />
-            <attenuation constant ="1.0" linear = "0.0" quadratic = "0.0"/>
+        <spot id="spot_add_1" enabled="1" angle="90" exponent="5">
+            <location x="6" y="3" z="2" w="1.0" />
+            <target x="4" y= "5" z="0"/>
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant ="0" linear = "0.5" quadratic = "0.0"/>
+        </spot>
+        
+        <spot id="spot_add_2" enabled="1" angle="90" exponent="5">
+            <location x="9" y="3" z="2" w="1.0" />
+            <target x="9" y= "4" z="0"/>
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant ="0" linear = "0.5" quadratic = "0.0"/>
         </spot>
     </lights>
 
@@ -43,6 +52,9 @@
         <texture id="plastic" file="scenes/images/plastic.png"/>
         <texture id="colmo" file= "scenes/images/colmo.png"/>
         <texture id="tronco" file= "scenes/images/madeira.jpg"/>
+        <texture id="vice_city" file="scenes/images/vice_city.jpg"/>
+        <texture id="ola" file="scenes/images/sumol.jpg"/>
+        <texture id="iron" file="scenes/images/iron.jpg"/>
 
     </textures>
 
@@ -111,6 +123,10 @@
             <translate x="0" y="0" z="0"/>
         </transformation>
 
+        <transformation id="spot_pub_transf">
+            <translate x="5" y="2" z="0.5"/>
+        </transformation>
+
     </transformations>
 
     <primitives>
@@ -122,6 +138,10 @@
             <cylinder base="0.4" top="0.5" height="1" slices="10" stacks="10" />
         </primitive>
 
+         <primitive id="cilinder_spot">
+            <cylinder base="0.1" top="0.1" height="4" slices="15" stacks="15" />
+        </primitive>
+
         <primitive id="torus_bouy">
             <torus inner="0.2" outer="0.5" slices="30" loops="30"/>
         </primitive>
@@ -131,7 +151,7 @@
         </primitive>
 
         <primitive id="cilinder_guarda_sol">
-            <cylinder base="0.5" top="0" height="1" slices="30" stacks="30" />
+            <cylinder base="0.5" top="0" height="1" slices="15" stacks="15" />
         </primitive>
 
         <primitive id="cilinder_perna_esperguicadeira">
@@ -145,18 +165,125 @@
 
     <components>
 
-         <component id="spot_pub">
+            <component id="barra_ilumin_spot2">
             <transformation>
-                <translate x="5" y="2" z="0.5"/>
-                <scale x="5" y="2" z="1"/>
+                <translate x="4" y="0" z="0"/>
+                <scale x="0.08" y="1" z="2"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
-
             <children>
-                <primitiveref id="square"/>
+                <primiteref id="square"/>
+            </children>
+        </component>
+
+
+        <component id="barra_ilumin_spot1">
+            <transformation>
+               
+               <translate x="0.5" y="0" z="0"/>
+               <scale x="0.08" y="1" z="2"/>
+
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="square"/>
+            </children>
+        </component>
+
+
+        <component id="leg_2_spot">
+            <transformation>
+                <translate x="4.3" y="0" z="0"/>
+
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="cilinder_spot"/>
+            </children>
+        </component>
+
+
+         <component id="leg_1_spot">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="cilinder_spot"/>
+            </children>
+        </component>
+
+
+        <component id="spot_light_spottype">
+            <transformation>
+                <translate x="0" y="2" z="0"/>
+                <rotate axis="x" angle="110"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="iron"/>
+            <children>
+                <componentref id="barra_ilumin_spot1"/>
+                <componentref id="barra_ilumin_spot2"/>
+            </children>
+        </component>
+
+         <component id="legs_spot_pub">
+            <transformation>
+                <translate x="0.3" y="0" z="0"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="iron" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="leg_1_spot"/>
+                <componentref id="leg_2_spot"/>
+            </children>
+        </component>
+
+
+
+         <component id="add">
+            <transformation>
+                 <scale x="5" y="2" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="vice_city" length_s="1" length_t="1"/>
+            <children>
+                <primiteref id="square"/>
+            </children>
+        </component>
+
+
+
+         <component id="spot_pub">
+            <transformation>
+                <transformationref id="spot_pub_transf"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="add"/>
+                <componentref id="legs_spot_pub"/>
+                <componentref id="spot_light_spottype"/>
 
             </children>
         </component>
@@ -622,7 +749,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="plastic"/>
+            <texture id="plastic" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -636,7 +763,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="plastic"/>
+            <texture id="plastic" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -652,7 +779,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="plastic"/>
+            <texture id="plastic" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -666,7 +793,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="plastic"/>
+            <texture id="plastic" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
@@ -676,13 +803,13 @@
         <component id="chapeu_shape">
             <transformation>
                 <translate x="0" y="6" z="1"/>
-                <scale x="10" y="3" z="10"/>
+                <scale x="8" y="2" z="8"/>
                 <rotate axis="x" angle ="-90"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="colmo"/>
+            <texture id="ola" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="cilinder_guarda_sol"/>
             </children>
@@ -712,7 +839,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="tronco"/>
+            <texture id="plastic" length_s="1" length_t="1"/>
             <children>
                 <componentref id="chapeu_shape"/>
                 <componentref id="pau_placement"/>
@@ -730,7 +857,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="esperguicadeira"/>
+            <texture id="esperguicadeira" length_s="1" length_t="1"/>
             <children>
                 <componentref id="anterior_esq"/>
                 <componentref id="anterior_dir"/>
@@ -751,7 +878,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="plastic"/>
+            <texture id="plastic" length_s="1" length_t="1"/>
             <children>
                 <componentref id="pau"/>
             </children>
@@ -766,7 +893,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="esperguicadeira"/>
+            <texture id="esperguicadeira" length_s="1" length_t="1"/>
             <children>
                 <componentref id="esperguicadeira"/>
             </children>
@@ -827,7 +954,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass"/>
+            <texture id="grass" length_s="1" length_t="1"/>
             <children>
                 <componentref id="esper_mais_guarda_sois_1"/>
                 <componentref id="esper_mais_guarda_sois_2"/>
@@ -845,7 +972,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass"/>
+            <texture id="grass" length_s="1" length_t="1"/>
             <children>
                 <componentref id="esper_mais_guarda_sois_1"/>
                 <componentref id="esper_mais_guarda_sois_2"/>
@@ -866,7 +993,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass"/>
+            <texture id="grass" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -881,7 +1008,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="marble"/>
+            <texture id="marble" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -897,7 +1024,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="marble"/>
+            <texture id="marble" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -913,7 +1040,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass"/>
+            <texture id="grass" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -929,7 +1056,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="marble"/>
+            <texture id="marble" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -1030,7 +1157,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass"/>
+            <texture id="grass" length_s="1" length_t="1"/>
             <children>
                 <componentref id="floor_width" />
                 <componentref id="floor_length" />
@@ -1196,7 +1323,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="water"/>
+            <texture id="water" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
