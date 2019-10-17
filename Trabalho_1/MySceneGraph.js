@@ -37,6 +37,9 @@ class MySceneGraph {
         this.Views = [];
         this.ambient = [];
         this.background = [];
+        this.mPressed = 0;
+        this.mPressed_bool = true;
+        
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -1299,7 +1302,7 @@ class MySceneGraph {
                             }
                             component_aux.materials.push(this.materials[material_id]);
                         }
-                        else {
+                        else{
                             component_aux.materials.push(material_id);
                         }
 
@@ -1538,113 +1541,98 @@ class MySceneGraph {
 
         this.scene.pushMatrix();
 
-        this.displaySceneRecursive(root, root.materials[0], root.texture[0]);
+        
+        this.displaySceneRecursive(root, root.materials[0], root.texture[0], root.texture[1], root.texture[2]);
 
         this.scene.popMatrix();
 
     }
 
-    displaySceneRecursive(Node, material_father, texture_father) {
+    displaySceneRecursive(Node, material_father, texture_father, ls, lt) {
 
         var current_node = Node;
+        material_father.setTexture(null);
+        this.material_active = this.mPressed % current_node.materials.length;
+      
+        if(current_node.materials[0] == "inherit"){
 
-        if (current_node.materials[0] == "inherit") {
+            material_father.setTextureWrap('REPEAT', 'REPEAT');
             
-            if (material_father != "inherit"){
-
-                material_father.setTextureWrap('REPEAT', 'REPEAT');
-            }
-
-            if (current_node.texture[0] == "inherit") {
-                if (texture_father != "none") {
+            if(current_node.texture[0] == "inherit"){
+                if(texture_father != "none"){
                     material_father.setTexture(texture_father);
-                    texture_father.bind();
                 }
             }
-            else if (current_node.texture[0] == "none") {
-                if (texture_father != "none") {
-                    texture_father.unbind();
-                }
-            }
-            else {
+
+            else if(current_node.texture[0] != "none"){
                 material_father.setTexture(current_node.texture[0]);
-                current_node.texture[0].bind();
-            }
-            if (material_father != "inherit")
-                material_father.apply()
-        }
-        else {
-
-            if (current_node.texture[0] == "inherit") {
-                
-                if (texture_father != "none") {
-                    current_node.materials[0].setTexture(texture_father);
-                    texture_father.bind();
-                }
-            }
-            else if (current_node.texture[0] == "none") {
-                
-                if (texture_father != "none") {
-                   texture_father.unbind();
-                }
-            }
-
-            else {
-                current_node.materials[0].setTexture(current_node.texture[0]);
-                current_node.texture[0].bind();
             }
             
-            current_node.materials[0].apply();
+            material_father.apply();
         }
-
-
-     
-            this.scene.multMatrix(current_node.transformations);
-
-
+        else{
+            
+            current_node.materials[this.material_active].setTextureWrap('REPEAT', 'REPEAT');
+            
+            if(current_node.texture[0] == "inherit"){
+                if(texture_father != "none"){
+                    current_node.materials[this.material_active].setTexture(texture_father);
+                }
+            }
+            else if(current_node.texture[0] != "none"){
+                current_node.materials[this.material_active].setTexture(current_node.texture[0]);
+            }
+            
+            current_node.materials[this.material_active].apply();
+        }
+        
+        this.scene.multMatrix(current_node.transformations);
+        
         for (let i = 0; i < current_node.children_primitives.length; i++) {
             
-            if (this.scene.displayNormals) {
+            if (this.scene.displayNormals)
                 current_node.children_primitives[i].primitive.enableNormalViz();
-            }
-            if (current_node.texture[0] != "inherit" && current_node.texture[0] != "none") {
-                //current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1] , current_node.texture[2]);
+            else
+                current_node.children_primitives[i].primitive.disableNormalViz();
+            
+            if (current_node.texture[0] != "none") {
+
+               if(current_node.texture[0] == "inherit")
+                    current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
+                else
+                  current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1] , current_node.texture[2]);
             }
 
             current_node.children_primitives[i].primitive.display();
-
         }
 
         for (let i = 0; i < current_node.children_component.length; i++) {
             
             this.scene.pushMatrix();
-            
+
             if (current_node.materials[0] == "inherit") {
-                
-                if (current_node.texture[0] == "inherit") {
-                    this.displaySceneRecursive(current_node.children_component[i], material_father, texture_father);
-                }
-                else if (current_node.texture[0] != "none") {
-                    this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0]);
-                }
-                else {
-                    this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0]);
-                }
+
+                if (current_node.texture[0] == "inherit")
+                    this.displaySceneRecursive(current_node.children_component[i], material_father, texture_father, ls, lt);
+            
+                else if (current_node.texture[0] != "none")
+                    this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], 1, 1);
+            
+                else
+                    this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], current_node.texture[1], current_node.texture[2]);
+            
             }
+
             else {
 
-                //Ou seja ha material novo
-
-                if (current_node.texture[0] == "inherit") {
-                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], texture_father);
-                }
-                else if (current_node.texture[0] != "none") {
-                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0]);
-                }
-                else {
-                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[0], current_node.texture[0]);
-                }
-
+                if (current_node.texture[0] == "inherit")
+                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[this.material_active], texture_father, ls, lt);
+            
+                else if (current_node.texture[0] != "none")
+                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[this.material_active], current_node.texture[0], 1, 1);
+            
+                else
+                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[this.material_active], current_node.texture[0], current_node.texture[1], current_node.texture[2]);
             }
 
             this.scene.popMatrix();

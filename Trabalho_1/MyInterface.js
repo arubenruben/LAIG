@@ -29,7 +29,7 @@ class MyInterface extends CGFinterface {
         var f0 = this.gui.addFolder('Lights');
         f0.add(this.scene.lights[0], 'enabled').name("Enabled");
 */
-
+        this.m_pressed = 0;
         this.initKeys();
     
       
@@ -46,10 +46,13 @@ class MyInterface extends CGFinterface {
         this.activeKeys={};
     }
 
-    processKeyDown(event) {
+    processKeyDown(event){
         this.activeKeys[event.code]=true;
+        if(event.code == "KeyM" && !event.repeat){
+                this.scene.graph.mPressed++;
+        }
     };
-
+    
     processKeyUp(event) {
         this.activeKeys[event.code]=false;
     };
@@ -57,4 +60,6 @@ class MyInterface extends CGFinterface {
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
+
+
 }
