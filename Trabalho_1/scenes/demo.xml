@@ -16,13 +16,22 @@
     <lights>
         <omni id="sol" enabled="0">
             <location x="7" y="5" z="10" w="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <attenuation constant ="1.0" linear = "0" quadratic = "0.0"/>
+        </omni>
+        
+        <omni id="white_light" enabled="1">
+            <location x="7" y="5" z="10" w="1.0" />
             <ambient r="0.9" g="0.5" b="0" a="1.0" />
             <diffuse r="0.9" g="0.5" b="0" a="1.0" />
             <specular r="0.9" g="0.5" b="0" a="1.0" />
             <attenuation constant ="1.0" linear = "0" quadratic = "0.0"/>
         </omni>
 
-        <spot id="spot_add_1" enabled="1" angle="90" exponent="5">
+
+        <spot id="spot_add_1" enabled="0" angle="90" exponent="5">
             <location x="6" y="3" z="2" w="1.0" />
             <target x="4" y= "5" z="0"/>
             <ambient r="0" g="0" b="0" a="1.0" />
@@ -30,8 +39,8 @@
             <specular r="1" g="1" b="1" a="1.0" />
             <attenuation constant ="0" linear = "0.5" quadratic = "0.0"/>
         </spot>
-        
-        <spot id="spot_add_2" enabled="1" angle="90" exponent="5">
+
+        <spot id="spot_add_2" enabled="0" angle="90" exponent="5">
             <location x="9" y="3" z="2" w="1.0" />
             <target x="9" y= "4" z="0"/>
             <ambient r="0" g="0" b="0" a="1.0" />
@@ -86,11 +95,11 @@
             <specular r="0.7" g="0" b="0.2" a="1.0" />
         </material>
 
-        <material id="fence_wood1" shininess="0.5">
+        <material id="fence_wood1" shininess="10">
 
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="0.41" g="0.19" b="0.05" a="1.0" />
+            <diffuse r="0.54" g="0.27" b="0" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
 
 
@@ -138,7 +147,7 @@
             <cylinder base="0.4" top="0.5" height="1" slices="10" stacks="10" />
         </primitive>
 
-         <primitive id="cilinder_spot">
+        <primitive id="cilinder_spot">
             <cylinder base="0.1" top="0.1" height="4" slices="15" stacks="15" />
         </primitive>
 
@@ -161,11 +170,18 @@
         <primitive id="triangle">
             <triangle x1="0" y1="0" z1="0" x2="1" y2="1" z2="0" x3="2" y3="0" z3="0" />
         </primitive>
+
+        <primitive id="triangle_fence_primitive">
+            <triangle x1="0" y1="0" z1="0" x2="0.25" y2="0.25" z2="0" x3="0.5" y3="0" z3="0" />
+        </primitive>
     </primitives>
 
     <components>
 
-            <component id="barra_ilumin_spot2">
+        <!--
+            Espaco de manipulacao do espaco publicitario
+        -->
+        <component id="barra_ilumin_spot2">
             <transformation>
                 <translate x="4" y="0" z="0"/>
                 <scale x="0.08" y="1" z="2"/>
@@ -179,12 +195,11 @@
             </children>
         </component>
 
-
         <component id="barra_ilumin_spot1">
             <transformation>
-               
-               <translate x="0.5" y="0" z="0"/>
-               <scale x="0.08" y="1" z="2"/>
+
+                <translate x="0.5" y="0" z="0"/>
+                <scale x="0.08" y="1" z="2"/>
 
             </transformation>
             <materials>
@@ -195,7 +210,6 @@
                 <primiteref id="square"/>
             </children>
         </component>
-
 
         <component id="leg_2_spot">
             <transformation>
@@ -211,8 +225,7 @@
             </children>
         </component>
 
-
-         <component id="leg_1_spot">
+        <component id="leg_1_spot">
             <transformation>
             </transformation>
             <materials>
@@ -223,7 +236,6 @@
                 <primiteref id="cilinder_spot"/>
             </children>
         </component>
-
 
         <component id="spot_light_spottype">
             <transformation>
@@ -240,7 +252,7 @@
             </children>
         </component>
 
-         <component id="legs_spot_pub">
+        <component id="legs_spot_pub">
             <transformation>
                 <translate x="0.3" y="0" z="0"/>
                 <rotate axis="x" angle="90"/>
@@ -255,11 +267,9 @@
             </children>
         </component>
 
-
-
-         <component id="add">
+        <component id="add">
             <transformation>
-                 <scale x="5" y="2" z="1"/>
+                <scale x="5" y="2" z="1"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -270,9 +280,7 @@
             </children>
         </component>
 
-
-
-         <component id="spot_pub">
+        <component id="spot_pub">
             <transformation>
                 <transformationref id="spot_pub_transf"/>
             </transformation>
@@ -288,14 +296,88 @@
             </children>
         </component>
 
-        <component id="tronco_fence">
+        <!--
+    Espaco publicitario end 
+-->
+
+        <!--
+    Espaco de manipulacao da fence
+-->
+
+        <component id="grupo_3_fences_generico">
             <transformation>
-             <scale x="0.5" y="1.2" z="1"/>
+               
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_fence_generico_0"/>
+                <componentref id="grupo_fence_generico_1"/>
+                <componentref id="grupo_fence_generico_2"/>
+
+
+            </children>
+
+
+        </component>
+        
+        
+        <component id="grupo_fence_generico_2">
+            <transformation>
+                <translate x="-1.5" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="tronco_fence"/>
+                <componentref id="triangle_fence"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_generico_1">
+            <transformation>
+                <translate x="-1" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="tronco_fence"/>
+                <componentref id="triangle_fence"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_generico_0">
+            <transformation>
+                <translate x="-0.5" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="tronco_fence"/>
+                <componentref id="triangle_fence"/>
+            </children>
+        </component>
+
+        <component id="tronco_fence">
+            <transformation>
+                <scale x="0.5" y="1.5" z="1"/>
+            </transformation>
+            <materials>
+                <material id="fence_wood1" />
+            </materials>
+            <texture id="none"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -305,15 +387,14 @@
 
         <component id="triangle_fence">
             <transformation>
-                <translate x="-0.25" y="1.2" z="0"/>
-                <scale x="0.5" y="0.5" z="1"/>
+                <translate x="0" y="1.5" z="0"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="none"/>
             <children>
-                <primitiveref id="triangle"/>
+                <primitiveref id="triangle_fence_primitive"/>
             </children>
         </component>
 
@@ -392,7 +473,7 @@
             </children>
         </component>
 
-          <component id="grupo_fence_front_2">
+        <component id="grupo_fence_front_2">
             <transformation>
                 <translate x="4" y="0" z="0"/>
             </transformation>
@@ -407,8 +488,7 @@
             </children>
         </component>
 
-        
-         <component id="grupo_fence_front_1">
+        <component id="grupo_fence_front_1">
             <transformation>
                 <translate x="2" y="0" z="0"/>
             </transformation>
@@ -423,8 +503,7 @@
             </children>
         </component>
 
-        
-         <component id="grupo_fence_front_0">
+        <component id="grupo_fence_front_0">
             <transformation>
                 <translate x="0" y="0" z="0"/>
             </transformation>
@@ -439,10 +518,9 @@
             </children>
         </component>
 
-
-        <component id="grupo_fence_esq_9">
+         <component id="grupo_fence_esq_19">
             <transformation>
-                <translate x="-19" y="0" z="0"/>
+                <translate x="-18.5" y="0" z="0"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -450,12 +528,24 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+        <component id="grupo_fence_esq_18">
+            <transformation>
+                <translate x="-18" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_8">
+         <component id="grupo_fence_esq_17">
             <transformation>
                 <translate x="-17" y="0" z="0"/>
             </transformation>
@@ -465,12 +555,27 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_7">
+        <component id="grupo_fence_esq_16">
+            <transformation>
+                <translate x="-16" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+
+
+         <component id="grupo_fence_esq_15">
             <transformation>
                 <translate x="-15" y="0" z="0"/>
             </transformation>
@@ -480,12 +585,26 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_6">
+        <component id="grupo_fence_esq_14">
+            <transformation>
+                <translate x="-14" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+
+        <component id="grupo_fence_esq_13">
             <transformation>
                 <translate x="-13" y="0" z="0"/>
             </transformation>
@@ -495,12 +614,28 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_4">
+
+
+
+        <component id="grupo_fence_esq_12">
+            <transformation>
+                <translate x="-12" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_esq_11">
             <transformation>
                 <translate x="-11" y="0" z="0"/>
             </transformation>
@@ -510,12 +645,27 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_5">
+
+
+         <component id="grupo_fence_esq_10">
+            <transformation>
+                <translate x="-10" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_esq_9">
             <transformation>
                 <translate x="-9" y="0" z="0"/>
             </transformation>
@@ -525,12 +675,27 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_3">
+
+        <component id="grupo_fence_esq_8">
+            <transformation>
+                <translate x="-8" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+
+        <component id="grupo_fence_esq_7">
             <transformation>
                 <translate x="-7" y="0" z="0"/>
             </transformation>
@@ -540,12 +705,27 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_2">
+
+
+        <component id="grupo_fence_esq_6">
+            <transformation>
+                <translate x="-6" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_esq_5">
             <transformation>
                 <translate x="-5" y="0" z="0"/>
             </transformation>
@@ -555,14 +735,25 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+               <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
+        <component id="grupo_fence_esq_4">
+            <transformation>
+                <translate x="-4" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
 
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
 
-        <component id="grupo_fence_esq_1">
+        <component id="grupo_fence_esq_3">
             <transformation>
                 <translate x="-3" y="0" z="0"/>
             </transformation>
@@ -572,12 +763,25 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
-        <component id="grupo_fence_esq_0">
+        <component id="grupo_fence_esq_2">
+            <transformation>
+                <translate x="-2" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_esq_1">
             <transformation>
                 <translate x="-1" y="0" z="0"/>
             </transformation>
@@ -587,16 +791,44 @@
             <texture id="inherit"/>
 
             <children>
-                <componentref id="tronco_fence"/>
-                <componentref id="triangle_fence"/>
+               <componentref id="grupo_3_fences_generico"/>
+            </children>
+        </component>
+
+        <component id="grupo_fence_esq_0">
+            <transformation>
+                
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_3_fences_generico"/>
             </children>
         </component>
 
 
+        <component id="grupo_fence_dir">
+            <transformation>
+                <translate x="14" y="0" z="20"/>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="fence_wood1"/>
+            </materials>
+            <texture id="inherit"/>
+
+            <children>
+                <componentref id="grupo_fence_esq"/>
+            </children>
+        </component>
+
 
         <component id="grupo_fence_esq">
             <transformation>
-                <rotate axis="y" angle="90"/>
+                <rotate axis="y" angle ="90"/>
             </transformation>
             <materials>
                 <material id="fence_wood1" />
@@ -604,6 +836,7 @@
             <texture id="inherit"/>
 
             <children>
+        
                 <componentref id="grupo_fence_esq_0"/>
                 <componentref id="grupo_fence_esq_1"/>
                 <componentref id="grupo_fence_esq_2"/>
@@ -615,24 +848,25 @@
                 <componentref id="grupo_fence_esq_8"/>
                 <componentref id="grupo_fence_esq_9"/>
 
+                <!-- Para colocar buracos a simular portas nas fences
+                
+                    <componentref id="grupo_fence_esq_10"/>
+                    <componentref id="grupo_fence_esq_11"/>
+                    <componentref id="grupo_fence_esq_12"/>
+
+                -->
+                <componentref id="grupo_fence_esq_13"/>
+                <componentref id="grupo_fence_esq_14"/>
+                <componentref id="grupo_fence_esq_15"/>
+                <componentref id="grupo_fence_esq_16"/>
+                <componentref id="grupo_fence_esq_17"/>
+                <componentref id="grupo_fence_esq_18"/>
+                <componentref id="grupo_fence_esq_19"/>
+                
+
             </children>
         </component>
 
-        <component id="grupo_fence_dir">
-            <transformation>
-                <translate x="14" y="0" z="20"/>
-                <rotate axis="y" angle="180"/>
-            </transformation>
-            <materials>
-                <material id="fence_wood1" />
-            </materials>
-            <texture id="inherit"/>
-
-            <children>
-                <componentref id="grupo_fence_esq"/>
-
-            </children>
-        </component>
 
         <component id="grupo_fence_front">
             <transformation>
@@ -652,13 +886,12 @@
                 <componentref id="grupo_fence_front_5"/>
                 <componentref id="grupo_fence_front_6"/>
                 <componentref id="grupo_fence_front_7"/>
-                
+
 
             </children>
 
 
         </component>
-
 
         <component id="grupo_fence_back">
             <transformation>
@@ -671,15 +904,15 @@
 
             <children>
                 <componentref id="grupo_fence_front"/>
-                
+
 
             </children>
 
 
         </component>
 
-       
 
+    
         <component id="fence_core">
             <transformation>
                 <translate x="0" y="0" z="0"/>
@@ -695,10 +928,7 @@
                 
                 <componentref id="grupo_fence_esq"/>
                 <componentref id="grupo_fence_dir"/>
-                <componentref id="grupo_fence_front"/>
-                <componentref id="grupo_fence_back"/>
-             
-                
+              
 
             </children>
 
@@ -740,7 +970,6 @@
             </children>
         </component>
 
-
         <component id="frente_esq">
             <transformation>
                 <translate x="3" y="0" z="1" />
@@ -768,8 +997,6 @@
                 <primitiveref id="cilinder_perna_esperguicadeira"/>
             </children>
         </component>
-
-
 
         <component id="anterior_esq">
             <transformation>
@@ -1401,12 +1628,12 @@
             </materials>
             <texture id="dirt"/>
             <children>
-        
+
                 <componentref id="underground"/>
                 <componentref id="floor"/>
                 <componentref id="sides"/>
                 <componentref id="pool"/>
-                  <componentref id="spot_pub"/>
+                <componentref id="spot_pub"/>
 
                 <componentref id= "fence_core"/>
 
