@@ -174,6 +174,15 @@
         <primitive id="triangle_fence_primitive">
             <triangle x1="0" y1="0" z1="0" x2="0.25" y2="0.25" z2="0" x3="0.5" y3="0" z3="0" />
         </primitive>
+
+        <primitive id="sphere_palm_tree">
+            <sphere radius="0.1" slices="10" stacks="10"/>
+        </primitive>
+
+        <primitive id="cilinder_palm_tree">
+            <cylinder base="0.1" top="0.1" height="2" slices="10" stacks="10" />
+        </primitive>
+
     </primitives>
 
     <components>
@@ -1455,6 +1464,146 @@
             </children>
         </component>
 
+        
+            <component id="palm_tree_trunk_5">
+             <transformation>
+                <rotate axis="x" angle="-90"/>
+                <scale x="0.5" y="0.5" z="0.3"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="cilinder_palm_tree"/>
+                
+            </children>
+        </component>
+
+
+
+            <component id="palm_tree_trunk_4">
+             <transformation>
+                <translate x="0" y="1.84" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="sphere_palm_tree"/>
+                <componentref id="palm_tree_trunk_5"/>
+            </children>
+        </component>
+        
+        
+        <component id="palm_tree_trunk_3">
+             <transformation>
+                <rotate axis="x" angle="15"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="palm_tree_trunk_1"/>
+            </children>
+        </component>
+
+
+        <component id="palm_tree_trunk_2">
+             <transformation>
+                <translate x="0" y="2" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="sphere_palm_tree"/>
+                <componentref id="palm_tree_trunk_3"/>
+                <componentref id="palm_tree_trunk_4"/>
+                
+            </children>
+        </component>
+        
+        <component id="palm_tree_trunk_1">
+            <transformation>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primiteref id="cilinder_palm_tree"/>
+                
+            </children>
+        </component>
+
+
+
+
+        <component id="palm_tree_trunk_0">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="palm_tree_trunk_1"/>
+                <componentref id="palm_tree_trunk_2"/>
+            </children>
+        </component>
+
+
+
+        <component id="palm_tree_1">
+            <transformation>
+                <translate x="12" y="0" z="0"/>
+                <rotate axis="y" angle=" 200"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="palm_tree_trunk_0"/>
+            </children>
+        </component>
+        
+        <component id="palm_tree_0">
+            <transformation>
+                
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="palm_tree_trunk_0"/>
+            </children>
+        </component>
+
+
+
+
+        <component id="palm_trees_node">
+            <transformation>
+                <translate x="1" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="palm_tree_0" />
+                <componentref id="palm_tree_1" />
+            </children>
+        </component>
+
         <component id="floor">
             <transformation>
                 <transformationref id="identity"/>
@@ -1466,6 +1615,7 @@
             <children>
                 <componentref id="floor_width" />
                 <componentref id="floor_length" />
+                <componentref id="palm_trees_node"/>
 
             </children>
         </component>
@@ -1706,14 +1856,16 @@
             </materials>
             <texture id="dirt" length_s="1" length_t="1"/>
             <children>
-
+                <!--
                 <componentref id="underground"/>
-                <componentref id="floor"/>
-                <componentref id="sides"/>
                 <componentref id="pool"/>
                 <componentref id="spot_pub"/>
-
                 <componentref id= "fence_core"/>
+                <componentref id="sides"/>
+
+                -->
+
+                <componentref id="floor"/>
 
             </children>
         </component>
