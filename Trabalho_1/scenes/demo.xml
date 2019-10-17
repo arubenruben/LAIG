@@ -375,7 +375,7 @@
                 <scale x="0.5" y="1.5" z="1"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="none"/>
 
@@ -390,7 +390,7 @@
                 <translate x="0" y="1.5" z="0"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="none"/>
             <children>
@@ -905,7 +905,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="fence_wood1"/>
+                <material id="inherit"/>
             </materials>
             <texture id="inherit"/>
 
@@ -920,7 +920,7 @@
                 <rotate axis="y" angle ="90"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit"/>
 
@@ -963,7 +963,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit"/>
 
@@ -996,6 +996,7 @@
 
             <materials>
                 <material id="fence_wood1"/>
+                <material id="demoMaterial"/>
             </materials>
 
             <texture id="none"/>
