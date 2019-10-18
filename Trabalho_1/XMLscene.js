@@ -60,15 +60,13 @@ class XMLscene extends CGFscene {
         var enable_index, angle_index, exponent_index, type_index;
         var attributeNames = ["location", "target", "ambient", "diffuse", "specular", "attenuation", "enable", "exponent" , "angle", "type"];
         // Reads the lights from the scene graph.
-           
+        var light;
         for (var key in this.graph.Lights) {
             // Only eight lights allowed by WebGL.
             if (i >= 8)
                 break;              
 
-            if (this.graph.Lights.hasOwnProperty(key)) {
-                var light = this.graph.Lights[key];
-
+                light = this.graph.Lights[key];
                 location_index =attributeNames[0];
                 target_index =attributeNames[1];
                 ambient_index = attributeNames[2];
@@ -92,20 +90,20 @@ class XMLscene extends CGFscene {
                 if (light[type_index] == "spot") {
                     this.lights[i].setSpotCutOff(light[angle_index]);
                     this.lights[i].setSpotExponent(light[exponent_index]);
-                    this.lights[i].setSpotDirection(light[target_index][0], light[target_index][1], light[target_index][2]);
+                    this.lights[i].setSpotDirection(light[target_index][0] - light[location_index][0], light[target_index][1] - light[location_index][1], light[target_index][2] - light[location_index][2]);
                 }
 
                 if (light[enable_index] == true){
-                    this.lights[i].setVisible(true);
                     this.lights[i].enable();
                 }
                 else{
                     this.lights[i].disable();
                 }
+                this.lights[i].setVisible(true);
                 
                 this.lights[i].update();
                 i++;
-            }
+            
         }
     }
 

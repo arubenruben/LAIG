@@ -1,11 +1,53 @@
 <lxs>
     <scene root="terrain" axis_length="5"/>
 
-    <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="500" angle="0.4">
-            <from x="15" y="15" z="15" />
-            <to x="0" y="0" z="0" />
+    <views default="frontSideCamera">
+        <perspective id="frontSideCamera" near="0.1" far="500" angle="45">
+            <from x="7" y="10" z="30" />
+            <to x="7" y="0" z="0" />
         </perspective>
+
+         <perspective id="backSideCamera" near="0.1" far="500" angle="45">
+            <from x="7" y="10" z="-10" />
+            <to x="7" y="0" z="20" />
+        </perspective>
+
+          <perspective id="leftSideCamera" near="0.1" far="500" angle="45">
+            <from x="-10" y="10" z="10" />
+            <to x="14" y="0" z="10" />
+        </perspective>
+
+        <perspective id="rightSideCamera" near="0.1" far="500" angle="45">
+            <from x="24" y="10" z="10" />
+            <to x="0" y="0" z="10" />
+        </perspective>
+
+
+        <perspective id="TopCamera" near="0.1" far="500" angle="45">
+            <from x="8" y="20" z="10" />
+            <to x="7" y="0" z="10" />
+        </perspective>
+
+        <perspective id="billboardCamera" near="0.1" far="500" angle="45">
+            <from x="7" y="5" z="7" />
+            <to x="7" y="3" z="0" />
+        </perspective>
+
+        <perspective id="poolCamera" near="0.1" far="500" angle="45">
+            <from x="4" y="4" z="20" />
+            <to x="7" y="0.5" z="10" />
+        </perspective>
+
+        <perspective id="chairCamera" near="0.1" far="500" angle="45">
+            <from x="2.0" y="1.5" z="9.5" />
+            <to x="7" y="0" z="11" />
+        </perspective>
+
+        <ortho id ="orthoPoolCamera" near="2" far="500" left="-20" right="20" top="20" bottom="-5">
+            <from x="7" y="3" z="3" />
+            <to x="7" y="2.9" z="0" />
+            <up x="0" y="1" z="0"/>
+        </ortho>
     </views>
 
     <globals>
@@ -174,15 +216,6 @@
         <primitive id="triangle_fence_primitive">
             <triangle x1="0" y1="0" z1="0" x2="0.25" y2="0.25" z2="0" x3="0.5" y3="0" z3="0" />
         </primitive>
-
-        <primitive id="sphere_palm_tree">
-            <sphere radius="0.1" slices="10" stacks="10"/>
-        </primitive>
-
-        <primitive id="cilinder_palm_tree">
-            <cylinder base="0.1" top="0.1" height="2" slices="10" stacks="10" />
-        </primitive>
-
     </primitives>
 
     <components>
@@ -200,7 +233,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square"/>
+                <primiteref id="square"/>
             </children>
         </component>
 
@@ -216,7 +249,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square"/>
+                <primiteref id="square"/>
             </children>
         </component>
 
@@ -230,7 +263,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="cilinder_spot"/>
+                <primiteref id="cilinder_spot"/>
             </children>
         </component>
 
@@ -242,7 +275,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="cilinder_spot"/>
+                <primiteref id="cilinder_spot"/>
             </children>
         </component>
 
@@ -285,7 +318,7 @@
             </materials>
             <texture id="vice_city" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="square"/>
+                <primiteref id="square"/>
             </children>
         </component>
 
@@ -384,7 +417,7 @@
                 <scale x="0.5" y="1.5" z="1"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1" />
             </materials>
             <texture id="none"/>
 
@@ -399,7 +432,7 @@
                 <translate x="0" y="1.5" z="0"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1" />
             </materials>
             <texture id="none"/>
             <children>
@@ -914,7 +947,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="inherit"/>
+                <material id="fence_wood1"/>
             </materials>
             <texture id="inherit"/>
 
@@ -929,7 +962,7 @@
                 <rotate axis="y" angle ="90"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1" />
             </materials>
             <texture id="inherit"/>
 
@@ -972,7 +1005,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="fence_wood1"/>
             </materials>
             <texture id="inherit"/>
 
@@ -1005,7 +1038,6 @@
 
             <materials>
                 <material id="fence_wood1"/>
-                <material id="demoMaterial"/>
             </materials>
 
             <texture id="none"/>
@@ -1232,7 +1264,7 @@
                 <translate x="0.5" y="0" z="0"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="demoMaterial"  />
             </materials>
             <texture id="plastic" length_s="1" length_t="1"/>
             <children>
@@ -1464,591 +1496,6 @@
             </children>
         </component>
 
-    
-        <component id="folha18">
-             <transformation>
-
-                <rotate axis="x" angle="10"/>
-                <rotate axis="z" angle =" 330"/>
-                <scale x="0.2" y="2.1" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-        
-        
-        <component id="folha17">
-             <transformation>
-
-                <rotate axis="x" angle="-5"/>
-                <rotate axis="z" angle =" 310"/>
-                <scale x="0.2" y="2" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-
-        <component id="folha16">
-             <transformation>
-
-                <rotate axis="x" angle="-10"/>
-                <rotate axis="z" angle =" 290"/>
-                <scale x="0.2" y="2.1" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-
-        <component id="folha15">
-             <transformation>
-
-                <rotate axis="x" angle="-10"/>
-                <rotate axis="z" angle =" 270"/>
-                <scale x="0.2" y="1.6" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-
-         <component id="folha14">
-             <transformation>
-
-                <rotate axis="x" angle="-20"/>
-                <rotate axis="z" angle =" 250"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-
-        <component id="folha13">
-             <transformation>
-
-                <rotate axis="x" angle="-10"/>
-                <rotate axis="z" angle =" 230"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-        
-        
-        <component id="folha12">
-             <transformation>
-
-                <rotate axis="x" angle="-10"/>
-                <rotate axis="z" angle =" 210"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-        <component id="folha11">
-             <transformation>
-
-                <rotate axis="x" angle="-10"/>
-                <rotate axis="z" angle =" 210"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-        <component id="folha10">
-             <transformation>
-
-                <rotate axis="x" angle="-10"/>
-                <rotate axis="z" angle =" 190"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-
-            <component id="folha9">
-             <transformation>
-
-                <rotate axis="x" angle="-5"/>
-                <rotate axis="z" angle =" 170"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-            <component id="folha8">
-             <transformation>
-
-                <rotate axis="x" angle="5"/>
-                <rotate axis="z" angle =" 150"/>
-                <scale x="0.2" y="1.6" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-             <component id="folha7">
-             <transformation>
-
-                <rotate axis="x" angle="10"/>
-                <rotate axis="z" angle =" 130"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-            <component id="folha6">
-             <transformation>
-
-                <rotate axis="x" angle="10"/>
-                <rotate axis="z" angle =" 110"/>
-                <scale x="0.2" y="1.4" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-            
-            
-            
-            <component id="folha5">
-             <transformation>
-
-                <rotate axis="x" angle="70"/>
-                <rotate axis="z" angle =" 90"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-            
-
-
-
-             <component id="folha4">
-             <transformation>
-
-                <rotate axis="x" angle="50"/>
-                <rotate axis="z" angle =" 70"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-             <component id="folha3">
-             <transformation>
-
-                <rotate axis="x" angle="30"/>
-                <rotate axis="z" angle =" 40"/>
-                <scale x="0.2" y="2" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-
-            <component id="folha2">
-             <transformation>
-
-                <rotate axis="x" angle="20"/>
-                <rotate axis="z" angle =" 10"/>
-                <scale x="0.2" y="1.8" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-
-
-            <component id="folha1">
-             <transformation>
-                <rotate axis="x" angle="30"/>
-                <scale x="0.2" y="2" z="0.2"/>
-                
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="triangle"/>
-                
-                
-            </children>
-
-            </component>
-        
-            <component id="topo_folhas">
-             <transformation>
-                <translate x="-0.1" y="0.5" z="0"/>
-                <rotate axis="x" angle="90"/>
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="folha1"/>
-                <componentref id="folha2"/>
-                <componentref id="folha3"/>
-                <componentref id="folha4"/>
-                <componentref id="folha5"/>
-                <componentref id="folha6"/>
-                <componentref id="folha7"/>
-                <componentref id="folha8"/>
-                <componentref id="folha9"/>
-                <componentref id="folha10"/>
-                <componentref id="folha11"/>
-                <componentref id="folha12"/>
-                <componentref id="folha13"/>
-                <componentref id="folha14"/>
-                <componentref id="folha15"/>
-                <componentref id="folha16"/>
-                <componentref id="folha17"/>
-                <componentref id="folha18"/>
-                
-                
-            </children>
-
-            </component>
-            
-            <component id="palm_tree_trunk_5">
-             <transformation>
-                <rotate axis="x" angle="-90"/>
-                <scale x="0.5" y="0.5" z="0.3"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveteref id="cilinder_palm_tree"/>
-            </children>
-        </component>
-
-
-
-            <component id="palm_tree_trunk_4">
-             <transformation>
-                <translate x="0" y="1.84" z="0.5"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="sphere_palm_tree"/>
-                <componentref id="palm_tree_trunk_5"/>
-                <componentref id="topo_folhas"/>
-            </children>
-        </component>
-        
-        
-        <component id="palm_tree_trunk_3">
-             <transformation>
-                <rotate axis="x" angle="15"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="palm_tree_trunk_1"/>
-            </children>
-        </component>
-
-
-        <component id="palm_tree_trunk_2">
-             <transformation>
-                <translate x="0" y="2" z="0"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="sphere_palm_tree"/>
-                <componentref id="palm_tree_trunk_3"/>
-                <componentref id="palm_tree_trunk_4"/>
-                
-            </children>
-        </component>
-        
-        <component id="palm_tree_trunk_1">
-            <transformation>
-                <rotate axis="x" angle="-90"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="cilinder_palm_tree"/>
-                
-            </children>
-        </component>
-
-
-
-
-        <component id="palm_tree_trunk_0">
-            <transformation>
-                <translate x="0" y="0" z="0"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="palm_tree_trunk_1"/>
-                <componentref id="palm_tree_trunk_2"/>
-            </children>
-        </component>
-
-
-
-        <component id="palm_tree_1">
-            <transformation>
-                <translate x="12" y="0" z="0"/>
-                <rotate axis="y" angle=" 200"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="palm_tree_trunk_0"/>
-            </children>
-        </component>
-        
-        <component id="palm_tree_0">
-            <transformation>
-                
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="palm_tree_trunk_0"/>
-            </children>
-        </component>
-
-
-
-
-        <component id="palm_trees_node">
-            <transformation>
-                <translate x="1" y="0" z="0"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="palm_tree_0" />
-                <componentref id="palm_tree_1" />
-            </children>
-        </component>
-
         <component id="floor">
             <transformation>
                 <transformationref id="identity"/>
@@ -2060,7 +1507,6 @@
             <children>
                 <componentref id="floor_width" />
                 <componentref id="floor_length" />
-                <componentref id="palm_trees_node"/>
 
             </children>
         </component>
@@ -2144,6 +1590,7 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="orange_material" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -2153,7 +1600,7 @@
 
         <component id="front_side">
             <transformation>
-                <translate x="0" y="0" z="20"/>
+                
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2191,7 +1638,7 @@
             </materials>
             <texture id="pool_tiles" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="square"/>
+                <primiteref id="square"/>
             </children>
         </component>
 
@@ -2202,7 +1649,7 @@
                 <scale x="0.430" y="0.5" z="0.6"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="pool_tiles" length_s="1" length_t="1"/>
             <children>
@@ -2265,6 +1712,7 @@
             </transformation>
             <materials>
                 <material id="magenta_material"/>
+                <material id="orange_material"/>
             </materials>
             <texture id="water" length_s="1" length_t="1"/>
             <children>
@@ -2277,7 +1725,8 @@
                 <transformationref id="identity" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="orange_material"/>
+                  <material id="magenta_material"/>
             </materials>
             <texture id="water" length_s="1" length_t="1"/>
             <children>
@@ -2290,6 +1739,7 @@
             </children>
         </component>
 
+
         <!-- TERRAIN ITSELF / ROOT OF XML-->
 
         <component id="terrain">
@@ -2301,16 +1751,13 @@
             </materials>
             <texture id="dirt" length_s="1" length_t="1"/>
             <children>
-                
                 <componentref id="underground"/>
+                <componentref id="floor"/>
+                <componentref id="sides"/>
                 <componentref id="pool"/>
                 <componentref id="spot_pub"/>
+
                 <componentref id= "fence_core"/>
-                <componentref id="sides"/>
-
-                
-
-                <componentref id="floor"/>
 
             </children>
         </component>

@@ -70,9 +70,6 @@ class MySceneGraph {
 
         //Vamos verificar que nos faltam referenciar
         this.check_components_integrity();
-
-
-
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -89,17 +86,9 @@ class MySceneGraph {
 
                     this.components[key].children_component[i] = this.components[this.components[key].children_component[i].id];
                     
-                }
-
-                
-            }
-            
-            
+                }   
+            }   
         }
-        
-        
-        
-        let j;
         
     }
     
@@ -559,9 +548,6 @@ class MySceneGraph {
         let attributeNames = ["location", "ambient", "diffuse", "specular", "attenuation", "target"];
         let attributeTypes = ["position", "color", "color", "color"];
 
-
-
-
         this.Lights = [];
         this.numLights = 0;
         var grandChildren = [];
@@ -602,6 +588,7 @@ class MySceneGraph {
                 continue;
             }
 
+    
 
             //store_light_info fica com a info temporaria
             store_light_info["type"] = children[i].nodeName;
@@ -1219,8 +1206,7 @@ class MySceneGraph {
             componentID = this.reader.getString(children[i], 'id');
             if (componentID == null)
                 return "no ID defined for componentID";
-
-
+    
             // Checks for repeated IDs.
             if (this.components[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
