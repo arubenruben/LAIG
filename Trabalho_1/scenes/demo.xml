@@ -106,6 +106,9 @@
         <texture id="vice_city" file="scenes/images/vice_city.jpg"/>
         <texture id="ola" file="scenes/images/sumol.jpg"/>
         <texture id="iron" file="scenes/images/iron.jpg"/>
+        <texture id="palm_wood" file="scenes/images/palmeira_wood.jpg"/>
+        <texture id="palm_tree_leaf" file="scenes/images/palm_tree_leaf.jpg"/>
+
 
     </textures>
 
@@ -141,9 +144,35 @@
 
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="0.54" g="0.27" b="0" a="1.0" />
+            <diffuse r="1" g="0.84" b="0" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
 
+        </material>
+
+        <material id="fence_wood2" shininess="10">
+
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0" g="0.54" b="0.54" a="1.0" />
+            <specular r="0" g="0.54" b="0.54" a="1.0" />
+
+        </material>
+
+        <material id="green_mint" shininess="10">
+
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.60" g="1" b="0.60" a="1.0" />
+            <specular r="0.60" g="1" b="0.60" a="1.0" />
+
+        </material>
+
+        <material id="fcp" shininess="10">
+
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.1" g="0.1" b="0.74" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.74" a="1.0" />
 
         </material>
 
@@ -427,7 +456,7 @@
                 <scale x="0.5" y="1.5" z="1"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="none"/>
 
@@ -442,7 +471,7 @@
                 <translate x="0" y="1.5" z="0"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="none"/>
             <children>
@@ -957,7 +986,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="fence_wood1"/>
+                <material id="inherit"/>
             </materials>
             <texture id="inherit"/>
 
@@ -972,7 +1001,7 @@
                 <rotate axis="y" angle ="90"/>
             </transformation>
             <materials>
-                <material id="fence_wood1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit"/>
 
@@ -1015,7 +1044,7 @@
                 <rotate axis="y" angle="180"/>
             </transformation>
             <materials>
-                <material id="fence_wood1"/>
+                <material id="inherit"/>
             </materials>
             <texture id="inherit"/>
 
@@ -1048,6 +1077,7 @@
 
             <materials>
                 <material id="fence_wood1"/>
+                <material id="fence_wood2"/>
             </materials>
 
             <texture id="none"/>
@@ -1919,14 +1949,14 @@
         
             <component id="topo_folhas">
              <transformation>
-                <translate x="-0.1" y="0.5" z="0"/>
+                <translate x="-0.1" y="0.6" z="0"/>
                 <rotate axis="x" angle="90"/>
                 
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="palm_tree_leaf" length_s="1" length_t="1"/>
             <children>
                 <componentref id="folha1"/>
                 <componentref id="folha2"/>
@@ -2036,7 +2066,7 @@
                 <translate x="0" y="0" z="0"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -2053,7 +2083,7 @@
                 <rotate axis="y" angle=" 200"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -2066,7 +2096,7 @@
                 
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -2081,7 +2111,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="tronco" length_s="1" length_t="1"/>
             <children>
                 <componentref id="palm_tree_0" />
                 <componentref id="palm_tree_1" />
@@ -2280,6 +2310,7 @@
             </transformation>
             <materials>
                 <material id="red_material" />
+                <material id="green_mint"/>
             </materials>
             <texture id="water" length_s="1" length_t="1"/>
             <children>
@@ -2294,6 +2325,7 @@
             </transformation>
             <materials>
                 <material id="orange_material"/>
+                <material id="fcp"/>
             </materials>
             <texture id="water" length_s="1" length_t="1"/>
             <children>
