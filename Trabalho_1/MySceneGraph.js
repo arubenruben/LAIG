@@ -38,7 +38,7 @@ class MySceneGraph {
         this.ambient = [];
         this.background = [];
         this.mPressed = 0;
-        this.mPressed_bool = true;
+
         
 
         // File reading 
@@ -473,7 +473,7 @@ class MySceneGraph {
 
 
             //O array de views fica no indice "nome da camara" com o objeto do tipo camara
-            this.Views[this.view_default] = camera;
+            this.Views[view_id] = camera;
 
 
         }
@@ -1284,10 +1284,11 @@ class MySceneGraph {
                 }
 
                 //component_aux.materials fica com a lista de materiais do bloco
-
-
+                
+                
                 else if (grandChildren[j].nodeName == "materials") {
-
+                    
+                    component_aux.material_active = 0;
                     block_materials = true;
 
                     if (grandgrandChildren.length == 0)
@@ -1415,7 +1416,6 @@ class MySceneGraph {
             else if (block_children == false) {
                 return "Block Children needs to be declared";
             }
-
             this.components[componentID] = component_aux;
         }
     }
@@ -1548,13 +1548,20 @@ class MySceneGraph {
 
     }
 
+    isObject(val) {
+        if (val === null) { return false;}
+        return ( (typeof val === 'function') || (typeof val === 'object') );
+    }
+
     displaySceneRecursive(Node, material_father, texture_father, ls, lt) {
 
         var current_node = Node;
+
         material_father.setTexture(null);
-        this.material_active = this.mPressed % current_node.materials.length;
+        
+        current_node.material_active = this.mPressed % current_node.materials.length;
       
-        if(current_node.materials[0] == "inherit"){
+        if(current_node.materials[current_node.material_active] == "inherit"){
 
             material_father.setTextureWrap('REPEAT', 'REPEAT');
             
@@ -1571,19 +1578,18 @@ class MySceneGraph {
             material_father.apply();
         }
         else{
-            
-            current_node.materials[this.material_active].setTextureWrap('REPEAT', 'REPEAT');
+            current_node.materials[current_node.material_active].setTextureWrap('REPEAT', 'REPEAT');
             
             if(current_node.texture[0] == "inherit"){
                 if(texture_father != "none"){
-                    current_node.materials[this.material_active].setTexture(texture_father);
+                    current_node.materials[current_node.material_active].setTexture(texture_father);
                 }
             }
             else if(current_node.texture[0] != "none"){
-                current_node.materials[this.material_active].setTexture(current_node.texture[0]);
+                current_node.materials[current_node.material_active].setTexture(current_node.texture[0]);
             }
             
-            current_node.materials[this.material_active].apply();
+            current_node.materials[current_node.material_active].apply();
         }
         
         this.scene.multMatrix(current_node.transformations);
@@ -1610,12 +1616,12 @@ class MySceneGraph {
             
             this.scene.pushMatrix();
 
-            if (current_node.materials[0] == "inherit") {
+            if (current_node.materials[current_node.material_active] == "inherit") {
 
                 if (current_node.texture[0] == "inherit")
                     this.displaySceneRecursive(current_node.children_component[i], material_father, texture_father, ls, lt);
             
-                else if (current_node.texture[0] != "none")
+                else if (current_node.texture[0] == "none")
                     this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], 1, 1);
             
                 else
@@ -1626,13 +1632,13 @@ class MySceneGraph {
             else {
 
                 if (current_node.texture[0] == "inherit")
-                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[this.material_active], texture_father, ls, lt);
+                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], texture_father, ls, lt);
             
-                else if (current_node.texture[0] != "none")
-                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[this.material_active], current_node.texture[0], 1, 1);
+                else if (current_node.texture[0] == "none")
+                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], current_node.texture[0], 1, 1);
             
                 else
-                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[this.material_active], current_node.texture[0], current_node.texture[1], current_node.texture[2]);
+                    this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], current_node.texture[0], current_node.texture[1], current_node.texture[2]);
             }
 
             this.scene.popMatrix();
