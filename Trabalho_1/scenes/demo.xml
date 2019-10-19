@@ -17,13 +17,19 @@
             <to x="14" y="0" z="10" />
         </perspective>
 
+        <ortho id="topOrtho" near="0.1" far="500" angle="45" left="-15" right="15" top="15" bottom="-15">
+            <from x="7" y="50" z="10" />
+            <to x="7" y="0" z="10" />
+            <up x="0.0" y="0.0" z="1.0" />
+        </ortho>
+
         <perspective id="rightSideCamera" near="0.1" far="500" angle="45">
             <from x="24" y="10" z="10" />
             <to x="0" y="0" z="10" />
         </perspective>
 
 
-        <perspective id="TopCamera" near="0.1" far="500" angle="45">
+        <perspective id="topPerspective" near="0.1" far="500" angle="45">
             <from x="8" y="20" z="10" />
             <to x="7" y="0" z="10" />
         </perspective>
@@ -43,11 +49,7 @@
             <to x="7" y="0" z="11" />
         </perspective>
 
-        <ortho id ="orthoPoolCamera" near="2" far="500" left="-20" right="20" top="20" bottom="-5">
-            <from x="7" y="3" z="3" />
-            <to x="7" y="2.9" z="0" />
-            <up x="0" y="1" z="0"/>
-        </ortho>
+       
     </views>
 
     <globals>
