@@ -106,7 +106,6 @@
         <texture id="vice_city" file="scenes/images/vice_city.jpg"/>
         <texture id="ola" file="scenes/images/sumol.jpg"/>
         <texture id="iron" file="scenes/images/iron.jpg"/>
-        <texture id="palm_wood" file="scenes/images/palmeira_wood.jpg"/>
         <texture id="palm_tree_leaf" file="scenes/images/palm_tree_leaf.jpg"/>
         <texture id="beachBall" file="scenes/images/beachBall.jpg"/>
         <texture id="beachBuoy1" file="scenes/images/beachBuoy1.jpg"/>

@@ -989,7 +989,6 @@ class MySceneGraph {
         }
         transformation = transfMatrix;
 
-        this.log("Parsed transformations for component of id " + id);
         return transformation;
     }
 
@@ -1278,7 +1277,7 @@ class MySceneGraph {
                         var material_id = this.reader.getString(grandgrandChildren[k], 'id');
                         if (material_id != "inherit" && material_id != "none") {
                             if (this.materials[material_id] == null) {
-                                return "ID in the material Block for component of id" + componentID + "must be a valid reference";
+                                return "ID in the material Block for component of id " + componentID + " must be a valid reference";
                             }
                             component_aux.materials.push(this.materials[material_id]);
                         }
@@ -1303,19 +1302,18 @@ class MySceneGraph {
                         component_aux.texture.push(texture_id);
                     }
 
+                    
                     //Nao existe entao textures no array de texturas
-
+                    
                     else if (this.textures[texture_id] == null) {
-                        return "ID in the texture Block for component of id" + componentID + "must be a valid reference";
+                        return "ID in the texture Block for component of id " + componentID + " must be a valid reference";
                     }
 
 
                     //Se a textura estiver definida, entao. Associamos a textura ao bloco component
-                    component_aux.texture.push(this.textures[texture_id]);
-
-
-                    //Ja esta com as novas diretivas do prof se for inherit ou none nao puxa as coordenas de lenght t e s
-                    if (texture_id != "inherit" && texture_id != "none") {
+                    else if(this.textures[texture_id] != null){
+                        component_aux.texture.push(this.textures[texture_id]);
+                        
                         var length_s = this.reader.getString(grandChildren[j], 'length_s');
                         if(length_s == null){
                             return "length_s is null or not defined correctly for texture block of component with id " + componentID;
@@ -1327,22 +1325,29 @@ class MySceneGraph {
                         component_aux.texture.push(length_s);
                         component_aux.texture.push(length_t);
                     }
+                    
+                    if (texture_id == "inherit" || texture_id == "none") {
+
+                       if (this.reader.getString(grandChildren[j], 'length_s') != null) {
+                           this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
+                       }
+                       else{
+                           this.onXMLMinorError("Ignore this error , it is due to a function returning null");
+                       }
+
+                       if (this.reader.getString(grandChildren[j], 'length_t') != null) {
+                           this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
+                       }
+                       else{
+                           this.onXMLMinorError("Ignore this error , it is due to a function returning null");
+                       }
+
+                   }
+                }
+                    
 
                     //Seguir as diretivas do stor que deve dar erro/warning
 
-                    else if (texture_id == "inherit" || texture_id == "none") {
-
-                        if (this.reader.getString(grandChildren[j], 'length_s') != null) {
-                            this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
-                        }
-
-                        if (this.reader.getString(grandChildren[j], 'length_t') != null) {
-                            this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
-                        }
-
-                    }
-
-                }
 
                 else if (grandChildren[j].nodeName == "children") {
 
@@ -1548,18 +1553,6 @@ class MySceneGraph {
     displaySceneRecursive(Node, material_father, texture_father, ls, lt) {
 
         var current_node = Node;
-
-        if(current_node.id == "fence_core"){
-            console.log("shit");
-        }
-
-        if(current_node.id == "grupo_fence_generico_1"){
-            console.log("shit");
-        }
-
-        if(current_node.id == "mainPlaneNode"){
-            console.log("");
-        }
 
         material_father.setTexture(null);
         
