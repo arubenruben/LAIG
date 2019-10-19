@@ -22,11 +22,11 @@ class MyTriangle extends CGFobject {
 	}
 	
 	updatetexCoords(ls , lt){
-
+		
 		this.texCoords = [
 			0,0,
-			this.a * ls, 0,
-			this.c * ls *  this.alpha_cos, this.c * this.alpha_sin * lt
+			this.a/ls,0,
+			(this.c * this.alpha_cos) / ls, (this.c * this.alpha_sin)/lt,
 		];
 		this.updateTexCoordsGLBuffers();
 	}
@@ -66,7 +66,6 @@ class MyTriangle extends CGFobject {
 		//Counter-clockwise reference of vertices*/
 		this.indices = [
 			0, 1, 2,
-			2, 1, 0
 		];
 		
 		this.normals.push(...this.vetor_normal);

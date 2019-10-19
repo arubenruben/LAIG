@@ -74,7 +74,7 @@
 
 
         <spot id="spot_add_1" enabled="0" angle="90" exponent="5">
-            <location x="6" y="3" z="2" w="1.0" />
+            <location x="5" y="3" z="2" w="1.0" />
             <target x="4" y= "5" z="0"/>
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1" g="1" b="1" a="1.0" />
@@ -108,7 +108,10 @@
         <texture id="iron" file="scenes/images/iron.jpg"/>
         <texture id="palm_wood" file="scenes/images/palmeira_wood.jpg"/>
         <texture id="palm_tree_leaf" file="scenes/images/palm_tree_leaf.jpg"/>
-
+        <texture id="beachBall" file="scenes/images/beachBall.jpg"/>
+        <texture id="beachBuoy1" file="scenes/images/beachBuoy1.jpg"/>
+        <texture id="beachBuoy2" file="scenes/images/beachBuoy2.jpg"/>
+           <texture id="fences" file="scenes/images/fences.jpg"/>
 
     </textures>
 
@@ -138,6 +141,27 @@
             <ambient r="0.7" g="0" b="0.2" a="1.0" />
             <diffuse r="0.7" g="0" b="0.2" a="1.0" />
             <specular r="0.7" g="0" b="0.2" a="1.0" />
+        </material>
+
+        <material id="brown_material" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.3" g="0.1" b="0" a="1.0" />
+            <diffuse r="0.3" g="0.1" b="0" a="1.0" />
+            <specular r="0.3" g="0.1" b="0" a="1.0" />
+        </material>
+
+        <material id="purple_material" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.4" g="0" b="0.5" a="1.0" />
+            <diffuse r="0.4" g="0" b="0.5" a="1.0" />
+            <specular r="0.4" g="0" b="0.5" a="1.0" />
+        </material>
+
+        <material id="yellow_material" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="1" g="1" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="0" a="1.0" />
+            <specular r="1" g="1" b="0" a="1.0" />
         </material>
 
         <material id="fence_wood1" shininess="10">
@@ -176,6 +200,14 @@
 
         </material>
 
+        <material id="transparent" shininess="10">
+
+            <emission r="0" g="0" b="0" a="0.5" />
+            <ambient r="0.1" g="0.7" b="0.9" a="0.5" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="0.5" />
+            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
+
+        </material>
 
     </materials>
 
@@ -204,7 +236,7 @@
         </transformation>
 
         <transformation id="spot_pub_transf">
-            <translate x="5" y="2" z="0.5"/>
+            <translate x="4.7" y="2" z="0.5"/>
         </transformation>
 
     </transformations>
@@ -1080,7 +1112,7 @@
                 <material id="fence_wood2"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="fences"/>
 
             <children>
                 
@@ -1193,7 +1225,7 @@
                 <rotate axis="x" angle ="-90"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="ola" length_s="1" length_t="1"/>
             <children>
@@ -1223,7 +1255,7 @@
                 <scale x="1" y="1" z="1"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="plastic" length_s="1" length_t="1"/>
             <children>
@@ -1262,7 +1294,12 @@
                 <translate x="0" y="0" z="14.3"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="orange_material"/>
+                <material id="red_material"/>
+                <material id="magenta_material"/>
+                <material id="purple_material"/>
+                <material id="brown_material"/>
+                <material id="green_mint"/>
             </materials>
             <texture id="plastic" length_s="1" length_t="1"/>
             <children>
@@ -1379,7 +1416,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass" length_s="1" length_t="1"/>
+            <texture id="grass" length_s="0.2" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -1394,7 +1431,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="marble" length_s="1" length_t="1"/>
+            <texture id="marble" length_s="0.5" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -1410,7 +1447,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="marble" length_s="1" length_t="1"/>
+            <texture id="marble" length_s="0.5" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -1426,7 +1463,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="grass" length_s="1" length_t="1"/>
+            <texture id="grass" length_s="0.2" length_t="0.5"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -1442,7 +1479,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="marble" length_s="1" length_t="1"/>
+            <texture id="marble" length_s="0.2" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -2277,7 +2314,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pool_tiles" length_s="1" length_t="1"/>
+            <texture id="pool_tiles" length_s="0.5" length_t="3"/>
             <children>
                 <componentref id="left_side"/>
                 <componentref id="right_side"/>
@@ -2294,9 +2331,9 @@
                 <scale x="6" y="20" z="1"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="transparent" />
             </materials>
-            <texture id="water" length_s="1" length_t="1"/>
+            <texture id="water" length_s="2" length_t="1"/>
             <children>
                 <primitiveref id="square"/>
             </children>
@@ -2309,10 +2346,9 @@
 
             </transformation>
             <materials>
-                <material id="red_material" />
-                <material id="green_mint"/>
+                <material id="demoMaterial" />
             </materials>
-            <texture id="water" length_s="1" length_t="1"/>
+            <texture id="beachBall" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="sphere_ball"/>
             </children>
@@ -2324,10 +2360,9 @@
                 <rotate axis="x" angle="90"/>
             </transformation>
             <materials>
-                <material id="orange_material"/>
-                <material id="fcp"/>
+                <material id="demoMaterial"/>
             </materials>
-            <texture id="water" length_s="1" length_t="1"/>
+            <texture id="beachBuoy1" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="torus_bouy"/>
             </children>
@@ -2339,33 +2374,14 @@
                 <rotate axis="x" angle="90"/>
             </transformation>
             <materials>
-                <material id="magenta_material"/>
-                <material id="orange_material"/>
+                <material id="demoMaterial"/>
             </materials>
-            <texture id="water" length_s="1" length_t="1"/>
+            <texture id="beachBuoy2" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="torus_bouy"/>
             </children>
         </component>
 
-        <component id="pool">
-            <transformation>
-                <transformationref id="identity" />
-            </transformation>
-            <materials>
-                <material id="orange_material"/>
-                  <material id="magenta_material"/>
-            </materials>
-            <texture id="water" length_s="1" length_t="1"/>
-            <children>
-                <componentref id="sides1"/>
-                <componentref id="ramp"/>
-                <componentref id="water"/>
-                <componentref id="water_ball"/>
-                <componentref id="water_bouy"/>
-                <componentref id="water_bouy_2"/>
-            </children>
-        </component>
 
 
         <!-- TERRAIN ITSELF / ROOT OF XML-->
@@ -2383,13 +2399,31 @@
                 <componentref id="floor"/>
                 <componentref id="sides"/>
                 <componentref id="pool"/>
-                <componentref id="spot_pub"/>
+               <componentref id="spot_pub"/>
 
                 <componentref id= "fence_core"/>
 
             </children>
         </component>
 
+        <component id="pool">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="orange_material"/>
+                  <material id="magenta_material"/>
+            </materials>
+            <texture id="water" length_s="1" length_t="1"/>
+            <children>
+               <componentref id="sides1"/>
+                <componentref id="ramp"/>
+                <componentref id="water_ball"/>
+                <componentref id="water_bouy"/>
+                <componentref id="water_bouy_2"/>
+                <componentref id="water"/>
+            </children>
+        </component>
 
     </components>
 </lxs>

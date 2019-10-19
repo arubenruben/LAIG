@@ -15,10 +15,13 @@ class MyCilinder extends CGFobject {
     
     updatetexCoords(ls, lt){
         
+        this.texture_parameter_s = ls / this.slices;
+        this.texture_parameter_t = lt / this.stacks;
+        
         this.texCoords = [];
         for (let i = 0; i <= this.stacks; i++) {
             for (let j = 0; j <= this.slices; j++) {
-                this.texCoords.push(j * this.texture_parameter_s * ls, (this.stacks-i) * this.texture_parameter_t * lt);
+                this.texCoords.push(j * this.texture_parameter_s, (this.stacks-i) * this.texture_parameter_t);
             }
         }
         this.updateTexCoordsGLBuffers();

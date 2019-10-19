@@ -22,12 +22,17 @@ class MyRectangle extends CGFobject {
 	 */
 	updatetexCoords(ls, lt){
 		
+		this.length = this.x2 - this.x1;
+		this.height = this.y2 - this.y1;
+		var tex_u = this.length / ls;
+		var tex_v = this.height / lt;
 		this.texCoords = [
-			0, 1 * lt,
-			1 * ls, 1 * lt,
-			0, 0,
-			1 * ls, 0
+			0, tex_v,
+			tex_u, tex_v,
+			0,0,
+			tex_u ,0,
 		];
+
 		this.updateTexCoordsGLBuffers();
 
 	}
@@ -67,10 +72,10 @@ class MyRectangle extends CGFobject {
         */
 
 		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
+			0,1,
+			1,1,
+			0,0,
+			1,0
 		];
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
