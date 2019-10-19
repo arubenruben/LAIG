@@ -5,9 +5,7 @@
 class MyComponent {
 	constructor(id,is_defined) {
 		
-		this.loaded = false;
-
-
+	
 		// variable used to tell if a component is already defined or not in the components block,´
 		// at the end of the components block needs to checked if all components have this variable as true
 		//	if not means some components refers it 

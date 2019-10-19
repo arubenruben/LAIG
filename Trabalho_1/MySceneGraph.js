@@ -68,29 +68,12 @@ class MySceneGraph {
             return;
         }
 
-        //Vamos verificar que nos faltam referenciar
-        this.check_components_integrity();
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
     }
 
-    check_components_integrity() {
-
-        for (var key in this.components) {
-
-            for (let i = 0; i < (this.components[key].children_component.length); i++) {
-
-                if (this.components[key].children_component[i].definition_made == false) {
-
-                    this.components[key].children_component[i] = this.components[this.components[key].children_component[i].id];
-                    
-                }   
-            }   
-        }
-        
-    }
     
     /**
      * Parses the XML file, processing each block.
@@ -1179,6 +1162,16 @@ class MySceneGraph {
         return null;
     }
 
+    check_components_integrity() {
+
+        for (var key in this.components) {
+                if (this.components[key].definition_made == false) {
+                    return "component of id " + key + " is referenced inside another component but it is not defined in the list of components";
+                }   
+            } 
+        return null;
+    }
+
     /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
@@ -1192,7 +1185,8 @@ class MySceneGraph {
         var grandChildren = [];
         var grandgrandChildren = [];
         var componentID;
-        let current_node_transformation
+        var component_aux;
+
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
@@ -1208,14 +1202,19 @@ class MySceneGraph {
                 return "no ID defined for componentID";
     
             // Checks for repeated IDs.
-            if (this.components[componentID] != null)
-                return "ID must be unique for each component (conflict: ID = " + componentID + ")";
-
-            //Objeto do tipo component_aux
-
-            var component_aux = new MyComponent(componentID, true);
+            
+            if (this.components[componentID] != null){
+                if(this.components[componentID].definition_made == true){
+                    return "ID must be unique for each component (conflict: ID = " + componentID + ")";
+                }
+                component_aux = this.components[componentID];
+            }
+            else{
+                this.components[componentID] = new MyComponent(componentID, false);
+                component_aux = this.components[componentID];
+            }
+            
             grandChildren = children[i].children;
-
 
             if (grandChildren.length == 0) {
                 return "Blocks Transformation, Materials, Texture, Children need to be declared for component of id " + componentID;
@@ -1318,7 +1317,13 @@ class MySceneGraph {
                     //Ja esta com as novas diretivas do prof se for inherit ou none nao puxa as coordenas de lenght t e s
                     if (texture_id != "inherit" && texture_id != "none") {
                         var length_s = this.reader.getString(grandChildren[j], 'length_s');
+                        if(length_s == null){
+                            return "length_s is null or not defined correctly for texture block of component with id " + componentID;
+                        }
                         var length_t = this.reader.getString(grandChildren[j], 'length_t');
+                        if(length_t == null){
+                            return "length_t is null or not defined correctly for texture block of component with id " + componentID;
+                        }
                         component_aux.texture.push(length_s);
                         component_aux.texture.push(length_t);
                     }
@@ -1348,27 +1353,21 @@ class MySceneGraph {
                     }
                     for (var k = 0; k < grandgrandChildren.length; k++) {
 
-
-                        //Dar parse as refs existentes. Podemos definir inicialmente elementos inexistentes atraves da flag false do not defined
-
                         if (grandgrandChildren[k].nodeName == "componentref") {
 
                             var children_component_id = this.reader.getString(grandgrandChildren[k], 'id');
 
-                            if (this.components[children_component_id]!=null) {
-                                //Ja existe este elemento. Ele fica defindo e o problema nao se apresenta
+                            if (this.components[children_component_id]!=null)
                                 component_aux.children_component.push(this.components[children_component_id]);
-
-                            } else {
-
-                                //Nao existe a referencia para tal bloco, e como tal, vou declarar la um objeto vazio
-                                component_aux.children_component.push(new MyComponent(children_component_id, false));
-
+                        
+                            else{
+                                this.components[children_component_id] = new MyComponent(children_component_id, false);
+                                component_aux.children_component.push(this.components[children_component_id]);
                             }
-
                         }
-                        else {
-                            //Aqui acho que faz sentido ver se eles sao null ref ous nao. Nos components nao pq damos flexibilidade de taggar coisas desconhecidas. No display temos de testar se e valido
+
+                        else if(grandgrandChildren[k].nodeName == "primitiveref"){
+                           
                             var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id');
 
                             if (this.primitives[children_primitive_id] == null) {
@@ -1376,6 +1375,9 @@ class MySceneGraph {
                             }
                             component_aux.children_primitives.push(this.primitives[children_primitive_id]);
                         }
+
+                        else
+                            return "unknown tag "+ grandgrandChildren[k].nodeName + " in children for component of id " + componentID;
                     }
                 }
 
@@ -1393,8 +1395,13 @@ class MySceneGraph {
                 return "Block Textures needs to be declared for component of id " + componentID;
             else if (block_children == false) 
                 return "Block Children needs to be declared for component of id " + componentID;
+            
+            component_aux.definition_made = true;
+        }
 
-            this.components[componentID] = component_aux;
+        var returnedValue;
+        if((returnedValue = this.check_components_integrity())!= null){
+            return returnedValue;
         }
 
         // checking to see of root component is declared and has the correct tags or not
@@ -1404,6 +1411,7 @@ class MySceneGraph {
         if(this.components[this.idRoot].materials[0] == "inherit"){
             return "Error in the root component of id= " + this.idRoot + " , material must not be inherit";
         }
+
     }
 
 
@@ -1541,6 +1549,14 @@ class MySceneGraph {
 
         var current_node = Node;
 
+        if(current_node.id == "fence_core"){
+            console.log("shit");
+        }
+
+        if(current_node.id == "grupo_fence_generico_1"){
+            console.log("shit");
+        }
+
         if(current_node.id == "mainPlaneNode"){
             console.log("");
         }
@@ -1601,7 +1617,7 @@ class MySceneGraph {
         }
 
         for (let i = 0; i < current_node.children_component.length; i++) {
-            
+
             this.scene.pushMatrix();
 
             if (current_node.materials[current_node.material_active] == "inherit") {

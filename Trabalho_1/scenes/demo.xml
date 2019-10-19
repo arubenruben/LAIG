@@ -56,15 +56,15 @@
     </globals>
 
     <lights>
-        <omni id="sol" enabled="0">
+        <omni id="meio_dia" enabled="0">
             <location x="7" y="5" z="10" w="1.0" />
-            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0.7" g="0.7" b="0.7" a="1.0" />
             <attenuation constant ="1.0" linear = "0" quadratic = "0.0"/>
         </omni>
         
-        <omni id="white_light" enabled="1">
+        <omni id="por_do_sol" enabled="1">
             <location x="7" y="5" z="10" w="1.0" />
             <ambient r="0.9" g="0.5" b="0" a="1.0" />
             <diffuse r="0.9" g="0.5" b="0" a="1.0" />
@@ -73,7 +73,7 @@
         </omni>
 
 
-        <spot id="spot_add_1" enabled="0" angle="90" exponent="5">
+        <spot id="spotLightBillboard1" enabled="0" angle="90" exponent="5">
             <location x="5" y="3" z="2" w="1.0" />
             <target x="4" y= "5" z="0"/>
             <ambient r="0" g="0" b="0" a="1.0" />
@@ -82,7 +82,7 @@
             <attenuation constant ="0" linear = "0.5" quadratic = "0.0"/>
         </spot>
 
-        <spot id="spot_add_2" enabled="0" angle="90" exponent="5">
+        <spot id="spotLightBillboard12" enabled="0" angle="90" exponent="5">
             <location x="9" y="3" z="2" w="1.0" />
             <target x="9" y= "4" z="0"/>
             <ambient r="0" g="0" b="0" a="1.0" />
@@ -358,7 +358,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="iron"/>
+            <texture id="iron" length_s="1" length_t="1"/>
             <children>
                 <componentref id="barra_ilumin_spot1"/>
                 <componentref id="barra_ilumin_spot2"/>
@@ -490,7 +490,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -505,7 +505,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="triangle_fence_primitive"/>
             </children>
@@ -1104,7 +1104,6 @@
 
         <component id="fence_core">
             <transformation>
-                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1112,13 +1111,14 @@
                 <material id="fence_wood2"/>
             </materials>
 
-            <texture id="fences"/>
+            <texture id="fences" length_s="1" length_t="1" />
 
             <children>
                 
                 <componentref id="grupo_fence_esq"/>
                 <componentref id="grupo_fence_dir"/>
                 <componentref id="grupo_fence_front"/>
+
               
 
             </children>
@@ -2029,7 +2029,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveteref id="cilinder_palm_tree"/>
+                <primitiveref id="cilinder_palm_tree"/>
             </children>
         </component>
 
@@ -2263,7 +2263,7 @@
 
         <component id="front_side">
             <transformation>
-                
+                <translate x="0" y="0" z="20"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2285,7 +2285,7 @@
             <children>
                 <componentref id="left_side"/>
                 <componentref id="right_side"/>
-                <componentref id="front_side"/>
+                 <componentref id="front_side"/>
                 <componentref id="back_side"/>
             </children>
         </component>
@@ -2393,7 +2393,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="dirt" length_s="1" length_t="1"/>
+            <texture id="dirt" length_s="0.5" length_t="0.5"/>
             <children>
                 <componentref id="underground"/>
                 <componentref id="floor"/>
@@ -2422,6 +2422,7 @@
                 <componentref id="water_bouy"/>
                 <componentref id="water_bouy_2"/>
                 <componentref id="water"/>
+                
             </children>
         </component>
 
