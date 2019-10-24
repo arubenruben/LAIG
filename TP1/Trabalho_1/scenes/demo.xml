@@ -2408,7 +2408,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="dirt" length_s="0.5" length_t="0.5"/>
+            <texture id="water" length_s="0.5" length_t="0.5"/>
             <children>
                 <componentref id="underground"/>
                 <componentref id="floor"/>

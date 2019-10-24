@@ -28,13 +28,13 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(100);
+        this.update_period = 50;
+        this.setUpdatePeriod(this.update_period);
 
         this.displayAxis = true;
         this.displayNormals = false;
         this.selectedCamera = 0;
         
-
     }
     /**
      * Initializes the scene cameras.
@@ -49,6 +49,21 @@ class XMLscene extends CGFscene {
         this.selectedCamera = this.graph.view_default;
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
+    }
+
+    update(t){
+        this.animation.update(t);
+
+
+
+
+
+
+
+
+
+
+
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
