@@ -8,8 +8,13 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 7;
+var PRIMITIVES_INDEX = 8;
+var COMPONENTS_INDEX = 9;
+var TRANSLATION_POS= 0;
+var ROTATION_POS= 0;
+var SCALE_POS= 0;
+
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -39,7 +44,7 @@ class MySceneGraph {
         this.background = [];
         this.mPressed = 0;
 
-        
+
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -74,7 +79,7 @@ class MySceneGraph {
         this.scene.onGraphLoaded();
     }
 
-    
+
     /**
      * Parses the XML file, processing each block.
      * @param {XML root element} rootElement
@@ -187,6 +192,18 @@ class MySceneGraph {
 
             //Parse transformations block
             if ((error = this.parseTransformations(nodes[index], this.transformations)) != null)
+                return error;
+        }
+
+        // <animation>
+        if ((index = nodeNames.indexOf("animation")) == -1)
+            return "tag <animation> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animation> out of order");
+
+            //Parse primitives block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -571,7 +588,7 @@ class MySceneGraph {
                 continue;
             }
 
-    
+
 
             //store_light_info fica com a info temporaria
             store_light_info["type"] = children[i].nodeName;
@@ -708,7 +725,7 @@ class MySceneGraph {
 
                 else {
                     //Por causa de so o spot ter target o index retorna -1, para nao estar a mudar tudo
-                    if(attributeNames[j]!="target"&&children[i].nodeName!="spot"){
+                    if (attributeNames[j] != "target" && children[i].nodeName != "spot") {
 
                         this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
                         continue;
@@ -1109,6 +1126,144 @@ class MySceneGraph {
         return null;
     }
 
+
+    parseAnimations(animationNode) {
+
+        let children = animationNode.children;
+
+        this.animations = [];
+
+        let grandChildren = [];
+
+        let grandgrandChildren = [];
+
+        for (let i = 0; i < children.length; i++) {
+
+            //Se a animacao for invalida, nao estouro. Sinalizo erro e prossigo para a proxima tentative de animacao.
+
+            if (children[i].nodeName != "animation") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            let animationId = this.reader.getString(children[i], 'id');
+
+            if (animationIdId == null)
+                return "no ID defined for the animation";
+
+            if (this.animations[animationIdd] != null)
+                return "ID must be unique for each animation (conflict: ID = " + animationIdeId + ")";
+
+            grandChildren = children[i].children;
+
+            /*Key frame nao pode ser vazio*/
+            if (grandChildren.length > 0) {
+
+                if (grandChildren.nodeName != "keyframe") {
+                    this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">");
+                    continue;
+                }
+
+                for (let j = 0; j < grandChildren.length; j++) {
+                    let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
+
+                    if (keyframe_instant == null) {
+                        return "keyframe_instant in" + animationId + "must be valid";
+                    }
+
+                    //O grandchildren sao as transformacoes
+                    grandgrandChildren = grandChildren[j].children;
+
+                    //Ver se as 3 transformacoes estao instanciadas e pela ordem indicada
+
+                    for (let transf_pos = 0; transf_pos < 3; transf_pos++) {
+
+                        switch(transf_pos){
+
+                            case TRANSLATION_POS:{
+
+                                if(grandgrandChildren [transf_pos].nodeName!="translate"){
+                                    
+                                    this.onXMLMinorError("Keyframe"+ animationId + keyframe_instant);
+                                    continue;
+                                }
+                                else{
+
+                                    let translate_array=this.parseCoordinates3D(grandgrandChildren[transf_pos],"Translate keyfram"+animationId);
+
+                                }
+
+                                
+                            
+                                break;
+                            }
+
+
+                            case ROTATION_POS:{
+
+                                if(grandgrandChildren [transf_pos].nodeName!="rotate"){
+                                    
+                                    this.onXMLMinorError("Keyframe"+ animationId + keyframe_instant);
+                                    continue;
+                                }
+                                else{
+
+                                  
+                                }
+
+
+
+
+
+                                break;
+                            }
+
+
+
+                            case SCALE_POS:{
+
+                                if(grandgrandChildren [transf_pos].nodeName!="scale"){
+                                    
+                                    this.onXMLMinorError("Keyframe"+ animationId + keyframe_instant);
+                                    continue;
+                                }
+                                else{
+
+                                    let scale_array=this.parseCoordinates3D(grandgrandChildren[transf_pos],"Scale keyfram"+animationId);
+
+                                }
+
+
+
+
+
+
+
+                                break;
+                            }
+
+
+
+
+                        }
+
+
+
+
+                    }
+
+
+                }
+
+            } else {
+                return "It must be at least a keyframe defined in the animation:" + animationId;
+            }
+
+        }
+
+        return null;
+    }
+
     /**
      * Parses the <primitives> block.
      * @param {primitives block element} primitivesNode
@@ -1164,10 +1319,10 @@ class MySceneGraph {
     check_components_integrity() {
 
         for (var key in this.components) {
-                if (this.components[key].definition_made == false) {
-                    return "component of id " + key + " is referenced inside another component but it is not defined in the list of components";
-                }   
-            } 
+            if (this.components[key].definition_made == false) {
+                return "component of id " + key + " is referenced inside another component but it is not defined in the list of components";
+            }
+        }
         return null;
     }
 
@@ -1199,20 +1354,20 @@ class MySceneGraph {
             componentID = this.reader.getString(children[i], 'id');
             if (componentID == null)
                 return "no ID defined for componentID";
-    
+
             // Checks for repeated IDs.
-            
-            if (this.components[componentID] != null){
-                if(this.components[componentID].definition_made == true){
+
+            if (this.components[componentID] != null) {
+                if (this.components[componentID].definition_made == true) {
                     return "ID must be unique for each component (conflict: ID = " + componentID + ")";
                 }
                 component_aux = this.components[componentID];
             }
-            else{
+            else {
                 this.components[componentID] = new MyComponent(componentID, false);
                 component_aux = this.components[componentID];
             }
-            
+
             grandChildren = children[i].children;
 
             if (grandChildren.length == 0) {
@@ -1223,7 +1378,7 @@ class MySceneGraph {
             var block_materials = false;
             var block_texture = false;
             var block_children = false;
-           
+
             for (var j = 0; j < grandChildren.length; j++) {
 
                 grandgrandChildren = grandChildren[j].children;
@@ -1235,21 +1390,21 @@ class MySceneGraph {
                     block_transformation = true;
 
                     if (grandgrandChildren.length == 0) {
-                        component_aux.transformation=mat4.create();
-                        
+                        component_aux.transformation = mat4.create();
+
                     }
-                    
-                    else{ 
+
+                    else {
                         //transformation ref
                         if (grandgrandChildren[0].nodeName == "transformationref") {
-    
+
                             if (grandgrandChildren.length > 1) {
                                 return "There can only one transformation ref or there is only one transformation ref but there are also explicit transformations  for components of id " + componentID;
                             }
                             var transformation_id = this.reader.getString(grandgrandChildren[0], 'id');
-    
+
                             if (this.transformations[transformation_id] == null) {
-                                    return "ID in the transformations Block for a transformation ref for component of id " + componentID + "must be a valid reference";
+                                return "ID in the transformations Block for a transformation ref for component of id " + componentID + "must be a valid reference";
                             }
                             component_aux.transformation = this.transformations[transformation_id];
                         }
@@ -1265,7 +1420,7 @@ class MySceneGraph {
 
                 //component_aux.materials fica com a lista de materiais do bloco
                 else if (grandChildren[j].nodeName == "materials") {
-                    
+
                     component_aux.material_active = 0;
                     block_materials = true;
 
@@ -1281,7 +1436,7 @@ class MySceneGraph {
                             }
                             component_aux.materials.push(this.materials[material_id]);
                         }
-                        else{
+                        else {
                             component_aux.materials.push(material_id);
                         }
 
@@ -1302,51 +1457,51 @@ class MySceneGraph {
                         component_aux.texture.push(texture_id);
                     }
 
-                    
+
                     //Nao existe entao textures no array de texturas
-                    
+
                     else if (this.textures[texture_id] == null) {
                         return "ID in the texture Block for component of id " + componentID + " must be a valid reference";
                     }
 
 
                     //Se a textura estiver definida, entao. Associamos a textura ao bloco component
-                    else if(this.textures[texture_id] != null){
+                    else if (this.textures[texture_id] != null) {
                         component_aux.texture.push(this.textures[texture_id]);
-                        
+
                         var length_s = this.reader.getString(grandChildren[j], 'length_s');
-                        if(length_s == null){
+                        if (length_s == null) {
                             return "length_s is null or not defined correctly for texture block of component with id " + componentID;
                         }
                         var length_t = this.reader.getString(grandChildren[j], 'length_t');
-                        if(length_t == null){
+                        if (length_t == null) {
                             return "length_t is null or not defined correctly for texture block of component with id " + componentID;
                         }
                         component_aux.texture.push(length_s);
                         component_aux.texture.push(length_t);
                     }
-                    
+
                     if (texture_id == "inherit" || texture_id == "none") {
 
-                       if (this.reader.getString(grandChildren[j], 'length_s') != null) {
-                           this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
-                       }
-                       else{
-                           this.onXMLMinorError("Ignore this error , it is due to a function returning null");
-                       }
+                        if (this.reader.getString(grandChildren[j], 'length_s') != null) {
+                            this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
+                        }
+                        else {
+                            this.onXMLMinorError("Ignore this error , it is due to a function returning null");
+                        }
 
-                       if (this.reader.getString(grandChildren[j], 'length_t') != null) {
-                           this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
-                       }
-                       else{
-                           this.onXMLMinorError("Ignore this error , it is due to a function returning null");
-                       }
+                        if (this.reader.getString(grandChildren[j], 'length_t') != null) {
+                            this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
+                        }
+                        else {
+                            this.onXMLMinorError("Ignore this error , it is due to a function returning null");
+                        }
 
-                   }
+                    }
                 }
-                    
 
-                    //Seguir as diretivas do stor que deve dar erro/warning
+
+                //Seguir as diretivas do stor que deve dar erro/warning
 
 
                 else if (grandChildren[j].nodeName == "children") {
@@ -1362,17 +1517,17 @@ class MySceneGraph {
 
                             var children_component_id = this.reader.getString(grandgrandChildren[k], 'id');
 
-                            if (this.components[children_component_id]!=null)
+                            if (this.components[children_component_id] != null)
                                 component_aux.children_component.push(this.components[children_component_id]);
-                        
-                            else{
+
+                            else {
                                 this.components[children_component_id] = new MyComponent(children_component_id, false);
                                 component_aux.children_component.push(this.components[children_component_id]);
                             }
                         }
 
-                        else if(grandgrandChildren[k].nodeName == "primitiveref"){
-                           
+                        else if (grandgrandChildren[k].nodeName == "primitiveref") {
+
                             var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id');
 
                             if (this.primitives[children_primitive_id] == null) {
@@ -1382,38 +1537,38 @@ class MySceneGraph {
                         }
 
                         else
-                            return "unknown tag "+ grandgrandChildren[k].nodeName + " in children for component of id " + componentID;
+                            return "unknown tag " + grandgrandChildren[k].nodeName + " in children for component of id " + componentID;
                     }
                 }
 
                 else
                     return "Unknown block with name " + grandChildren[j].nodeName + " for component of id " + componentID;
-            
+
             }
 
             // checking if any of the blocks is missing from component
             if (block_transformation == false)
                 return "Block Transformation needs to be declared for component of id " + componentID;
-            else if (block_materials == false) 
+            else if (block_materials == false)
                 return "Block Materials needs to be declared for component of id " + componentID;
-            else if (block_texture == false) 
+            else if (block_texture == false)
                 return "Block Textures needs to be declared for component of id " + componentID;
-            else if (block_children == false) 
+            else if (block_children == false)
                 return "Block Children needs to be declared for component of id " + componentID;
-            
+
             component_aux.definition_made = true;
         }
 
         var returnedValue;
-        if((returnedValue = this.check_components_integrity())!= null){
+        if ((returnedValue = this.check_components_integrity()) != null) {
             return returnedValue;
         }
 
         // checking to see of root component is declared and has the correct tags or not
-        if(this.components[this.idRoot] == null){
+        if (this.components[this.idRoot] == null) {
             return "Error root component of id " + this.idRoot + " defined in scene block is not in the components block";
         }
-        if(this.components[this.idRoot].materials[0] == "inherit"){
+        if (this.components[this.idRoot].materials[0] == "inherit") {
             return "Error in the root component of id= " + this.idRoot + " , material must not be inherit";
         }
 
@@ -1536,18 +1691,18 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        
+
         var root = this.components[this.idRoot];
-        
+
         this.scene.pushMatrix();
         this.displaySceneRecursive(root, root.materials[0], root.texture[0], root.texture[1], root.texture[2]);
         this.scene.popMatrix();
-    
+
     }
 
     isObject(val) {
-        if (val === null) { return false;}
-        return ( (typeof val === 'function') || (typeof val === 'object') );
+        if (val === null) { return false; }
+        return ((typeof val === 'function') || (typeof val === 'object'));
     }
 
     displaySceneRecursive(Node, material_father, texture_father, ls, lt) {
@@ -1555,56 +1710,56 @@ class MySceneGraph {
         var current_node = Node;
 
         material_father.setTexture(null);
-        
-        current_node.material_active = this.mPressed % current_node.materials.length;
-      
-        if(current_node.materials[current_node.material_active] == "inherit"){
 
-           // material_father.setTextureWrap('REPEAT', 'REPEAT');
-            
-            if(current_node.texture[0] == "inherit"){
-                if(texture_father != "none"){
+        current_node.material_active = this.mPressed % current_node.materials.length;
+
+        if (current_node.materials[current_node.material_active] == "inherit") {
+
+            // material_father.setTextureWrap('REPEAT', 'REPEAT');
+
+            if (current_node.texture[0] == "inherit") {
+                if (texture_father != "none") {
                     material_father.setTexture(texture_father);
                 }
             }
 
-            else if(current_node.texture[0] != "none"){
+            else if (current_node.texture[0] != "none") {
                 material_father.setTexture(current_node.texture[0]);
             }
-            
+
             material_father.apply();
         }
-        else{
+        else {
             current_node.materials[current_node.material_active].setTextureWrap('REPEAT', 'REPEAT');
-            
-            if(current_node.texture[0] == "inherit"){
-                if(texture_father != "none"){
+
+            if (current_node.texture[0] == "inherit") {
+                if (texture_father != "none") {
                     current_node.materials[current_node.material_active].setTexture(texture_father);
                 }
             }
-            else if(current_node.texture[0] != "none"){
+            else if (current_node.texture[0] != "none") {
                 current_node.materials[current_node.material_active].setTexture(current_node.texture[0]);
             }
-            
+
             current_node.materials[current_node.material_active].apply();
         }
-        
+
         this.scene.multMatrix(current_node.transformation);
-        
+
         for (let i = 0; i < current_node.children_primitives.length; i++) {
-            
+
             if (this.scene.displayNormals)
                 current_node.children_primitives[i].primitive.enableNormalViz();
             else
                 current_node.children_primitives[i].primitive.disableNormalViz();
-            
+
             if (current_node.texture[0] != "none") {
 
-                if(current_node.texture[0] == "inherit")
-                  current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
+                if (current_node.texture[0] == "inherit")
+                    current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
                 else
-                  current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1] , current_node.texture[2]);    
-                }
+                    current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
+            }
 
             current_node.children_primitives[i].primitive.display();
         }
@@ -1617,23 +1772,23 @@ class MySceneGraph {
 
                 if (current_node.texture[0] == "inherit")
                     this.displaySceneRecursive(current_node.children_component[i], material_father, texture_father, ls, lt);
-            
+
                 else if (current_node.texture[0] == "none")
                     this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], 1, 1);
-            
+
                 else
                     this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], current_node.texture[1], current_node.texture[2]);
-            
+
             }
 
             else {
 
                 if (current_node.texture[0] == "inherit")
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], texture_father, ls, lt);
-            
+
                 else if (current_node.texture[0] == "none")
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], current_node.texture[0], 1, 1);
-            
+
                 else
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], current_node.texture[0], current_node.texture[1], current_node.texture[2]);
             }
