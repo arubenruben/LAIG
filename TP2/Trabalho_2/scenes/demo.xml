@@ -126,7 +126,7 @@
         <texture id="beachBall" file="scenes/images/beachBall.jpg"/>
         <texture id="beachBuoy1" file="scenes/images/beachBuoy1.jpg"/>
         <texture id="beachBuoy2" file="scenes/images/beachBuoy2.jpg"/>
-           <texture id="fences" file="scenes/images/fences.jpg"/>
+        <texture id="fences" file="scenes/images/fences.jpg"/>
 
     </textures>
 
@@ -1126,7 +1126,7 @@
                 <material id="fence_wood2"/>
             </materials>
 
-            <texture id="fences" length_s="1" length_t="1" />
+            <texture id="none"/>
 
             <children>
                 
