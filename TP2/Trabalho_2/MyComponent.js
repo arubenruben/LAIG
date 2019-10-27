@@ -39,7 +39,11 @@ class MyComponent {
 		this.children_component = [];
 
 		// array to hold children that are primitives
-		this.children_primitives = []
+		this.children_primitives = [];
+
+		//array de animacoes
+
+		this.animations=[];
 
 	}
 }

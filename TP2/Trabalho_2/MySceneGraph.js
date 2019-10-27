@@ -1290,7 +1290,7 @@ class MySceneGraph {
                     keyframes_array_aux.push(keyframe_auxiliar_var);
 
                 }
-                
+
                 this.animations[animationId]=keyframes_array_aux;
             }
             else {
@@ -1416,6 +1416,7 @@ class MySceneGraph {
             var block_materials = false;
             var block_texture = false;
             var block_children = false;
+            
 
             for (var j = 0; j < grandChildren.length; j++) {
 
@@ -1452,6 +1453,28 @@ class MySceneGraph {
                             if (component_aux.transformation == -1) {
                                 return "Fix Errors";
                             }
+                        }
+                    }
+                
+                }
+                else if(grandChildren[j].nodeName=="animationref"){
+
+                    let animation_in_componet_id=this.reader.getString(grandChildren[j],'id');
+                    
+                    if(animation_in_componet_id==null){
+                        this.onXMLMinorError("Animation not added to component. ID not found");
+                    }
+
+                    //Se o id estiver definido
+                    else{
+                        
+                        //Testar se a animacao esta definida
+                        if(this.animations[animation_in_componet_id]!=null){
+                            
+                            component_aux.animations=this.animations[animation_in_componet_id];
+
+                        }else{
+                            this.onXMLMinorError("Animations not defined. Not added to the component");
                         }
                     }
                 }

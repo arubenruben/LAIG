@@ -637,6 +637,9 @@
             <transformation>
                 <translate x="-8" y="0" z="0"/>
             </transformation>
+
+            <animationref id="a"/>
+            
             <materials>
                 <material id="inherit" />
             </materials>
