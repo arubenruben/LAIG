@@ -11,9 +11,9 @@ var TRANSFORMATIONS_INDEX = 6;
 var ANIMATIONS_INDEX = 7;
 var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
-var TRANSLATION_POS= 0;
-var ROTATION_POS= 0;
-var SCALE_POS= 0;
+var TRANSLATION_POS = 0;
+var ROTATION_POS = 1;
+var SCALE_POS = 2;
 
 
 /**
@@ -43,6 +43,8 @@ class MySceneGraph {
         this.ambient = [];
         this.background = [];
         this.mPressed = 0;
+
+        this.animations=[];
 
 
 
@@ -196,11 +198,11 @@ class MySceneGraph {
         }
 
         // <animation>
-        if ((index = nodeNames.indexOf("animation")) == -1)
-            return "tag <animation> missing";
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
         else {
             if (index != ANIMATIONS_INDEX)
-                this.onXMLMinorError("tag <animation> out of order");
+                this.onXMLMinorError("tag <animations> out of order");
 
             //Parse primitives block
             if ((error = this.parseAnimations(nodes[index])) != null)
@@ -1127,6 +1129,13 @@ class MySceneGraph {
     }
 
 
+
+    /*Animation Array Structure:
+
+    Placed to the position, animation_id. Where are pushed into the keyframes arrays, instants should be ordered to performance imporvement.
+
+    */
+
     parseAnimations(animationNode) {
 
         let children = animationNode.children;
@@ -1137,125 +1146,154 @@ class MySceneGraph {
 
         let grandgrandChildren = [];
 
+        
+        
+        //Animations pode ser vazio
+        
         for (let i = 0; i < children.length; i++) {
-
+            
             //Se a animacao for invalida, nao estouro. Sinalizo erro e prossigo para a proxima tentative de animacao.
-
+            
             if (children[i].nodeName != "animation") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-
+            
             let animationId = this.reader.getString(children[i], 'id');
-
-            if (animationIdId == null)
-                return "no ID defined for the animation";
-
-            if (this.animations[animationIdd] != null)
-                return "ID must be unique for each animation (conflict: ID = " + animationIdeId + ")";
-
+            
+            if (animationId == null)
+            return "no ID defined for the animation";
+            
+            if (this.animations[animationId] != null)
+            return "ID must be unique for each animation (conflict: ID = " + animationIdeId + ")";
+            
             grandChildren = children[i].children;
-
+            
             /*Key frame nao pode ser vazio*/
             if (grandChildren.length > 0) {
 
-                if (grandChildren.nodeName != "keyframe") {
-                    this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">");
-                    continue;
-                }
-
+                let keyframes_array_aux=[];
+                
                 for (let j = 0; j < grandChildren.length; j++) {
-                    let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
+                    
+                    if (grandChildren[j].nodeName != "keyframe") {
+                        this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
+                        continue;
+                    }
+        
+                    let keyframe_auxiliar_var=new MyKeyFrameAnimation(this.scene);
 
+                    
+                    let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
+                    
+                    
                     if (keyframe_instant == null) {
                         return "keyframe_instant in" + animationId + "must be valid";
                     }
+                    
+                    keyframe_auxiliar_var.instant=keyframe_instant;
 
                     //O grandchildren sao as transformacoes
                     grandgrandChildren = grandChildren[j].children;
-
+                    
                     //Ver se as 3 transformacoes estao instanciadas e pela ordem indicada
-
+                    
                     for (let transf_pos = 0; transf_pos < 3; transf_pos++) {
 
-                        switch(transf_pos){
-
-                            case TRANSLATION_POS:{
-
-                                if(grandgrandChildren [transf_pos].nodeName!="translate"){
-                                    
-                                    this.onXMLMinorError("Keyframe"+ animationId + keyframe_instant);
-                                    continue;
-                                }
-                                else{
-
-                                    let translate_array=this.parseCoordinates3D(grandgrandChildren[transf_pos],"Translate keyfram"+animationId);
-
-                                }
-
-                                
+                        switch (transf_pos) {
                             
-                                break;
-                            }
-
-
-                            case ROTATION_POS:{
-
-                                if(grandgrandChildren [transf_pos].nodeName!="rotate"){
+                            case TRANSLATION_POS: {
+                                
+                                if (grandgrandChildren[transf_pos].nodeName != "translate") {
+                                    this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
+                                    return ("Animation order not respected");
+                                }
+                                else {
+                                    let translate_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Translate keyfram" + animationId);
                                     
-                                    this.onXMLMinorError("Keyframe"+ animationId + keyframe_instant);
-                                    continue;
+                                    if(!(Array.isArray(translate_array))){
+                                        return "Translate Array invalid";
+                                    }
+
+                                    keyframe_auxiliar_var.translate_vec=translate_array;
                                 }
-                                else{
-
-                                  
-                                }
-
-
-
-
-
                                 break;
                             }
+                            
+                            case ROTATION_POS: {
 
+                                if (grandgrandChildren[transf_pos].nodeName != "rotate") {
 
+                                    this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
+                                    return ("Animation order not respected");
+                                }
+                                else {
 
-                            case SCALE_POS:{
+                                    let angle_x = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_x');
 
-                                if(grandgrandChildren [transf_pos].nodeName!="scale"){
+                                    if (angle_x == null) {
+                                        this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
+                                        break;
+                                    }
+
+                                    keyframe_auxiliar_var.rotate_vec.push(angle_x);
+
+                                    let angle_y = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_y');
+
+                                    if (angle_y == null) {
+                                        this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
+                                        break;
+                                    }
                                     
-                                    this.onXMLMinorError("Keyframe"+ animationId + keyframe_instant);
-                                    continue;
+                                    keyframe_auxiliar_var.rotate_vec.push(angle_y);
+
+                                    let angle_z = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_z');
+
+                                    if (angle_z == null) {
+                                        this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
+                                        break;
+                                    }
+                                    
+                                    keyframe_auxiliar_var.rotate_vec.push(angle_z);
+
                                 }
-                                else{
+                                break;
+                            }
+                            case SCALE_POS: {
 
-                                    let scale_array=this.parseCoordinates3D(grandgrandChildren[transf_pos],"Scale keyfram"+animationId);
+                                if (grandgrandChildren[transf_pos].nodeName != "scale") {
 
+                                    this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
+                                    return ("Animation order not respected");
                                 }
+                                else {
 
+                                    let scale_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Scale keyfram" + animationId);
 
-
-
-
-
+                                    if(!Array.isArray(scale_array)){
+                                        return("Invalid scale_array");
+                                    }
+                                    keyframe_auxiliar_var.scale_vec=scale_array;
+                                    
+                                }
 
                                 break;
                             }
-
-
-
 
                         }
 
-
-
-
+                        
                     }
+                    
+                    /*Introduce the keyframe(i) in the animations array*/
 
+                    keyframes_array_aux.push(keyframe_auxiliar_var);
 
                 }
-
-            } else {
+                
+                this.animations[animationId]=keyframes_array_aux;
+            }
+            else {
                 return "It must be at least a keyframe defined in the animation:" + animationId;
             }
 

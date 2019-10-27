@@ -3,15 +3,21 @@
  * @constructor
  * @param scene - Reference to MyScene object
  */
-class MyAnimation extends CGFobject {
+class MyKeyFrameAnimation extends CGFobject {
 	constructor(scene) {
 		super(scene);
         this.initBuffers();
+        
+        this.instant=-1;
+        this.translate_vec=[];
+        this.rotate_vec=[];
+        this.scale_vec=[];
+
+
        
     }
     update(t){
-        //altera a posiçao das asas
-        this.rotate_wings = Math.sin(t)*Math.PI/4 ;
+       
     }
     
     apply(t){

@@ -7,10 +7,12 @@ class MyAnimation extends CGFobject {
 	constructor(scene) {
 		super(scene);
         this.initBuffers();
-       
+        this.keyframe=[];
+        
+
     }
     update(t){
-        //altera a posiçao das asas
+    
         this.keyanimation
     }
     
