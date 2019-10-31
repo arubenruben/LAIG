@@ -1168,6 +1168,8 @@ class MySceneGraph {
             return "ID must be unique for each animation (conflict: ID = " + animationIdeId + ")";
             
             grandChildren = children[i].children;
+
+            let animation = new MyAnimation(this.scene);
             
             /*Key frame nao pode ser vazio*/
             if (grandChildren.length > 0) {
@@ -1290,8 +1292,8 @@ class MySceneGraph {
                     keyframes_array_aux.push(keyframe_auxiliar_var);
 
                 }
-
-                this.animations[animationId]=keyframes_array_aux;
+                animation.KeyFrames = keyframes_array_aux;
+                this.animations[animationId]=animation;
             }
             else {
                 return "It must be at least a keyframe defined in the animation:" + animationId;
@@ -1467,11 +1469,10 @@ class MySceneGraph {
 
                     //Se o id estiver definido
                     else{
-                        
                         //Testar se a animacao esta definida
                         if(this.animations[animation_in_componet_id]!=null){
                             
-                            component_aux.animations=this.animations[animation_in_componet_id];
+                            component_aux.animation=this.animations[animation_in_componet_id];
 
                         }else{
                             this.onXMLMinorError("Animations not defined. Not added to the component");
@@ -1806,6 +1807,9 @@ class MySceneGraph {
         }
 
         this.scene.multMatrix(current_node.transformation);
+        if(current_node.animation != null && current_node.startedToAnimate){
+            //this.scene.multMatrix(current_node.transformationAnimation);
+        }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
 

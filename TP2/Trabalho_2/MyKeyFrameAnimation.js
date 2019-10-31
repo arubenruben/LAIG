@@ -12,18 +12,7 @@ class MyKeyFrameAnimation extends CGFobject {
         this.translate_vec=[];
         this.rotate_vec=[];
         this.scale_vec=[];
-
-
-       
-    }
-    update(t){
-       
-    }
     
-    apply(t){
-
-
     }
-
 }
 

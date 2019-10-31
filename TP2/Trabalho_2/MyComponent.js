@@ -17,6 +17,11 @@ class MyComponent {
 		// variable to hold either the transformation refered or to hold the trasnformation 
 		// if a transformation is refered to then this.transformation= this.materials[transformationref];
 		this.transformation;
+
+		//Animation transformation matrix
+		this.transformationAnimation;
+
+		this.startedToAnimate = false;
 		
 	
 		// variable to hold the current active material of the component
@@ -41,9 +46,8 @@ class MyComponent {
 		// array to hold children that are primitives
 		this.children_primitives = [];
 
-		//array de animacoes
-
-		this.animations=[];
+		//animation varaible to hold the animation
+		this.animation = null;
 
 	}
 }

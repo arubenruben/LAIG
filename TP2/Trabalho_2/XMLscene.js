@@ -33,6 +33,8 @@ class XMLscene extends CGFscene {
         this.displayAxis = true;
         this.displayNormals = false;
         this.selectedCamera = 0;
+
+        this.animation1 = new MyAnimation(this);
         
 
     }
@@ -132,6 +134,16 @@ class XMLscene extends CGFscene {
         this.interface.gui_add_lights(this, this.graph.Lights);
 
         this.sceneInited = true;
+    }
+
+    update(t){
+        
+        for (var key in this.graph.components){
+            this.component_animation = this.graph.components[key].animation;
+            if(this.component_animation != null){
+              this.component_animation.update(t, key);
+            }
+        }
     }
 
     /**
