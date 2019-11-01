@@ -45,6 +45,7 @@ class MySceneGraph {
         this.mPressed = 0;
 
         this.animations=[];
+        this.idsComponentsAnimation=[];
 
 
 
@@ -105,8 +106,6 @@ class MySceneGraph {
         var error;
 
         this.transformations = [];
-
-        this.idsComponentsAnimation = [];
 
         // Processes each node, verifying errors.
 
@@ -1178,6 +1177,15 @@ class MySceneGraph {
 
                 let keyframes_array_aux=[];
                 
+                
+                /*Crio aqui na pos 0 a matriz identidade para representar a keyframe 0*/
+                let keyframe_auxiliar_first=new MyKeyFrameAnimation(this.scene,0);
+                keyframe_auxiliar_first.translate_vec=[0,0,0];
+                keyframe_auxiliar_first.rotate_vec=[0,0,0];
+                keyframe_auxiliar_first.scale_vec=[1,1,1];
+                keyframes_array_aux.push(keyframe_auxiliar_first);
+                
+                
                 for (let j = 0; j < grandChildren.length; j++) {
                     
                     if (grandChildren[j].nodeName != "keyframe") {
@@ -1185,12 +1193,12 @@ class MySceneGraph {
                         continue;
                     }
         
-                    let keyframe_auxiliar_var=new MyKeyFrameAnimation(this.scene);
-
+                    
                     
                     let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
                     
-                    
+                    let keyframe_auxiliar_var=new MyKeyFrameAnimation(this.scene,keyframe_instant);
+   
                     if (keyframe_instant == null) {
                         return "keyframe_instant in" + animationId + "must be valid";
                     }
