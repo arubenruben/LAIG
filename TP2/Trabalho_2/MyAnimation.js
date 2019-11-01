@@ -24,7 +24,7 @@ class MyAnimation extends CGFobject {
         this.lastTime = currTime;
     
         this.deltaTime = this.deltaTime/1000; //in seconds
-        this.total_time += this.deltaTime
+        this.total_time += this.deltaTime;
         
         this.segmentTime = this.KeyFrames[this.keyFrameIndex1] - this.KeyFrames[this.keyFrameIndex0];
 
