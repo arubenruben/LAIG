@@ -28,13 +28,25 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(100);
-
+        
+        let UPDATE_PERIOD=60;
+        //Tempo em milisegundos
+        UPDATE_PERIOD*=1000.0;
+        this.setUpdatePeriod(UPDATE_PERIOD);
+        
         this.displayAxis = true;
         this.displayNormals = false;
         this.selectedCamera = 0;
 
-        this.animation1 = new MyAnimation(this);
+        /*
+            Create a start keyframe to help the calculations
+        */
+        this.start_keyframe=new MyKeyFrameAnimation(this);
+        this.start_keyframe.instant=0;
+        this.start_keyframe.translate_vec=this.translate(0,0,0);
+        this.start_keyframe.rotate_vec=this.rotate(0,0,0,0);
+        this.start_keyframe.scale_vec=this.scale(1,1,1);
+
         
 
     }
@@ -136,12 +148,18 @@ class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
+    /*Called at a precise frame rate defined in the constructor*/
     update(t){
         
         for (var key in this.graph.components){
+            
             this.component_animation = this.graph.components[key].animation;
+            
+            /*Animacoes com NULL sao components em animationref definido*/
             if(this.component_animation != null){
-              this.component_animation.update(t, key);
+            
+                this.component_animation.update(t);
+            
             }
         }
     }

@@ -9,32 +9,36 @@ class MyAnimation extends CGFobject {
         super(scene);
         this.scene = scene;
         this.initBuffers();
-        this.KeyFrames;
+        this.KeyFrames=[];
         this.Ma = 0;
         this.total_time = 0;
-        this.previous_t;
+        this.previous_t=0;
         this.delta = 0;
         this.previous_t = 0;
-        this.firstTime = true;
+        this.active_frame=0;
     }
-    update(t, component){
+    update(t){
         //altera a posiçao das asas
-        this.delta = t - this.previous_t;
-        this.previous_t = t;
-        if(this.firstTime == false){
-            this.total_time += this.delta/1000;
-        }
         
-        if(this.firstTime == true){
-            this.firstTime = false;
+        if(this.active_frame>=this.KeyFrames.length){
+           console.log("Cheguei ao fim dos active frames para o component");
+        }else{
+            
+            if(t>this.KeyFrames[this.active_frame].instant){
+
+                this.active_frame++;
+            }
+            
+            this.delta = t - this.previous_t;
+            this.previous_t = t;
+            
         }
 
-        for (var key in this.keyFrames){
-           
-        }
+
+       
     }
     
-    apply(t, key){
+    apply(t){
 
 
     }
