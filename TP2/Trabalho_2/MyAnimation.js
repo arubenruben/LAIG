@@ -16,72 +16,84 @@ class MyAnimation extends CGFobject {
         this.keyFrameIndex0 = 0;
         this.keyFrameIndex1 = 1;
         this.firstTime = true;
+        this.active=true;
     }
     update(t){
         //altera a posiçao das asas
         
         this.delta = t - this.previous_t;
         this.previous_t = t;
-        if(this.firstTime == false){
-            this.totalTime += this.delta/1000;
-        }
-
         
+        if(this.active==true){
 
-        console.log(this.totalTime);
-        
-        /*Calcula a duracao do segmento*/
-        
-        this.segmentTime = this.KeyFrames[this.keyFrameIndex1].instant - this.KeyFrames[this.keyFrameIndex0].instant;
+                if(this.firstTime == false){
+                    this.totalTime += this.delta/1000;
+                }
 
-        /*Se for 0 tenho de inicializar os paremetros da velocidade*/
-        if(this.firstTime == true){
-            this.firstTime = false;
-            this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
-        }
-
-        if(this.totalTime > this.segmentTime){
-           
-            this.totalTime = this.totalTime - this.segmentTime;
+                
+                
+                console.log(this.totalTime);
+                
+            /*Calcula a duracao do segmento*/
             
-            if(this.keyFrameIndex1 <= this.KeyFrames.length-1){
-                this.keyFrameIndex0++;
-                this.keyFrameIndex1++;
+            this.segmentTime = this.KeyFrames[this.keyFrameIndex1].instant - this.KeyFrames[this.keyFrameIndex0].instant;
+            
+            /*Se for 0 tenho de inicializar os paremetros da velocidade*/
+            if(this.firstTime == true){
+                this.firstTime = false;
+                this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
             }
-            this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
-        }
-        
-        if(this.keyFrameIndex1<=this.KeyFrames.length-1){
-            this.updateMatrix(this.totalTime);
-        }
-    
-        
-       
-    }
 
+            if(this.totalTime > this.segmentTime){
+            
+                this.totalTime = this.totalTime - this.segmentTime;
+                
+                if(this.keyFrameIndex1 < this.KeyFrames.length-1){
+                    this.keyFrameIndex0++;
+                    this.keyFrameIndex1++;
+                }else{
+                    this.active=false;
+                }
+                this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
+            }
+            
+            if(this.keyFrameIndex1<=this.KeyFrames.length-1&&this.active==true){
+                this.updateMatrix(this.totalTime);
+            }
+        
+        }
+        
+        
+    }
+    
     update_parameters(frame0,frame1){
         
-        let distance_x=frame1.translate_vec[0]-frame0.translate_vec[0]; 
-        let distance_y=frame1.translate_vec[1]-frame0.translate_vec[1]; 
-        let distance_z=frame1.translate_vec[2]-frame0.translate_vec[2]; 
+        if(frame1==null){
 
-        let rot_x=frame1.rotate_vec[0]-frame0.rotate_vec[0]; 
-        let rot_y=frame1.rotate_vec[1]-frame0.rotate_vec[1]; 
-        let rot_z=frame1.rotate_vec[2]-frame0.rotate_vec[2]; 
+        }else{
 
-        let scale_x=frame1.scale_vec[0]-frame0.scale_vec[0]; 
-        let scale_y=frame1.scale_vec[1]-frame0.scale_vec[1]; 
-        let scale_z=frame1.scale_vec[2]-frame0.scale_vec[2]; 
-
-        this.oldPosition = frame0.translate_vec;
-
-        
-        
-
-        this.vx=distance_x/this.segmentTime;
-        this.vy=distance_y/this.segmentTime;
-        this.vz=distance_z/this.segmentTime;
-
+            let distance_x=frame1.translate_vec[0]-frame0.translate_vec[0]; 
+            let distance_y=frame1.translate_vec[1]-frame0.translate_vec[1]; 
+            let distance_z=frame1.translate_vec[2]-frame0.translate_vec[2]; 
+            
+            let rot_x=frame1.rotate_vec[0]-frame0.rotate_vec[0]; 
+            let rot_y=frame1.rotate_vec[1]-frame0.rotate_vec[1]; 
+            let rot_z=frame1.rotate_vec[2]-frame0.rotate_vec[2]; 
+            
+            let scale_x=frame1.scale_vec[0]-frame0.scale_vec[0]; 
+            let scale_y=frame1.scale_vec[1]-frame0.scale_vec[1]; 
+            let scale_z=frame1.scale_vec[2]-frame0.scale_vec[2]; 
+            
+            this.oldPosition = frame0.translate_vec;
+            
+            
+            
+            
+            this.vx=distance_x/this.segmentTime;
+            this.vy=distance_y/this.segmentTime;
+            this.vz=distance_z/this.segmentTime;
+        }
+            
     }
 
     updateMatrix(executionPercentage){
