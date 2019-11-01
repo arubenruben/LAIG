@@ -11,36 +11,43 @@ class MyAnimation extends CGFobject {
         this.initBuffers();
         this.KeyFrames=[];
         this.Ma = 0;
-        this.total_time = 0;
-        this.previous_t=0;
-        this.delta = 0;
-        this.previous_t = 0;
-        this.active_frame=0;
+        this.totalTime = 0;
+        this.segmentTime = 0;
+        this.keyFrameIndex0 = 0;
+        this.keyFrameIndex1 = 1;
     }
     update(t){
         //altera a posiçao das asas
         
-        if(this.active_frame>=this.KeyFrames.length){
-           console.log("Cheguei ao fim dos active frames para o component");
-        }else{
-            
-            if(t>this.KeyFrames[this.active_frame].instant){
+        this.lastTime = this.lastTime || 0.0;
+        this.deltaTime = currTime - this.lastTime || 0.0;
+        this.lastTime = currTime;
+    
+        this.deltaTime = this.deltaTime/1000; //in seconds
+        this.total_time += this.deltaTime
+        
+        this.segmentTime = this.KeyFrames[this.keyFrameIndex1] - this.KeyFrames[this.keyFrameIndex0];
 
-                this.active_frame++;
-            }
-            
-            this.delta = t - this.previous_t;
-            this.previous_t = t;
-            
+        if(this.total_time > this.segmentTime){
+            this.totalTime = this.total_time - this.segmentTime;
+            this.keyFrameIndex0++;
+            this.keyFrameIndex1++;
         }
 
-
+        this.executionPercentage = this.totalTime / this.segmentTime;
+        this.updateMa(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1], this.executionPercentage);
        
     }
+
+    updateMa(keyFrame1, keyFrame2, executionPercentage){
+        
+
+
+
+    }
     
-    apply(t){
-
-
+    apply(){
+        this.scene.multMatrix(this.Ma);
     }
 
 }

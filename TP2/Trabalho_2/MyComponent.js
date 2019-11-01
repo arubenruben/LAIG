@@ -18,10 +18,7 @@ class MyComponent {
 		// if a transformation is refered to then this.transformation= this.materials[transformationref];
 		this.transformation;
 
-		//Animation transformation matrix
-		this.transformationAnimation;
 
-		this.startedToAnimate = false;
 		
 	
 		// variable to hold the current active material of the component

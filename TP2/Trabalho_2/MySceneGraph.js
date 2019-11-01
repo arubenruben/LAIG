@@ -106,6 +106,8 @@ class MySceneGraph {
 
         this.transformations = [];
 
+        this.idsComponentsAnimation = [];
+
         // Processes each node, verifying errors.
 
         // <scene>
@@ -1473,6 +1475,7 @@ class MySceneGraph {
                         if(this.animations[animation_in_componet_id]!=null){
                             
                             component_aux.animation=this.animations[animation_in_componet_id];
+                            this.idsComponentsAnimation.push(componentID);
 
                         }else{
                             this.onXMLMinorError("Animations not defined. Not added to the component");
@@ -1807,8 +1810,9 @@ class MySceneGraph {
         }
 
         this.scene.multMatrix(current_node.transformation);
-        if(current_node.animation != null && current_node.startedToAnimate){
-            //this.scene.multMatrix(current_node.transformationAnimation);
+
+        if(current_node.animation != null){
+            current_node.animation.apply();
         }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {

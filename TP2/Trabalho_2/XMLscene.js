@@ -150,16 +150,14 @@ class XMLscene extends CGFscene {
 
     /*Called at a precise frame rate defined in the constructor*/
     update(t){
-        
-        for (var key in this.graph.components){
-            
+        var key;
+        for (var i; i < this.graph.idsComponentsAnimation.length; i++){
+            key  = this.graph.idsComponentsAnimation[i];
             this.component_animation = this.graph.components[key].animation;
             
             /*Animacoes com NULL sao components em animationref definido*/
             if(this.component_animation != null){
-            
                 this.component_animation.update(t);
-            
             }
         }
     }
