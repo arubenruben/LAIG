@@ -15,23 +15,28 @@ class MyAnimation extends CGFobject {
         this.segmentTime = 0;
         this.keyFrameIndex0 = 0;
         this.keyFrameIndex1 = 1;
+        this.firstTime = true;
     }
     update(t){
         //altera a posiçao das asas
         
-        this.lastTime = this.lastTime || 0.0;
-        this.deltaTime = t - this.lastTime || 0.0;
-        this.lastTime = t;
-    
-        this.deltaTime = this.deltaTime/1000; //in seconds
-        this.totalTime += this.deltaTime;
+        this.delta = t - this.previous_t;
+        this.previous_t = t;
+        if(this.firstTime == false){
+            this.totalTime += this.delta/1000;
+        }
+
+        
+
+        console.log(this.totalTime);
         
         /*Calcula a duracao do segmento*/
         
         this.segmentTime = this.KeyFrames[this.keyFrameIndex1].instant - this.KeyFrames[this.keyFrameIndex0].instant;
 
         /*Se for 0 tenho de inicializar os paremetros da velocidade*/
-        if(this.keyFrameIndex0==0){
+        if(this.firstTime == true){
+            this.firstTime = false;
             this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
         }
 
@@ -39,17 +44,17 @@ class MyAnimation extends CGFobject {
            
             this.totalTime = this.totalTime - this.segmentTime;
             
-            if(this.keyFrameIndex1<this.KeyFrames.length-1){
+            if(this.keyFrameIndex1 <= this.KeyFrames.length-1){
                 this.keyFrameIndex0++;
                 this.keyFrameIndex1++;
             }
             this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
         }
         
-        this.executionPercentage = this.totalTime / this.segmentTime;
-        this.updateMatrix(this.executionPercentage);
-        
-        
+        if(this.keyFrameIndex1<=this.KeyFrames.length-1){
+            this.updateMatrix(this.totalTime);
+        }
+    
         
        
     }
@@ -67,6 +72,9 @@ class MyAnimation extends CGFobject {
         let scale_x=frame1.scale_vec[0]-frame0.scale_vec[0]; 
         let scale_y=frame1.scale_vec[1]-frame0.scale_vec[1]; 
         let scale_z=frame1.scale_vec[2]-frame0.scale_vec[2]; 
+
+        this.oldPosition = frame0.translate_vec;
+
         
         
 
@@ -82,9 +90,11 @@ class MyAnimation extends CGFobject {
         let array_aux_mat4=[this.vx*executionPercentage,this.vy*executionPercentage,this.vz*executionPercentage]
         M_Translate=mat4.create();
         M_Translate=mat4.translate(M_Translate,M_Translate,array_aux_mat4);
-
+        M_Translate=mat4.translate(M_Translate,M_Translate,this.oldPosition);
+        
         this.Ma=M_Translate;
         
+
 
     }
     

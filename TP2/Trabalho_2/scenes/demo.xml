@@ -260,24 +260,34 @@
 
      <animations>    
         <animation id = "first">
-            <keyframe instant = "100">
-                <translate x = "0" y = "50" z = "0"/>
+            <keyframe instant = "1">
+                <translate x = "0" y = "5" z = "0"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
-             <keyframe instant = "4000">
-                <translate x = "0" y = "20" z = "0"/>
-                <rotate angle_x="0" angle_y="360" angle_z="0"/>
-                <scale x="1.2" y="1.2" z="1.2"/>
-            </keyframe>
-
-
-             <keyframe instant = "2000000">
+             <keyframe instant = "2">
                 <translate x = "0" y = "0" z = "0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <rotate angle_x="0" angle_y="360" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
+
+            <keyframe instant = "3">
+                <translate x = "5" y = "0" z = "0"/>
+                <rotate angle_x="0" angle_y="360" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant = "4">
+                <translate x = "20" y = "10" z = "0"/>
+                <rotate angle_x="0" angle_y="360" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+
+
+
+    
         </animation>
 
     </animations>
