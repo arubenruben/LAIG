@@ -17,6 +17,8 @@ class MyAnimation extends CGFobject {
         this.keyFrameIndex1 = 1;
         this.firstTime = true;
         this.active=true;
+        //Tempo que dura um frame em segundos
+        this.frame_time=(1/this.scene.UPDATE_PERIOD);
     }
     update(t){
         //altera a posiçao das asas
@@ -29,10 +31,6 @@ class MyAnimation extends CGFobject {
                 if(this.firstTime == false){
                     this.totalTime += this.delta/1000;
                 }
-
-                
-                
-                console.log(this.totalTime);
                 
             /*Calcula a duracao do segmento*/
             
@@ -68,10 +66,6 @@ class MyAnimation extends CGFobject {
     
     update_parameters(frame0,frame1){
         
-      
-
-      
-
             let distance_x=frame1.translate_vec[0]-frame0.translate_vec[0]; 
             let distance_y=frame1.translate_vec[1]-frame0.translate_vec[1]; 
             let distance_z=frame1.translate_vec[2]-frame0.translate_vec[2]; 
@@ -79,27 +73,29 @@ class MyAnimation extends CGFobject {
             let rot_x=frame1.rotate_vec[0]-frame0.rotate_vec[0]; 
             let rot_y=frame1.rotate_vec[1]-frame0.rotate_vec[1]; 
             let rot_z=frame1.rotate_vec[2]-frame0.rotate_vec[2]; 
-            
-            let scale_x=frame1.scale_vec[0]-frame0.scale_vec[0]; 
-            let scale_y=frame1.scale_vec[1]-frame0.scale_vec[1]; 
-            let scale_z=frame1.scale_vec[2]-frame0.scale_vec[2]; 
-            
+            //Save positon to use in the position equation as X0
             this.oldPosition = frame0.translate_vec;
-            
-            
-            
             
             this.vx=distance_x/this.segmentTime;
             this.vy=distance_y/this.segmentTime;
             this.vz=distance_z/this.segmentTime;
-
+            
             this.wx=rot_x/this.segmentTime;
             this.wy=rot_y/this.segmentTime;
             this.wz=rot_z/this.segmentTime;
-
+            //Save angle to use ins the angle equation as Teta0
             this.oldRotation=frame0.rotate_vec;
-        
             
+            
+            let delta_scale_x=frame1.scale_vec[0]-frame0.scale_vec[0]; 
+            let delta_scale_y=frame1.scale_vec[1]-frame0.scale_vec[1]; 
+            let delta_scale_z=frame1.scale_vec[2]-frame0.scale_vec[2]; 
+
+            this.s_x=delta_scale_x/this.segmentTime;
+            this.s_y=delta_scale_y/this.segmentTime;
+            this.s_z=delta_scale_z/this.segmentTime;
+
+            this.oldScale=frame0.scale_vec;
     }
 
     updateMatrix(totalTime){
@@ -124,6 +120,19 @@ class MyAnimation extends CGFobject {
        
 
         this.Ma=mat4.multiply(this.Ma,M_Rotate,M_Translate);
+
+        let scale_x=this.oldScale[0]+this.s_x*totalTime;
+        let scale_y=this.oldScale[1]+this.s_y*totalTime;
+        let scale_z=this.oldScale[2]+this.s_z*totalTime;
+        
+        M_Scale=mat4.create();
+        
+        M_Scale=mat4.scale(M_Scale,M_Scale,[scale_x,scale_y,scale_z]);
+
+        this.Ma=mat4.multiply(this.Ma,this.Ma,M_Scale);
+
+
+
         
 
 
