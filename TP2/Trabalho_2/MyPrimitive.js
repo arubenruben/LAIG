@@ -10,6 +10,7 @@ class MyPrimitive{
         this.primitive;
         this.error = false;
         this.args = [];
+        this.controlPoints = [];
         
         switch(this.primitiveType){
             
@@ -73,6 +74,38 @@ class MyPrimitive{
                     this.primitive = new MyTorus(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3]);
             break;
 
+            case "plane":
+                this.args = this.parse_plane_attributes(primitive_element);
+                if(!Array.isArray(this.args)){
+                    this.args = this.args + " primitive of type " +  this.primitiveType; 
+                    this.error = true;
+                }
+                else
+                    this.primitive = new MyPlane(this.graph.scene, this.args[0], this.args[1]);
+
+            break;
+
+            case "patch":
+                this.args = this.parse_patch_attributes(primitive_element);
+                this.controlPoints = this.parsePatchControlPoints(primitive_element);
+                if(!Array.isArray(this.args)){
+                    this.args = this.args + " primitive of type " +  this.primitiveType; 
+                    this.error = true;
+                }
+                else
+                    this.primitive = new MyPatch(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3] , this.controlPoints);
+            break;
+
+            case "cylinder2":
+                this.args = this.parse_cylinder_attributes(primitive_element);
+                if(!Array.isArray(this.args)){
+                    this.args = this.args + " primitive of type " +  this.primitiveType; 
+                    this.error = true;
+                }
+                else
+                    this.primitive = new MyCylinder2(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3]);
+            break;
+
             default:
                 this.onXMLMinorError("unknown tag <" + this.primitiveType + ">"); 
             break;
@@ -81,9 +114,9 @@ class MyPrimitive{
 
     parse_rectangle_attributes(primitive_element, graph){
         
-        var args_aux = [];
+        let args_aux = [];
         this.graph = graph;
-        var x1, y1, x2, y2;
+        let x1, y1, x2, y2;
         
         x1 = this.graph.reader.getFloat(primitive_element, 'x1');
         if (!(x1 != null && !isNaN(x1))){
@@ -110,11 +143,11 @@ class MyPrimitive{
 
     parse_triangle_attributes(primitive_element){
         
-        var args_aux = [];
-        var point1 = [];
-        var point2 = [];
-        var point3 = [];
-        var x, y, z;
+        let args_aux = [];
+        let point1 = [];
+        let point2 = [];
+        let point3 = [];
+        let x, y, z;
        
         x = this.graph.reader.getFloat(primitive_element, 'x1');
         if (!(x != null && !isNaN(x))){
@@ -177,8 +210,8 @@ class MyPrimitive{
         
     parse_cylinder_attributes(primitive_element){
         
-        var args_aux = [];
-        var base, top, height, slices, stacks;
+        let args_aux = [];
+        let base, top, height, slices, stacks;
 
         base = this.graph.reader.getFloat(primitive_element, 'base');
         if (!(base != null && !isNaN(base))){
@@ -209,8 +242,8 @@ class MyPrimitive{
     
     parse_sphere_attributes(primitive_element){
         
-        var args_aux = [];
-        var radius, slices, stacks;
+        let args_aux = [];
+        let radius, slices, stacks;
 
         radius = this.graph.reader.getFloat(primitive_element, 'radius');
         if (!(radius != null && !isNaN(radius))){
@@ -234,8 +267,8 @@ class MyPrimitive{
     
     parse_torus_attributes(primitive_element){
         
-        var args_aux = [];
-        var inner, outer, slices, loops;
+        let args_aux = [];
+        let inner, outer, slices, loops;
 
         inner = this.graph.reader.getFloat(primitive_element, 'inner');
         if (!(inner != null && !isNaN(inner))){
@@ -258,6 +291,64 @@ class MyPrimitive{
         }
 
         args_aux.push(...[inner, outer, slices, loops]);
+
+        return args_aux;
+    }
+
+    parse_patch_attributes(primitive_element){
+        let args_aux = [];
+        let npartsU , npartsV, npointsU , npointsV;
+        
+        npointsU = this.graph.reader.getFloat(primitive_element, 'npointsU');
+        if (!(inner != null && !isNaN(inner))){
+            return "No attribute npointsU or incorrect value for it, ";
+        }
+
+        npointsV = this.graph.reader.getFloat(primitive_element, 'npointsV');
+        if (!(outer != null && !isNaN(outer))){
+            return "No attribute npointsV or incorrect value for it, ";
+        }
+
+        npartsU = this.graph.reader.getFloat(primitive_element, 'npartsU');
+        if (!(inner != null && !isNaN(inner))){
+            return "No attribute npartsU or incorrect value for it, ";
+        }
+
+        npartsV = this.graph.reader.getFloat(primitive_element, 'npartsV');
+        if (!(outer != null && !isNaN(outer))){
+            return "No attribute npartsV or incorrect value for it, ";
+        }
+
+        args_aux.push(...[npointsU, npointsV ,npartsU, npartsV]);
+
+        return args_aux;
+    }
+
+    parsePatchControlPoints(primitive_element){
+        let args_aux = [];
+        children = primitive_element.children;
+
+        for(let i = 0; i < children.length; i++){
+            let point = [];
+            point = this.graph.parseCoordinates3D(children[i], 'Control point wrong');
+            args_aux.push(point);
+        }
+        return args_aux;
+    }
+    parse_plane_attributes(primitive_element){
+        let args_aux = [];
+        let npartsU , npartsV;
+
+        npartsU = this.graph.reader.getFloat(primitive_element, 'npartsU');
+        if (!(inner != null && !isNaN(inner))){
+            return "No attribute npartsU or incorrect value for it, ";
+        }
+
+        npartsV = this.graph.reader.getFloat(primitive_element, 'npartsV');
+        if (!(outer != null && !isNaN(outer))){
+            return "No attribute npartsV or incorrect value for it, ";
+        }
+        args_aux.push(...[npartsU, npartsV]);
 
         return args_aux;
     }

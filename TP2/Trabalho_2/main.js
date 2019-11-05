@@ -24,6 +24,9 @@ serialInclude(['../lib/CGF.js',
 'MyTriangle.js',
 'MyAnimation.js',
 'MyKeyFrameAnimation.js',
+'MyPatch.js',
+'MyCilinder2.js',
+'MyPatch.js',
 
 
 main=function()
