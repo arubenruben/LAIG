@@ -116,8 +116,6 @@ class MyAnimation extends CGFobject {
         M_Rotate=mat4.rotate(M_Rotate,M_Rotate,ang_y*DEGREE_TO_RAD,[0,1,0]);
         M_Rotate=mat4.rotate(M_Rotate,M_Rotate,ang_z*DEGREE_TO_RAD,[0,0,1]);
 
-       
-
         this.Ma=mat4.multiply(this.Ma,M_Rotate,M_Translate);
 
         let scale_x=this.oldScale[0]*Math.pow(this.scale_reason_x,totalTime);
