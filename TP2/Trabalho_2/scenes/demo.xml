@@ -337,23 +337,38 @@
             <cylinder base="0.1" top="0.1" height="2" slices="10" stacks="10" />
         </primitive>
 
+        <primitive id="plano">
+            <plane npartsU="2" npartsV="2"/>
+        </primitive>
+
+         <primitive id="cilindro_nurbs">
+            <cylinder2 base="1" top="1" height="4" slices="10" stacks="10"/>
+        </primitive>
+
+         <primitive id="patch">
+            <patch npointsU="2" npointsV="2" npartsU="2" npartsV="2">
+                <controlpoint x="-0.5" y="0" z="0.5"/>
+                <controlpoint x="-0.5" y="0" z="-0.5"/>
+                <controlpoint x="0.5" y="0" z="0.5"/>
+                <controlpoint x="0.5" y="0" z="0.5"/>
+            </patch>
+        </primitive>
+
 
     </primitives>
 
     <components>
 
-        
         <component id="square">
             <transformation>
                 <translate x="0" y="0" z="0"/>
             </transformation>
-            <animationref id="first"/>
             <materials>
                 <material id="demoMaterial"/>
             </materials>
             <texture id="beachBuoy2" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="square"/>
+                <primitiveref id="cilindro_nurbs"/>
             </children>
         </component>
 

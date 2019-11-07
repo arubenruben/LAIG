@@ -1348,8 +1348,8 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName!= 'cylinder2' && grandChildren[0].nodeName!= 'plane' && grandChildren[0].nodeName!= 'patch')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, patch, plane or cylinder2)"
             }
 
             var new_primitive = new MyPrimitive(this, grandChildren[0]);
@@ -1824,7 +1824,7 @@ class MySceneGraph {
         }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
-
+          /*
             if (this.scene.displayNormals)
                 current_node.children_primitives[i].primitive.enableNormalViz();
             else
@@ -1836,7 +1836,7 @@ class MySceneGraph {
                     current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
                 else
                     current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
-            }
+            }*/
 
             current_node.children_primitives[i].primitive.display();
         }

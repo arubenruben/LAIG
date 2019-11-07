@@ -41,7 +41,7 @@ class MyPrimitive{
                     this.error = true;
                 }
                 else
-                    this.primitive = new MyCilinder(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);            
+                    this.primitive = new MyCylinder(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);            
             break;
             
             case "sphere":
@@ -103,7 +103,7 @@ class MyPrimitive{
                     this.error = true;
                 }
                 else
-                    this.primitive = new MyCylinder2(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3]);
+                    this.primitive = new MyCylinder2(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);            
             break;
 
             default:
@@ -300,22 +300,22 @@ class MyPrimitive{
         let npartsU , npartsV, npointsU , npointsV;
         
         npointsU = this.graph.reader.getFloat(primitive_element, 'npointsU');
-        if (!(inner != null && !isNaN(inner))){
+        if (!(npointsU!= null && !isNaN(npointsU))){
             return "No attribute npointsU or incorrect value for it, ";
         }
 
         npointsV = this.graph.reader.getFloat(primitive_element, 'npointsV');
-        if (!(outer != null && !isNaN(outer))){
+        if (!(npointsV != null && !isNaN(npointsV))){
             return "No attribute npointsV or incorrect value for it, ";
         }
 
         npartsU = this.graph.reader.getFloat(primitive_element, 'npartsU');
-        if (!(inner != null && !isNaN(inner))){
+        if (!(npartsU != null && !isNaN(npartsU))){
             return "No attribute npartsU or incorrect value for it, ";
         }
 
         npartsV = this.graph.reader.getFloat(primitive_element, 'npartsV');
-        if (!(outer != null && !isNaN(outer))){
+        if (!(npartsV != null && !isNaN(npartsV))){
             return "No attribute npartsV or incorrect value for it, ";
         }
 
@@ -326,7 +326,7 @@ class MyPrimitive{
 
     parsePatchControlPoints(primitive_element){
         let args_aux = [];
-        children = primitive_element.children;
+        let children = primitive_element.children;
 
         for(let i = 0; i < children.length; i++){
             let point = [];
@@ -340,12 +340,12 @@ class MyPrimitive{
         let npartsU , npartsV;
 
         npartsU = this.graph.reader.getFloat(primitive_element, 'npartsU');
-        if (!(inner != null && !isNaN(inner))){
+        if (!(npartsU != null && !isNaN(npartsU))){
             return "No attribute npartsU or incorrect value for it, ";
         }
 
         npartsV = this.graph.reader.getFloat(primitive_element, 'npartsV');
-        if (!(outer != null && !isNaN(outer))){
+        if (!(npartsV != null && !isNaN(npartsV))){
             return "No attribute npartsV or incorrect value for it, ";
         }
         args_aux.push(...[npartsU, npartsV]);
