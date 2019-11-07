@@ -103,7 +103,7 @@ class MyPrimitive{
                     this.error = true;
                 }
                 else
-                    this.primitive = new MyCylinder2(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);            
+                  this.primitive = new MyCylinder2(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);            
             break;
 
             default:
