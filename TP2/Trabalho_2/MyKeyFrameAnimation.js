@@ -6,8 +6,7 @@
 class MyKeyFrameAnimation extends MyAnimation {
 	constructor(scene,instant) {
 		super(scene);
-        
-        
+         
         this.instant=instant;
         this.translate_vec=[];
         this.rotate_vec=[];
@@ -15,4 +14,3 @@ class MyKeyFrameAnimation extends MyAnimation {
     
     }
 }
-

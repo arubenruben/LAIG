@@ -1,3 +1,4 @@
+  
 <lxs>
     <scene root="terrain" axis_length="5"/>
 
@@ -350,7 +351,7 @@
                 <controlpoint x="-0.5" y="0" z="0.5"/>
                 <controlpoint x="-0.5" y="0" z="-0.5"/>
                 <controlpoint x="0.5" y="0" z="0.5"/>
-                <controlpoint x="0.5" y="0" z="0.5"/>
+                <controlpoint x="0.5" y="0" z="-0.5"/>
             </patch>
         </primitive>
 
@@ -363,7 +364,7 @@
             <transformation>
                 <translate x="0" y="0" z="0"/>
             </transformation>
-            <!--<animationref id="first"/>-->
+            <animationref id="first"/>
             <materials>
                 <material id="demoMaterial"/>
             </materials>
@@ -402,12 +403,3 @@
 
     </components>
 </lxs>
-
-
-
-
-
-
-
-
-
