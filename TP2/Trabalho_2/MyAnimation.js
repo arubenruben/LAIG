@@ -28,10 +28,10 @@ class MyAnimation extends CGFobject {
         
         if(this.active==true){
 
-                if(this.firstTime == false){
-                    this.totalTime += this.delta/1000;
-                }
-                
+            if(this.firstTime == false){
+                this.totalTime += this.delta/1000;
+            }
+            
             /*Calcula a duracao do segmento*/
             
             this.segmentTime = this.KeyFrames[this.keyFrameIndex1].instant - this.KeyFrames[this.keyFrameIndex0].instant;
