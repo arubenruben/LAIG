@@ -86,16 +86,15 @@ class MyAnimation extends CGFobject {
             //Save angle to use ins the angle equation as Teta0
             this.oldRotation=frame0.rotate_vec;
             
+            //R=POW(NUMBER, 1/N)
+
+            this.scale_reason_x=Math.pow(frame1.scale_vec[0]/frame0.scale_vec[0],1/this.segmentTime);
+            this.scale_reason_y=Math.pow(frame1.scale_vec[1]/frame0.scale_vec[1],1/this.segmentTime);
+            this.scale_reason_z=Math.pow(frame1.scale_vec[2]/frame0.scale_vec[2],1/this.segmentTime);
             
-            let delta_scale_x=frame1.scale_vec[0]-frame0.scale_vec[0]; 
-            let delta_scale_y=frame1.scale_vec[1]-frame0.scale_vec[1]; 
-            let delta_scale_z=frame1.scale_vec[2]-frame0.scale_vec[2]; 
-
-            this.s_x=delta_scale_x/this.segmentTime;
-            this.s_y=delta_scale_y/this.segmentTime;
-            this.s_z=delta_scale_z/this.segmentTime;
-
             this.oldScale=frame0.scale_vec;
+
+            
     }
 
     updateMatrix(totalTime){
@@ -121,9 +120,9 @@ class MyAnimation extends CGFobject {
 
         this.Ma=mat4.multiply(this.Ma,M_Rotate,M_Translate);
 
-        let scale_x=this.oldScale[0]+this.s_x*totalTime;
-        let scale_y=this.oldScale[1]+this.s_y*totalTime;
-        let scale_z=this.oldScale[2]+this.s_z*totalTime;
+        let scale_x=this.oldScale[0]*Math.pow(this.scale_reason_x,totalTime);
+        let scale_y=this.oldScale[1]*Math.pow(this.scale_reason_y,totalTime);
+        let scale_z=this.oldScale[2]*Math.pow(this.scale_reason_z,totalTime);
         
         M_Scale=mat4.create();
         

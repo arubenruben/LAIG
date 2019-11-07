@@ -35,24 +35,49 @@ class NurbsScene extends CGFscene
 		this.texture = new CGFtexture(this, "texture.jpg");
 		this.appearance.setTexture(this.texture);
 		this.appearance.setTextureWrap ('REPEAT', 'REPEAT');
+		this.object=new  MyPlane_Nurb(this,5,5);
+
+		this.object_2=new MyPatch_Nurb(this,5,5,2,3,[
+													
+															[ -2.0, -2.0, 1.0],
+															[ -2.0, -1.0, -2.0],
+															[ -2.0, 1.0, 5.0],
+															[ -2.0, 2.0, -1.0],
+													
+													
+													
+															[ 0, -2.0, 0],
+															[ 0, -1.0, -1.0, 5 ],
+															[ 0, 1.0, 1.5, 5 ],
+															[ 0, 2.0, 0],
+													
+													
+													
+															[ 2.0, -2.0, -1.0],
+															[ 2.0, -1.0, 2.0],
+															[ 2.0, 1.0, -5.0],
+															[ 2.0, 2.0, 1.0],
+													]
+									);
 		
 		this.surfaces = [];
 		
 
 		this.makeSurface(1, // degree on U: 2 control vertexes U
 						 1, // degree on V: 2 control vertexes on V
-						[	// U = 0
-							[ // V = 0..1;
+						[	
+							[
 								 [-2.0, -2.0, 0.0, 1 ],
 								 [-2.0,  2.0, 0.0, 1 ]
 								
 							],
-							// U = 1
-							[ // V = 0..1
+							
+							[
 								 [ 2.0, -2.0, 0.0, 1 ],
 								 [ 2.0,  2.0, 0.0, 1 ]							 
 							]
-						], // translation of surface 
+						],
+						 // translation of surface 
 						[-7.5,0,0]);
 
 		this.makeSurface(2, // degree on U: 3 control vertexes U
@@ -185,14 +210,7 @@ class NurbsScene extends CGFscene
 		this.axis.display();	
 
 		// draw surfaces
-		this.appearance.apply();
-		for (var i =0; i<this.surfaces.length; i++) {
-			this.pushMatrix();
-		
-			this.translate(this.translations[i][0], this.translations[i][1], this.translations[i][2]);
+		this.object_2.display();
 
-			this.surfaces[i].display();
-			this.popMatrix();
-		}
 	};
 }
