@@ -1,0 +1,23 @@
+/**
+* MySecurityCamera
+* @constructor
+*/
+class MySecurityCamera extends CGFobject {
+    constructor(scene) {
+        super(scene);
+        this.rectangle=new MyRectangle(scene,'camera',0.75,-1,1,-0.75)
+        this.shader=new CGFshader(scene.gl,'shaders/shader.vert','shaders/shader.frag')
+        this.scene = scene;
+     
+        this.initBuffers();
+    }
+    
+    display(){
+        
+        this.scene.setActiveShader(this.shader)
+        this.scene.textureRTT.bind()
+        this.rectangle.display()
+    }
+
+
+}

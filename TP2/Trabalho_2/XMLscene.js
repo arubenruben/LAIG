@@ -10,10 +10,9 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
         this.interface = myinterface;
     }
-
+    
     /**
      * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
      * @param {CGFApplication} application
@@ -22,9 +21,15 @@ class XMLscene extends CGFscene {
         
         super.init(application);
         this.sceneInited = false;
+        
+        let array_canvas=[];
+        array_canvas=this.gl.getParameter(this.gl.VIEWPORT)
+        this.textureRTT= new CGFtextureRTT(this,array_canvas[2],array_canvas[3])
+        this.security_camera=new MySecurityCamera(this)
+        
         this.enableTextures(true);
         this.gl.clearDepth(100.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
@@ -155,7 +160,7 @@ class XMLscene extends CGFscene {
     /**
      * Displays the scene.
      */
-    display() {
+    render() {
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
@@ -190,5 +195,23 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+
+
+    display(){
+        
+        
+        this.textureRTT.attachToFrameBuffer()
+        
+        this.render()
+
+        this.textureRTT.detachFromFrameBuffer()
+        this.render()
+
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.security_camera.display()
+        this.gl.enable(this.gl.DEPTH_TEST)
+
     }
 }

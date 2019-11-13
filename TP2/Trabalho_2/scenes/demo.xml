@@ -1250,7 +1250,6 @@
                 <scale x="8" y="2" z="8"/>
                 <rotate axis="x" angle ="-90"/>
             </transformation>
-            <animationref id="first"/>
             <materials>
                 <material id="inherit" />
             </materials>

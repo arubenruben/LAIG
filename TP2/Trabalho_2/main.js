@@ -27,6 +27,7 @@ serialInclude(['../lib/CGF.js',
                 'MyPrimitive.js',
                 'MyAnimation.js',
                 'MyKeyFrameAnimation.js',
+                'MySecurityCamera.js',
 
 
 main=function()
