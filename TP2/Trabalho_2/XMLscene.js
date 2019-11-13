@@ -24,7 +24,7 @@ class XMLscene extends CGFscene {
         
         let array_canvas=[];
         array_canvas=this.gl.getParameter(this.gl.VIEWPORT)
-        this.textureRTT= new CGFtextureRTT(this,array_canvas[2],array_canvas[3])
+        this.textureRTT= new CGFtextureRTT(this,1920,1080)
         this.security_camera=new MySecurityCamera(this)
         
         this.enableTextures(true);
@@ -203,7 +203,7 @@ class XMLscene extends CGFscene {
         
         
         this.textureRTT.attachToFrameBuffer()
-        
+
         this.render()
 
         this.textureRTT.detachFromFrameBuffer()
