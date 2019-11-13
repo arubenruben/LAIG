@@ -7,7 +7,9 @@ class MySecurityCamera extends CGFobject {
         super(scene);
         this.rectangle=new MyRectangle(scene,'camera',0.5,-0.5,1,-1)
         this.shader=new CGFshader(scene.gl,'shaders/shader.vert','shaders/shader.frag')
-        this.rectangle.updatetexCoords(0.5, 0.5)
+
+        //this.rectangle.updatetexCoords(0.5, 0.5)
+        
         this.scene = scene;
      
         this.initBuffers();
