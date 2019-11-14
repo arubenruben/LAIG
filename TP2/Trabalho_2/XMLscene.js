@@ -52,6 +52,10 @@ class XMLscene extends CGFscene {
         this.camera_to_rtt = this.graph.Views[this.Rtt];
     }
 
+    updateCameraRTT(){
+        this.interface.setActiveCamera(this.cameraRTT);
+    }
+
 
     initCameras() {
 
@@ -171,6 +175,8 @@ class XMLscene extends CGFscene {
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
 
+        this.camera = active_camera
+        this.interface.setActiveCamera(this.camera)
 
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -183,7 +189,6 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
 
-        this.camera = active_camera
 
         this.pushMatrix();
 
