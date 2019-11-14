@@ -12,104 +12,110 @@ class XMLscene extends CGFscene {
         super();
         this.interface = myinterface;
     }
-    
+
     /**
      * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
      * @param {CGFApplication} application
      */
     init(application) {
-        
+
         super.init(application);
         this.sceneInited = false;
-        
-        let array_canvas=[];
-        array_canvas=this.gl.getParameter(this.gl.VIEWPORT)
-        this.textureRTT= new CGFtextureRTT(this,1920,1080)
-        this.security_camera=new MySecurityCamera(this)
-        
+
+        this.textureRTT = new CGFtextureRTT(this, this.gl.canvas.width, 600)
+        this.security_camera = new MySecurityCamera(this)
+
         this.enableTextures(true);
         this.gl.clearDepth(100.0);
         this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
-        
-        
-        this.UPDATE_PERIOD=60;
+
+
+        this.UPDATE_PERIOD = 60;
 
         this.displayAxis = true;
         this.displayNormals = false;
-        this.selectedCamera = 0;        
+        this.selectedCamera = 0;
+        this.Rtt = 0;
 
     }
     /**
      * Initializes the scene cameras.
      */
-    updateCamera(){
-        this.camera = this.graph.Views[this.selectedCamera];
-        this.interface.setActiveCamera(this.camera);
+    updateCamera() {
+        this.normalcamera = this.graph.Views[this.selectedCamera];
+
+    }
+    updateCamera_RTT() {
+        this.camera_to_rtt = this.graph.Views[this.Rtt];
     }
 
 
     initCameras() {
-        this.selectedCamera = this.graph.view_default;
-        this.camera = this.graph.Views[this.selectedCamera];
-        this.interface.setActiveCamera(this.camera);
+
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 30), vec3.fromValues(0, 0, 0));
+
+        this.normalcamera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 30), vec3.fromValues(0, 0, 0));
+        this.camera_to_rtt = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 30), vec3.fromValues(0, 0, 0));
+        //Inicialmente a camera rtt e a default camera
     }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        
+
         var i = 0;
         var location_index, ambient_index, diffuse_index, specular_index, attenuation_index, target_index;
         var enable_index, angle_index, exponent_index, type_index;
-        var attributeNames = ["location", "target", "ambient", "diffuse", "specular", "attenuation", "enable", "exponent" , "angle", "type"];
+        var attributeNames = ["location", "target", "ambient", "diffuse", "specular", "attenuation", "enable", "exponent", "angle", "type"];
         // Reads the lights from the scene graph.
         var light;
         for (var key in this.graph.Lights) {
             // Only eight lights allowed by WebGL.
             if (i >= 8)
-                break;              
+                break;
 
-                light = this.graph.Lights[key];
-                location_index =attributeNames[0];
-                target_index =attributeNames[1];
-                ambient_index = attributeNames[2];
-                diffuse_index =attributeNames[3]; 
-                specular_index =attributeNames[4];
-                attenuation_index =attributeNames[5];
-                enable_index =attributeNames[6];
-                exponent_index =  attributeNames[7];
-                angle_index =attributeNames[8];
-                type_index = attributeNames[9];
+            light = this.graph.Lights[key];
+            location_index = attributeNames[0];
+            target_index = attributeNames[1];
+            ambient_index = attributeNames[2];
+            diffuse_index = attributeNames[3];
+            specular_index = attributeNames[4];
+            attenuation_index = attributeNames[5];
+            enable_index = attributeNames[6];
+            exponent_index = attributeNames[7];
+            angle_index = attributeNames[8];
+            type_index = attributeNames[9];
 
-                // atributes that are common betteewn lights (omin and spot)
-                this.lights[i].setPosition(light[location_index][0], light[location_index][1], light[location_index][2], light[location_index][3], light[location_index][4]);
-                this.lights[i].setAmbient(light[ambient_index][0], light[ambient_index][1], light[ambient_index][2], light[ambient_index][3] , light[ambient_index][4]);
-                this.lights[i].setDiffuse(light[diffuse_index][0], light[diffuse_index][1], light[diffuse_index][2], light[diffuse_index][3], light[diffuse_index][4]);
-                this.lights[i].setSpecular(light[specular_index][0], light[specular_index][1], light[specular_index][2], light[specular_index][3], light[specular_index][4]);
-                this.lights[i].setConstantAttenuation(light[attenuation_index][0]);
-                this.lights[i].setLinearAttenuation(light[attenuation_index][1]);
-                this.lights[i].setQuadraticAttenuation(light[attenuation_index][2]);
-                
-                if (light[type_index] == "spot") {
-                    this.lights[i].setSpotCutOff(light[angle_index]);
-                    this.lights[i].setSpotExponent(light[exponent_index]);
-                    this.lights[i].setSpotDirection(light[target_index][0] - light[location_index][0], light[target_index][1] - light[location_index][1], light[target_index][2] - light[location_index][2]);
-                }
+            // atributes that are common betteewn lights (omin and spot)
+            this.lights[i].setPosition(light[location_index][0], light[location_index][1], light[location_index][2], light[location_index][3], light[location_index][4]);
+            this.lights[i].setAmbient(light[ambient_index][0], light[ambient_index][1], light[ambient_index][2], light[ambient_index][3], light[ambient_index][4]);
+            this.lights[i].setDiffuse(light[diffuse_index][0], light[diffuse_index][1], light[diffuse_index][2], light[diffuse_index][3], light[diffuse_index][4]);
+            this.lights[i].setSpecular(light[specular_index][0], light[specular_index][1], light[specular_index][2], light[specular_index][3], light[specular_index][4]);
+            this.lights[i].setConstantAttenuation(light[attenuation_index][0]);
+            this.lights[i].setLinearAttenuation(light[attenuation_index][1]);
+            this.lights[i].setQuadraticAttenuation(light[attenuation_index][2]);
 
-                if (light[enable_index] == true){
-                    this.lights[i].enable();
-                }
-                else{
-                    this.lights[i].disable();
-                }
-                this.lights[i].setVisible(true);
-                
-                this.lights[i].update();
-                i++;
-            
+            if (light[type_index] == "spot") {
+                this.lights[i].setSpotCutOff(light[angle_index]);
+                this.lights[i].setSpotExponent(light[exponent_index]);
+                this.lights[i].setSpotDirection(light[target_index][0] - light[location_index][0], light[target_index][1] - light[location_index][1], light[target_index][2] - light[location_index][2]);
+            }
+
+            if (light[enable_index] == true) {
+                this.lights[i].enable();
+            }
+            else {
+                this.lights[i].disable();
+            }
+            this.lights[i].setVisible(true);
+
+            this.lights[i].update();
+            i++;
+
         }
     }
 
@@ -134,24 +140,25 @@ class XMLscene extends CGFscene {
         this.initCameras();
 
         this.interface.gui_add_camera(this, this.graph.Views);
-
+        this.interface.gui_add_camera_rtt(this, this.graph.Views)
         this.interface.gui_add_lights(this, this.graph.Lights);
-        
+
+
         /*Tempo em milisegundos*/
-        this.setUpdatePeriod((1/this.UPDATE_PERIOD)*1000);
-        
+        this.setUpdatePeriod((1 / this.UPDATE_PERIOD) * 1000);
+
         this.sceneInited = true;
     }
 
     /*Called at a precise frame rate defined in the constructor*/
-    update(t){
+    update(t) {
         var key;
-        for (var i=0; i < this.graph.idsComponentsAnimation.length; i++){
-            key  = this.graph.idsComponentsAnimation[i];
+        for (var i = 0; i < this.graph.idsComponentsAnimation.length; i++) {
+            key = this.graph.idsComponentsAnimation[i];
             this.component_animation = this.graph.components[key].animation;
-            
+
             /*Animacoes com NULL sao components em animationref definido*/
-            if(this.component_animation != null){
+            if (this.component_animation != null) {
                 this.component_animation.update(t);
             }
         }
@@ -160,25 +167,27 @@ class XMLscene extends CGFscene {
     /**
      * Displays the scene.
      */
-    render() {
+    render(active_camera) {
         // ---- BEGIN Background, camera and axis setup
-
         // Clear image and depth buffer everytime we update the scene
-        if(this.sceneInited){
-            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-            // Initialize Model-View matrix as identity (no transformation
-            this.updateProjectionMatrix();
-            this.loadIdentity();
-            
-            // Apply transformations corresponding to the camera position relative to the origin
-            this.applyViewMatrix();
-        }
-        
+
+        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        // Initialize Model-View matrix as identity (no transformation
+        this.updateProjectionMatrix();
+        this.loadIdentity();
+
+        // Apply transformations corresponding to the camera position relative to the origin
+        this.applyViewMatrix();
+
+
+        this.camera = active_camera
+
         this.pushMatrix();
-        
-        if(this.displayAxis)
+
+        if (this.displayAxis)
             this.axis.display();
 
         for (var i = 0; i < this.graph.numLights; i++) {
@@ -199,19 +208,20 @@ class XMLscene extends CGFscene {
 
 
 
-    display(){
-        
-        
-        this.textureRTT.attachToFrameBuffer()
+    display() {
 
-        this.render()
 
-        this.textureRTT.detachFromFrameBuffer()
-        this.render()
+        if (this.sceneInited) {
+            this.textureRTT.attachToFrameBuffer()
 
-        this.gl.disable(this.gl.DEPTH_TEST);
-        this.security_camera.display()
-        this.gl.enable(this.gl.DEPTH_TEST)
+            this.render(this.camera_to_rtt)
 
+            this.textureRTT.detachFromFrameBuffer()
+            this.render(this.normalcamera)
+
+            this.gl.disable(this.gl.DEPTH_TEST);
+            this.security_camera.display()
+            this.gl.enable(this.gl.DEPTH_TEST)
+        }
     }
 }

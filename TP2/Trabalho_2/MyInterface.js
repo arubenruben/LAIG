@@ -37,19 +37,27 @@ class MyInterface extends CGFinterface {
     }
 
     gui_add_camera(scene, views){
-        this.views_key = [];
-        for (var key in views) {
-            this.views_key.push(key)
+        let views_key = [];
+        for (let key in views) {
+            views_key.push(key)
         }
-        this.gui.add(scene, 'selectedCamera', this.views_key).onChange(this.scene.updateCamera.bind(this.scene));
+        this.gui.add(scene, 'selectedCamera', views_key).onChange(this.scene.updateCamera.bind(this.scene));
+    }
+
+    gui_add_camera_rtt(scene, views){
+        let views_key = [];
+        for (let key in views) {
+            views_key.push(key)
+        }
+        this.gui.add(scene, 'Rtt', views_key).onChange(this.scene.updateCamera_RTT.bind(this.scene));
     }
 
     gui_add_lights(scene, lights){
-       
+        let views_key = [];
         var f0 = this.gui.addFolder('Lights');
         var i = 0;
-        for (var key in lights) {
-            this.views_key.push(key);
+        for (let key in lights) {
+            views_key.push(key);
             f0.add(this.scene.lights[i], 'enabled').name(key);
             i++;
         }
