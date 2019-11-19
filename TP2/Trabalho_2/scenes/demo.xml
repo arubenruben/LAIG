@@ -127,6 +127,7 @@
         <texture id="beachBuoy1" file="scenes/images/beachBuoy1.jpg"/>
         <texture id="beachBuoy2" file="scenes/images/beachBuoy2.jpg"/>
         <texture id="fences" file="scenes/images/fences.jpg"/>
+        <texture id="eagle" file="scenes/images/eagle.jpg"/>
 
     </textures>
 
@@ -314,6 +315,36 @@
 
         <primitive id="nurb_esperguicadeira">
             <plane npartsU="4" npartsV="4"/>
+        </primitive>
+
+        <primitive id="escorrega_patch">
+            <patch npointsU="5" npointsV="3" npartsU="5" npartsV="3">
+                
+                <controlpoint x="-2.2" y="-8" z="0"/>
+                <controlpoint x="-2.2" y="-8" z="-5"/>
+                <controlpoint x="-2.2" y="-8" z="-8"/>
+
+                
+                <controlpoint x="0" y="-1" z="0"/>
+                <controlpoint x="-1" y="-2" z="-5"/>
+                <controlpoint x="0" y="-1" z="-8"/>
+                
+                <controlpoint x="5" y="1" z="0"/>
+                <controlpoint x="3" y="-2" z="-5"/>
+                <controlpoint x="5" y="-1" z="-8"/>
+
+
+                <controlpoint x="8" y="-10" z="0"/>
+                <controlpoint x="7" y="-20" z="-5"/>
+                <controlpoint x="8" y="-10" z="-8"/>
+
+                <controlpoint x="12" y="-6" z="0"/>
+                <controlpoint x="12" y="-6" z="-5"/>
+                <controlpoint x="12" y="-6" z="-8"/>
+
+
+            </patch>
+
         </primitive>
 
 
@@ -2367,7 +2398,7 @@
 
         <component id="water_ball">
             <transformation>
-                <translate x="7" y="-0.1" z="8"/>
+                <translate x="7" y="-0.1" z="11"/>
                 <scale x="2" y="2" z="2"/>
 
             </transformation>
@@ -2421,6 +2452,7 @@
             </materials>
             <texture id="dirt" length_s="0.5" length_t="0.5"/>
             <children>
+               
                 <componentref id="underground"/>
                 <componentref id="floor"/>
                 <componentref id="sides"/>
@@ -2428,9 +2460,26 @@
                <componentref id="spot_pub"/>
 
                 <componentref id= "fence_core"/>
-
+    
             </children>
         </component>
+
+
+        <component id="escorrega">
+                <transformation>
+                    <translate x="6" y="1.5" z="6"/>
+                    <rotate axis="y" angle="-90"/>
+                    <scale x="0.2" y="0.2" z="0.2"/>    
+                </transformation>
+                <materials>
+                    <material id="demoMaterial" />
+                </materials>
+                <texture id="demoTexture" length_s="1" length_t="1" />
+                <children>
+                    <primitiveref id="escorrega_patch"/>
+                </children>
+            </component>
+
 
         <component id="pool">
             <transformation>
@@ -2442,12 +2491,16 @@
             </materials>
             <texture id="water" length_s="1" length_t="1"/>
             <children>
+
+                
                <componentref id="sides1"/>
                 <componentref id="ramp"/>
                 <componentref id="water_ball"/>
                 <componentref id="water_bouy"/>
                 <componentref id="water_bouy_2"/>
                 <componentref id="water"/>
+                <componentref id="escorrega"/>
+
             </children>
         </component>
 
