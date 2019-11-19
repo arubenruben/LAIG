@@ -9,7 +9,6 @@ class MyPlane extends CGFobject {
         this.npartsU = npartsU;
         this.npartsV = npartsV;
         this.object=null;
-
         this.initBuffers();
     }
     

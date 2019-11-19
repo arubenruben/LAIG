@@ -312,6 +312,10 @@
             <cylinder base="0.1" top="0.1" height="2" slices="10" stacks="10" />
         </primitive>
 
+        <primitive id="nurb_esperguicadeira">
+            <plane npartsU="4" npartsV="4"/>
+        </primitive>
+
 
     </primitives>
 
@@ -1154,11 +1158,10 @@
 
         <component id="costas">
             <transformation>
-                <translate x="0" y="1" z="-0.5" />
-                <rotate axis="z" angle="120"/>
-                <rotate axis="y" angle="-90"/>
-                <rotate axis="x" angle="-90"/>
-                <scale x="2" y="3" z="0"/>
+                <translate x="-1" y="2.1" z="0.5" />
+                <rotate axis="z" angle="180"/>>
+                <rotate axis="z" angle="135"/>
+                <scale x="3" y="1" z="2"/>
 
             </transformation>
             <materials>
@@ -1166,24 +1169,21 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square"/>
+                <primitiveref id="nurb_esperguicadeira"/>
             </children>
         </component>
 
         <component id="tabua">
             <transformation>
-                <translate x="0" y="1" z="-0.5" />
-                <rotate axis="y" angle="-90"/>
-                <rotate axis="x" angle="-90"/>
-                <scale x="2" y="5" z="0"/>
-
+                <translate x="2" y="1" z="0.5" />
+                <scale x="4" y="1" z="2"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="square"/>
+                <primitiveref id="nurb_esperguicadeira"/>
             </children>
         </component>
 
