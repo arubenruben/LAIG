@@ -103,11 +103,11 @@ class MyAnimation extends CGFobject {
         let Maux = mat4.create();
         if(this.animationDone){
             let lastKeyFrame = this.KeyFrames[this.keyFrameIndex1];
-            mat4.translate(Maux, Maux, lastKeyFrame.translate);
-            mat4.rotate(Maux, Maux,  lastKeyFrame.rotate[0] * DEGREE_TO_RAD, [1,0,0]);
-            mat4.rotate(Maux, Maux, lastKeyFrame.rotate[1] * DEGREE_TO_RAD, [1,0,0]);
-            mat4.rotate(Maux, Maux, lastKeyFrame.rotate[2] * DEGREE_TO_RAD, [1,0,0]);
-            mat4.scale(Maux, Maux, lastKeyFrame.scale); 
+            mat4.translate(Maux, Maux, lastKeyFrame.translate_vec);
+            mat4.rotate(Maux, Maux,  lastKeyFrame.rotate_vec[0] * DEGREE_TO_RAD, [1,0,0]);
+            mat4.rotate(Maux, Maux, lastKeyFrame.rotate_vec[1] * DEGREE_TO_RAD, [1,0,0]);
+            mat4.rotate(Maux, Maux, lastKeyFrame.rotate_vec[2] * DEGREE_TO_RAD, [1,0,0]);
+            mat4.scale(Maux, Maux, lastKeyFrame.scale_vec); 
         }
         else
         {
