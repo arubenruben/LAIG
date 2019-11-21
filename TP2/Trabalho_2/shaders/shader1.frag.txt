@@ -1,0 +1,47 @@
+#ifdef GL_ES
+precision highp float;
+#endif
+
+varying vec2 vTextureCoord;
+uniform sampler2D uSampler;
+uniform float timeFactor;
+
+const float gradient_start = 0.25;
+const float max_dist_factor = 0.25;
+
+//Fragment shader
+
+void main(){
+    
+    // gradiente circular
+    vec4 color =texture2D(uSampler,vTextureCoord);
+    vec2 origem_circu = vec2(0.5,0.5);
+    float value = 1.0;
+    float distance = distance(origem_circu, vTextureCoord);
+    if(distance > gradient_start){
+        float distance_factor = distance - gradient_start;
+        float gradient = (distance_factor * (1.0 / max_dist_factor));
+        value = value - gradient;
+    }
+
+    // linhas
+    if(mod(vTextureCoord.y * 35.0- timeFactor / 10.0, 2.0) > 1.0)
+        color = vec4(color.rgb + 0.3,1.0);
+
+    gl_FragColor = vec4(color.rgb * value, 1.0);
+
+
+    
+    
+
+}
+
+
+
+
+
+
+
+
+
+    
