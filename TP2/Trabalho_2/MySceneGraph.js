@@ -448,8 +448,6 @@ class MySceneGraph {
                 }
             }
 
-
-
             var camera;
 
             //CGFcamera( fov, near, far, position, target )
@@ -1140,15 +1138,9 @@ class MySceneGraph {
     parseAnimations(animationNode) {
 
         let children = animationNode.children;
-
         this.animations = [];
-
         let grandChildren = [];
-
-        let grandgrandChildren = [];
-
-        
-        
+        let grandgrandChildren = [];        
         //Animations pode ser vazio
         
         for (let i = 0; i < children.length; i++) {
@@ -1159,7 +1151,6 @@ class MySceneGraph {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-            
             let animationId = this.reader.getString(children[i], 'id');
             
             if (animationId == null)
@@ -1176,8 +1167,7 @@ class MySceneGraph {
             if (grandChildren.length > 0) {
 
                 let keyframes_array_aux=[];
-                
-                
+                   
                 /*Crio aqui na pos 0 a matriz identidade para representar a keyframe 0*/
                 let keyframe_auxiliar_first=new MyKeyFrameAnimation(this.scene,0);
                 keyframe_auxiliar_first.translate_vec=[0,0,0];
@@ -1193,8 +1183,6 @@ class MySceneGraph {
                         continue;
                     }
         
-                    
-                    
                     let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
                     
                     let keyframe_auxiliar_var=new MyKeyFrameAnimation(this.scene,keyframe_instant);
@@ -1300,9 +1288,11 @@ class MySceneGraph {
                     /*Introduce the keyframe(i) in the animations array*/
 
                     keyframes_array_aux.push(keyframe_auxiliar_var);
-
                 }
-                animation.KeyFrames = keyframes_array_aux;
+                //faz a traducao de keyframes para segmentos na animacao
+                
+               animation.parse_keyframes(keyframes_array_aux);
+
                 this.animations[animationId]=animation;
             }
             else {

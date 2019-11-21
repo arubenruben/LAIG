@@ -4,138 +4,136 @@
  * @param scene - Reference to MyScene object
  */
 class MyAnimation extends CGFobject {
-    
+
     constructor(scene) {
         super(scene);
         this.scene = scene;
         this.initBuffers();
-        this.KeyFrames=[];
+        this.segments_array = [];
         this.Ma = mat4.create();
         this.totalTime = 0;
-        this.segmentTime = 0;
-        this.keyFrameIndex0 = 0;
-        this.keyFrameIndex1 = 1;
-        this.firstTime = true;
-        this.active=true;
-        //Tempo que dura um frame em segundos
-        this.frame_time=(1/this.scene.UPDATE_PERIOD);
+        this.previous_t = 0;
+
+        this.segmentTime_active = 0;
+
         this.animationDone = false;
+        this.firstime = true;
     }
-    update(t){
-        //altera a posiçao das asas
-        if(!this.animationDone){
+
+    parse_keyframes(array_keyframes) {
+
+
+
+        //Ando aos pares nao vamos testar o ultimos porque se nao iamos aceder a memoria que nao existe
+        for (let i = 0; i < array_keyframes.length - 1; i++) {
+
+            this.segments_array[i] = new MySegment(array_keyframes[i], array_keyframes[i + 1]);
+
+        }
+
+
+
+    }
+    update(t) {
+
         this.delta = t - this.previous_t;
+
         this.previous_t = t;
-        
-        if(this.active==true){
 
-            if(this.firstTime == false){
-                this.totalTime += this.delta/1000;
-            }
-            
-            /*Calcula a duracao do segmento*/
-            
-            this.segmentTime = this.KeyFrames[this.keyFrameIndex1].instant - this.KeyFrames[this.keyFrameIndex0].instant;
-            
-            /*Se for 0 tenho de inicializar os paremetros da velocidade*/
-            if(this.firstTime == true){
-                this.firstTime = false;
-                this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
-            }
-
-            if(this.totalTime > this.segmentTime){
-            
-                this.totalTime = this.totalTime - this.segmentTime;
-                
-                if(this.keyFrameIndex1 < this.KeyFrames.length-1){
-                    this.keyFrameIndex0++;
-                    this.keyFrameIndex1++;
-                }
-                else{
-                    this.animationDone=true;
-                }
-                this.update_parameters(this.KeyFrames[this.keyFrameIndex0], this.KeyFrames[this.keyFrameIndex1]);
-            }
-            
-            if(this.keyFrameIndex1<=this.KeyFrames.length-1){
-                this.updateMatrix(this.totalTime);
-            }
+        if (this.firstime == false) {
+            this.totalTime += this.delta / 1000;
+        } else {
+            this.firstime = false;
         }
-
-        }   
-    }
-    
-    update_parameters(frame0,frame1){
-        
-            let distance_x=frame1.translate_vec[0]-frame0.translate_vec[0]; 
-            let distance_y=frame1.translate_vec[1]-frame0.translate_vec[1]; 
-            let distance_z=frame1.translate_vec[2]-frame0.translate_vec[2]; 
-            
-            let rot_x=frame1.rotate_vec[0]-frame0.rotate_vec[0]; 
-            let rot_y=frame1.rotate_vec[1]-frame0.rotate_vec[1]; 
-            let rot_z=frame1.rotate_vec[2]-frame0.rotate_vec[2]; 
-            //Save positon to use in the position equation as X0
-            this.oldPosition = frame0.translate_vec;
-            
-            this.vx=distance_x/this.segmentTime;
-            this.vy=distance_y/this.segmentTime;
-            this.vz=distance_z/this.segmentTime;
-            
-            this.wx=rot_x/this.segmentTime;
-            this.wy=rot_y/this.segmentTime;
-            this.wz=rot_z/this.segmentTime;
-            //Save angle to use ins the angle equation as Teta0
-            this.oldRotation=frame0.rotate_vec;
-            
-            //R=POW(NUMBER, 1/N)
-
-            this.scale_reason_x=Math.pow(frame1.scale_vec[0]/frame0.scale_vec[0],1/this.segmentTime);
-            this.scale_reason_y=Math.pow(frame1.scale_vec[1]/frame0.scale_vec[1],1/this.segmentTime);
-            this.scale_reason_z=Math.pow(frame1.scale_vec[2]/frame0.scale_vec[2],1/this.segmentTime);
-            
-            this.oldScale=frame0.scale_vec;
-
-            
     }
 
-    updateMatrix(totalTime){
-        
-        let Maux = mat4.create();
-        if(this.animationDone){
-            let lastKeyFrame = this.KeyFrames[this.keyFrameIndex1];
-            mat4.translate(Maux, Maux, lastKeyFrame.translate_vec);
-            mat4.rotate(Maux, Maux,  lastKeyFrame.rotate_vec[0] * DEGREE_TO_RAD, [1,0,0]);
-            mat4.rotate(Maux, Maux, lastKeyFrame.rotate_vec[1] * DEGREE_TO_RAD, [1,0,0]);
-            mat4.rotate(Maux, Maux, lastKeyFrame.rotate_vec[2] * DEGREE_TO_RAD, [1,0,0]);
-            mat4.scale(Maux, Maux, lastKeyFrame.scale_vec); 
-        }
-        else
-        {
-            let translateParameters = [this.oldPosition[0]+this.vx*totalTime,this.oldPosition[1]+this.vy*totalTime,this.oldPosition[2]+this.vz*totalTime]
-            
-            let angX=this.oldRotation[0]+this.wx*totalTime;
-            let angY=this.oldRotation[1]+this.wy*totalTime;
-            let angZ=this.oldRotation[2]+this.wz*totalTime;
-            
-            let scaleX=this.oldScale[0]*Math.pow(this.scale_reason_x,totalTime);
-            let scaleY=this.oldScale[1]*Math.pow(this.scale_reason_y,totalTime);
-            let scaleZ=this.oldScale[2]*Math.pow(this.scale_reason_z,totalTime);
+    apply() {
+        //atualizar o segmento
+        if (this.animationDone == false && this.firstime == false) {
 
-            let scaleParameters = [scaleX, scaleY, scaleZ];
+            if (this.animationDone==false&&this.segments_array[this.segmentTime_active].keyframe_posterior.instant < this.totalTime) {
+                this.segmentTime_active++;
+            }
+            if (this.segmentTime_active == this.segments_array.length) {
+                this.animationDone = true;
+                this.segmentTime_active--;
+            }
+              
+            let ratio = (this.totalTime - this.segments_array[this.segmentTime_active].keyframe_anterior.instant) / (this.segments_array[this.segmentTime_active].duracao);
 
-            mat4.translate(Maux, Maux, translateParameters);
-            mat4.rotate(Maux, Maux, angX * DEGREE_TO_RAD, [1,0,0]);
-            mat4.rotate(Maux, Maux, angY * DEGREE_TO_RAD, [0,1,0]);
-            mat4.rotate(Maux, Maux, angZ * DEGREE_TO_RAD, [0,0,1]);
-            mat4.scale(Maux, Maux, scaleParameters); 
-        }
+            this.update_parameters(this.segments_array[this.segmentTime_active], ratio);
 
-        this.Ma = Maux;
-    }
-    
-    apply(){
+            }
+
         this.scene.multMatrix(this.Ma);
+    
     }
 
+
+    update_parameters(segmento, ratio) {
+
+        let Maux = mat4.create();
+        if(this.animationDone==false){
+
+            
+            let tx0 = segmento.keyframe_anterior.translate_vec[0];
+            let ty0 = segmento.keyframe_anterior.translate_vec[1];
+            let tz0 = segmento.keyframe_anterior.translate_vec[2];
+            
+            let tx1 = segmento.keyframe_posterior.translate_vec[0];
+            let ty1 = segmento.keyframe_posterior.translate_vec[1];
+            let tz1 = segmento.keyframe_posterior.translate_vec[2];
+            
+            let txfinal = tx0 + (tx1 - tx0) * ratio;
+            let tyfinal = ty0 + (ty1 - ty0) * ratio;
+            let tzfinal = tz0 + (tz1 - tz0) * ratio;
+            
+            let rx0 = segmento.keyframe_anterior.rotate_vec[0];
+            let ry0 = segmento.keyframe_anterior.rotate_vec[1];
+            let rz0 = segmento.keyframe_anterior.rotate_vec[2];
+            
+            let rx1 = segmento.keyframe_posterior.rotate_vec[0];
+            let ry1 = segmento.keyframe_posterior.rotate_vec[1];
+            let rz1 = segmento.keyframe_posterior.rotate_vec[2];
+            
+            let rxfinal = rx0 + (rx1 - rx0) * ratio;
+            let ryfinal = ry0 + (ry1 - ry0) * ratio;
+            let rzfinal = rz0 + (rz1 - rz0) * ratio;
+            
+            let translate_parameters = [txfinal, tyfinal, tzfinal];
+            let scaleParameters = [1, 1, 1];
+            
+            mat4.translate(Maux, Maux, translate_parameters);
+            
+            mat4.rotate(Maux, Maux, rxfinal * DEGREE_TO_RAD, [1, 0, 0]);
+            mat4.rotate(Maux, Maux, ryfinal * DEGREE_TO_RAD, [0, 1, 0]);
+            mat4.rotate(Maux, Maux, rzfinal * DEGREE_TO_RAD, [0, 0, 1]);
+            
+            
+            
+            mat4.scale(Maux, Maux, scaleParameters);
+            
+            this.Ma = Maux;
+
+        }else{
+
+            mat4.translate(Maux,Maux,segmento.keyframe_posterior.translate_vec);
+
+            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[0] * DEGREE_TO_RAD, [1, 0, 0]);
+            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[1] * DEGREE_TO_RAD, [0, 1, 0]);
+            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[2] * DEGREE_TO_RAD, [0, 0, 1]);
+
+            mat4.scale(Maux,segmento.keyframe_posterior.scale_vec);
+
+            this.Ma=Maux;
+
+        }
+        
+    }
+        
+        
+        
 }
+        
+        
 
