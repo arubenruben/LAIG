@@ -166,6 +166,7 @@ class XMLscene extends CGFscene {
                 this.component_animation.update(t);
             }
         }
+        this.security_camera.update(t);
     }
 
     /**
