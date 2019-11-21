@@ -280,12 +280,12 @@
             </keyframe>
 
             <keyframe instant="14">
-                <translate x="0" y="0" z="0"/>
+                <translate x="0" y="-0.5" z="0"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
-            <keyframe instant="17">
+            <keyframe instant="19">
                 <translate x="-1" y="0" z="1"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
@@ -295,9 +295,9 @@
 
         <animation id="boia">
             <keyframe instant="7">
-                        <translate x="0" y="0" z="0"/>
-                        <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                        <scale x="1" y="1" z="1"/>
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
             </keyframe>
             <keyframe instant="14">
                 <translate x="0" y="0.5" z="0"/>
@@ -306,37 +306,58 @@
             </keyframe>
 
             <keyframe instant="20">
-                    <translate x="0" y="0" z="0"/>
-                    <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                    <scale x="1" y="1" z="1"/>
-                </keyframe>
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
 
         </animation>
 
         <animation id="palm_tree_leafs">
 
             <keyframe instant="3">
-                        <translate x="0" y="0" z="0"/>
-                        <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                        <scale x="1" y="1" z="1"/>
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
             </keyframe>
             
             <keyframe instant="10">
-
-                    <translate x="0" y="0" z="0"/>
-                    <rotate angle_x="10" angle_y="5" angle_z="-10"/>
-                    <scale x="1" y="1" z="1"/>
-
-
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="10" angle_y="5" angle_z="-10"/>
+                <scale x="1" y="1" z="1"/>
             </keyframe>
 
             <keyframe instant="15">
 
-                    <translate x="0" y="0" z="0"/>
-                    <rotate angle_x="-10" angle_y="5" angle_z="-10"/>
-                    <scale x="1" y="1" z="1"/>
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="-10" angle_y="5" angle_z="-10"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+        </animation>
 
+        <animation id="guarda_sol">
+            <keyframe instant="3">
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
 
+            <keyframe instant="8">
+                <translate x="0" y="0" z="-0.6"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="0.8" y="0.8" z="1.2"/>
+            </keyframe>
+
+            <keyframe instant="14">
+                <translate x="0" y="0" z="-0.8"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="0.3" y="0.3" z="1.7"/>
+            </keyframe>
+
+            <keyframe instant="20">
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
             </keyframe>
 
 
@@ -345,41 +366,41 @@
 
         <animation id="palm_tree_trunk">
 
-                <keyframe instant="3">
-                            <translate x="0" y="0" z="0"/>
-                            <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                            <scale x="1" y="1" z="1"/>
-                </keyframe>
-                
-                <keyframe instant="4">
-    
-                        <translate x="0" y="0" z="0"/>
-                        <rotate angle_x="2" angle_y="1" angle_z="2"/>
-                        <scale x="1" y="1" z="1"/>
-    
-    
-                </keyframe>
-    
-                <keyframe instant="15">
-    
-                        <translate x="0" y="0" z="0"/>
-                        <rotate angle_x="-1" angle_y="-5" angle_z="1"/>
-                        <scale x="1" y="1" z="1"/>
-    
-    
-                </keyframe>
+            <keyframe instant="3">
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
 
-                <keyframe instant="25">
-    
-                        <translate x="0" y="0" z="0"/>
-                        <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                        <scale x="1" y="1" z="1"/>
-    
-    
-                </keyframe>
-    
-    
-            </animation>
+            <keyframe instant="7">
+
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="2" angle_y="1" angle_z="2"/>
+                <scale x="1" y="1" z="1"/>
+
+
+            </keyframe>
+
+            <keyframe instant="15">
+
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="-1" angle_y="-5" angle_z="1"/>
+                <scale x="1" y="1" z="1"/>
+
+
+            </keyframe>
+
+            <keyframe instant="25">
+
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+
+
+            </keyframe>
+
+
+        </animation>
 
     </animations>
 
@@ -1397,6 +1418,7 @@
                 <scale x="8" y="2" z="8"/>
                 <rotate axis="x" angle ="-90"/>
             </transformation>
+            <animationref id="guarda_sol"/>
             <materials>
                 <material id="inherit" />
             </materials>
@@ -2544,7 +2566,7 @@
                 <primitiveref id="torus_bouy"/>
             </children>
         </component>
-        
+
         <component id="water_bouy_2">
             <transformation>
                 <translate x="6" y="-0.3" z="15"/>
@@ -2588,14 +2610,14 @@
 
         <component id="escorrega">
             <transformation>
-                <translate x="6" y="1.5" z="6"/>
+                <translate x="6" y="2" z="6"/>
                 <rotate axis="y" angle="-90"/>
-                <scale x="0.2" y="0.2" z="0.2"/>
+                <scale x="0.3" y="0.3" z="0.3"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture" length_s="1" length_t="1" />
+            <texture id="none" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="escorrega_patch"/>
             </children>

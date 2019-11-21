@@ -33,7 +33,7 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
 
 
-        this.UPDATE_PERIOD = 60;
+        this.UPDATE_PERIOD = 30;
 
         this.displayAxis = true;
         this.displayNormals = false;
