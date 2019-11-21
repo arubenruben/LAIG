@@ -1290,7 +1290,7 @@ class MySceneGraph {
                     keyframes_array_aux.push(keyframe_auxiliar_var);
                 }
                 //faz a traducao de keyframes para segmentos na animacao
-                
+
                animation.parse_keyframes(keyframes_array_aux);
 
                 this.animations[animationId]=animation;
@@ -1841,14 +1841,14 @@ class MySceneGraph {
         }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
-          /*
-            if (this.scene.displayNormals)
+          
+        /*    if (this.scene.displayNormals)
                 current_node.children_primitives[i].primitive.enableNormalViz();
             else
                 current_node.children_primitives[i].primitive.disableNormalViz();
-
+/*
             if (current_node.texture[0] != "none") {
-
+                
                 if (current_node.texture[0] == "inherit")
                     current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
                 else

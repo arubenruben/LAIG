@@ -37,35 +37,37 @@ class MyAnimation extends CGFobject {
     update(t) {
 
         this.delta = t - this.previous_t;
-
         this.previous_t = t;
 
-        if (this.firstime == false) {
+        if(this.firstime == false) {
             this.totalTime += this.delta / 1000;
-        } else {
+        }else {
             this.firstime = false;
         }
     }
 
     apply() {
         //atualizar o segmento
-        if (this.animationDone == false && this.firstime == false) {
+        
+        if(!this.animationDone){
 
-            if (this.animationDone==false&&this.segments_array[this.segmentTime_active].keyframe_posterior.instant < this.totalTime) {
+            if (this.segments_array[this.segmentTime_active].keyframe_posterior.instant < this.totalTime) {
                 this.segmentTime_active++;
             }
-            if (this.segmentTime_active == this.segments_array.length) {
-                this.animationDone = true;
-                this.segmentTime_active--;
+            
+            if (this.firstime == false) {
+                
+                if (this.segmentTime_active == this.segments_array.length) {
+                    this.animationDone = true;
+                    this.segmentTime_active--;
+                }  
+                let ratio = (this.totalTime - this.segments_array[this.segmentTime_active].keyframe_anterior.instant) / (this.segments_array[this.segmentTime_active].duracao);
+                this.update_parameters(this.segments_array[this.segmentTime_active], ratio);
+                
             }
-              
-            let ratio = (this.totalTime - this.segments_array[this.segmentTime_active].keyframe_anterior.instant) / (this.segments_array[this.segmentTime_active].duracao);
-
-            this.update_parameters(this.segments_array[this.segmentTime_active], ratio);
-
-            }
-
-        this.scene.multMatrix(this.Ma);
+            
+            this.scene.multMatrix(this.Ma);
+        }
     
     }
 
@@ -73,6 +75,7 @@ class MyAnimation extends CGFobject {
     update_parameters(segmento, ratio) {
 
         let Maux = mat4.create();
+        
         if(this.animationDone==false){
 
             
@@ -114,26 +117,10 @@ class MyAnimation extends CGFobject {
             mat4.scale(Maux, Maux, scaleParameters);
             
             this.Ma = Maux;
-
-        }else{
-
-            mat4.translate(Maux,Maux,segmento.keyframe_posterior.translate_vec);
-
-            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[0] * DEGREE_TO_RAD, [1, 0, 0]);
-            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[1] * DEGREE_TO_RAD, [0, 1, 0]);
-            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[2] * DEGREE_TO_RAD, [0, 0, 1]);
-
-            mat4.scale(Maux,segmento.keyframe_posterior.scale_vec);
-
-            this.Ma=Maux;
-
-        }
         
     }
         
         
         
+    }
 }
-        
-        
-
