@@ -127,8 +127,6 @@
         <texture id="beachBuoy1" file="scenes/images/beachBuoy1.jpg"/>
         <texture id="beachBuoy2" file="scenes/images/beachBuoy2.jpg"/>
         <texture id="fences" file="scenes/images/fences.jpg"/>
-        <texture id="eagle" file="scenes/images/eagle.jpg"/>
-
     </textures>
 
     <materials>
