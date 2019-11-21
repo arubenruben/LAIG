@@ -330,7 +330,7 @@ class MyPrimitive{
 
         for(let i = 0; i < children.length; i++){
             let point = [];
-            point = this.graph.parseCoordinates3D(children[i], 'Control point wrong');
+            point = this.graph.parseCoordinates3DControlPoint(children[i], 'Control point wrong');
             args_aux.push(point);
         }
         return args_aux;
