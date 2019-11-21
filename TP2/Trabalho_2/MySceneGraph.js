@@ -44,8 +44,8 @@ class MySceneGraph {
         this.background = [];
         this.mPressed = 0;
 
-        this.animations=[];
-        this.idsComponentsAnimation=[];
+        this.animations = [];
+        this.idsComponentsAnimation = [];
 
 
 
@@ -1127,8 +1127,6 @@ class MySceneGraph {
         return null;
     }
 
-
-
     /*Animation Array Structure:
 
     Placed to the position, animation_id. Where are pushed into the keyframes arrays, instants should be ordered to performance imporvement.
@@ -1140,86 +1138,90 @@ class MySceneGraph {
         let children = animationNode.children;
         this.animations = [];
         let grandChildren = [];
-        let grandgrandChildren = [];        
+        let grandgrandChildren = [];
         //Animations pode ser vazio
-        
+
         for (let i = 0; i < children.length; i++) {
-            
+
             //Se a animacao for invalida, nao estouro. Sinalizo erro e prossigo para a proxima tentative de animacao.
-            
+
             if (children[i].nodeName != "animation") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
             let animationId = this.reader.getString(children[i], 'id');
-            
+
             if (animationId == null)
-            return "no ID defined for the animation";
-            
+                return "no ID defined for the animation";
+            //Test if the animation is unique
             if (this.animations[animationId] != null)
-            return "ID must be unique for each animation (conflict: ID = " + animationIdeId + ")";
-            
+                return "ID must be unique for each animation (conflict: ID = " + animationIdeId + ")";
+
             grandChildren = children[i].children;
 
             let animation = new MyAnimation(this.scene);
-            
-            /*Key frame nao pode ser vazio*/
-            if (grandChildren.length > 0) {
 
-                let keyframes_array_aux=[];
-                   
+            /*Key frame nao pode ser vazio*/
+            //Iterar as keyframes//
+            if (grandChildren.length > 0) {
+                let keyframes_array_aux = [];
+                let value_first_keyframe=-1;
+                
                 /*Crio aqui na pos 0 a matriz identidade para representar a keyframe 0*/
-                let keyframe_auxiliar_first=new MyKeyFrameAnimation(this.scene,0);
-                keyframe_auxiliar_first.translate_vec=[0,0,0];
-                keyframe_auxiliar_first.rotate_vec=[0,0,0];
-                keyframe_auxiliar_first.scale_vec=[1,1,1];
-                keyframes_array_aux.push(keyframe_auxiliar_first);
+                //Testar se o primeiro input e no instante 0 e se ha necessidade de "injetar a origem"
+                value_first_keyframe=this.reader.getFloat(grandChildren[0], 'instant');
                 
-                
+                if(value_first_keyframe>0){
+                    let keyframe_auxiliar_first = new MyKeyFrameAnimation(this.scene, 0);
+                    keyframe_auxiliar_first.translate_vec = [0, 0, 0];
+                    keyframe_auxiliar_first.rotate_vec = [0, 0, 0];
+                    keyframe_auxiliar_first.scale_vec = [1, 1, 1];
+                    keyframes_array_aux.push(keyframe_auxiliar_first);
+                }
+
                 for (let j = 0; j < grandChildren.length; j++) {
-                    
+
                     if (grandChildren[j].nodeName != "keyframe") {
                         this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
                         continue;
                     }
-        
                     let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
-                    
-                    let keyframe_auxiliar_var=new MyKeyFrameAnimation(this.scene,keyframe_instant);
-   
+
+                    let keyframe_auxiliar_var = new MyKeyFrameAnimation(this.scene, keyframe_instant);
+
                     if (keyframe_instant == null) {
                         return "keyframe_instant in" + animationId + "must be valid";
                     }
-                    
-                    keyframe_auxiliar_var.instant=keyframe_instant;
+
+                    keyframe_auxiliar_var.instant = keyframe_instant;
 
                     //O grandchildren sao as transformacoes
                     grandgrandChildren = grandChildren[j].children;
-                    
+
                     //Ver se as 3 transformacoes estao instanciadas e pela ordem indicada
-                    
+
                     for (let transf_pos = 0; transf_pos < 3; transf_pos++) {
 
                         switch (transf_pos) {
-                            
+
                             case TRANSLATION_POS: {
-                                
+
                                 if (grandgrandChildren[transf_pos].nodeName != "translate") {
                                     this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
                                     return ("Animation order not respected");
                                 }
                                 else {
                                     let translate_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Translate keyfram" + animationId);
-                                    
-                                    if(!(Array.isArray(translate_array))){
+
+                                    if (!(Array.isArray(translate_array))) {
                                         return "Translate Array invalid";
                                     }
 
-                                    keyframe_auxiliar_var.translate_vec=translate_array;
+                                    keyframe_auxiliar_var.translate_vec = translate_array;
                                 }
                                 break;
                             }
-                            
+
                             case ROTATION_POS: {
 
                                 if (grandgrandChildren[transf_pos].nodeName != "rotate") {
@@ -1244,7 +1246,7 @@ class MySceneGraph {
                                         this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
                                         break;
                                     }
-                                    
+
                                     keyframe_auxiliar_var.rotate_vec.push(angle_y);
 
                                     let angle_z = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_z');
@@ -1253,7 +1255,7 @@ class MySceneGraph {
                                         this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
                                         break;
                                     }
-                                    
+
                                     keyframe_auxiliar_var.rotate_vec.push(angle_z);
 
                                 }
@@ -1270,30 +1272,22 @@ class MySceneGraph {
 
                                     let scale_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Scale keyfram" + animationId);
 
-                                    if(!Array.isArray(scale_array)){
-                                        return("Invalid scale_array");
+                                    if (!Array.isArray(scale_array)) {
+                                        return ("Invalid scale_array");
                                     }
-                                    keyframe_auxiliar_var.scale_vec=scale_array;
-                                    
-                                }
+                                    keyframe_auxiliar_var.scale_vec = scale_array;
 
+                                }
                                 break;
                             }
-
                         }
-
-                        
                     }
-                    
                     /*Introduce the keyframe(i) in the animations array*/
-
                     keyframes_array_aux.push(keyframe_auxiliar_var);
                 }
                 //faz a traducao de keyframes para segmentos na animacao
-
-               animation.parse_keyframes(keyframes_array_aux);
-
-                this.animations[animationId]=animation;
+                animation.parse_keyframes(keyframes_array_aux);
+                this.animations[animationId] = animation;
             }
             else {
                 return "It must be at least a keyframe defined in the animation:" + animationId;
@@ -1338,7 +1332,7 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName!= 'cylinder2' && grandChildren[0].nodeName!= 'plane' && grandChildren[0].nodeName!= 'patch')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'cylinder2' && grandChildren[0].nodeName != 'plane' && grandChildren[0].nodeName != 'patch')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, patch, plane or cylinder2)"
             }
 
@@ -1418,7 +1412,7 @@ class MySceneGraph {
             var block_materials = false;
             var block_texture = false;
             var block_children = false;
-            
+
 
             for (var j = 0; j < grandChildren.length; j++) {
 
@@ -1457,25 +1451,25 @@ class MySceneGraph {
                             }
                         }
                     }
-                
-                }
-                else if(grandChildren[j].nodeName=="animationref"){
 
-                    let animation_in_componet_id=this.reader.getString(grandChildren[j],'id');
-                    
-                    if(animation_in_componet_id==null){
+                }
+                else if (grandChildren[j].nodeName == "animationref") {
+
+                    let animation_in_componet_id = this.reader.getString(grandChildren[j], 'id');
+
+                    if (animation_in_componet_id == null) {
                         this.onXMLMinorError("Animation not added to component. ID not found");
                     }
 
                     //Se o id estiver definido
-                    else{
+                    else {
                         //Testar se a animacao esta definida
-                        if(this.animations[animation_in_componet_id]!=null){
-                            
-                            component_aux.animation=this.animations[animation_in_componet_id];
+                        if (this.animations[animation_in_componet_id] != null) {
+
+                            component_aux.animation = this.animations[animation_in_componet_id];
                             this.idsComponentsAnimation.push(componentID);
 
-                        }else{
+                        } else {
                             this.onXMLMinorError("Animations not defined. Not added to the component");
                         }
                     }
@@ -1636,8 +1630,6 @@ class MySceneGraph {
         }
 
     }
-
-
 
     /**
      * Parse the coordinates from a node with ID = id
@@ -1836,24 +1828,24 @@ class MySceneGraph {
 
         this.scene.multMatrix(current_node.transformation);
 
-        if(current_node.animation != null){
+        if (current_node.animation != null) {
             current_node.animation.apply();
         }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
-          
-        /*    if (this.scene.displayNormals)
-                current_node.children_primitives[i].primitive.enableNormalViz();
-            else
-                current_node.children_primitives[i].primitive.disableNormalViz();
-/*
-            if (current_node.texture[0] != "none") {
-                
-                if (current_node.texture[0] == "inherit")
-                    current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
+
+            /*    if (this.scene.displayNormals)
+                    current_node.children_primitives[i].primitive.enableNormalViz();
                 else
-                    current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
-            }*/
+                    current_node.children_primitives[i].primitive.disableNormalViz();
+    /*
+                if (current_node.texture[0] != "none") {
+                    
+                    if (current_node.texture[0] == "inherit")
+                        current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
+                    else
+                        current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
+                }*/
 
             current_node.children_primitives[i].primitive.display();
         }
