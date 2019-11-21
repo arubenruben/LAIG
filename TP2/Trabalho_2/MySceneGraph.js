@@ -1815,7 +1815,7 @@ class MySceneGraph {
 
         if (current_node.materials[current_node.material_active] == "inherit") {
 
-            // material_father.setTextureWrap('REPEAT', 'REPEAT');
+            material_father.setTextureWrap('REPEAT', 'REPEAT');
 
             if (current_node.texture[0] == "inherit") {
                 if (texture_father != "none") {
@@ -1830,6 +1830,7 @@ class MySceneGraph {
             material_father.apply();
         }
         else {
+           
             current_node.materials[current_node.material_active].setTextureWrap('REPEAT', 'REPEAT');
 
             if (current_node.texture[0] == "inherit") {
@@ -1840,7 +1841,10 @@ class MySceneGraph {
             else if (current_node.texture[0] != "none") {
                 current_node.materials[current_node.material_active].setTexture(current_node.texture[0]);
             }
-
+            
+            else{
+                current_node.materials[current_node.material_active].setTexture(null);
+            }
             current_node.materials[current_node.material_active].apply();
         }
 
@@ -1851,19 +1855,22 @@ class MySceneGraph {
         }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
-          /*
+          let  type = current_node.children_primitives[i].primitiveType;
+
+        if(type != "patch" && type != "plane" && type != "cylinder2"){ 
+            
             if (this.scene.displayNormals)
                 current_node.children_primitives[i].primitive.enableNormalViz();
             else
                 current_node.children_primitives[i].primitive.disableNormalViz();
 
-            if (current_node.texture[0] != "none") {
-
+            if (current_node.texture[0] != "none"){
                 if (current_node.texture[0] == "inherit")
                     current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
                 else
                     current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
-            }*/
+            }
+        }
 
             current_node.children_primitives[i].primitive.display();
         }

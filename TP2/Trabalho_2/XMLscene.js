@@ -59,10 +59,10 @@ class XMLscene extends CGFscene {
 
     initCameras() {
 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 30), vec3.fromValues(0, 0, 0));
-
-        this.normalcamera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 30), vec3.fromValues(0, 0, 0));
-        this.camera_to_rtt = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 30), vec3.fromValues(0, 0, 0));
+        this.selectedCamera = this.graph.view_default;
+        this.Rtt = this.graph.view_default;
+        this.normalcamera = this.graph.Views[this.selectedCamera];
+        this.camera_to_rtt = this.graph.Views[this.Rtt];
         //Inicialmente a camera rtt e a default camera
     }
 
