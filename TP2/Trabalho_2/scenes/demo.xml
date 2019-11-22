@@ -267,33 +267,53 @@
         <animation id="bola">
             <keyframe instant="4">
                 <translate x="0" y="-0.5" z="1"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <rotate angle_x="10" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
             <keyframe instant="7">
                 <translate x="0" y="0.5" z="2"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <rotate angle_x="15" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
             <keyframe instant="14">
                 <translate x="0" y="-0.5" z="0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <rotate angle_x="20" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
             <keyframe instant="19">
                 <translate x="-1" y="0" z="1"/>
+                <rotate angle_x="40" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="21">
+                <translate x="5" y="5" z="1"/>
+                <rotate angle_x="140" angle_y="0" angle_z="0"/>
+                <scale x="0.5" y="0.5" z="0.5"/>
+            </keyframe>
+
+
+            <keyframe instant="23">
+                <translate x="-1" y="-0.5" z="0"/>
+                <rotate angle_x="280" angle_y="0" angle_z="100"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="25">
+                <translate x="0" y="1" z="0.5"/>
+                <rotate angle_x="5" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="26">
+                <translate x="0" y="0" z="0"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
-            <keyframe instant="23">
-                <translate x="5" y="0" z="1"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
 
         </animation>
 
@@ -314,6 +334,26 @@
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
+
+        </animation>
+
+        <animation id="boia2">
+
+            <keyframe instant="10">
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+            <keyframe instant="16">
+                <translate x="1" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+            <keyframe instant="20">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+                </keyframe>
 
         </animation>
 
@@ -2562,6 +2602,7 @@
                 <translate x="8" y="-0.3" z="13"/>
                 <rotate axis="x" angle="90"/>
             </transformation>
+            <animationref id="boia2"/>
             <materials>
                 <material id="demoMaterial"/>
             </materials>
