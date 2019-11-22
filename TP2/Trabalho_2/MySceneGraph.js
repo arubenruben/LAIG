@@ -40,6 +40,7 @@ class MySceneGraph {
         this.axisCoords['z'] = [0, 0, 1];
 
         this.Views = [];
+        this.ViewsSecurity = [];
         this.ambient = [];
         this.background = [];
         this.mPressed = 0;
@@ -449,21 +450,25 @@ class MySceneGraph {
             }
 
             var camera;
+            var cameraS;
 
             //CGFcamera( fov, near, far, position, target )
             if (view_type == "perspective") {
 
                 camera = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+                cameraS = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
             }
 
             // CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up)
             else if (view_type == "ortho") {
                 camera = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
+                cameraS = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
             }
 
 
             //O array de views fica no indice "nome da camara" com o objeto do tipo camara
             this.Views[view_id] = camera;
+            this.ViewsSecurity[view_id] = cameraS;
 
 
         }
@@ -1797,7 +1802,7 @@ class MySceneGraph {
 
         if (current_node.materials[current_node.material_active] == "inherit") {
 
-            // material_father.setTextureWrap('REPEAT', 'REPEAT');
+            material_father.setTextureWrap('REPEAT', 'REPEAT');
 
             if (current_node.texture[0] == "inherit") {
                 if (texture_father != "none") {
@@ -1812,6 +1817,7 @@ class MySceneGraph {
             material_father.apply();
         }
         else {
+           
             current_node.materials[current_node.material_active].setTextureWrap('REPEAT', 'REPEAT');
 
             if (current_node.texture[0] == "inherit") {
@@ -1822,7 +1828,10 @@ class MySceneGraph {
             else if (current_node.texture[0] != "none") {
                 current_node.materials[current_node.material_active].setTexture(current_node.texture[0]);
             }
-
+            
+            else{
+                current_node.materials[current_node.material_active].setTexture(null);
+            }
             current_node.materials[current_node.material_active].apply();
         }
 
@@ -1835,19 +1844,22 @@ class MySceneGraph {
         }
 
         for (let i = 0; i < current_node.children_primitives.length; i++) {
+          let  type = current_node.children_primitives[i].primitiveType;
 
-            /*    if (this.scene.displayNormals)
-                    current_node.children_primitives[i].primitive.enableNormalViz();
+        if(type != "patch" && type != "plane" && type != "cylinder2"){ 
+            
+            if (this.scene.displayNormals)
+                current_node.children_primitives[i].primitive.enableNormalViz();
+            else
+                current_node.children_primitives[i].primitive.disableNormalViz();
+
+            if (current_node.texture[0] != "none"){
+                if (current_node.texture[0] == "inherit")
+                    current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
                 else
-                    current_node.children_primitives[i].primitive.disableNormalViz();
-    /*
-                if (current_node.texture[0] != "none") {
-                    
-                    if (current_node.texture[0] == "inherit")
-                        current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
-                    else
-                        current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
-                }*/
+                    current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
+            }
+        }
 
             current_node.children_primitives[i].primitive.display();
         }
