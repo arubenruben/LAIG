@@ -3,12 +3,9 @@
  * @constructor
  * @param scene - Reference to MyScene object
  */
-class MyAnimation extends CGFobject {
-
+class MyAnimation {
     constructor(scene) {
-        super(scene);
         this.scene = scene;
-        this.initBuffers();
         this.segments_array = [];
         this.Ma = mat4.create();
         this.totalTime = 0;

@@ -1826,6 +1826,8 @@ class MySceneGraph {
             current_node.materials[current_node.material_active].apply();
         }
 
+
+        //Last Multmatrix é a local matrix primeiro e a matriz de animacao
         this.scene.multMatrix(current_node.transformation);
 
         if (current_node.animation != null) {
