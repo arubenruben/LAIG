@@ -295,7 +295,6 @@
                 <scale x="0.5" y="0.5" z="0.5"/>
             </keyframe>
 
-
             <keyframe instant="23">
                 <translate x="-1" y="-0.5" z="0"/>
                 <rotate angle_x="280" angle_y="0" angle_z="100"/>
@@ -350,10 +349,10 @@
                 <scale x="1" y="1" z="1"/>
             </keyframe>
             <keyframe instant="20">
-                    <translate x="0" y="0" z="0"/>
-                    <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                    <scale x="1" y="1" z="1"/>
-                </keyframe>
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
 
         </animation>
 
@@ -364,7 +363,7 @@
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
-            
+
             <keyframe instant="10">
                 <translate x="0" y="0" z="0"/>
                 <rotate angle_x="10" angle_y="5" angle_z="-10"/>
@@ -531,6 +530,185 @@
     </primitives>
 
     <components>
+
+        <!-- 
+            Espaco de manipulacao do portao
+        -->
+
+        <component id="tabuaverticaldir">
+                <transformation>
+                    <translate x="1.5" y="0" z="0"/>
+                    <scale x="0.1" y="1" z="1"/>           
+                </transformation>
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+
+        <component id="tabuaverticalesq">
+                <transformation>
+                    <scale x="0.1" y="1" z="1"/>           
+                </transformation>
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+
+        <component id="tabuahorizontalbaixo">
+                <transformation>
+                    <scale x="1.5" y="0.1" z="0.1"/>           
+                </transformation>
+    
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+    
+        <component id="tabuahorizontalcima">
+            <transformation>
+                <translate x="0" y="1" z="0"/>
+                <scale x="1.6" y="0.1" z="0.1"/>
+                    
+            </transformation>
+
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+               <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="diagonal-cima-esq">
+                <transformation>
+                    <translate x="0" y="1" z="0"/>
+                    <rotate axis="z" angle="-35"/>
+                    <scale x="0.9" y="0.1" z="1"/>
+                        
+                </transformation>
+    
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+
+
+        <component id="diagonal-cima-dir">
+                <transformation>
+                    <translate x="1.5" y="1.1" z="0"/>
+                    <rotate axis="z" angle="215"/>
+                    <scale x="0.9" y="0.1" z="1"/>
+                        
+                </transformation>
+    
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+
+        <component id="diagonal-baixo-esq">
+                <transformation>
+                    <translate x="0" y="0" z="0"/>
+                    <rotate axis="z" angle="30"/>
+                    <scale x="1" y="0.1" z="1"/>
+                        
+                </transformation>
+    
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+
+
+        <component id="diagonal-baixo-dir">
+                <transformation>
+                    <translate x="1.6" y="0.1" z="0"/>
+                    <rotate axis="z" angle="-210"/>
+                    <scale x="1" y="0.1" z="1"/>
+                        
+                </transformation>
+    
+                <materials>
+                    <material id="demoMaterial"/>
+                </materials>
+    
+                <texture id="none"/>
+    
+                <children>
+                   <primitiveref id="square"/>
+                </children>
+        </component>
+
+        <component id="gate">
+            <transformation>
+            </transformation>
+
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="tabuahorizontalcima"/>
+                <componentref id="tabuahorizontalbaixo"/>
+                <componentref id="tabuaverticalesq"/>
+                <componentref id="tabuaverticaldir"/>
+                <componentref id="diagonal-cima-esq"/>
+                <componentref id="diagonal-cima-dir"/>
+                
+                <componentref id="diagonal-baixo-esq"/>
+                <componentref id="diagonal-baixo-dir"/>
+                
+            </children>
+
+        </component>
+
+
+
+
+        <!-- 
+            Fim do Espaco de manipulacao do portao
+        -->
 
         <!--
             Espaco de manipulacao do espaco publicitario
@@ -2640,7 +2818,7 @@
             </materials>
             <texture id="dirt" length_s="0.5" length_t="0.5"/>
             <children>
-
+                
                 <componentref id="underground"/>
                 <componentref id="floor"/>
                 <componentref id="sides"/>
