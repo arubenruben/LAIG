@@ -21,18 +21,12 @@ class MyAnimation extends CGFobject {
     }
 
     parse_keyframes(array_keyframes) {
-
-
-
         //Ando aos pares nao vamos testar o ultimos porque se nao iamos aceder a memoria que nao existe
         for (let i = 0; i < array_keyframes.length - 1; i++) {
 
             this.segments_array[i] = new MySegment(array_keyframes[i], array_keyframes[i + 1]);
 
         }
-
-
-
     }
     update(t) {
 
@@ -59,16 +53,19 @@ class MyAnimation extends CGFobject {
                 
                 if (this.segmentTime_active == this.segments_array.length) {
                     this.animationDone = true;
-                    this.segmentTime_active--;
-                }  
-                let ratio = (this.totalTime - this.segments_array[this.segmentTime_active].keyframe_anterior.instant) / (this.segments_array[this.segmentTime_active].duracao);
-                this.update_parameters(this.segments_array[this.segmentTime_active], ratio);
+                    this.update_parameters(this.segments_array[this.segmentTime_active-1], 100);
+                                        
+
+                } 
+                else{ 
+                    let ratio = (this.totalTime - this.segments_array[this.segmentTime_active].keyframe_anterior.instant) / (this.segments_array[this.segmentTime_active].duracao);
+                    this.update_parameters(this.segments_array[this.segmentTime_active], ratio);
+                }
                 
             }
             
-            this.scene.multMatrix(this.Ma);
         }
-    
+        this.scene.multMatrix(this.Ma);
     }
 
 
@@ -90,6 +87,8 @@ class MyAnimation extends CGFobject {
             let txfinal = tx0 + (tx1 - tx0) * ratio;
             let tyfinal = ty0 + (ty1 - ty0) * ratio;
             let tzfinal = tz0 + (tz1 - tz0) * ratio;
+
+            let translate_parameters = [txfinal, tyfinal, tzfinal];
             
             let rx0 = segmento.keyframe_anterior.rotate_vec[0];
             let ry0 = segmento.keyframe_anterior.rotate_vec[1];
@@ -102,17 +101,27 @@ class MyAnimation extends CGFobject {
             let rxfinal = rx0 + (rx1 - rx0) * ratio;
             let ryfinal = ry0 + (ry1 - ry0) * ratio;
             let rzfinal = rz0 + (rz1 - rz0) * ratio;
+
+            let sx0 = segmento.keyframe_anterior.scale_vec[0];
+            let sy0 = segmento.keyframe_anterior.scale_vec[1];
+            let sz0 = segmento.keyframe_anterior.scale_vec[2];
             
-            let translate_parameters = [txfinal, tyfinal, tzfinal];
-            let scaleParameters = [1, 1, 1];
+            let sx1 = segmento.keyframe_posterior.scale_vec[0];
+            let sy1 = segmento.keyframe_posterior.scale_vec[1];
+            let sz1 = segmento.keyframe_posterior.scale_vec[2];
+            
+            let sxfinal = sx0 + (sx1 - sx0) * ratio;
+            let syfinal = sy0 + (sy1 - sy0) * ratio;
+            let szfinal = sz0 + (sz1 - sz0) * ratio;
+            
+            let scaleParameters = [sxfinal, syfinal, szfinal];
+
             
             mat4.translate(Maux, Maux, translate_parameters);
             
             mat4.rotate(Maux, Maux, rxfinal * DEGREE_TO_RAD, [1, 0, 0]);
             mat4.rotate(Maux, Maux, ryfinal * DEGREE_TO_RAD, [0, 1, 0]);
             mat4.rotate(Maux, Maux, rzfinal * DEGREE_TO_RAD, [0, 0, 1]);
-            
-            
             
             mat4.scale(Maux, Maux, scaleParameters);
             

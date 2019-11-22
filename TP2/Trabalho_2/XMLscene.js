@@ -33,7 +33,7 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
 
 
-        this.UPDATE_PERIOD = 30;
+        this.UPDATE_PERIOD = 60;
 
         this.displayAxis = true;
         this.displayNormals = false;
@@ -49,21 +49,18 @@ class XMLscene extends CGFscene {
 
     }
     updateCamera_RTT() {
-        this.camera_to_rtt = this.graph.Views[this.Rtt];
+        this.camera_to_rtt = this.graph.ViewsSecurity[this.Rtt];
     }
 
-    updateCameraRTT(){
-        this.interface.setActiveCamera(this.cameraRTT);
-    }
-
+   
 
     initCameras() {
-
         this.selectedCamera = this.graph.view_default;
         this.Rtt = this.graph.view_default;
+        this.camera = this.graph.Views[this.selectedCamera];
+
         this.normalcamera = this.graph.Views[this.selectedCamera];
-        this.camera_to_rtt = this.graph.Views[this.Rtt];
-        //Inicialmente a camera rtt e a default camera
+        this.camera_to_rtt = this.graph.ViewsSecurity[this.Rtt];
     }
 
     /**

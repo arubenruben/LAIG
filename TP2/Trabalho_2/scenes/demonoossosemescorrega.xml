@@ -109,8 +109,6 @@
     </lights>
 
     <textures>
-        <texture id="slider_red" file="scenes/images/slider.jpg" />
-        <texture id="slider_yellow" file="scenes/images/slider_yellow.jpg" />
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
         <texture id="dirt" file="scenes/images/dirt.jpg" />
         <texture id="grass" file="scenes/images/grass.jpg" />
@@ -267,216 +265,49 @@
         </animation>
 
         <animation id="bola">
-            <keyframe instant="5">
+            <keyframe instant="4">
+                <translate x="0" y="-0.5" z="1"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="7">
+                <translate x="0" y="0.5" z="2"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="14">
+                <translate x="0" y="-0.5" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="19">
+                <translate x="-1" y="0" z="1"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+        </animation>
+
+        <animation id="boia">
+            <keyframe instant="7">
                 <translate x="0" y="0" z="0"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
-
-            <keyframe instant="6.5">
-                <translate x="0" y="-4.1" z="0"/>
+            <keyframe instant="14">
+                <translate x="0" y="0.5" z="0"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
 
-
-            <keyframe instant="6.9">
-                <translate x="0" y="-2.55" z="0"/>
+            <keyframe instant="20">
+                <translate x="0" y="0" z="0"/>
                 <rotate angle_x="0" angle_y="0" angle_z="0"/>
                 <scale x="1" y="1" z="1"/>
             </keyframe>
-
-            
-            <keyframe instant="7.3">
-                <translate x="0" y="-3.55" z="0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-              <keyframe instant="7.6">
-                <translate x="0" y="-2.9" z="0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="7.8">
-                <translate x="0" y="-3.25" z="0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-              <keyframe instant="8.1">
-                <translate x="0" y="-3.00" z="0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-             <keyframe instant="8.6">
-                <translate x="0" y="-3.10" z="0"/>
-                <rotate angle_x="0" angle_y="0" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-           
-        </animation>
-
-        <animation id="boia_left">
-              
-            <keyframe instant="0.8">
-                <translate x="0" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="-20" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-            
-            <keyframe instant="0.90">
-                <translate x="0" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="-20" angle_z="0"/>
-                <scale x="1.2" y="1.2" z="0.7"/>
-            </keyframe>
-
-            <keyframe instant="1.1">
-                <translate x="0" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="-20" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-            
-            <keyframe instant="1.6">
-                <translate x="2" y="0.7" z="2"/>
-                <rotate angle_x="0" angle_y="-90" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="2.1">
-                <translate x="4" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="-160" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="2.8">
-                <translate x="5.0" y="0.7" z="6.65"/>
-                <rotate angle_x="0" angle_y="-185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-            <keyframe instant="3.0">
-                <translate x="5.0" y="0.7" z="5.60"/>
-                <rotate angle_x="0" angle_y="-185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-                <keyframe instant="3.3">
-                <translate x="5.0" y="0.7" z="6.60"/>
-                <rotate angle_x="0" angle_y="-185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-                <keyframe instant="3.6">
-                <translate x="5.0" y="0.7" z="6.30"/>
-                <rotate angle_x="0" angle_y="-185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-             
-                <keyframe instant="6.5">
-                <translate x="5.0" y="0.7" z="6.30"/>
-                <rotate angle_x="0" angle_y="-185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="10.0">
-                <translate x="5.5" y="1.5" z="6.30"/>
-                <rotate angle_x="0" angle_y="-185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-
-
-        </animation>
-
-        
-        <animation id="boia_right">
-            <keyframe instant="0.8">
-                <translate x="0" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="20" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-            
-            <keyframe instant="0.90">
-                <translate x="0" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="20" angle_z="0"/>
-                <scale x="1.2" y="1.2" z="0.7"/>
-            </keyframe>
-
-            <keyframe instant="1.1">
-                <translate x="0" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="20" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-            
-            <keyframe instant="1.6">
-                <translate x="-2" y="0.7" z="2"/>
-                <rotate angle_x="0" angle_y="90" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="2.1">
-                <translate x="-4" y="0.7" z="3"/>
-                <rotate angle_x="0" angle_y="160" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="2.8">
-                <translate x="-5.0" y="0.7" z="6.65"/>
-                <rotate angle_x="0" angle_y="185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-            <keyframe instant="3.0">
-                <translate x="-5.0" y="0.7" z="5.60"/>
-                <rotate angle_x="0" angle_y="185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-                <keyframe instant="3.3">
-                <translate x="-5.0" y="0.7" z="6.60"/>
-                <rotate angle_x="0" angle_y="185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-                <keyframe instant="3.6">
-                <translate x="-5.0" y="0.7" z="6.30"/>
-                <rotate angle_x="0" angle_y="185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-               <keyframe instant="6.5">
-                <translate x="-5.0" y="0.7" z="6.30"/>
-                <rotate angle_x="0" angle_y="185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-
-            <keyframe instant="10.0">
-                <translate x="-5.5" y="-0.1" z="6.30"/>
-                <rotate angle_x="0" angle_y="185" angle_z="0"/>
-                <scale x="1" y="1" z="1"/>
-            </keyframe>
-
-           
 
         </animation>
 
@@ -577,7 +408,19 @@
 
     <primitives>
 
+        <primitive id = "Escorrega">
+            <patch npointsU="1" npointsV="4" npartsU="5" npartsV="3">
 
+            
+                <controlpoint xx="-0.543" yy="0.78" zz="0.034"/>
+                <controlpoint xx="-0.776" yy="0.432" zz="-1.108"/>
+                <controlpoint xx="-0.044" yy="0.306" zz="-0.954"/>
+                 <controlpoint xx="0" yy="0" zz="0"/>
+
+
+            </patch>
+
+        </primitive>
         <primitive id="square">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
@@ -627,24 +470,29 @@
         </primitive>
 
         <primitive id="escorrega_patch">
-            <patch npointsU="4" npointsV="3" npartsU="5" npartsV="3">
+            <patch npointsU="5" npointsV="3" npartsU="5" npartsV="3">
+
+                <controlpoint xx="-2.2" yy="-8" zz="0"/>
+                <controlpoint xx="-2.2" yy="-8" zz="-5"/>
+                <controlpoint xx="-2.2" yy="-8" zz="-8"/>
+
 
                 <controlpoint xx="0" yy="-1" zz="0"/>
-                <controlpoint xx="-1" yy="-2" zz="-2"/>
-                <controlpoint xx="0" yy="-1" zz="-4"/>
+                <controlpoint xx="-1" yy="-2" zz="-5"/>
+                <controlpoint xx="0" yy="-1" zz="-8"/>
 
                 <controlpoint xx="5" yy="1" zz="0"/>
-                <controlpoint xx="3" yy="-2" zz="-2"/>
-                <controlpoint xx="5" yy="-1" zz="-4"/>
+                <controlpoint xx="3" yy="-2" zz="-5"/>
+                <controlpoint xx="5" yy="-1" zz="-8"/>
 
 
                 <controlpoint xx="8" yy="-10" zz="0"/>
-                <controlpoint xx="7" yy="-20" zz="-2"/>
-                <controlpoint xx="8" yy="-10" zz="-4"/>
+                <controlpoint xx="7" yy="-20" zz="-5"/>
+                <controlpoint xx="8" yy="-10" zz="-8"/>
 
-                <controlpoint xx="12" yy="-9" zz="0"/>
-                <controlpoint xx="12" yy="-15" zz="-2"/>
-                <controlpoint xx="12" yy="-9" zz="-4"/>
+                <controlpoint xx="12" yy="-6" zz="0"/>
+                <controlpoint xx="12" yy="-6" zz="-5"/>
+                <controlpoint xx="12" yy="-6" zz="-8"/>
 
 
             </patch>
@@ -673,6 +521,18 @@
             </children>
         </component>
 
+        <component id="escorrega_meu">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="escorrega"/>
+            </children>
+        </component>
 
         <component id="barra_ilumin_spot1">
             <transformation>
@@ -2708,11 +2568,11 @@
 
         <component id="water_ball">
             <transformation>
-                <translate x="7" y="6" z="12"/>
+                <translate x="7" y="-0.1" z="11"/>
                 <scale x="2" y="2" z="2"/>
             </transformation>
 
-            <animationref id="bola"/> 
+            <animationref id="bola"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -2724,14 +2584,13 @@
 
         <component id="water_bouy">
             <transformation>
-                <translate x="11" y="6" z="9"/>
+                <translate x="8" y="-0.3" z="13"/>
                 <rotate axis="x" angle="90"/>
             </transformation>
-               <animationref id="boia_right"/>
             <materials>
                 <material id="demoMaterial"/>
             </materials>
-            <texture id="beachBuoy2" length_s="1" length_t="2"/>
+            <texture id="none" length_s="1" length_t="2"/>
             <children>
                 <primitiveref id="torus_bouy"/>
             </children>
@@ -2739,10 +2598,10 @@
 
         <component id="water_bouy_2">
             <transformation>
-                <translate x="3" y="6" z="13"/>
+                <translate x="6" y="-0.3" z="15"/>
                 <rotate axis="x" angle="90"/>
             </transformation>
-            <animationref id="boia_left"/>
+            <animationref id="boia"/>
             <materials>
                 <material id="demoMaterial"/>
             </materials>
@@ -2777,31 +2636,17 @@
             </children>
         </component>
 
-        <component id="escorrega2">
-            <transformation>
-                <translate x="8" y="2.2" z="4.3"/>
-                <rotate axis="y" angle="-90"/>
-                <scale x="0.2" y="0.2" z="0.2"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial"/>
-            </materials>
-            <texture id="slider_red" length_s ="1" length_t = "1"/>
-            <children>
-                <primitiveref id="escorrega_patch"/>
-            </children>
-        </component>
 
         <component id="escorrega">
             <transformation>
-                <translate x="5" y="2.2" z="4.3"/>
+                <translate x="6" y="2" z="6"/>
                 <rotate axis="y" angle="-90"/>
-                <scale x="0.2" y="0.2" z="0.2"/>
+                <scale x="0.3" y="0.3" z="0.3"/>
             </transformation>
             <materials>
                 <material id="demoMaterial"/>
             </materials>
-                <texture id="slider_yellow" length_s ="1" length_t = "1"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="escorrega_patch"/>
             </children>
@@ -2827,7 +2672,6 @@
                 <componentref id="water_bouy_2"/>
                 <componentref id="water"/>
                 <componentref id="escorrega"/>
-                <componentref id="escorrega2"/>
 
             </children>
         </component>

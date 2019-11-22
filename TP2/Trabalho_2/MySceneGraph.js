@@ -40,6 +40,7 @@ class MySceneGraph {
         this.axisCoords['z'] = [0, 0, 1];
 
         this.Views = [];
+        this.ViewsSecurity = [];
         this.ambient = [];
         this.background = [];
         this.mPressed = 0;
@@ -449,21 +450,25 @@ class MySceneGraph {
             }
 
             var camera;
+            var cameraS;
 
             //CGFcamera( fov, near, far, position, target )
             if (view_type == "perspective") {
 
                 camera = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+                cameraS = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
             }
 
             // CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up)
             else if (view_type == "ortho") {
                 camera = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
+                cameraS = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
             }
 
 
             //O array de views fica no indice "nome da camara" com o objeto do tipo camara
             this.Views[view_id] = camera;
+            this.ViewsSecurity[view_id] = cameraS;
 
 
         }

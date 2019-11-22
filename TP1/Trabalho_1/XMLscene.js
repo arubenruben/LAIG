@@ -51,20 +51,10 @@ class XMLscene extends CGFscene {
         this.interface.setActiveCamera(this.camera);
     }
 
-    update(t){
-        this.animation.update(t);
 
 
 
-
-
-
-
-
-
-
-
-    }
+    
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
