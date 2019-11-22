@@ -87,6 +87,19 @@ class MyAnimation extends CGFobject {
     
             this.Ma=Maux
         }
+        else if(this.animationDone==true){
+            
+            let array_aux=[segmento.keyframe_posterior.translate_vec[0],segmento.keyframe_posterior.translate_vec[1],segmento.keyframe_posterior.translate_vec[2]]
+            
+            mat4.translate(Maux,Maux,array_aux)
+
+            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[0] * DEGREE_TO_RAD, [1, 0, 0])
+            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[1] * DEGREE_TO_RAD, [0, 1, 0])
+            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[2] * DEGREE_TO_RAD, [0, 0, 1])
+    
+            mat4.scale(Maux, Maux, this.scaleParameters)
+
+        }
     }
 
     update_parameters(segmento) {
@@ -120,9 +133,6 @@ class MyAnimation extends CGFobject {
             this.translate_parameters = [txfinal, tyfinal, tzfinal]
             this.rotate_parameters=[rxfinal,ryfinal,rzfinal]
             this.scaleParameters = [1, 1, 1]
-
         }
-
-
     }
 }
