@@ -82,11 +82,17 @@ class MyAnimation extends CGFobject {
             mat4.rotate(Maux, Maux, (segmento.keyframe_anterior.rotate_vec[0]+(this.rotate_parameters[0]* this.ratio)) * DEGREE_TO_RAD, [1, 0, 0])
             mat4.rotate(Maux, Maux, (segmento.keyframe_anterior.rotate_vec[1]+(this.rotate_parameters[1]* this.ratio)) * DEGREE_TO_RAD, [0, 1, 0])
             mat4.rotate(Maux, Maux, (segmento.keyframe_anterior.rotate_vec[2]+(this.rotate_parameters[2]* this.ratio)) * DEGREE_TO_RAD, [0, 0, 1])
-    
-            mat4.scale(Maux, Maux, this.scaleParameters)
+            
+            let sx=segmento.keyframe_anterior.scale_vec[0]*Math.pow(this.scaleParameters[0],this.ratio*segmento.duracao)
+            let sy=segmento.keyframe_anterior.scale_vec[1]*Math.pow(this.scaleParameters[1],this.ratio*segmento.duracao)
+            let sz=segmento.keyframe_anterior.scale_vec[2]*Math.pow(this.scaleParameters[2],this.ratio*segmento.duracao)
+
+            array_aux=[sx,sy,sz]
+            mat4.scale(Maux, Maux, array_aux)
     
             this.Ma=Maux
         }
+        //Forca a ultima iteracao da animaca a ser igual ao keyframe 0
         else if(this.animationDone==true){
             
             let array_aux=[segmento.keyframe_posterior.translate_vec[0],segmento.keyframe_posterior.translate_vec[1],segmento.keyframe_posterior.translate_vec[2]]
@@ -130,9 +136,15 @@ class MyAnimation extends CGFobject {
             let ryfinal =ry1-ry0
             let rzfinal =rz1-rz0
 
+
+            let sx=Math.pow((segmento.keyframe_posterior.scale_vec[0]/segmento.keyframe_anterior.scale_vec[0]),1/segmento.duracao)
+            let sy=Math.pow((segmento.keyframe_posterior.scale_vec[1]/segmento.keyframe_anterior.scale_vec[1]),1/segmento.duracao)
+            let sz=Math.pow((segmento.keyframe_posterior.scale_vec[2]/segmento.keyframe_anterior.scale_vec[2]),1/segmento.duracao)
+
             this.translate_parameters = [txfinal, tyfinal, tzfinal]
             this.rotate_parameters=[rxfinal,ryfinal,rzfinal]
-            this.scaleParameters = [1, 1, 1]
+
+            this.scaleParameters = [sx, sy, sz]
         }
     }
 }
