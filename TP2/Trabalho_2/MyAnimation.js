@@ -10,6 +10,8 @@ class MyAnimation {
         this.Ma = mat4.create();
         this.totalTime = 0;
         this.previous_t = 0;
+        //Var to guarantee that in last iteration paramenters are updated in any situation
+        this.unique=false;
 
         this.segmentTime_active = 0;
 
@@ -32,7 +34,7 @@ class MyAnimation {
 
         if (this.firstime == false) {
             this.totalTime += this.delta / 1000
-        } else {
+        }else {
             this.firstime = false;
             this.update_parameters(this.segments_array[this.segmentTime_active])
         }
@@ -58,6 +60,9 @@ class MyAnimation {
                 this.ratio = (this.totalTime - this.segments_array[this.segmentTime_active].keyframe_anterior.instant) / (this.segments_array[this.segmentTime_active].duracao);
                 this.build_matrix(this.segments_array[this.segmentTime_active])
             }
+        }else if(this.unique==false){
+            this.unique=true
+            this.build_matrix(this.segments_array[this.segmentTime_active])
         }
         this.scene.multMatrix(this.Ma);
     }
@@ -89,18 +94,29 @@ class MyAnimation {
     
             this.Ma=Maux
         }
-        //Forca a ultima iteracao da animaca a ser igual ao keyframe 0
+        //Forca a ultima iteracao da animaca a ser igual ao keyframe 0 é o mesmo que multiplicar como se ratio fosse 1
         else if(this.animationDone==true){
             
-            let array_aux=[segmento.keyframe_posterior.translate_vec[0],segmento.keyframe_posterior.translate_vec[1],segmento.keyframe_posterior.translate_vec[2]]
+            let tx=segmento.keyframe_anterior.translate_vec[0]+this.translate_parameters[0]
+            let ty=segmento.keyframe_anterior.translate_vec[1]+this.translate_parameters[1]
+            let tz=segmento.keyframe_anterior.translate_vec[2]+this.translate_parameters[2]
             
-            mat4.translate(Maux,Maux,array_aux)
-
-            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[0] * DEGREE_TO_RAD, [1, 0, 0])
-            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[1] * DEGREE_TO_RAD, [0, 1, 0])
-            mat4.rotate(Maux, Maux, segmento.keyframe_posterior.rotate_vec[2] * DEGREE_TO_RAD, [0, 0, 1])
+            let array_aux=[tx,ty,tz]
     
-            mat4.scale(Maux, Maux, this.scaleParameters)
+            mat4.translate(Maux, Maux, array_aux);
+    
+            mat4.rotate(Maux, Maux, (segmento.keyframe_anterior.rotate_vec[0]+(this.rotate_parameters[0] )) * DEGREE_TO_RAD, [1, 0, 0])
+            mat4.rotate(Maux, Maux, (segmento.keyframe_anterior.rotate_vec[1]+(this.rotate_parameters[1] )) * DEGREE_TO_RAD, [0, 1, 0])
+            mat4.rotate(Maux, Maux, (segmento.keyframe_anterior.rotate_vec[2]+(this.rotate_parameters[2] )) * DEGREE_TO_RAD, [0, 0, 1])
+            
+            let sx=segmento.keyframe_anterior.scale_vec[0]*Math.pow(this.scaleParameters[0],segmento.duracao)
+            let sy=segmento.keyframe_anterior.scale_vec[1]*Math.pow(this.scaleParameters[1],segmento.duracao)
+            let sz=segmento.keyframe_anterior.scale_vec[2]*Math.pow(this.scaleParameters[2],segmento.duracao)
+
+            array_aux=[sx,sy,sz]
+            mat4.scale(Maux, Maux, array_aux)
+    
+            this.Ma=Maux
 
         }
     }
