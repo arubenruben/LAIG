@@ -129,6 +129,8 @@
         <texture id="beachBuoy1" file="scenes/images/beachBuoy1.jpg"/>
         <texture id="beachBuoy2" file="scenes/images/beachBuoy2.jpg"/>
         <texture id="fences" file="scenes/images/fences.jpg"/>
+        <texture id="gates" file="scenes/images/woodenWallTex.jpeg"/>
+
     </textures>
 
     <materials>
@@ -622,6 +624,55 @@
 
         </animation>
 
+        <animation id="gate">
+            
+            <keyframe instant="2">
+                <translate x="0" y="0" z="0"/>
+                <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="5">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="-150" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+             </keyframe>
+
+             <keyframe instant="8">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="-10" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+
+            <keyframe instant="15">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="-100" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="17">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="-10" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+            </keyframe>
+            <keyframe instant="17.3">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="-40" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+            <keyframe instant="17.5">
+                    <translate x="0" y="0" z="0"/>
+                    <rotate angle_x="0" angle_y="0" angle_z="0"/>
+                    <scale x="1" y="1" z="1"/>
+            </keyframe>
+
+
+
+
+        </animation>
+
     </animations>
 
     <primitives>
@@ -718,7 +769,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -733,7 +784,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -749,7 +800,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -767,7 +818,7 @@
                 <material id="demoMaterial"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="inherit"/>
 
             <children>
                <primitiveref id="square"/>
@@ -786,7 +837,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -806,7 +857,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -825,7 +876,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -845,7 +896,7 @@
                     <material id="demoMaterial"/>
                 </materials>
     
-                <texture id="none"/>
+                <texture id="inherit"/>
     
                 <children>
                    <primitiveref id="square"/>
@@ -853,14 +904,17 @@
         </component>
 
         <component id="gate">
-            <transformation>
+            <transformation>  
+                <scale x="1.58" y="1.3" z="1"/>   
             </transformation>
+
+            <animationref id="gate"/>
 
             <materials>
                 <material id="demoMaterial"/>
             </materials>
 
-            <texture id="none"/>
+            <texture id="gates" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="tabuahorizontalcima"/>
@@ -869,10 +923,28 @@
                 <componentref id="tabuaverticaldir"/>
                 <componentref id="diagonal-cima-esq"/>
                 <componentref id="diagonal-cima-dir"/>
-                
                 <componentref id="diagonal-baixo-esq"/>
                 <componentref id="diagonal-baixo-dir"/>
                 
+            </children>
+
+        </component>
+
+        <component id="gate_esquerda">
+
+            <transformation>
+                <translate x="-13" y="0" z="0"/>
+            </transformation>
+
+            <materials>
+                    <material id="demoMaterial"/>
+            </materials>
+    
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="gate"/>
             </children>
 
         </component>
@@ -1651,6 +1723,8 @@
                     <componentref id="grupo_fence_esq_12"/>
 
                 -->
+                <componentref id="gate_esquerda"/> 
+
                 <componentref id="grupo_fence_esq_13"/>
                 <componentref id="grupo_fence_esq_14"/>
                 <componentref id="grupo_fence_esq_15"/>
@@ -3001,7 +3075,7 @@
                 <componentref id="spot_pub"/>
 
                 <componentref id= "fence_core"/>
-
+        
             </children>
         </component>
 
