@@ -1144,6 +1144,7 @@ class MySceneGraph {
         this.animations = [];
         let grandChildren = [];
         let grandgrandChildren = [];
+        let lasttime=0;
         //Animations pode ser vazio
 
         for (let i = 0; i < children.length; i++) {
@@ -1186,11 +1187,21 @@ class MySceneGraph {
 
                 for (let j = 0; j < grandChildren.length; j++) {
 
+
                     if (grandChildren[j].nodeName != "keyframe") {
                         this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
                         continue;
                     }
                     let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
+
+                    if(j>0){
+                        if(keyframe_instant<lasttime){
+                            this.onXMLMinorError("Keyframe in incorrect order. Not inserted the keyframe:"+keyframe_instant)
+                            continue
+                        }
+                    }
+
+                    lasttime=keyframe_instant
 
                     let keyframe_auxiliar_var = new MyKeyFrameAnimation(this.scene, keyframe_instant);
 
