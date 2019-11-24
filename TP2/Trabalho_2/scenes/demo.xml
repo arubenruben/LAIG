@@ -120,7 +120,7 @@
         <texture id="esperguicadeira" file="scenes/images/esperguicadeira.png" />
         <texture id="water" file="scenes/images/water.jpg" />
         <texture id="pool_tiles" file="scenes/images/pool_tiles.jpg" />
-        <texture id="plastic" file="scenes/images/plastic.png" />
+        <texture id="plastic" file="scenes/images/plastic.jpg" />
         <texture id="colmo" file="scenes/images/colmo.png" />
         <texture id="tronco" file="scenes/images/madeira.jpg" />
         <texture id="vice_city" file="scenes/images/vice_city.jpg" />

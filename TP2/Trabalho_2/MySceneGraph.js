@@ -1556,20 +1556,13 @@ class MySceneGraph {
 
                     if (texture_id == "inherit" || texture_id == "none") {
 
-                        if (this.reader.getString(grandChildren[j], 'length_s') != null) {
+                        if (this.reader.getString(grandChildren[j], 'length_s', false) != null) {
                             this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
                         }
-                        else {
-                            this.onXMLMinorError("Ignore this error , it is due to a function returning null");
-                        }
-
-                        if (this.reader.getString(grandChildren[j], 'length_t') != null) {
+            
+                        if (this.reader.getString(grandChildren[j], 'length_t', false) != null) {
                             this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
                         }
-                        else {
-                            this.onXMLMinorError("Ignore this error , it is due to a function returning null");
-                        }
-
                     }
                 }
 
