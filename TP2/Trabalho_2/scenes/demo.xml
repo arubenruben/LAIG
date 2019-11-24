@@ -1,7 +1,7 @@
 <lxs>
     <scene root="terrain" axis_length="5" />
 
-     <!-- VIEWS/CAMERAS USED IN THE SCENE -->
+    <!-- VIEWS/CAMERAS USED IN THE SCENE -->
     <views default="frontSideCamera">
         <perspective id="frontSideCamera" near="0.1" far="500" angle="45">
             <from x="7" y="10" z="30" />
@@ -50,7 +50,7 @@
             <to x="7" y="0" z="11" />
         </perspective>
 
-        
+
     </views>
 
 
@@ -58,9 +58,9 @@
         <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
     </globals>
-    
-    
-    <!-- LIGHTS USED IN THE SCENE -->    
+
+
+    <!-- LIGHTS USED IN THE SCENE -->
     <lights>
         <omni id="meio_dia" enabled="0">
             <location x="7" y="5" z="10" w="1.0" />
@@ -110,7 +110,7 @@
 
     </lights>
 
-     <!-- TEXTURES USED IN THE SCENE -->
+    <!-- TEXTURES USED IN THE SCENE -->
     <textures>
         <texture id="slider_red" file="scenes/images/slider.jpg" />
         <texture id="slider_yellow" file="scenes/images/slider_yellow.jpg" />
@@ -135,7 +135,7 @@
         <texture id="metal" file="scenes/images/metal.jpg" />
     </textures>
 
-     <!-- MATERIALS USED IN THE SCENE -->
+    <!-- MATERIALS USED IN THE SCENE -->
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />

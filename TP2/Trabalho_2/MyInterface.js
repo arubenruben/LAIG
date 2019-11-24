@@ -100,15 +100,15 @@ class MyInterface extends CGFinterface {
     };
 
     /**
-* function to process the event of a key being let up, sttoping pressing it
-*/
+    * function to process the event of a key being let up, sttoping pressing it
+    */
     processKeyUp(event) {
         this.activeKeys[event.code] = false;
     };
 
     /**
-* function to determine if a key is being pressed or not
-*/
+    * function to determine if a key is being pressed or not
+    */
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }

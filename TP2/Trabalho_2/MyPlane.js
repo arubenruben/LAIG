@@ -11,44 +11,43 @@ class MyPlane extends CGFobject {
         this.scene = scene;
         this.npartsU = npartsU;
         this.npartsV = npartsV;
-        this.object=null;
+        this.object = null;
         this.initBuffers();
     }
-    
+
     /**
     * Function initBuffers creates the nurbs 
     * @function
     */
-    initBuffers(){
-        let controlPoints=
-        //grau 1 em u e grau 1 em v
-        [
-            // u=1
+    initBuffers() {
+        let controlPoints =
+            //grau 1 em u e grau 1 em v
             [
-                [-0.5,0,0.5,1],
-                [-0.5,0,-0.5,1]
+                // u=1
+                [
+                    [-0.5, 0, 0.5, 1],
+                    [-0.5, 0, -0.5, 1]
 
-            ],
-            //u=2
-            [
-                [0.5,0,0.5,1],
-                [0.5,0,-0.5,1]
+                ],
+                //u=2
+                [
+                    [0.5, 0, 0.5, 1],
+                    [0.5, 0, -0.5, 1]
 
-            ],
-    
-        ];
-        
-        let surface= new CGFnurbsSurface(1,1,controlPoints);
-        this.object= new CGFnurbsObject(this.scene,this.npartsU,this.npartsV,surface);
+                ],
+
+            ];
+
+        let surface = new CGFnurbsSurface(1, 1, controlPoints);
+        this.object = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, surface);
     }
-    
+
     /**
     * Function used to display the patch nurbs created
     * @function
     */
-    display(){
+    display() {
         this.object.display();
     }
 
 }
-    

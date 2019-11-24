@@ -7,34 +7,34 @@
 class MySecurityCamera extends CGFobject {
     constructor(scene) {
         super(scene);
-        this.rectangle=new MyRectangle(scene,'camera',0.5,-0.5,1,-1);
-        this.shader=new CGFshader(scene.gl,'shaders/shader.vert','shaders/shader.frag');
+        this.rectangle = new MyRectangle(scene, 'camera', 0.5, -0.5, 1, -1);
+        this.shader = new CGFshader(scene.gl, 'shaders/shader.vert', 'shaders/shader.frag');
         this.scene = scene;
-     
+
         this.initBuffers();
     }
-    
+
     /**
     * Sets the active shader, binds the RTTtexture, displays the security camera, set the active shader to be
     * the default one and unbinds the texture
     * @function
     */
-    display(){
+    display() {
 
         this.scene.setActiveShader(this.shader)
         this.scene.textureRTT.bind()
         this.rectangle.display()
         this.scene.setActiveShader(this.scene.defaultShader)
         this.scene.textureRTT.unbind()
-    
+
     }
 
-     
+
     /**
     * Updates the time for the shader , for the withe lines to move upwards
     * @function
     */
-    update(t){
-        this.shader.setUniformsValues({timeFactor: t / 100 % 1000});
+    update(t) {
+        this.shader.setUniformsValues({ timeFactor: t / 100 % 1000 });
     }
 }

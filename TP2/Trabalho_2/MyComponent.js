@@ -5,16 +5,16 @@
  * @param is_defined bool, represents if the element that was created was already passed on the xml or not
  */
 class MyComponent {
-	constructor(id,is_defined) {
-		
+	constructor(id, is_defined) {
+
 		// variable used to tell if a component is already defined or not in the components block,´
 		// at the end of the components block needs to checked if all components have this variable as true
 		//	if not means some components refers it 
-		this.definition_made=is_defined;
-		
+		this.definition_made = is_defined;
+
 		// component id
 		this.id = id;
-		
+
 		// variable to hold either the transformation refered or to hold the trasnformation 
 		// if a transformation is refered to then this.transformation= this.materials[transformationref];
 		this.transformation;
@@ -27,7 +27,7 @@ class MyComponent {
 		// father.
 		// if the component has inherit material then this.material[position_of_that_material] == "inherit"
 		this.materials = [];
-	
+
 
 		// variable to hold the id of the texture used, if id == "inherit" then the texture would be that of the
 		// father. if id == "none" no texture is applicable
@@ -35,7 +35,7 @@ class MyComponent {
 		// this.texture[1] = lenght_s;
 		// this.texture[2] = lenght_t;
 		this.texture = [];
-		
+
 		// array to hold children that are component
 		this.children_component = [];
 

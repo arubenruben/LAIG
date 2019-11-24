@@ -40,10 +40,10 @@ class MyCylinder extends CGFobject {
 
     }
 
-     /**
-    * Fuction initbuffers
-    * @function
-    */
+    /**
+   * Fuction initbuffers
+   * @function
+   */
     initBuffers() {
 
         this.vertices = [];

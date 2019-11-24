@@ -48,13 +48,13 @@ class MySceneGraph {
         // Array to hold ambient configurations
         this.ambient = [];
         this.background = [];
-        
+
         // Var that holds the number of times the m key was pressed
         this.mPressed = 0;
 
         // Array to hold the animations in the xml
         this.animations = [];
-        
+
         // Array to hold the ids of components that have animations
         this.idsComponentsAnimation = [];
 
@@ -404,10 +404,7 @@ class MySceneGraph {
 
             }
 
-            //NAO IREMOS CONFIRMAR QUE OS PARAMETROS SEGUEM UMA ORDEM ESPECIFICA.TEM E DE ESTAR LA E CORRETAMENTE DEFINIDOS
-
             //Valor index do from para verificar existencia dos atributos no xml
-
             index_from = nodeNames.indexOf(attributeNames[0]);
 
             if (index_from == -1) {
@@ -439,10 +436,7 @@ class MySceneGraph {
                 continue;
             }
 
-
-
             //Ortho tem um grandchild up ainda
-
             if (view_type == "ortho") {
 
                 index_up = nodeNames.indexOf(attributeNames[2]);
@@ -484,7 +478,6 @@ class MySceneGraph {
         // Since our approach was if it was a error but theres still more views , its possible that the default view has a error and wasnt added
         // this feature is done so that the program doesnt end if there one error in another view that inst the default one
         // this may need to be correct since if our program wants to change views it will not know the view is not defined
-
         if (this.Views[this.view_default] == null) {
             return "unable to start program as default view as issues or is not defined";
         }
@@ -1152,7 +1145,7 @@ class MySceneGraph {
         this.animations = [];
         let grandChildren = [];
         let grandgrandChildren = [];
-        let lasttime=0;
+        let lasttime = 0;
         //Animations pode ser vazio
 
         for (let i = 0; i < children.length; i++) {
@@ -1179,13 +1172,13 @@ class MySceneGraph {
             //Iterar as keyframes//
             if (grandChildren.length > 0) {
                 let keyframes_array_aux = [];
-                let value_first_keyframe=-1;
-                
+                let value_first_keyframe = -1;
+
                 /*Crio aqui na pos 0 a matriz identidade para representar a keyframe 0*/
                 //Testar se o primeiro input e no instante 0 e se ha necessidade de "injetar a origem"
-                value_first_keyframe=this.reader.getFloat(grandChildren[0], 'instant');
-                
-                if(value_first_keyframe>0){
+                value_first_keyframe = this.reader.getFloat(grandChildren[0], 'instant');
+
+                if (value_first_keyframe > 0) {
                     let keyframe_auxiliar_first = new MyKeyFrameAnimation(this.scene, 0);
                     keyframe_auxiliar_first.translate_vec = [0, 0, 0];
                     keyframe_auxiliar_first.rotate_vec = [0, 0, 0];
@@ -1202,14 +1195,14 @@ class MySceneGraph {
                     }
                     let keyframe_instant = this.reader.getFloat(grandChildren[j], 'instant');
 
-                    if(j>0){
-                        if(keyframe_instant<lasttime){
-                            this.onXMLMinorError("Keyframe in incorrect order. Not inserted the keyframe:"+keyframe_instant)
+                    if (j > 0) {
+                        if (keyframe_instant < lasttime) {
+                            this.onXMLMinorError("Keyframe in incorrect order. Not inserted the keyframe:" + keyframe_instant)
                             continue
                         }
                     }
 
-                    lasttime=keyframe_instant
+                    lasttime = keyframe_instant
 
                     let keyframe_auxiliar_var = new MyKeyFrameAnimation(this.scene, keyframe_instant);
 
@@ -1540,7 +1533,6 @@ class MySceneGraph {
 
 
                     //Nao existe entao textures no array de texturas
-
                     else if (this.textures[texture_id] == null) {
                         return "ID in the texture Block for component of id " + componentID + " must be a valid reference";
                     }
@@ -1580,10 +1572,6 @@ class MySceneGraph {
 
                     }
                 }
-
-
-                //Seguir as diretivas do stor que deve dar erro/warning
-
 
                 else if (grandChildren[j].nodeName == "children") {
 
@@ -1684,7 +1672,8 @@ class MySceneGraph {
     }
 
     /**
-     * Parse the coordinates from a node with ID = id
+     * Parse the coordinates for a control Point Cannot use the  parseCoordinates3D function because 
+     * the coordinates are in this format xx, yy, zz, instead of x, y, z
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
      */
@@ -1806,112 +1795,164 @@ class MySceneGraph {
 
     }
 
+    /**
+     * Fnctions that determines if a certain value is an  object or not
+     * @param val the value we want to determine if it is a object or not
+     */
     isObject(val) {
         if (val === null) { return false; }
         return ((typeof val === 'function') || (typeof val === 'object'));
     }
 
+    /**
+     * Fnctions that determines if a certain value is an  object or not
+     * @param Node the current node
+     * @param material_father the material of the father of the current node
+     * @param texture_father the texture of the father  of the current node     
+     * @param ls the length_s of the texture of the father
+     * @param lt the length_t of the texture of the father
+     */
     displaySceneRecursive(Node, material_father, texture_father, ls, lt) {
 
         var current_node = Node;
 
+        // setting the texture of the father material to null , meaning no texture
         material_father.setTexture(null);
 
+        // determining the material active for the current nove based on the number of materials the node has
+        // and how many times the key m was pressed
         current_node.material_active = this.mPressed % current_node.materials.length;
 
+        // Testing if the component have material with the property inherit, this is if the current node inherits
+        // the texture of the father
         if (current_node.materials[current_node.material_active] == "inherit") {
 
+            // setting the texture wrap of the materialfather to repeat repeat
             material_father.setTextureWrap('REPEAT', 'REPEAT');
 
+            // Testing the property for the texture if inherit means it inherits the texture of the father 
             if (current_node.texture[0] == "inherit") {
                 if (texture_father != "none") {
                     material_father.setTexture(texture_father);
                 }
             }
 
+            // if its not inherits and also not none then that means we are gonna apply the current nodes texture
             else if (current_node.texture[0] != "none") {
                 material_father.setTexture(current_node.texture[0]);
             }
 
+            // if the texture propert is none then when we apply the father material and because we set its texture
+            // to null at the begginning we end up not applying any texture with it             
             material_father.apply();
         }
+
+        // if the material propert isnt inherit then we are gonna apply the currents node material 
+        // very similiar to the previous one just this little change
         else {
-           
+
+            // setting the texture wrap of the material to repeat repeat
             current_node.materials[current_node.material_active].setTextureWrap('REPEAT', 'REPEAT');
 
+            // Testing the property for the texture if inherit means it inherits the texture of the father 
             if (current_node.texture[0] == "inherit") {
                 if (texture_father != "none") {
                     current_node.materials[current_node.material_active].setTexture(texture_father);
                 }
             }
+
+            // if its not inherits and also not none then that means we are gonna apply the current nodes texture
             else if (current_node.texture[0] != "none") {
                 current_node.materials[current_node.material_active].setTexture(current_node.texture[0]);
             }
-            
-            else{
+            // it it is none then we do set texture to null
+            else {
                 current_node.materials[current_node.material_active].setTexture(null);
             }
+
+            // applying the current node material
             current_node.materials[current_node.material_active].apply();
         }
 
 
-        //Last Multmatrix é a local matrix primeiro e a matriz de animacao
+        //  Applying the current node transformation
         this.scene.multMatrix(current_node.transformation);
 
+
+        //  Applying the animation matrix in case the component has a animation
         if (current_node.animation != null) {
             current_node.animation.apply();
         }
 
+
+        // Cycle to display the current nodes primitves
         for (let i = 0; i < current_node.children_primitives.length; i++) {
-          let  type = current_node.children_primitives[i].primitiveType;
+            let type = current_node.children_primitives[i].primitiveType;
 
-        if(type != "patch" && type != "plane" && type != "cylinder2"){ 
-            
-            if (this.scene.displayNormals)
-                current_node.children_primitives[i].primitive.enableNormalViz();
-            else
-                current_node.children_primitives[i].primitive.disableNormalViz();
+            // if the primitive is of type plane patch and cylinder2 then we cant show normals, wecgf error not ours
+            if (type != "patch" && type != "plane" && type != "cylinder2") {
 
-            if (current_node.texture[0] != "none"){
-                if (current_node.texture[0] == "inherit")
-                    current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
+                if (this.scene.displayNormals)
+                    current_node.children_primitives[i].primitive.enableNormalViz();
                 else
-                    current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
-            }
-        }
+                    current_node.children_primitives[i].primitive.disableNormalViz();
 
+                // updating the texcorrds of a primitive if lenght_s and lenght_t is defined and texture property is 
+                // different than none
+                if (current_node.texture[0] != "none") {
+                    if (current_node.texture[0] == "inherit")
+                        current_node.children_primitives[i].primitive.updatetexCoords(ls, lt);
+                    else
+                        current_node.children_primitives[i].primitive.updatetexCoords(current_node.texture[1], current_node.texture[2]);
+                }
+            }
+
+            // display the primitive itself
             current_node.children_primitives[i].primitive.display();
         }
 
+
+        // iterative cycle to iterate thorugh the components children that are components
         for (let i = 0; i < current_node.children_component.length; i++) {
 
+            // pushing the current matrix
             this.scene.pushMatrix();
 
+            // Different cases in which we have to pass diferent parameters to the children component
+
+            // if the material is inherit we have to pass the father material to the children
             if (current_node.materials[current_node.material_active] == "inherit") {
 
+                // if the texture is inherit then we pass to the children the father's texture
                 if (current_node.texture[0] == "inherit")
                     this.displaySceneRecursive(current_node.children_component[i], material_father, texture_father, ls, lt);
 
+                // if the texture is none then we pass to the children the current node's texture that will be defined with nothing
                 else if (current_node.texture[0] == "none")
                     this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], 1, 1);
 
+                // if the texture is not none and not inherit then we pass to the children the current node's texture    
                 else
                     this.displaySceneRecursive(current_node.children_component[i], material_father, current_node.texture[0], current_node.texture[1], current_node.texture[2]);
 
             }
-
+            // if the material is not inherit then we have to pass the current node's material to the children
             else {
 
+                // if the texture is inherit then we pass to the children the father's texture
                 if (current_node.texture[0] == "inherit")
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], texture_father, ls, lt);
 
+                // if the texture is none then we pass to the children the current node's texture that will be defined with nothing
                 else if (current_node.texture[0] == "none")
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], current_node.texture[0], 1, 1);
 
+                // if the texture is not none and not inherit then we pass to the children the current node's texture   
                 else
                     this.displaySceneRecursive(current_node.children_component[i], current_node.materials[current_node.material_active], current_node.texture[0], current_node.texture[1], current_node.texture[2]);
             }
 
+            // pop of the current matrix
             this.scene.popMatrix();
         }
     }
