@@ -1,6 +1,10 @@
 /**
  * MyTorus
  * @constructor
+ * @param radius_inner the inner radius of the torus
+ * @param radius_outter the outter radius of the torus
+ * @param slices the number of slices of the torus
+ * @param loops the number of loops of the torus
  */
 class MyTorus extends CGFobject {
     constructor(scene, radius_inner, radius_outter, slices, loops) {
@@ -14,6 +18,12 @@ class MyTorus extends CGFobject {
         this.initBuffers();
     }
     
+     /**
+    * Fuction used to update the texcoords of a torus when a texture is applied
+    * @function
+    * @param ls lenght_s of the texture, found in the xml when declaring a texture for a certain component
+    * @param lt lenght_t of the texture, found in the xml when declaring a texture for a certain component
+    */
     updatetexCoords(ls, lt){
 
         this.texCoords = [];

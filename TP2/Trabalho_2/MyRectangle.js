@@ -2,8 +2,10 @@
  * MyRectangle
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param x1 - x coordinate of the left lower point of the rectangle
+ * @param y1 - y coordinate of the left lower point of the rectangle
+ * @param x2 - x coordinate of the right upper point of the rectangle
+ * @param y2 - y coordinate of the right upper point of the rectangle
  */
 class MyRectangle extends CGFobject {
 	constructor(scene, id, x1, y1, x2, y2) {
@@ -16,10 +18,12 @@ class MyRectangle extends CGFobject {
 		this.initBuffers();
 	}
 	
-	/**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the rectangle
-	 */
+	 /**
+    * Fuction used to update the texcoords of a rectangle when a texture is applied
+    * @function
+    * @param ls lenght_s of the texture, found in the xml when declaring a texture for a certain component
+    * @param lt lenght_t of the texture, found in the xml when declaring a texture for a certain component
+    */
 	updatetexCoords(ls, lt){
 		
 		this.length = this.x2 - this.x1;

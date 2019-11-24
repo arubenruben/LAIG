@@ -32,7 +32,6 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
 
-
         this.UPDATE_PERIOD = 60;
 
         this.displayAxis = true;
@@ -42,18 +41,24 @@ class XMLscene extends CGFscene {
 
     }
     /**
-     * Initializes the scene cameras.
+     * updates the scene camera
      */
     updateCamera() {
         this.normalcamera = this.graph.Views[this.selectedCamera];
 
     }
+
+    /**
+    * updates the security camera
+    */
     updateCamera_RTT() {
         this.camera_to_rtt = this.graph.ViewsSecurity[this.Rtt];
     }
 
-   
 
+    /**
+     * initializes the security camera and the scene camera with the default values
+     */
     initCameras() {
         this.selectedCamera = this.graph.view_default;
         this.Rtt = this.graph.view_default;
@@ -120,12 +125,15 @@ class XMLscene extends CGFscene {
         }
     }
 
+    /** set the default appearance of the scene
+    */
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
+    
     /** Handler called when the graph is finally loaded. 
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
@@ -145,7 +153,7 @@ class XMLscene extends CGFscene {
         this.interface.gui_add_lights(this, this.graph.Lights);
 
 
-        /*Tempo em milisegundos*/
+        //Time in ms
         this.setUpdatePeriod((1 / this.UPDATE_PERIOD) * 1000);
 
         this.sceneInited = true;
@@ -167,7 +175,8 @@ class XMLscene extends CGFscene {
     }
 
     /**
-     * Displays the scene.
+     * renders the scene for the security camera or for the scene itself
+     * @param active_camera the active_camera that is set 
      */
     render(active_camera) {
         // ---- BEGIN Background, camera and axis setup
@@ -185,9 +194,7 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
-
-
+        
         this.pushMatrix();
 
         if (this.displayAxis)
@@ -210,10 +217,10 @@ class XMLscene extends CGFscene {
     }
 
 
-
+    /** display the scene with the normal camera and renders to the textureRTT the scene 
+     * ywith a security camera and displays it
+     */
     display() {
-
-
         if (this.sceneInited) {
             this.textureRTT.attachToFrameBuffer()
 

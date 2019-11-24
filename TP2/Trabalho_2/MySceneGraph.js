@@ -39,16 +39,24 @@ class MySceneGraph {
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
 
+        //  Array to hold the cameras of the scene
         this.Views = [];
+
+        //  Array to hold the cameras for the security camera
         this.ViewsSecurity = [];
+
+        // Array to hold ambient configurations
         this.ambient = [];
         this.background = [];
+        
+        // Var that holds the number of times the m key was pressed
         this.mPressed = 0;
 
+        // Array to hold the animations in the xml
         this.animations = [];
+        
+        // Array to hold the ids of components that have animations
         this.idsComponentsAnimation = [];
-
-
 
         // File reading 
         this.reader = new CGFXMLreader();

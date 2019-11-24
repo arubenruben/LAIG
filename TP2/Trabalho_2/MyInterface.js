@@ -23,20 +23,26 @@ class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
         this.gui.add(this.scene, 'displayNormals').name("Display Normals");
-    
+
         //this.gui.add(this.scene, 'selectedCamera', this.graph.camera).name('Selected Object').onChange(this.scene.onCamerachange.bind(this.scene));
         /*var f0 = this.gui.addFolder('Lights');
         f0.add(this.scene.lights[0], 'enabled').name("Enabled");*/
 
         this.m_pressed = 0;
         this.initKeys();
-    
-      
+
+
 
         return true;
     }
 
-    gui_add_camera(scene, views){
+
+    /**
+     * adds the cameras options
+     * @param scene Reference to the scene
+     * @param views array holding the cameras ids
+     */
+    gui_add_camera(scene, views) {
         let views_key = [];
         for (let key in views) {
             views_key.push(key)
@@ -44,7 +50,13 @@ class MyInterface extends CGFinterface {
         this.gui.add(scene, 'selectedCamera', views_key).onChange(this.scene.updateCamera.bind(this.scene));
     }
 
-    gui_add_camera_rtt(scene, views){
+
+    /**
+     * adds the security cameras options
+     * @param scene Reference to the scene
+     * @param views array holding the cameras ids
+     */
+    gui_add_camera_rtt(scene, views) {
         let views_key = [];
         for (let key in views) {
             views_key.push(key)
@@ -52,7 +64,13 @@ class MyInterface extends CGFinterface {
         this.gui.add(scene, 'Rtt', views_key).onChange(this.scene.updateCamera_RTT.bind(this.scene));
     }
 
-    gui_add_lights(scene, lights){
+
+    /**
+     * adds the lights checkbox option
+     * @param scene Reference to the scene
+     * @param lights array holding the cameras ids
+     */
+    gui_add_lights(scene, lights) {
         let views_key = [];
         var f0 = this.gui.addFolder('Lights');
         var i = 0;
@@ -67,22 +85,30 @@ class MyInterface extends CGFinterface {
      * initKeys
      */
     initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+        this.scene.gui = this;
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
     }
-
-    processKeyDown(event){
-        this.activeKeys[event.code]=true;
-        if(event.code == "KeyM" && !event.repeat){
-                this.scene.graph.mPressed++;
+    /**
+    * function to process the event of a key being pressed down
+    */
+    processKeyDown(event) {
+        this.activeKeys[event.code] = true;
+        if (event.code == "KeyM" && !event.repeat) {
+            this.scene.graph.mPressed++;
         }
     };
-    
+
+    /**
+* function to process the event of a key being let up, sttoping pressing it
+*/
     processKeyUp(event) {
-        this.activeKeys[event.code]=false;
+        this.activeKeys[event.code] = false;
     };
 
+    /**
+* function to determine if a key is being pressed or not
+*/
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }

@@ -1,6 +1,10 @@
 /**
- * MySphere
+ * MySphere represent a sphere with center on the point (0,0,0)
  * @constructor
+ * @param scene reference to the scene
+ * @param radius radius of the sphere
+ * @param stacks stacks of the sphere
+ * @param slices slices of the sphere
  */
 class MySphere extends CGFobject {
     constructor(scene, radius, stacks, slices) {
@@ -14,7 +18,12 @@ class MySphere extends CGFobject {
 
         this.initBuffers();
     }
-    
+    /**
+    * Fuction used to update the texcoords of a sphere when a texture is applied
+    * @function
+    * @param ls lenght_s of the texture, found in the xml when declaring a texture for a certain component
+    * @param lt lenght_t of the texture, found in the xml when declaring a texture for a certain component
+    */
     updatetexCoords(ls, lt){
         
         this.texCoords = [];
@@ -55,12 +64,7 @@ class MySphere extends CGFobject {
                 this.vertices.push(x, y, z);
                 this.normals.push(x / this.r, y / this.r, z / this.r);
                 this.texCoords.push(j / this.slices, i / this.stacks);
-
             }
-
-
-
-
         }
 
 

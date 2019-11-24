@@ -1,6 +1,9 @@
 /**
-* MyPlane
+* MyPlane NURBS lays on xz plane
 * @constructor
+* @param scene Reference to the scene 
+* @param npartsU the number of parts in the u direction
+* @param npartsV the number of parts in the v direction
 */
 class MyPlane extends CGFobject {
     constructor(scene, npartsU, npartsV) {
@@ -12,6 +15,10 @@ class MyPlane extends CGFobject {
         this.initBuffers();
     }
     
+    /**
+    * Function initBuffers creates the nurbs 
+    * @function
+    */
     initBuffers(){
         let controlPoints=
         //grau 1 em u e grau 1 em v
@@ -34,6 +41,11 @@ class MyPlane extends CGFobject {
         let surface= new CGFnurbsSurface(1,1,controlPoints);
         this.object= new CGFnurbsObject(this.scene,this.npartsU,this.npartsV,surface);
     }
+    
+    /**
+    * Function used to display the patch nurbs created
+    * @function
+    */
     display(){
         this.object.display();
     }

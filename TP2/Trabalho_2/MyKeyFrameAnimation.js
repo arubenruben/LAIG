@@ -2,6 +2,7 @@
  * MyKeyFrameAnimation
  * @constructor
  * @param scene - Reference to MyScene object
+ * @param instant - instant of the keyframe
  */
 class MyKeyFrameAnimation extends MyAnimation {
 	constructor(scene,instant) {

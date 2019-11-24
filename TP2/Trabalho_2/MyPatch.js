@@ -1,6 +1,12 @@
 /**
-* MyPatch
+* MyPatch NURBS
 * @constructor
+* @param scene Reference to the scene 
+* @param npointsU the number of points in the u direction
+* @param npointsV the number of points in the v direction
+* @param npartsU the number of parts in the u direction
+* @param npartsV the number of parts in the v direction
+* @param controlPointsFromParserarray holding the control points used to create the patch itself
 */
 class MyPatch extends CGFobject {
     
@@ -16,12 +22,20 @@ class MyPatch extends CGFobject {
         this.initBuffers();
     }
 
+    /**
+    * Function initBuffers creates the nurbs 
+    * @function
+    */
     initBuffers() {
         let controlPoints=this.generateControlPointsFormatRequired();
         let surface= new CGFnurbsSurface(this.npointsU-1,this.npointsV-1,controlPoints);
         this.object=new CGFnurbsObject(this.scene,this.npartsU,this.npartsV,surface);
     }
 
+    /**
+    * Function used to parse the control points sent from the xml parser into a determined and fixed form
+    * @function
+    */
     generateControlPointsFormatRequired(){
         let final_controlPoints=[];
         let iterator_control_points=0;
@@ -46,6 +60,11 @@ class MyPatch extends CGFobject {
         }
         return final_controlPoints;
     }
+
+    /**
+    * Function used to display the patch nurbs created
+    * @function
+    */
     display(){
         this.object.display();
     }

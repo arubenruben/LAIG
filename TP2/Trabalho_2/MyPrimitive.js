@@ -1,17 +1,31 @@
 /**
  * MyPrimitive
  * @constructor
+ * @param graph reference to MySceneGraph
+ * @param primitive_element the type of the element to be created (cylinder, patch , traingle, ....)
  */
 class MyPrimitive{
 	constructor(graph, primitive_element){
-	
+    
+        // Reference to MyScenegraph
         this.graph = graph;
+
+        // Var to hold the primitive type
         this.primitiveType = primitive_element.nodeName;
+
+        // Variable to hold the primitive that is about ot be created
         this.primitive;
+
+        // variable used to detect a error in the parsing of a certain arguments 
         this.error = false;
+
+        // Array to hold the parsed parameters
         this.args = [];
+
+        //  Array to hold the control points in case the primitive is one of the nurb primitives
         this.controlPoints = [];
         
+        // switch for the various primitives that exist (Rectangle, triangle, cylinder, cylinder2, sphere...)
         switch(this.primitiveType){
             
             case "rectangle":
@@ -111,6 +125,8 @@ class MyPrimitive{
             break;
         }
     }
+
+    // FUNCTIONS USED TO PARSE THE XML PRIMITIVE PARAMETERS
 
     parse_rectangle_attributes(primitive_element, graph){
         

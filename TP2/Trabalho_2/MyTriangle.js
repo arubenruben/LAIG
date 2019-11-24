@@ -2,6 +2,9 @@
  * MyTriangle
  * @constructor
  * @param scene - Reference to MyScene object
+ * @param ponto1 - One of the three points that make a triangle
+ * @param ponto2 - One of the three points that make a triangle
+ * @param ponto3 - One of the three points that make a triangle
  */
 class MyTriangle extends CGFobject {
 	constructor(scene, ponto1 = [], ponto2 = [], ponto3 = []) {
@@ -14,13 +17,29 @@ class MyTriangle extends CGFobject {
 		
 
 	}
+
+	/**
+	 * In case we want to update the points of a triangle
+	 * @function
+	 * @param ponto1 - One of the three points that make a triangle
+	 * @param ponto2 - One of the three points that make a triangle
+	 * @param ponto3 - One of the three points that make a triangle
+	*/
 	update_points(ponto1 = [], ponto2 = [], ponto3 = []){
 		this.ponto1 = ponto1;
 		this.ponto2 = ponto2;
 		this.ponto3 = ponto3;
 		this.initBuffers();
 	}
-	
+
+
+	    
+     /**
+    * Fuction used to update the texcoords of a Triangle when a texture is applied
+    * @function
+    * @param ls lenght_s of the texture, found in the xml when declaring a texture for a certain component
+    * @param lt lenght_t of the texture, found in the xml when declaring a texture for a certain component
+    */
 	updatetexCoords(ls , lt){
 		
 		this.texCoords = [
@@ -31,6 +50,11 @@ class MyTriangle extends CGFobject {
 		this.updateTexCoordsGLBuffers();
 	}
 
+	/**
+    * Fuction used to calculate the norm of a vector
+    * @function
+    * @param vector array to hold the values of a vector [x, y, z]
+    */
 	norma(vetor = []){
 		var norma = Math.sqrt(Math.pow(vetor[0],2)+ Math.pow(vetor[1],2) + Math.pow(vetor[2],2));
 		return norma;

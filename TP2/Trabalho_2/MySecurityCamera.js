@@ -1,6 +1,8 @@
 /**
-* MySecurityCamera
+* MySecurityCamera creates the rectangle shape of the camera to be displayed on the bottom right corner
+    occupying 25% of the screen in width and height
 * @constructor
+* @param scene reference to the scene
 */
 class MySecurityCamera extends CGFobject {
     constructor(scene) {
@@ -12,6 +14,11 @@ class MySecurityCamera extends CGFobject {
         this.initBuffers();
     }
     
+    /**
+    * Sets the active shader, binds the RTTtexture, displays the security camera, set the active shader to be
+    * the default one and unbinds the texture
+    * @function
+    */
     display(){
 
         this.scene.setActiveShader(this.shader)
@@ -22,11 +29,12 @@ class MySecurityCamera extends CGFobject {
     
     }
 
+     
+    /**
+    * Updates the time for the shader , for the withe lines to move upwards
+    * @function
+    */
     update(t){
         this.shader.setUniformsValues({timeFactor: t / 100 % 1000});
     }
-
-    
-
-
 }

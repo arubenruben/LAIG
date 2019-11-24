@@ -1,11 +1,12 @@
 /**
  * MyComponent
  * @constructor
+ * @param id id of the component
+ * @param is_defined bool, represents if the element that was created was already passed on the xml or not
  */
 class MyComponent {
 	constructor(id,is_defined) {
 		
-	
 		// variable used to tell if a component is already defined or not in the components block,´
 		// at the end of the components block needs to checked if all components have this variable as true
 		//	if not means some components refers it 
@@ -19,8 +20,6 @@ class MyComponent {
 		this.transformation;
 
 
-		
-	
 		// variable to hold the current active material of the component
 		this.material_active;
 

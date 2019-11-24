@@ -16,9 +16,10 @@ void main(){
 
     float distance = distance(origem, vTextureCoord);
     
-    // gradiente circular
+    // Circular gradient calculation
     float value = 1.0 - (distance * 1.7);
 
+    // Trying to make a different function to improve the circular gradient (NOT COMPLETE)
     //    vec4 color = texture2D(uSampler,vTextureCoord);
     // vec2 origem = vec2(0.5,0.5);
     // float distance = distance(origem, vTextureCoord);
@@ -29,14 +30,14 @@ void main(){
     // float d = h * (1.0/r);
     // float value = 1.0 - d;
 
-    // Linhas da camera
+    // Makes the white lines that are moving one the security camera
     // if(mod(vTextureCoord.y * 20.0- timeFactor / 10.0, 2.0) > 1.0)
     //     color = vec4(color.rgb + 0.3,1.0);
 
     // gl_FragColor = vec4(color.rgb * value, 1.0);
 
 
-    // Linhas da camera
+    // Makes the white lines that are moving one the security camera
     if(mod(vTextureCoord.y * 20.0- timeFactor / 10.0, 2.0) > 1.0)
         color = vec4(color.rgb + 0.3,1.0);
 
