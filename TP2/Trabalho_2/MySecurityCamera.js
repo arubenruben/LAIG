@@ -35,6 +35,6 @@ class MySecurityCamera extends CGFobject {
     * @function
     */
     update(t) {
-        this.shader.setUniformsValues({ timeFactor: t / 100 % 1000 });
+        this.shader.setUniformsValues({ timeFactor: t / 100 % 1000, SCLinesHeight: this.scene.SCLinesHeight, SCLinesRate: this.scene.SCLinesRate, SCRadialGradient: this.scene.SCRadialGradient});
     }
 }

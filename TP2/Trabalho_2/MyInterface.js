@@ -24,14 +24,13 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
         this.gui.add(this.scene, 'displayNormals').name("Display Normals");
 
-        //this.gui.add(this.scene, 'selectedCamera', this.graph.camera).name('Selected Object').onChange(this.scene.onCamerachange.bind(this.scene));
-        /*var f0 = this.gui.addFolder('Lights');
-        f0.add(this.scene.lights[0], 'enabled').name("Enabled");*/
+
+        this.gui.add(this.scene, 'SCLinesHeight', 0, 50).name('SC Lines Height');
+        this.gui.add(this.scene, 'SCLinesRate', 0.0, 10.0).name('SC Lines Rate');
+        this.gui.add(this.scene, 'SCRadialGradient', 1.0, 10.0).name('SC Radial Gradient');
 
         this.m_pressed = 0;
         this.initKeys();
-
-
 
         return true;
     }

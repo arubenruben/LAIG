@@ -39,6 +39,11 @@ class XMLscene extends CGFscene {
         this.selectedCamera = 0;
         this.Rtt = 0;
 
+        this.SCLinesHeight = 20.0;
+        this.SCLinesRate = 10.0;
+        this.SCRadialGradient = 1.7;
+
+
     }
     /**
      * updates the scene camera
