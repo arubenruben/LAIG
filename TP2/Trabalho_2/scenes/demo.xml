@@ -1,6 +1,7 @@
 <lxs>
     <scene root="terrain" axis_length="5" />
 
+     <!-- VIEWS/CAMERAS USED IN THE SCENE -->
     <views default="frontSideCamera">
         <perspective id="frontSideCamera" near="0.1" far="500" angle="45">
             <from x="7" y="10" z="30" />
@@ -49,14 +50,17 @@
             <to x="7" y="0" z="11" />
         </perspective>
 
-
+        
     </views>
+
 
     <globals>
         <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
     </globals>
-
+    
+    
+    <!-- LIGHTS USED IN THE SCENE -->    
     <lights>
         <omni id="meio_dia" enabled="0">
             <location x="7" y="5" z="10" w="1.0" />
@@ -106,6 +110,7 @@
 
     </lights>
 
+     <!-- TEXTURES USED IN THE SCENE -->
     <textures>
         <texture id="slider_red" file="scenes/images/slider.jpg" />
         <texture id="slider_yellow" file="scenes/images/slider_yellow.jpg" />
@@ -130,6 +135,7 @@
         <texture id="metal" file="scenes/images/metal.jpg" />
     </textures>
 
+     <!-- MATERIALS USED IN THE SCENE -->
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -226,10 +232,12 @@
 
     </materials>
 
+    <!-- TRANSFORMATIONS USED IN THE SCENE -->
     <transformations>
 
 
-        <!-- VERIFICADAS-->
+        <!-- Not that many used because we use more explicit transformations on the components, the ones that are here
+        are only to demonstrate the capability of our parser to be able in the components to use transformationsref-->
         <transformation id="demoTransform">
             <translate x="0" y="0" z="0" />
         </transformation>
@@ -243,7 +251,6 @@
             <translate x="0" y="-2" z="0" />
             <rotate axis="x" angle="90" />
             <scale x="14" y="20" z="1" />
-
         </transformation>
 
         <transformation id="terrain_transf">
@@ -256,7 +263,10 @@
 
     </transformations>
 
+    <!-- ANIMATIONS USED IN THE SCENE -->
     <animations>
+
+        <!-- Test animation, first animation we tried-->
         <animation id="first">
             <keyframe instant="5">
                 <translate x="0" y="5" z="0" />
@@ -265,8 +275,8 @@
             </keyframe>
         </animation>
 
+        <!-- Animation for the water ball that is on the scene-->
         <animation id="bola">
-
             <keyframe instant="3.00">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
@@ -489,6 +499,7 @@
 
         </animation>
 
+        <!--Animation for one of the water bouy in the scene-->
         <animation id="boia_left">
 
             <keyframe instant="0.8">
@@ -566,7 +577,7 @@
 
         </animation>
 
-
+        <!--Animation for one of the water bouy in the scene-->
         <animation id="boia_right">
             <keyframe instant="0.8">
                 <translate x="0" y="0.7" z="3" />
@@ -642,26 +653,7 @@
 
         </animation>
 
-        <animation id="boia2">
-
-            <keyframe instant="10">
-                <translate x="0" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-            <keyframe instant="16">
-                <translate x="1" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-            <keyframe instant="20">
-                <translate x="0" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-
-        </animation>
-
+        <!-- Animation for the slight movement of the palm trees leaves-->
         <animation id="palm_tree_leafs">
 
             <keyframe instant="3">
@@ -684,6 +676,7 @@
             </keyframe>
         </animation>
 
+        <!-- Animation for the beach umbrellas on the scene, the closing and opening-->
         <animation id="guarda_sol">
             <keyframe instant="3">
                 <translate x="0" y="0" z="0" />
@@ -712,7 +705,7 @@
 
         </animation>
 
-
+        <!-- Animation for the slight movement of the palm trees trunks-->
         <animation id="palm_tree_trunk">
 
             <keyframe instant="3">
@@ -751,6 +744,7 @@
 
         </animation>
 
+        <!-- Animation for the opening and closing of the gates that are one the scene-->
         <animation id="gate">
 
             <keyframe instant="2">
@@ -800,57 +794,70 @@
 
     </animations>
 
+    <!-- PRIMITIVES USED IN THE SCENE -->
     <primitives>
 
-
+        <!-- Simple primitve used to represent a square 1 by 1, used a lot in the scene with scale transformation to make rectangles -->
         <primitive id="square">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
 
+        <!-- Cylinder primitive used in the construction of the beach umbrella stick-->
         <primitive id="cilinder_pau">
             <cylinder base="0.4" top="0.5" height="1" slices="10" stacks="10" />
         </primitive>
 
+        <!-- Cylinder primitive used in the construction of the billboard support pilar-->
         <primitive id="cilinder_spot">
             <cylinder base="0.1" top="0.1" height="4" slices="15" stacks="15" />
         </primitive>
 
+        <!-- Torus primitve used to make the bouy that are on the scene-->
         <primitive id="torus_bouy">
             <torus inner="0.2" outer="0.5" slices="30" loops="30" />
         </primitive>
 
+        <!-- Sphere primitve used to make the water ball on the scene -->
         <primitive id="sphere_ball">
             <sphere radius="0.3" slices="30" stacks="30" />
         </primitive>
 
+        <!-- Cylinder primitive used in the construction of the beach umbrella stick-->
         <primitive id="cilinder_guarda_sol">
             <cylinder base="0.5" top="0" height="1" slices="15" stacks="15" />
         </primitive>
 
+        <!-- Cylinder primitive used in the construction of a chair leg-->
         <primitive id="cilinder_perna_esperguicadeira">
             <cylinder base="0.3" top="0.3" height="1" slices="10" stacks="10" />
         </primitive>
 
+        <!-- Triangle primitive used a lot in the scene, on various objects but mainly in the leaves of the palm trees-->
         <primitive id="triangle">
             <triangle x1="0" y1="0" z1="0" x2="1" y2="1" z2="0" x3="2" y3="0" z3="0" />
         </primitive>
 
+        <!-- Triangle primitve used to represent the top part of the fences-->
         <primitive id="triangle_fence_primitive">
             <triangle x1="0" y1="0" z1="0" x2="0.25" y2="0.25" z2="0" x3="0.5" y3="0" z3="0" />
         </primitive>
 
+        <!-- Sphere primitive used int he palm tree to represent on the joints sort off-->
         <primitive id="sphere_palm_tree">
             <sphere radius="0.1" slices="10" stacks="10" />
         </primitive>
 
+        <!-- Cylinder primitive used to create the trunk of a palm tree -->
         <primitive id="cilinder_palm_tree">
             <cylinder base="0.1" top="0.1" height="2" slices="10" stacks="10" />
         </primitive>
 
+        <!-- Plane primitive used to create one of the parts of a chair -->
         <primitive id="nurb_esperguicadeira">
             <plane npartsU="4" npartsV="4" />
         </primitive>
 
+        <!-- Patch primitives used to create the water sliders in the scene-->
         <primitive id="escorrega_patch">
             <patch npointsU="4" npointsV="3" npartsU="5" npartsV="3">
 
@@ -898,9 +905,9 @@
 
 
             </patch>
-
         </primitive>
 
+        <!-- Cylinder primitives used to creates the ladders to the water sliders -->
         <primitive id="cylinder_slider_ladder_1">
             <cylinder2 base="0.1" top="0.1" height="3" slices="10" stacks="10" />
         </primitive>
@@ -912,12 +919,11 @@
 
     </primitives>
 
+
+    <!-- COMPONENTS USED IN THE SCENE -->
     <components>
 
-        <!-- 
-            Espaco de manipulacao do portao
-        -->
-
+        <!-- Components used to create the 2 gates that lead to the pool itself-->
         <component id="tabuaverticaldir">
             <transformation>
                 <translate x="1.5" y="0" z="0" />
@@ -1107,14 +1113,7 @@
 
         </component>
 
-
-        <!-- 
-            Fim do Espaco de manipulacao do portao
-        -->
-
-        <!--
-            Espaco de manipulacao do espaco publicitario
-        -->
+        <!-- Componets used to create the billboard that is in the scene with the text "Grand theft Auto VICE CITY" -->
         <component id="barra_ilumin_spot2">
             <transformation>
                 <translate x="4" y="0" z="0" />
@@ -1230,14 +1229,8 @@
             </children>
         </component>
 
-        <!--
-    Espaco publicitario end 
--->
-
-        <!--
-    Espaco de manipulacao da fence
--->
-
+        <!--Components Used to create the fences that around the pool, decided not to apply a texture due to it slowing 
+            the scene a lot -->
         <component id="grupo_3_fences_generico">
             <transformation></transformation>
             <materials>
@@ -1645,7 +1638,6 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
-
             <children>
                 <componentref id="grupo_3_fences_generico" />
             </children>
@@ -1659,7 +1651,6 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
-
             <children>
                 <componentref id="grupo_3_fences_generico" />
             </children>
@@ -1674,7 +1665,6 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
-
             <children>
                 <componentref id="grupo_3_fences_generico" />
             </children>
@@ -1859,16 +1849,7 @@
                 <componentref id="grupo_fence_esq_7" />
                 <componentref id="grupo_fence_esq_8" />
                 <componentref id="grupo_fence_esq_9" />
-
-                <!-- Para colocar buracos a simular portas nas fences
-
-                    <componentref id="grupo_fence_esq_10"/>
-                    <componentref id="grupo_fence_esq_11"/>
-                    <componentref id="grupo_fence_esq_12"/>
-
-                -->
                 <componentref id="gate_esquerda" />
-
                 <componentref id="grupo_fence_esq_13" />
                 <componentref id="grupo_fence_esq_14" />
                 <componentref id="grupo_fence_esq_15" />
@@ -1932,8 +1913,73 @@
 
 
             </children>
+        </component>
 
 
+        <!-- Components that Represent the umbrella itself with a stick of the umbrella and the superior part of it-->
+        <component id="pau">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="plastic" length_s="1" length_t="1" />
+            <children>
+                <componentref id="chapeu_shape" />
+                <componentref id="pau_placement" />
+            </children>
+        </component>
+
+        <component id="chapeu_shape">
+            <transformation>
+                <translate x="0" y="6" z="1" />
+                <scale x="8" y="2" z="8" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <animationref id="guarda_sol" />
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="ola" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cilinder_guarda_sol" />
+            </children>
+        </component>
+
+        <component id="pau_placement">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+                <scale x="0.5" y="6" z="0.5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="cilinder_pau" />
+            </children>
+        </component>
+
+        <!-- Components used to represent a chair in the scene-->
+        <component id="esperguicadeira">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="esperguicadeira" length_s="1" length_t="1" />
+            <children>
+                <componentref id="anterior_esq" />
+                <componentref id="anterior_dir" />
+                <componentref id="frente_esq" />
+                <componentref id="frente_dir" />
+                <componentref id="tabua" />
+                <componentref id="costas" />
+            </children>
         </component>
 
         <component id="costas">
@@ -2024,74 +2070,8 @@
             </children>
         </component>
 
-
-        <component id="chapeu_shape">
-            <transformation>
-                <translate x="0" y="6" z="1" />
-                <scale x="8" y="2" z="8" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <animationref id="guarda_sol" />
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="ola" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="cilinder_guarda_sol" />
-            </children>
-        </component>
-
-        <component id="pau_placement">
-            <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="0.5" y="6" z="0.5" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <primitiveref id="cilinder_pau" />
-            </children>
-        </component>
-
-
-        <component id="pau">
-            <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="1" y="1" z="1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="plastic" length_s="1" length_t="1" />
-            <children>
-                <componentref id="chapeu_shape" />
-                <componentref id="pau_placement" />
-            </children>
-        </component>
-
-
-        <component id="esperguicadeira">
-            <transformation>
-                <translate x="0" y="0" z="0" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="esperguicadeira" length_s="1" length_t="1" />
-            <children>
-                <componentref id="anterior_esq" />
-                <componentref id="anterior_dir" />
-                <componentref id="frente_esq" />
-                <componentref id="frente_dir" />
-                <componentref id="tabua" />
-                <componentref id="costas" />
-            </children>
-        </component>
-
-
+        <!-- Component that represent a beach umbrela in the scene, used to give a certain umbrela different position and
+            materials when clicking M-->
         <component id="guarda_sol_aux_1">
             <transformation>
                 <translate x="0" y="0" z="14.3" />
@@ -2110,7 +2090,7 @@
             </children>
         </component>
 
-
+        <!-- Components to represent the chairs in a diferent position, just applying a transformation-->
         <component id="esperguicadeira_aux_2">
             <transformation>
                 <translate x="0" y="0" z="18" />
@@ -2138,6 +2118,7 @@
             </children>
         </component>
 
+        <!-- Components that represent one block with a beahc umbrella and two chairs-->
         <component id="esper_mais_guarda_sois_1">
             <transformation>
                 <translate x="0.5" y="0" z="0" />
@@ -2169,7 +2150,7 @@
             </children>
         </component>
 
-
+        <!-- Components that contains the beach umbrelas and the chais used in the scene-->
         <component id="mobiliario">
             <transformation>
                 <translate x="2" y="0" z="7" />
@@ -2204,7 +2185,7 @@
             </children>
         </component>
 
-
+        <!-- Components used to create the marble sections of the pool and the grass ones -->
         <component id="grass_width">
             <transformation>
 
@@ -2373,7 +2354,8 @@
             </children>
         </component>
 
-
+        <!-- Components used to create the two palm Trees that are in the scene, a lot of the components used are because
+            of the leaves that a palm tree has to have-->
         <component id="folha18">
             <transformation>
 
@@ -2657,15 +2639,11 @@
 
         </component>
 
-
         <component id="folha5">
             <transformation>
-
                 <rotate axis="x" angle="70" />
                 <rotate axis="z" angle=" 90" />
                 <scale x="0.2" y="1.8" z="0.2" />
-
-
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2673,21 +2651,14 @@
             <texture id="inherit" />
             <children>
                 <primitiveref id="triangle" />
-
-
             </children>
-
         </component>
-
 
         <component id="folha4">
             <transformation>
-
                 <rotate axis="x" angle="50" />
                 <rotate axis="z" angle=" 70" />
                 <scale x="0.2" y="1.8" z="0.2" />
-
-
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2695,21 +2666,15 @@
             <texture id="inherit" />
             <children>
                 <primitiveref id="triangle" />
-
-
             </children>
-
         </component>
 
 
         <component id="folha3">
             <transformation>
-
                 <rotate axis="x" angle="30" />
                 <rotate axis="z" angle=" 40" />
                 <scale x="0.2" y="2" z="0.2" />
-
-
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2717,21 +2682,15 @@
             <texture id="inherit" />
             <children>
                 <primitiveref id="triangle" />
-
-
             </children>
-
         </component>
 
 
         <component id="folha2">
             <transformation>
-
                 <rotate axis="x" angle="20" />
                 <rotate axis="z" angle=" 10" />
                 <scale x="0.2" y="1.8" z="0.2" />
-
-
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2739,19 +2698,13 @@
             <texture id="inherit" />
             <children>
                 <primitiveref id="triangle" />
-
-
             </children>
-
         </component>
-
 
         <component id="folha1">
             <transformation>
                 <rotate axis="x" angle="30" />
                 <scale x="0.2" y="2" z="0.2" />
-
-
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -2759,17 +2712,13 @@
             <texture id="inherit" />
             <children>
                 <primitiveref id="triangle" />
-
-
             </children>
-
         </component>
 
         <component id="topo_folhas">
             <transformation>
                 <translate x="-0.1" y="0.6" z="0" />
                 <rotate axis="x" angle="90" />
-
             </transformation>
             <animationref id="palm_tree_leafs" />
             <materials>
@@ -2795,10 +2744,7 @@
                 <componentref id="folha16" />
                 <componentref id="folha17" />
                 <componentref id="folha18" />
-
-
             </children>
-
         </component>
 
         <component id="palm_tree_trunk_5">
@@ -2876,7 +2822,6 @@
             </children>
         </component>
 
-
         <component id="palm_tree_trunk_0">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -2892,7 +2837,6 @@
                 <componentref id="palm_tree_trunk_2" />
             </children>
         </component>
-
 
         <component id="palm_tree_1">
             <transformation>
@@ -2933,7 +2877,7 @@
             </children>
         </component>
 
-
+        <!-- component to represent one of the grass rectangles, the one with the palm trees-->
         <component id="floor">
             <transformation>
                 <transformationref id="identity" />
@@ -2946,10 +2890,27 @@
                 <componentref id="floor_width" />
                 <componentref id="floor_length" />
                 <componentref id="palm_trees_node" />
-
             </children>
         </component>
 
+
+        <!-- Components used to create the inner and outer sides of the terrain, the ones that have the textures of dirt
+            to represent the underground-->
+        <component id="sides">
+            <transformation>
+                <transformationref id="identity" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="left_side" />
+                <componentref id="right_side" />
+                <componentref id="front_side" />
+                <componentref id="back_side" />
+            </children>
+        </component>
 
         <component id="underground">
             <transformation>
@@ -2963,9 +2924,6 @@
                 <primitiveref id="square" />
             </children>
         </component>
-
-        <!--SIDES-->
-
         <component id="left_right_side_primitive">
             <transformation>
                 <translate x="0" y="-2" z="0" />
@@ -3024,7 +2982,6 @@
 
         <component id="back_side">
             <transformation>
-                <!-- putting normals the correct way-->
                 <translate x="0" y="-2" z="0" />
                 <rotate axis="x" angle="180" />
             </transformation>
@@ -3037,6 +2994,7 @@
                 <componentref id="back_front_side_primitive" />
             </children>
         </component>
+
 
         <component id="front_side">
             <transformation>
@@ -3051,38 +3009,8 @@
             </children>
         </component>
 
-        <component id="sides">
-            <transformation>
-                <transformationref id="identity" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="left_side" />
-                <componentref id="right_side" />
-                <componentref id="front_side" />
-                <componentref id="back_side" />
-            </children>
-        </component>
-
-        <component id="ramp">
-            <transformation>
-                <translate x="3" y="0" z="18" />
-                <rotate axis="x" angle="-105" />
-                <scale x="7" y="5" z="0" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="pool_tiles" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="square" />
-            </children>
-        </component>
-
-
+        <!-- Component used to form the inner sides of the pool, the bottom and the sides, derivade from the components above 
+        this one -->
         <component id="sides1">
             <transformation>
                 <translate x="4" y="0" z="6" />
@@ -3101,6 +3029,24 @@
             </children>
         </component>
 
+        <!-- Component used to create the ramp that gives acess to the water pool itself-->
+        <component id="ramp">
+            <transformation>
+                <translate x="3" y="0" z="18" />
+                <rotate axis="x" angle="-105" />
+                <scale x="7" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="pool_tiles" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+
+        <!-- Component used to represent the water in the pool itself, basically a rectangle with a texture of water-->
         <component id="water">
             <transformation>
                 <translate x="4" y="-0.3" z="20" />
@@ -3116,6 +3062,7 @@
             </children>
         </component>
 
+        <!-- Water ball in the middle of the pool, in the water-->
         <component id="water_ball">
             <transformation>
                 <translate x="7" y="0" z="12" />
@@ -3132,6 +3079,8 @@
             </children>
         </component>
 
+
+        <!-- Components for the 2 water bouy in the middle of the pool, in the water -->
         <component id="water_bouy">
             <transformation>
                 <translate x="11" y="6" z="9" />
@@ -3163,8 +3112,7 @@
         </component>
 
 
-        <!-- TERRAIN ITSELF / ROOT OF XML-->
-
+        <!-- ROOT of the xml, represents the scene itself-->
         <component id="terrain">
             <transformation>
                 <transformationref id="identity" />
@@ -3188,6 +3136,8 @@
             </children>
         </component>
 
+
+        <!-- The two water sliders in the scene, created using nurbs-->
         <component id="escorrega2">
             <transformation>
                 <translate x="8" y="2.2" z="4.3" />
@@ -3220,6 +3170,8 @@
             </children>
         </component>
 
+
+        <!-- Components associated to the ladder used in the water sliders -->
         <component id="slider_ladder_left">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -3367,7 +3319,7 @@
             </children>
         </component>
 
-
+        <!-- Pool from the scene and its constituents-->
         <component id="pool">
             <transformation>
                 <transformationref id="identity" />
@@ -3379,7 +3331,6 @@
             <texture id="water" length_s="1" length_t="1" />
             <children>
 
-
                 <componentref id="sides1" />
                 <componentref id="ramp" />
                 <componentref id="water_ball" />
@@ -3388,7 +3339,6 @@
                 <componentref id="water" />
                 <componentref id="escorrega" />
                 <componentref id="escorrega2" />
-
 
             </children>
         </component>

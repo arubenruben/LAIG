@@ -17,7 +17,7 @@ void main(){
     float distance = distance(origem, vTextureCoord);
     
     // gradiente circular
-    float value = 1.0 - (distance * 1.5);
+    float value = 1.0 - (distance * 1.7);
 
     //    vec4 color = texture2D(uSampler,vTextureCoord);
     // vec2 origem = vec2(0.5,0.5);
