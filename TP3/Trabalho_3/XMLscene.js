@@ -21,10 +21,6 @@ class XMLscene extends CGFscene {
 
         super.init(application);
         this.sceneInited = false;
-
-        this.textureRTT = new CGFtextureRTT(this, this.gl.canvas.width, 600)
-        this.security_camera = new MySecurityCamera(this)
-
         this.enableTextures(true);
         this.gl.clearDepth(100.0);
         this.gl.disable(this.gl.DEPTH_TEST);
@@ -32,45 +28,27 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
 
-        this.UPDATE_PERIOD = 60;
+        this.UPDATE_PERIOD = 30;
 
         this.displayAxis = true;
         this.displayNormals = false;
         this.selectedCamera = 0;
-        this.Rtt = 0;
-
-        this.SCLinesHeight = 20.0;
-        this.SCLinesRate = 10.0;
-        this.SCRadialGradient = 1.7;
-
-
     }
     /**
      * updates the scene camera
      */
-    updateCamera() {
-        this.normalcamera = this.graph.Views[this.selectedCamera];
-
+    updateCamera(){
+        this.camera = this.graph.Views[this.selectedCamera];
+        this.interface.setActiveCamera(this.camera);
     }
-
-    /**
-    * updates the security camera
-    */
-    updateCamera_RTT() {
-        this.camera_to_rtt = this.graph.ViewsSecurity[this.Rtt];
-    }
-
 
     /**
      * initializes the security camera and the scene camera with the default values
      */
     initCameras() {
         this.selectedCamera = this.graph.view_default;
-        this.Rtt = this.graph.view_default;
         this.camera = this.graph.Views[this.selectedCamera];
-
-        this.normalcamera = this.graph.Views[this.selectedCamera];
-        this.camera_to_rtt = this.graph.ViewsSecurity[this.Rtt];
+        this.interface.setActiveCamera(this.camera);
     }
 
     /**
@@ -153,8 +131,6 @@ class XMLscene extends CGFscene {
 
         this.initCameras();
 
-        this.interface.gui_add_camera(this, this.graph.Views);
-        this.interface.gui_add_camera_rtt(this, this.graph.Views)
         this.interface.gui_add_lights(this, this.graph.Lights);
 
 
@@ -176,33 +152,31 @@ class XMLscene extends CGFscene {
                 this.component_animation.update(t);
             }
         }
-        this.security_camera.update(t);
     }
 
-    /**
-     * renders the scene for the security camera or for the scene itself
-     * @param active_camera the active_camera that is set 
+    
+     /**
+     * Displays the scene.
      */
-    render(active_camera) {
+    display() {
         // ---- BEGIN Background, camera and axis setup
+
         // Clear image and depth buffer everytime we update the scene
+        if(this.sceneInited){
+            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-        this.camera = active_camera
-        this.interface.setActiveCamera(this.camera)
-
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-        // Initialize Model-View matrix as identity (no transformation
-        this.updateProjectionMatrix();
-        this.loadIdentity();
-
-        // Apply transformations corresponding to the camera position relative to the origin
-        this.applyViewMatrix();
-
+            // Initialize Model-View matrix as identity (no transformation
+            this.updateProjectionMatrix();
+            this.loadIdentity();
+            
+            // Apply transformations corresponding to the camera position relative to the origin
+            this.applyViewMatrix();
+        }
+        
         this.pushMatrix();
-
-        if (this.displayAxis)
+        
+        if(this.displayAxis)
             this.axis.display();
 
         for (var i = 0; i < this.graph.numLights; i++) {
@@ -219,24 +193,5 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
-    }
-
-
-    /** display the scene with the normal camera and renders to the textureRTT the scene 
-     * ywith a security camera and displays it
-     */
-    display() {
-        if (this.sceneInited) {
-            this.textureRTT.attachToFrameBuffer()
-
-            this.render(this.camera_to_rtt)
-
-            this.textureRTT.detachFromFrameBuffer()
-            this.render(this.normalcamera)
-
-            this.gl.disable(this.gl.DEPTH_TEST);
-            this.security_camera.display()
-            this.gl.enable(this.gl.DEPTH_TEST)
-        }
     }
 }

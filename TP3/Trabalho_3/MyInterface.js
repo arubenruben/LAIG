@@ -23,46 +23,11 @@ class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
         this.gui.add(this.scene, 'displayNormals').name("Display Normals");
-
-
-        this.gui.add(this.scene, 'SCLinesHeight', 0, 50).name('SC Lines Height');
-        this.gui.add(this.scene, 'SCLinesRate', 0.0, 10.0).name('SC Lines Rate');
-        this.gui.add(this.scene, 'SCRadialGradient', 1.0, 10.0).name('SC Radial Gradient');
-
         this.m_pressed = 0;
         this.initKeys();
 
         return true;
     }
-
-
-    /**
-     * adds the cameras options
-     * @param scene Reference to the scene
-     * @param views array holding the cameras ids
-     */
-    gui_add_camera(scene, views) {
-        let views_key = [];
-        for (let key in views) {
-            views_key.push(key)
-        }
-        this.gui.add(scene, 'selectedCamera', views_key).onChange(this.scene.updateCamera.bind(this.scene));
-    }
-
-
-    /**
-     * adds the security cameras options
-     * @param scene Reference to the scene
-     * @param views array holding the cameras ids
-     */
-    gui_add_camera_rtt(scene, views) {
-        let views_key = [];
-        for (let key in views) {
-            views_key.push(key)
-        }
-        this.gui.add(scene, 'Rtt', views_key).onChange(this.scene.updateCamera_RTT.bind(this.scene));
-    }
-
 
     /**
      * adds the lights checkbox option
