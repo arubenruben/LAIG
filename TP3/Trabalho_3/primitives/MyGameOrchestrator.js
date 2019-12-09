@@ -39,20 +39,19 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboard.display();
         
 
-        // this.scene.pushMatrix();
-        // this.scene.translate(1, 0, 0);
-        // this.piece1.display();
-        // this.scene.popMatrix();
+        this.scene.pushMatrix();
+        this.scene.translate(1, 0, 0);
+        this.piece1.display();
+        this.scene.popMatrix();
 
-        // this.scene.pushMatrix();
-        // this.scene.translate(-1, 0, 0);
-        // this.piece2.display();
-        // this.scene.popMatrix();
+        this.scene.pushMatrix();
+        this.scene.translate(-1, 0, 0);
+        this.piece2.display();
+        this.scene.popMatrix();
 
 
         // this.piece3.display();
 
 
     }
-
 }
