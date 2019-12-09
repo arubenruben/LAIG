@@ -11,6 +11,8 @@ class XMLscene extends CGFscene {
     constructor(myinterface) {
         super();
         this.interface = myinterface;
+
+        //this.gameOrchestrator = new MyGameOrchestrator(this);
     }
 
     /**
@@ -19,25 +21,26 @@ class XMLscene extends CGFscene {
      */
     init(application) {
 
-        super.init(application);
-        this.sceneInited = false;
-        this.enableTextures(true);
-        this.gl.clearDepth(100.0);
-        this.gl.disable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.CULL_FACE);
-        this.gl.depthFunc(this.gl.LEQUAL);
-        this.axis = new CGFaxis(this);
+            super.init(application);
+            this.sceneInited = false;
+            this.enableTextures(true);
+            this.gl.clearDepth(100.0);
+            this.gl.disable(this.gl.DEPTH_TEST);
+            this.gl.enable(this.gl.CULL_FACE);
+            this.gl.depthFunc(this.gl.LEQUAL);
+            this.axis = new CGFaxis(this);
 
-        this.UPDATE_PERIOD = 30;
+            this.UPDATE_PERIOD = 30;
 
-        this.displayAxis = true;
-        this.displayNormals = false;
-        this.selectedCamera = 0;
-    }
-    /**
-     * updates the scene camera
-     */
-    updateCamera(){
+            this.displayAxis = true;
+            this.displayNormals = false;
+            this.selectedCamera = 0;
+            this.gameOrchestrator = new MyGameOrchestrator(this);
+        }
+        /**
+         * updates the scene camera
+         */
+    updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
     }
@@ -96,8 +99,7 @@ class XMLscene extends CGFscene {
 
             if (light[enable_index] == true) {
                 this.lights[i].enable();
-            }
-            else {
+            } else {
                 this.lights[i].disable();
             }
             this.lights[i].setVisible(true);
@@ -109,7 +111,7 @@ class XMLscene extends CGFscene {
     }
 
     /** set the default appearance of the scene
-    */
+     */
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -152,31 +154,36 @@ class XMLscene extends CGFscene {
                 this.component_animation.update(t);
             }
         }
+
+        //para fazer o update no my game orchestrator
+
+        //this.gameOrchestrator.update(t);
     }
 
-    
-     /**
+
+    /**
      * Displays the scene.
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
+        //this.gameOrchestrator.orchestrate();
 
         // Clear image and depth buffer everytime we update the scene
-        if(this.sceneInited){
+        if (this.sceneInited) {
             this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
             // Initialize Model-View matrix as identity (no transformation
             this.updateProjectionMatrix();
             this.loadIdentity();
-            
+
             // Apply transformations corresponding to the camera position relative to the origin
             this.applyViewMatrix();
         }
-        
+
         this.pushMatrix();
-        
-        if(this.displayAxis)
+
+        if (this.displayAxis)
             this.axis.display();
 
         for (var i = 0; i < this.graph.numLights; i++) {
@@ -188,8 +195,10 @@ class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
+            //this.graph.displayScene();
         }
+
+        this.gameOrchestrator.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
