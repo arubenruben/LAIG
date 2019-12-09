@@ -14,16 +14,16 @@ class MyGameOrchestrator extends CGFobject {
 
         this.piece = new MyPiece(scene);
         //TODO:Pass as parameter the correct tile
-        this.gameboard = new MyGameBoard(scene,-2,4,4,-2,2);
+        this.tile = new MyTile(scene);
+        this.gameboard = new MyGameBoard(scene,-2,4,4,-2,2,this.tile);
         this.piece1 = new MyPiece(scene, 'blue');
         this.piece2 = new MyPiece(scene, 'red');
         this.piece3 = new MyPiece(scene, 'yellow');
 
-        this.tile = new MyTile(scene);
 
         /* this.gameSequence = new MyGameSequence(…);
+        this.theme = new MyScenegraph(…);
          this.animator = new MyAnimator(…);
-         this.theme = new MyScenegraph(…);
          this.prolog = new MyPrologInterface(…); */
     }
 
@@ -37,7 +37,7 @@ class MyGameOrchestrator extends CGFobject {
          this.gameboard.display();
          this.animator.display();*/
         this.gameboard.display();
-        this.piece.display();
+        
 
         // this.scene.pushMatrix();
         // this.scene.translate(1, 0, 0);
@@ -51,24 +51,6 @@ class MyGameOrchestrator extends CGFobject {
 
 
         // this.piece3.display();
-
-        this.tile.display();
-        this.scene.pushMatrix();
-        this.scene.translate(1, 0, 0);
-        this.tile.display();
-        this.scene.popMatrix();
-
-        this.tile.display();
-        this.scene.pushMatrix();
-        this.scene.translate(0, 1, 0);
-        this.tile.display();
-        this.scene.popMatrix();
-
-        this.tile.display();
-        this.scene.pushMatrix();
-        this.scene.translate(1, 1, 0);
-        this.tile.display();
-        this.scene.popMatrix();
 
 
     }
