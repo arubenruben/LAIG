@@ -12,14 +12,14 @@ tile)
  */
 
 class MyTile extends CGFobject {
-    constructor(scene,x,z, new_width, new_length,height) {
+    constructor(scene, x, z, new_width, new_length, height) {
         super(scene);
         this.scene = scene;
         this.areaBox;
-        this.scale_x=0.5/new_width;
-        this.scale_z=(Math.cos(Math.PI/6) *0.5)/new_length;
-        this.height=height
-        
+        this.scale_x = new_width / 1;
+        this.scale_z = new_length / (Math.cos(Math.PI / 6) * 0.5 * 2);
+        this.height = height
+
         this.sphere = new MySphere(scene, 0.5, 6, 6);
         this.torus = new MyTorus(scene, 0.025, 0.475, 6, 6);
 
@@ -34,8 +34,8 @@ class MyTile extends CGFobject {
         this.black.setAmbient(0, 0, 0, 1);
         this.black.setDiffuse(0, 0, 0, 1);
         this.black.setSpecular(0, 0, 0, 1);
-        this.x=x;
-        this.z=z;
+        this.x = x;
+        this.z = z;
 
 
     }
@@ -43,9 +43,9 @@ class MyTile extends CGFobject {
 
     display() {
         this.scene.pushMatrix();
-        this.scene.translate(this.x, this.height, this.z);
+        this.scene.translate(this.x, 0, this.z);
         this.scene.scale(this.scale_x, 0, this.scale_z);
-        this.scene.rotate(-Math.PI/2, 1, 0, 0);
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
         this.black.apply();
         this.scene.pushMatrix();
         this.scene.translate(0, 0, 0.01);

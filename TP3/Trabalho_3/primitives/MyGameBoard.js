@@ -26,12 +26,12 @@ class MyGameBoard extends CGFobject {
         this.x2 = x2;
         this.z2 = z2;
         this.height = height
-        
+
         this.n_lines = 11
         this.n_columns = 12
-        
-        const row_tiles_width=14/(x2-x1)
-        const column_tiles_height=12/(z2-z1)
+
+        this.tiles_width = (x2 - x1) / 14
+        this.tiles_height = (z2 - z1) / 12
 
         let controlPoinsFromParser = [
             [x1, 0, z1],
@@ -47,12 +47,13 @@ class MyGameBoard extends CGFobject {
         ]
         this.mainGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParser);
         this.sideGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParserSide);
-        this.matrixBoard=new Array();
+        this.matrixBoard = new Array();
         //MATRIX WITH THE TILE
-        for (let i = 0; i < this.n_lines; i++){
-            this.matrixBoard[i]=new Array()
-            for (let j = 0; j < this.n_columns; j++){
-                this.matrixBoard[i][j] = new MyTile(scene,x1+i*row_tiles_width,z2+j*column_tiles_height,row_tiles_width,column_tiles_height,height);
+        for (let i = 0; i < this.n_lines; i++) {
+            this.matrixBoard[i] = new Array()
+            for (let j = 0; j < this.n_columns; j++) {
+                this.matrixBoard[i][j] = new MyTile(scene,
+                    i * this.tiles_width, j * this.tiles_height, this.tiles_width, this.tiles_height, height);
             }
         }
     }
@@ -60,13 +61,13 @@ class MyGameBoard extends CGFobject {
     display() {
 
         this.mainGeometry.display()
-        //Frontal
+            //Frontal
         this.scene.pushMatrix()
         this.scene.translate(0, 0, this.z1)
         this.scene.rotate(Math.PI / 2.0, 1, 0, 0)
         this.sideGeometry.display()
         this.scene.popMatrix()
-        //Left
+            //Left
         this.scene.pushMatrix()
         this.scene.translate(this.x1, 0, this.z1)
         this.scene.rotate(Math.PI / 2.0, 0, 1, 0)
@@ -74,27 +75,30 @@ class MyGameBoard extends CGFobject {
         this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
         this.sideGeometry.display()
         this.scene.popMatrix()
-        //Right
+            //Right
         this.scene.pushMatrix()
         this.scene.rotate(-Math.PI / 2.0, 0, 1, 0)
         this.scene.translate(0, -this.height, -this.x2)
         this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
         this.sideGeometry.display()
         this.scene.popMatrix()
-        //Back
+            //Back
         this.scene.pushMatrix()
         this.scene.translate(0, -this.height, this.z2)
         this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
         this.sideGeometry.display()
         this.scene.popMatrix()
 
+        this.scene.pushMatrix()
+        this.scene.translate(this.x1 + this.tiles_width * 2, 0.01, this.z1 + this.tiles_height / 2);
 
-        for (let i = 0; i < this.n_lines; i++){
-            for (let j = 0; j < this.n_columns; j++){
+        for (let i = 0; i < this.n_lines; i++) {
+            for (let j = 0; j < this.n_columns; j++) {
                 this.matrixBoard[i][j].display()
             }
         }
 
+        this.scene.popMatrix()
     }
 
 }
