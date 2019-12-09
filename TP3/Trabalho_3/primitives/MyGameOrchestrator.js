@@ -13,10 +13,11 @@ class MyGameOrchestrator extends CGFobject {
         this.scene = scene;
 
         this.piece = new MyPiece(scene);
+        //TODO:Pass as parameter the correct tile
+        this.gameboard = new MyGameBoard(scene,-2,4,4,-2,2);
 
         /* this.gameSequence = new MyGameSequence(…);
          this.animator = new MyAnimator(…);
-         this.gameboard = new MyGameboard(…);
          this.theme = new MyScenegraph(…);
          this.prolog = new MyPrologInterface(…); */
     }
@@ -30,7 +31,7 @@ class MyGameOrchestrator extends CGFobject {
         /* this.theme.display();
          this.gameboard.display();
          this.animator.display();*/
-
+        this.gameboard.display();
         this.piece.display();
     }
 
