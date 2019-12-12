@@ -15,6 +15,8 @@ class MyGameOrchestrator extends CGFobject {
         this.piece = new MyPiece(this);
         //TODO:Pass as parameter the correct tile
         this.tile = new MyTile(this);
+        //MATRIX REPRESENTING THE GAME STATUS
+        this.gameState = new Array();
         this.gameboard = new MyGameBoard(this,-2,4,4,-2,2,this.tile);
         this.piece1 = new MyPiece(this, 'blue');
         this.piece2 = new MyPiece(this, 'red');
@@ -23,8 +25,8 @@ class MyGameOrchestrator extends CGFobject {
 
         /* this.gameSequence = new MyGameSequence(…);
         this.theme = new MyScenegraph(…);
-         this.animator = new MyAnimator(…);
-         this.prolog = new MyPrologInterface(…); */
+        this.animator = new MyAnimator(…);
+        this.prolog = new MyPrologInterface(…); */
     }
 
 

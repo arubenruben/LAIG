@@ -45,6 +45,7 @@ class MyTile extends CGFobject {
         this.scene.pushMatrix();
         this.scene.translate(this.x, 0, this.z);
         this.scene.scale(this.scale_x, 0, this.scale_z);
+        //this.scene.rotate(-Math.P)
         this.scene.rotate(-Math.PI / 2, 1, 0, 0);
         this.black.apply();
         this.scene.pushMatrix();

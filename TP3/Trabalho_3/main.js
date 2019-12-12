@@ -65,6 +65,7 @@ serialInclude(['../lib/CGF.js',
     'primitives/MyGameMove.js',
     'primitives/MyGameOrchestrator.js',
     'primitives/MyGameSequence.js',
+    'comunication/comunication.js', 
 
 
     main = function() {

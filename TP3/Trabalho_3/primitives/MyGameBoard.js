@@ -20,8 +20,9 @@ class MyGameBoard extends CGFobject {
             console.error('Parameters null on the board constructor')
         }
         super(orchestrator.scene);
-
-        this.scene = orchestrator.scene;
+        this.orchestrator=orchestrator;
+        
+        this.scene = this.orchestrator.scene;
         this.x1 = x1;
         this.z1 = z1;
         this.x2 = x2;
@@ -48,15 +49,14 @@ class MyGameBoard extends CGFobject {
         ]
         this.mainGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParser);
         this.sideGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParserSide);
-        this.matrixBoard = new Array();
-        //MATRIX WITH THE TILE
         
+        //MATRIX WITH THE TILE
         for (let i = 0; i < this.n_lines; i++) {
-            this.matrixBoard[i] = new Array()
+            this.orchestrator.gameState[i] = new Array()
             for (let j = 0; j < this.n_columns; j++) {
                 //TODO: CALCULAR AQUI A COORDENADA
                 //TODO: DESENHAR 11 ou 12 Pecas em coluna
-                this.matrixBoard[i][j] = new MyTile(orchestrator,
+                this.orchestrator.gameState[i][j] = new MyTile(this.orchestrator,
                     i * this.tiles_width, j * this.tiles_height, this.tiles_width, this.tiles_height, height);
             }
         }
@@ -98,7 +98,7 @@ class MyGameBoard extends CGFobject {
 
         for (let i = 0; i < this.n_lines; i++) {
             for (let j = 0; j < this.n_columns; j++) {
-                this.matrixBoard[i][j].display()
+                this.orchestrator.gameState[i][j].display()
             }
         }
 
