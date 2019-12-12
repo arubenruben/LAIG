@@ -12,16 +12,16 @@ tile)
  */
 
 class MyTile extends CGFobject {
-    constructor(scene, x, z, new_width, new_length, height) {
-        super(scene);
-        this.scene = scene;
+    constructor(orchestrator, x, z, new_width, new_length, height) {
+        super(orchestrator.scene);
+        this.scene = orchestrator.scene;
         this.areaBox;
         this.scale_x = new_width / 1;
         this.scale_z = new_length / (Math.cos(Math.PI / 6) * 0.5 * 2);
         this.height = height
 
-        this.sphere = new MySphere(scene, 0.5, 6, 6);
-        this.torus = new MyTorus(scene, 0.025, 0.475, 6, 6);
+        this.sphere = new MySphere(this.scene, 0.5, 6, 6);
+        this.torus = new MyTorus(this.scene, 0.025, 0.475, 6, 6);
 
         this.white = new CGFappearance(this.scene);
         this.white.setShininess(200);

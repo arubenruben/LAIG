@@ -12,13 +12,13 @@ class MyGameOrchestrator extends CGFobject {
         super(scene);
         this.scene = scene;
 
-        this.piece = new MyPiece(scene);
+        this.piece = new MyPiece(this);
         //TODO:Pass as parameter the correct tile
-        this.tile = new MyTile(scene);
-        this.gameboard = new MyGameBoard(scene,-2,4,4,-2,2,this.tile);
-        this.piece1 = new MyPiece(scene, 'blue');
-        this.piece2 = new MyPiece(scene, 'red');
-        this.piece3 = new MyPiece(scene, 'yellow');
+        this.tile = new MyTile(this);
+        this.gameboard = new MyGameBoard(this,-2,4,4,-2,2,this.tile);
+        this.piece1 = new MyPiece(this, 'blue');
+        this.piece2 = new MyPiece(this, 'red');
+        this.piece3 = new MyPiece(this, 'yellow');
 
 
         /* this.gameSequence = new MyGameSequence(…);

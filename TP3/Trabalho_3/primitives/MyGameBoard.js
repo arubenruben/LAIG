@@ -14,13 +14,14 @@
 • Display the gameboard (render). Calls display of tiles and of pieces
  */
 class MyGameBoard extends CGFobject {
-    constructor(scene, x1, z1, x2, z2, height) {
-        super(scene);
-
-        if (scene == null || x1 == null || z1 == null || x2 == null || z2 == null) {
+    constructor(orchestrator, x1, z1, x2, z2, height) {
+        
+        if (orchestrator == null || x1 == null || z1 == null || x2 == null || z2 == null) {
             console.error('Parameters null on the board constructor')
         }
-        this.scene = scene;
+        super(orchestrator.scene);
+
+        this.scene = orchestrator.scene;
         this.x1 = x1;
         this.z1 = z1;
         this.x2 = x2;
@@ -45,14 +46,17 @@ class MyGameBoard extends CGFobject {
             [x2, 0, height],
             [x2, 0, 0],
         ]
-        this.mainGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParser);
-        this.sideGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParserSide);
+        this.mainGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParser);
+        this.sideGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParserSide);
         this.matrixBoard = new Array();
         //MATRIX WITH THE TILE
+        
         for (let i = 0; i < this.n_lines; i++) {
             this.matrixBoard[i] = new Array()
             for (let j = 0; j < this.n_columns; j++) {
-                this.matrixBoard[i][j] = new MyTile(scene,
+                //TODO: CALCULAR AQUI A COORDENADA
+                //TODO: DESENHAR 11 ou 12 Pecas em coluna
+                this.matrixBoard[i][j] = new MyTile(orchestrator,
                     i * this.tiles_width, j * this.tiles_height, this.tiles_width, this.tiles_height, height);
             }
         }
