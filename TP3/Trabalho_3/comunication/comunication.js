@@ -1,6 +1,5 @@
 'use strict'
 
-
 function getPrologRequest(requestString, onSuccess, onError, port) {
     let requestPort = port || 8081
     let request = new XMLHttpRequest();
@@ -15,11 +14,26 @@ function getPrologRequest(requestString, onSuccess, onError, port) {
 
 function makeRequest(string) {
     // Get Parameter Values
-    console.log("Enviei"+string);
+    console.log("Enviei" + string);
+    let reply;
     // Make Request
-    getPrologRequest(string, handleReply);
+    reply= getPrologRequest(string, handleReply);
+    return reply;
 }
 //Handle the Reply
 function handleReply(data) {
-    console.log("Recebi"+string);
+    let serverStatus=data.target.status;
+    switch (serverStatus) {
+
+        case 200:
+            console.log('Sucess');
+            return data.target.response;
+        break;
+
+        default:
+            console.log('Default');
+            break;
+    }
+
+    return;
 }

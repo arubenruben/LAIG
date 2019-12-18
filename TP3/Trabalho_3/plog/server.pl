@@ -15,7 +15,7 @@
 port(8081).
 
 %LAIG INSPIRED IN THE HTTP FORMAT RETURNS
-ok_code(X):-X=200
+ok_code(X):-X=200.
 
 % Server Entry Point
 server :-
@@ -115,13 +115,11 @@ parse_input(quit, goodbye).
 %set_AI_0_difficulty(0):-
 %set_AI_1_difficulty(0):-
 %move(Board,Move_X_Coord,Move_Y_Coord,Result_Board,Active_Player,Player_Scores,Updated_Scores),
-parse_input('start',Response):-
-	
-	generate_starting_board(Board),
-	ok_code(OK_STR),
-	atom_concat(OK_STR,Board,Response).
+parse_input(start,Resposta):-
+	generate_starting_board(Resposta),
+	write('Entrei aqui'),nl.
 
-
+%parse_input('k')
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
 	
