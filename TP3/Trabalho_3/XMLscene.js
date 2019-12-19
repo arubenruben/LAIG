@@ -28,6 +28,7 @@ class XMLscene extends CGFscene {
             this.gl.enable(this.gl.DEPTH_TEST);
             this.gl.enable(this.gl.CULL_FACE);
             this.gl.depthFunc(this.gl.LEQUAL);
+            this.setPickEnabled(true);
             this.axis = new CGFaxis(this);
 
             this.UPDATE_PERIOD = 30;
@@ -43,6 +44,22 @@ class XMLscene extends CGFscene {
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
+    }
+
+
+    logPicking() {
+        if (this.pickMode == false) {
+            if (this.pickResults != null && this.pickResults.length > 0) {
+                for (var i = 0; i < this.pickResults.length; i++) {
+                    var obj = this.pickResults[i][0];
+                    if (obj) {
+                        var customId = this.pickResults[i][1];
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
+                    }
+                }
+                this.pickResults.splice(0, this.pickResults.length);
+            }
+        }
     }
 
     /**
@@ -198,6 +215,7 @@ class XMLscene extends CGFscene {
             //this.graph.displayScene();
         }
 
+        this.logPicking();
         this.gameOrchestrator.display();
 
         this.popMatrix();

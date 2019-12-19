@@ -25,12 +25,20 @@ class MyGameBoard extends CGFobject {
         this.z1 = z1;
         this.x2 = x2;
         this.z2 = z2;
-        this.height = height
+        this.height = height;
 
-        this.n_lines = 11
-        this.n_columns = 12
 
-        this.tiles_width = (x2 - x1) / 14
+
+        this.white = new CGFappearance(this.scene);
+        this.white.setShininess(200);
+        this.white.setAmbient(1, 1, 1, 1);
+        this.white.setDiffuse(1, 1, 1, 1);
+        this.white.setSpecular(1, 1, 1, 1);
+
+        this.n_lines = 12
+        this.n_columns = 12;
+
+        this.tiles_width = (x2 - x1) / 9;
         this.tiles_height = (z2 - z1) / 12
 
         let controlPoinsFromParser = [
@@ -48,55 +56,111 @@ class MyGameBoard extends CGFobject {
         this.mainGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParser);
         this.sideGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParserSide);
         this.matrixBoard = new Array();
+        this.translation_x = 0;
+        this.translation_z = 0;
+
+        this.aux = 0;
+        this.counter = 0;
+
         //MATRIX WITH THE TILE
         for (let i = 0; i < this.n_lines; i++) {
-            this.matrixBoard[i] = new Array()
+            this.matrixBoard[i] = new Array();
+            if (i % 2 == 0) {
+                this.translation_x = this.tiles_width / 4;
+                this.translation_z = this.tiles_height / 2;
+                this.aux = this.counter * this.tiles_width / 2;
+
+                this.counter++;
+            } else {
+                this.translation_x = 0;
+                this.translation_z = 0;
+            }
             for (let j = 0; j < this.n_columns; j++) {
-                this.matrixBoard[i][j] = new MyTile(scene,
-                    i * this.tiles_width, j * this.tiles_height, this.tiles_width, this.tiles_height, height);
+                this.matrixBoard[i][j] = new MyTile(scene, i * this.tiles_width + this.translation_x - this.aux, j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, height, i, j);
+                if (i % 2 == 0) {
+                    this.matrixBoard[i][j].piece = new MyPiece(scene, 'blue', this.matrixBoard[i][j]);
+
+                } else if (i % 3 == 0) {
+                    this.matrixBoard[i][j].piece = new MyPiece(scene, 'yellow', this.matrixBoard[i][j]);
+                } else {
+                    this.matrixBoard[i][j].piece = new MyPiece(scene, 'red', this.matrixBoard[i][j]);
+                }
             }
         }
     }
 
     display() {
 
-        this.mainGeometry.display()
-            //Frontal
-        this.scene.pushMatrix()
-        this.scene.translate(0, 0, this.z1)
-        this.scene.rotate(Math.PI / 2.0, 1, 0, 0)
-        this.sideGeometry.display()
-        this.scene.popMatrix()
-            //Left
-        this.scene.pushMatrix()
-        this.scene.translate(this.x1, 0, this.z1)
-        this.scene.rotate(Math.PI / 2.0, 0, 1, 0)
-        this.scene.translate(-this.x1, -this.height, 0)
-        this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
-        this.sideGeometry.display()
-        this.scene.popMatrix()
-            //Right
-        this.scene.pushMatrix()
-        this.scene.rotate(-Math.PI / 2.0, 0, 1, 0)
-        this.scene.translate(0, -this.height, -this.x2)
-        this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
-        this.sideGeometry.display()
-        this.scene.popMatrix()
-            //Back
-        this.scene.pushMatrix()
-        this.scene.translate(0, -this.height, this.z2)
-        this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
-        this.sideGeometry.display()
-        this.scene.popMatrix()
+        this.white.apply();
+
+        this.mainGeometry.display();
+
+        this.scene.pushMatrix();
+
+        this.scene.translate(0, 0, -this.tiles_height / 2);
+
+        this.mainGeometry.display();
+
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+
+        this.scene.translate(-this.tiles_width / 4, 0, -this.tiles_height / 2);
+
+        this.mainGeometry.display();
+
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+
+        this.scene.translate(-this.tiles_width / 4, 0, 0);
+
+        this.mainGeometry.display();
+
+        this.scene.popMatrix();
+
+        //     //Frontal
+        // this.scene.pushMatrix()
+        // this.scene.translate(0, 0, this.z1)
+        // this.scene.rotate(Math.PI / 2.0, 1, 0, 0)
+        // this.sideGeometry.display()
+        // this.scene.popMatrix()
+        //     //Left
+        // this.scene.pushMatrix()
+        // this.scene.translate(this.x1, 0, this.z1)
+        // this.scene.rotate(Math.PI / 2.0, 0, 1, 0)
+        // this.scene.translate(-this.x1, -this.height, 0)
+        // this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
+        // this.sideGeometry.display()
+        // this.scene.popMatrix()
+        //     //Right
+        // this.scene.pushMatrix()
+        // this.scene.rotate(-Math.PI / 2.0, 0, 1, 0)
+        // this.scene.translate(0, -this.height, -this.x2)
+        // this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
+        // this.sideGeometry.display()
+        // this.scene.popMatrix()
+        //     //Back
+        // this.scene.pushMatrix()
+        // this.scene.translate(0, -this.height, this.z2)
+        // this.scene.rotate(-Math.PI / 2.0, 1, 0, 0)
+        // this.sideGeometry.display()
+        // this.scene.popMatrix()
 
         this.scene.pushMatrix()
-        this.scene.translate(this.x1 + this.tiles_width * 2, 0.01, this.z1 + this.tiles_height / 2);
+
+        this.scene.translate(this.x1, 0.02 * this.tiles_width, this.z1);
 
         for (let i = 0; i < this.n_lines; i++) {
             for (let j = 0; j < this.n_columns; j++) {
-                this.matrixBoard[i][j].display()
+                this.scene.registerForPick((i + 1) * 100 + j, this.matrixBoard[i][j]);
+                this.matrixBoard[i][j].display();
             }
         }
+
+
+
+
 
         this.scene.popMatrix()
     }

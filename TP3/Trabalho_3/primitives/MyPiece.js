@@ -43,6 +43,8 @@ class MyPiece extends CGFobject {
         } else
             this.yellow.apply();
 
+        this.scene.pushMatrix();
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
 
         this.scene.pushMatrix();
         this.scene.translate(0, 0, 0.15);
@@ -56,6 +58,8 @@ class MyPiece extends CGFobject {
         this.scene.popMatrix();
 
         this.cylinder.display();
+
+        this.scene.popMatrix();
 
 
     }
