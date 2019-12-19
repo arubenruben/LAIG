@@ -46,6 +46,7 @@ class MyGameOrchestrator extends CGFobject {
 
         //Request to retrieve the InitialBoard
         let handlerVAR=this.handler;
+        
         this.prolog.getPrologRequest(
             'start',
             function (data) {
@@ -66,21 +67,6 @@ class MyGameOrchestrator extends CGFobject {
 
     buildInitialBoard() {
         this.gameboard = new MyGameBoard(this, -2, 4, 4, -2, 2, this.tile);
-        let boardAsString=String(this.prolog.sendBoardString(this.initialBoardRaw));
-        let string='executemove('+boardAsString+')'
-        console.log(boardAsString);
-        
-        let handlerVAR=this.handler;
-
-        this.prolog.getPrologRequest(
-            string,
-            function (data) {
-                handlerVAR.handleInitialBoard(data.target.response);
-            },
-            function (data) {
-                handlerVAR.handlerError(data.target.response);
-        });
-
         this.gameboardSet=true;
     }
 
@@ -99,7 +85,7 @@ class MyGameOrchestrator extends CGFobject {
             case this.states.SET_THE_GAME_TYPE:
                 //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
                 //alert('Inserir o game type');
-                console.log('Inserir o game type');
+
                 if(this.scene.gameType!=null&&this.scene.gameType>=0&&this.scene.gameType<3){
                     //console.log('Aqui');
                     this.gameStateControl.nextState();
