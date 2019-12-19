@@ -35,6 +35,8 @@ class XMLscene extends CGFscene {
             this.displayAxis = true;
             this.displayNormals = false;
             this.selectedCamera = 0;
+            this.gameType=null;
+            this.gameTypes=['1vs1','Player vs AI','AI vs Player','AI vs AI'];
             this.gameOrchestrator = new MyGameOrchestrator(this);
         }
         /**
@@ -134,6 +136,7 @@ class XMLscene extends CGFscene {
         this.initCameras();
 
         this.interface.gui_add_lights(this, this.graph.Lights);
+    
 
 
         //Time in ms
@@ -166,7 +169,7 @@ class XMLscene extends CGFscene {
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
-        //this.gameOrchestrator.orchestrate();
+        this.gameOrchestrator.orchestrate();
 
         // Clear image and depth buffer everytime we update the scene
         if (this.sceneInited) {

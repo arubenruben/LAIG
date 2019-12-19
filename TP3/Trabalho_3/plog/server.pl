@@ -109,15 +109,22 @@ print_header_line(_).
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
-
-
 %LAIG
+parse_input(start,Resposta):-
+	generate_starting_board(Resposta).
+parse_input(executemove,Resposta):-
+	move()
+
+
+/*
+parse_input(setAI0Difficulty0,Resposta):-
+	set_AI_0_difficulty(0),
+	Resposta=0.
+*/
+
 %set_AI_0_difficulty(0):-
 %set_AI_1_difficulty(0):-
 %move(Board,Move_X_Coord,Move_Y_Coord,Result_Board,Active_Player,Player_Scores,Updated_Scores),
-parse_input(start,Resposta):-
-	generate_starting_board(Resposta),
-	write('Entrei aqui'),nl.
 
 %parse_input('k')
 test(_,[],N) :- N =< 0.

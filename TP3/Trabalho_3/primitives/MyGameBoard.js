@@ -34,6 +34,7 @@ class MyGameBoard extends CGFobject {
 
         this.tiles_width = (x2 - x1) / 14
         this.tiles_height = (z2 - z1) / 12
+        this.boardset=false;
 
         let controlPoinsFromParser = [
             [x1, 0, z1],
@@ -53,11 +54,13 @@ class MyGameBoard extends CGFobject {
         //MATRIX WITH THE TILE
         for (let i = 0; i < this.n_lines; i++) {
             this.orchestrator.gameState[i] = new Array()
+
             for (let j = 0; j < this.n_columns; j++) {
+                let piece=this.orchestrator.initialBoardRaw[i][j];
                 //TODO: CALCULAR AQUI A COORDENADA
                 //TODO: DESENHAR 11 ou 12 Pecas em coluna
                 this.orchestrator.gameState[i][j] = new MyTile(this.orchestrator,
-                    i * this.tiles_width, j * this.tiles_height, this.tiles_width, this.tiles_height, height);
+                    i * this.tiles_width, j * this.tiles_height, this.tiles_width, this.tiles_height, height,piece);
             }
         }
     }

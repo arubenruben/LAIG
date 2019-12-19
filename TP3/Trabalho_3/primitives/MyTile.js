@@ -12,10 +12,11 @@ tile)
  */
 
 class MyTile extends CGFobject {
-    constructor(orchestrator, x, z, new_width, new_length, height) {
+    constructor(orchestrator, x, z, new_width, new_length, height,initialPiece) {
         super(orchestrator.scene);
         this.scene = orchestrator.scene;
         this.areaBox;
+        this.initialPiece=initialPiece;
         this.scale_x = new_width / 1;
         this.scale_z = new_length / (Math.cos(Math.PI / 6) * 0.5 * 2);
         this.height = height
