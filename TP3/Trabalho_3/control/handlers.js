@@ -8,8 +8,6 @@ class handlerPrologReplys {
     handleInitialBoard(data) {
         let board = String(data);
         let arrayLinesOfBoard;
-        console.log(data);
-
         //REMOVE THE EXTREMES OF BOARD [ ]
         let stringWithoutLimits = board.substring(1, board.length - 2);
         arrayLinesOfBoard = stringWithoutLimits.split('],');

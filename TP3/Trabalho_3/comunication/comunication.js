@@ -4,7 +4,7 @@ class MyPrologInterface {
     constructor(orchestrator){
         this.orchestrator=orchestrator;
     }
-    
+
 
     getPrologRequest(requestString, onSuccess, onError, port) {
         let requestPort = port || 8081
@@ -42,6 +42,41 @@ class MyPrologInterface {
         }
 
         return;
+    }
+
+
+    sendBoardString(matrix){
+
+        let strReturn=new String;
+        let str_index=0;
+
+        strReturn[0]='[';
+        str_index++;
+
+        for(let i=0;i<matrix.length;i++){
+
+            for(let j=0;j<matrix[i].length;j++){
+                
+                strReturn[str_index]=matrix[i][j];
+                str_index++;
+                
+                if(j<matrix[i].length-1){
+                    strReturn[str_index]=',';
+                    str_index++;
+                }
+
+            }
+            strReturn[str_index]=']';
+            str_index++;
+        }
+
+        strReturn[str_index]=']';
+    
+        return strReturn;
+
+
+
+
     }
 
 }

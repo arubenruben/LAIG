@@ -112,8 +112,10 @@ parse_input(quit, goodbye).
 %LAIG
 parse_input(start,Resposta):-
 	generate_starting_board(Resposta).
-parse_input(executemove,Resposta):-
-	move()
+parse_input(executemove(Board),Resposta):-
+	
+	write(Board)
+	%smove()
 
 
 /*

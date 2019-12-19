@@ -12,7 +12,6 @@ class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
         super(scene);
         this.scene = scene;
-        let gameOrchasterAsVar = this;
 
         //TODO:Pass as parameter the correct tile
         this.tile = new MyTile(this);
@@ -31,7 +30,7 @@ class MyGameOrchestrator extends CGFobject {
         };
 
         //TODO:VER ONDE COLOCAR O ARRAY COM O ESTADO DO JOGO
-        this.gameState1 = new MyGameState(this);
+        this.gameStateControl = new MyGameStateControler(this);
 
         //MATRIX REPRESENTING THE GAME STATUS
         this.initialBoardRaw = new Array();
@@ -72,13 +71,12 @@ class MyGameOrchestrator extends CGFobject {
 
     orchestrate(){
 
-        switch(this.gameState1.currentState){
+        switch(this.gameStateControl.currentState){
 
             case this.states.INITIALIZING:
                 
                 if(this.gameboardSet==true){
-                    console.log('Aqui');
-                    this.gameState1.nextState();
+                    this.gameStateControl.nextState();
                 }
 
             break;
@@ -86,13 +84,29 @@ class MyGameOrchestrator extends CGFobject {
             case this.states.SET_THE_GAME_TYPE:
                 //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
                 //alert('Inserir o game type');
-                //console.log('Inserir o game type');
+                console.log('Inserir o game type');
+                let boardAsString=this.prolog.sendBoardString(this.initialBoardRaw);
                 
                 if(this.scene.gameType!=null&&this.scene.gameType>=0&&this.scene.gameType<3){
-                    console.log('Aqui');
-                    this.gameState1.nextState();
+                    //console.log('Aqui');
+                    this.gameStateControl.nextState();
                 }
                 
+            break;
+
+            case this.SET_THE_AI_0_DIF:
+
+
+            break;
+
+            case this.SET_THE_AI_1_DIF:
+                
+
+            break;
+
+            case WAIT_PLAYER_1_MOVE:
+
+
             break;
         
             

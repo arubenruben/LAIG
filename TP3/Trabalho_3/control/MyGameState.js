@@ -1,6 +1,6 @@
 'use strict'
 
-class MyGameState {
+class MyGameStateControler {
 
     constructor(orchestrator) {
 
@@ -19,6 +19,12 @@ class MyGameState {
     nextState(){
 
         switch(this.currentState){
+
+            case this.orchestratorLocal.states.INITIALIZING:
+                
+                this.currentState=this.orchestratorLocal.states.SET_THE_GAME_TYPE;
+
+            break;
 
             case this.orchestratorLocal.states.SET_THE_GAME_TYPE:
 
