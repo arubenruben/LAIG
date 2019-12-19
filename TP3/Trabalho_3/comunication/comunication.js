@@ -1,8 +1,8 @@
 'use strict'
 class MyPrologInterface {
 
-    constructor(orchestrator){
-        this.orchestrator=orchestrator;
+    constructor(orchestrator) {
+        this.orchestrator = orchestrator;
     }
 
 
@@ -45,33 +45,31 @@ class MyPrologInterface {
     }
 
 
-    sendBoardString(matrix){
+    sendBoardString(matrix) {
 
-        let strReturn=new String;
-        let str_index=0;
+        let strReturn = new String;
+        let str_index = 0;
 
-        strReturn[0]='[';
-        str_index++;
+        strReturn+= '[';
 
-        for(let i=0;i<matrix.length;i++){
+        for (let i = 0; i < matrix.length; i++) {
+            strReturn += '[';
 
-            for(let j=0;j<matrix[i].length;j++){
-                
-                strReturn[str_index]=matrix[i][j];
-                str_index++;
-                
-                if(j<matrix[i].length-1){
-                    strReturn[str_index]=',';
-                    str_index++;
+            for (let j = 0; j < matrix[i].length; j++) {
+
+                strReturn += matrix[i][j];
+
+                if (j < matrix[i].length - 1) {
+                    strReturn += ',';
                 }
-
             }
-            strReturn[str_index]=']';
-            str_index++;
+            strReturn += ']';
+            if(i<matrix.length-1){
+                strReturn += ',';
+            }
         }
+        strReturn += ']';
 
-        strReturn[str_index]=']';
-    
         return strReturn;
 
 

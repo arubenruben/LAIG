@@ -113,8 +113,8 @@ parse_input(quit, goodbye).
 parse_input(start,Resposta):-
 	generate_starting_board(Resposta).
 parse_input(executemove(Board),Resposta):-
-	
-	write(Board)
+	write('Entrei aqui').
+	write(Board).
 	%smove()
 
 

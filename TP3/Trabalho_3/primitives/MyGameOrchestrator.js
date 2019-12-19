@@ -53,7 +53,7 @@ class MyGameOrchestrator extends CGFobject {
             },
             function (data) {
                 handlerVAR.handlerError(data.target.response);
-            });
+        });
 
         //RELEASE THE memory.
         //this.initialBoardRaw=[];
@@ -66,6 +66,21 @@ class MyGameOrchestrator extends CGFobject {
 
     buildInitialBoard() {
         this.gameboard = new MyGameBoard(this, -2, 4, 4, -2, 2, this.tile);
+        let boardAsString=String(this.prolog.sendBoardString(this.initialBoardRaw));
+        let string='executemove('+boardAsString+')'
+        console.log(boardAsString);
+        
+        let handlerVAR=this.handler;
+
+        this.prolog.getPrologRequest(
+            string,
+            function (data) {
+                handlerVAR.handleInitialBoard(data.target.response);
+            },
+            function (data) {
+                handlerVAR.handlerError(data.target.response);
+        });
+
         this.gameboardSet=true;
     }
 
@@ -85,8 +100,6 @@ class MyGameOrchestrator extends CGFobject {
                 //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
                 //alert('Inserir o game type');
                 console.log('Inserir o game type');
-                let boardAsString=this.prolog.sendBoardString(this.initialBoardRaw);
-                
                 if(this.scene.gameType!=null&&this.scene.gameType>=0&&this.scene.gameType<3){
                     //console.log('Aqui');
                     this.gameStateControl.nextState();
