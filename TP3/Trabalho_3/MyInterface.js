@@ -23,6 +23,7 @@ class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
         this.gui.add(this.scene, 'displayNormals').name("Display Normals");
+        this.gui.add(this.scene, 'gameType', this.scene.gameTypes)
         this.m_pressed = 0;
         this.initKeys();
 

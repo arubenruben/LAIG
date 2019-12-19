@@ -22,8 +22,8 @@ class MyTile extends CGFobject {
         this.height = height;
         this.piece = null;
 
-        this.sphere = new MySphere(scene, 0.5, 6, 6);
-        this.torus = new MyTorus(scene, 0.025, 0.475, 6, 6);
+        this.sphere = new MySphere(this.scene, 0.5, 6, 6);
+        this.torus = new MyTorus(this.scene, 0.025, 0.475, 6, 6);
 
         this.m = 0;
 

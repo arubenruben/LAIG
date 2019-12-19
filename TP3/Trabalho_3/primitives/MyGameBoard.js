@@ -14,13 +14,15 @@
 • Display the gameboard (render). Calls display of tiles and of pieces
  */
 class MyGameBoard extends CGFobject {
-    constructor(scene, x1, z1, x2, z2, height) {
-        super(scene);
-
-        if (scene == null || x1 == null || z1 == null || x2 == null || z2 == null) {
+    constructor(orchestrator, x1, z1, x2, z2, height) {
+        
+        if (orchestrator == null || x1 == null || z1 == null || x2 == null || z2 == null) {
             console.error('Parameters null on the board constructor')
         }
-        this.scene = scene;
+        super(orchestrator.scene);
+        this.orchestrator=orchestrator;
+        
+        this.scene = this.orchestrator.scene;
         this.x1 = x1;
         this.z1 = z1;
         this.x2 = x2;
@@ -40,6 +42,7 @@ class MyGameBoard extends CGFobject {
 
         this.tiles_width = (x2 - x1) / 9;
         this.tiles_height = (z2 - z1) / 12
+        this.boardset=false;
 
         let controlPoinsFromParser = [
             [x1, 0, z1],

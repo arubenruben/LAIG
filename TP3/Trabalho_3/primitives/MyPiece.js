@@ -7,12 +7,12 @@
 • Display the piece (render)
  */
 class MyPiece extends CGFobject {
-    constructor(scene, color, tile) {
-        super(scene);
-        this.scene = scene;
+    constructor(orchestrator, color, tile) {
+        super(orchestrator.scene);
+        this.scene = orchestrator.scene;
         this.color = color;
-        this.cylinder = new MyCylinder(scene, 20, 20, 0.15, 0.3, 0.3);
-        this.sphere = new MySphere(scene, 0.3, 20, 20);
+        this.cylinder = new MyCylinder(this.scene, 20, 20, 0.15, 0.3, 0.3);
+        this.sphere = new MySphere(this.scene, 0.3, 20, 20);
         this.tile = tile;
 
         this.red = new CGFappearance(this.scene);

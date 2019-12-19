@@ -7,6 +7,11 @@
 :-[ai].
 :- use_module(library(random)).
 :- use_module(library(system)).
+%LAIG
+:-use_module(library(sockets)).
+:-use_module(library(lists)).
+:-use_module(library(codesio)).
+
 
 
 
