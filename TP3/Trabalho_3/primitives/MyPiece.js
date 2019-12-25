@@ -11,6 +11,15 @@ class MyPiece extends CGFobject {
         super(orchestrator.scene);
         this.scene = orchestrator.scene;
         this.color = color;
+
+        if(this.color==1){
+            this.color='red';
+        }else if(this.color==2){
+            this.color='blue';
+        }else if(this.color==3){
+            this.color='yellow';
+        }
+
         this.cylinder = new MyCylinder(this.scene, 6, 6, 0.15, 0.3, 0.3);
         this.sphere = new MySphere(this.scene, 0.3, 6, 6);
         this.tile = tile;

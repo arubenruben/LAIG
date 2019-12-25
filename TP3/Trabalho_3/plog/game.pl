@@ -170,20 +170,19 @@ valid_move(Board,Move_X_Coord,Move_Y_Coord):-
 
 
 %Para qualquer player valido
-move(Board,Move_X_Coord,Move_Y_Coord,Result_Board,Active_Player,Player_Scores,Updated_Scores):-
+move(Board,Move_X_Coord,Move_Y_Coord,Result_Board):-
   %Faco este get primeiro para obter o tipo de elemento que iremos retirar para poder usar como input na funcao para dar update aos score
   get_board(Board,Move_X_Coord,Move_Y_Coord,Element_to_substitute), 
-  set_board(Board,Move_X_Coord,Move_Y_Coord,Result_Board),
-  update_scores(Active_Player,Player_Scores,Updated_Scores,Element_to_substitute).
+  set_board(Board,Move_X_Coord,Move_Y_Coord,Result_Board).
 
 %Em caso de jogada invalida
-move(_,_,_,_,_,_,_):-write('Invalid Play! You have lost your turn\n'),fail.
+move(_,_,_,_):-write('Invalid Play! You have lost your turn\n'),fail.
                 
 game_over(_Board, Scores, Result):-
   verify_win(Scores, Result),
   write('Game Over!\n Player '),
   write(Result),
-  write(' won!\nScores:\n'),
+  write('won!\nScores:\n'),
   writeScore(Scores, 1),
   writeScore(Scores, 2).
 

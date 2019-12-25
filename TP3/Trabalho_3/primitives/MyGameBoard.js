@@ -36,7 +36,7 @@ class MyGameBoard extends CGFobject {
         this.white.setDiffuse(1, 1, 1, 1);
         this.white.setSpecular(1, 1, 1, 1);
 
-        this.n_lines = 12
+        this.n_lines = 11;
         this.n_columns = 12;
 
         this.tiles_width = (x2 - x1) / 9;
@@ -79,7 +79,11 @@ class MyGameBoard extends CGFobject {
             }
             for (let j = 0; j < this.n_columns; j++) {
                 this.matrixBoard[i][j] = new MyTile(this.orchestrator, i * this.tiles_width + this.translation_x - this.aux, j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, height, i, j);
-
+                let initialPiece=this.orchestrator.initialBoardRaw[i][j];
+                if(initialPiece>0){
+                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j]);
+                }
+/*
                 if (i % 2 == 0) {
                     this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'blue', this.matrixBoard[i][j]);
                 } else if (i % 3 == 0) {
@@ -87,6 +91,7 @@ class MyGameBoard extends CGFobject {
                 } else {
                     this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'red', this.matrixBoard[i][j]);
                 }
+                */
             }
         }
     }

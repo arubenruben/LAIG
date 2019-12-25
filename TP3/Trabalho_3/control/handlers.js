@@ -27,6 +27,11 @@ class handlerPrologReplys {
         this.gameOrchestrator.buildInitialBoard();
     }
 
+    handleMove(data){
+        console.log('Aqui no handler');
+
+    }
+
     handlerError(message) {
         return false;
     }

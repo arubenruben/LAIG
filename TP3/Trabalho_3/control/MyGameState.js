@@ -8,8 +8,9 @@ class MyGameStateControler {
         this.player2_record_moves = new Array(3)
         this.score_player_1 = 0
         this.score_player_2 = 0
-        this.currentPlayer=1;
+        this.currentPlayer=0;
         this.orchestratorLocal=orchestrator;
+        this.pickPending=false;
         
 
         this.currentState=this.orchestratorLocal.states.INITIALIZING;
@@ -69,6 +70,12 @@ class MyGameStateControler {
 
         }
 
+    }
+    pickActive(obj,id){
+        this.currentState=this.orchestratorLocal.states.PICK_ACTIVE;
+        this.pickPending=true;
+        this.pickObject=obj;
+        this.pickId=id;
     }
 
 

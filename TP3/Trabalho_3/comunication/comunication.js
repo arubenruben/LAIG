@@ -44,37 +44,38 @@ class MyPrologInterface {
         return;
     }
 
+    
+    moveRequest(JSMatrix,coordX,coordY){
 
-    sendBoardString(matrix) {
+        let stringRequest=new String;
+        let stringMatrix=this.boardToString(JSMatrix);
+        stringRequest='executemove('+stringMatrix+')';
+        console.log(stringRequest);
+
+        return stringRequest;
+    }
+    
+    /*JS MATRIX TO PROLOG SYNTAX*/
+    boardToString(matrix) {
 
         let strReturn = new String;
-        let str_index = 0;
-
-        strReturn+= '[';
-
+        strReturn += '[';
         for (let i = 0; i < matrix.length; i++) {
             strReturn += '[';
-
             for (let j = 0; j < matrix[i].length; j++) {
-
                 strReturn += matrix[i][j];
-
                 if (j < matrix[i].length - 1) {
                     strReturn += ',';
                 }
             }
             strReturn += ']';
-            if(i<matrix.length-1){
+            if (i < matrix.length - 1) {
                 strReturn += ',';
             }
         }
         strReturn += ']';
-
+        
         return strReturn;
-
-
-
-
     }
 
 }
