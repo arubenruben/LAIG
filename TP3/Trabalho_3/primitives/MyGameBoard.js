@@ -15,13 +15,12 @@
  */
 class MyGameBoard extends CGFobject {
     constructor(orchestrator, x1, z1, x2, z2, height) {
-        
+
         if (orchestrator == null || x1 == null || z1 == null || x2 == null || z2 == null) {
             console.error('Parameters null on the board constructor')
         }
         super(orchestrator.scene);
-        this.orchestrator=orchestrator;
-        
+        this.orchestrator = orchestrator;
         this.scene = this.orchestrator.scene;
         this.x1 = x1;
         this.z1 = z1;
@@ -42,7 +41,7 @@ class MyGameBoard extends CGFobject {
 
         this.tiles_width = (x2 - x1) / 9;
         this.tiles_height = (z2 - z1) / 12
-        this.boardset=false;
+        this.boardset = false;
 
         let controlPoinsFromParser = [
             [x1, 0, z1],
@@ -56,8 +55,8 @@ class MyGameBoard extends CGFobject {
             [x2, 0, height],
             [x2, 0, 0],
         ]
-        this.mainGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParser);
-        this.sideGeometry = new MyPatch(scene, 2, 2, 15, 15, controlPoinsFromParserSide);
+        this.mainGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParser);
+        this.sideGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParserSide);
         this.matrixBoard = new Array();
         this.translation_x = 0;
         this.translation_z = 0;
@@ -79,14 +78,14 @@ class MyGameBoard extends CGFobject {
                 this.translation_z = 0;
             }
             for (let j = 0; j < this.n_columns; j++) {
-                this.matrixBoard[i][j] = new MyTile(scene, i * this.tiles_width + this.translation_x - this.aux, j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, height, i, j);
-                if (i % 2 == 0) {
-                    this.matrixBoard[i][j].piece = new MyPiece(scene, 'blue', this.matrixBoard[i][j]);
+                this.matrixBoard[i][j] = new MyTile(this.orchestrator, i * this.tiles_width + this.translation_x - this.aux, j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, height, i, j);
 
+                if (i % 2 == 0) {
+                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'blue', this.matrixBoard[i][j]);
                 } else if (i % 3 == 0) {
-                    this.matrixBoard[i][j].piece = new MyPiece(scene, 'yellow', this.matrixBoard[i][j]);
+                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'yellow', this.matrixBoard[i][j]);
                 } else {
-                    this.matrixBoard[i][j].piece = new MyPiece(scene, 'red', this.matrixBoard[i][j]);
+                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'red', this.matrixBoard[i][j]);
                 }
             }
         }
@@ -95,31 +94,18 @@ class MyGameBoard extends CGFobject {
     display() {
 
         this.white.apply();
-
         this.mainGeometry.display();
-
         this.scene.pushMatrix();
-
         this.scene.translate(0, 0, -this.tiles_height / 2);
-
         this.mainGeometry.display();
-
         this.scene.popMatrix();
-
         this.scene.pushMatrix();
-
         this.scene.translate(-this.tiles_width / 4, 0, -this.tiles_height / 2);
-
         this.mainGeometry.display();
-
         this.scene.popMatrix();
-
         this.scene.pushMatrix();
-
         this.scene.translate(-this.tiles_width / 4, 0, 0);
-
         this.mainGeometry.display();
-
         this.scene.popMatrix();
 
         //     //Frontal
@@ -156,6 +142,7 @@ class MyGameBoard extends CGFobject {
 
         for (let i = 0; i < this.n_lines; i++) {
             for (let j = 0; j < this.n_columns; j++) {
+                //TILES ARE PICKABLE
                 this.scene.registerForPick((i + 1) * 100 + j, this.matrixBoard[i][j]);
                 this.matrixBoard[i][j].display();
             }

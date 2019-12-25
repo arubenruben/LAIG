@@ -12,9 +12,10 @@ tile)
  */
 
 class MyTile extends CGFobject {
-    constructor(scene, x, z, new_width, new_length, height, index_i, index_j) {
-        super(scene);
-        this.scene = scene;
+    constructor(orchestrator, x, z, new_width, new_length, height, index_i, index_j) {
+        super(orchestrator.scene);
+        this.orchestrator=orchestrator
+        this.scene = orchestrator.scene;
         this.index_i = index_i;
         this.index_j = index_j;
         this.scale_x = new_width / 1;
