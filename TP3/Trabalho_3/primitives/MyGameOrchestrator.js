@@ -53,6 +53,7 @@ class MyGameOrchestrator extends CGFobject {
     }
     updateBoard(incomingArray) {
         this.gameboardSet = false;
+        let pieceRemoved=null;
 
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
 
@@ -61,6 +62,7 @@ class MyGameOrchestrator extends CGFobject {
 
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
+                        pieceRemoved=this.gameboard.matrixBoard[i][j].piece;
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
@@ -68,6 +70,7 @@ class MyGameOrchestrator extends CGFobject {
 
         }
         this.gameboardSet = true;
+        this.gameStateControl.updateScores(pieceRemoved);
     }
 
     orchestrate() {
@@ -170,9 +173,6 @@ class MyGameOrchestrator extends CGFobject {
         }
 
         else {
-
-
-
 
         }
 

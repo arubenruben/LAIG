@@ -4,10 +4,10 @@ class MyGameStateControler {
 
     constructor(orchestrator) {
 
-        this.player1_record_moves = new Array(3)
-        this.player2_record_moves = new Array(3)
-        this.score_player_1 = 0
-        this.score_player_2 = 0
+        this.player1_record_moves = new Array(3);
+        this.player2_record_moves = new Array(3);
+        this.score_player_1 = new Array(3);
+        this.score_player_2 = new Array(3);
         this.currentPlayer=0;
         this.orchestratorLocal=orchestrator;
         this.pickPending=false;
@@ -92,6 +92,29 @@ class MyGameStateControler {
         this.pickPending=true;
         this.pickObject=obj;
         this.pickId=id;
+    }
+
+    updateScores(pieceRemoved){
+
+        let indexPiece;
+
+        if (pieceRemoved== 'red') {
+            indexPiece = 0;
+        } else if (pieceRemoved== 'blue') {
+            indexPiece = 1;
+        } else if (pieceRemoved== 'yellow') {
+            indexPiece = 2;
+        }
+
+        if(this.currentPlayer==1){
+            this.score_player_1[indexPiece]++;
+            //TODO:Player Record
+        }else{
+            this.score_player_2[indexPiece]++;
+            //TODO:Player Record
+        }
+
+
     }
 
 
