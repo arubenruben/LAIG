@@ -118,7 +118,7 @@ parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
 		move(Board,Move_X_Coord,Move_Y_Coord,Resposta).
 
 parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
-		Resposta='NOT VALID'.
+		Resposta='FAIL'.
 		
 
 

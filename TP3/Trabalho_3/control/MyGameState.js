@@ -69,11 +69,11 @@ class MyGameStateControler {
 
             case this.orchestratorLocal.states.PICK_REPLY:
                 
-                if(this.resumeState==WAIT_PLAYER_1_MOVE){
-                    this.currentState=this.WAIT_PLAYER_2_MOVE;
+                if(this.resumeState==this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE){
+                    this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                 }
-                else if(this.resumeState==WAIT_PLAYER_2_MOVE){
-                    this.currentState=this.WAIT_PLAYER_1_MOVE;
+                else if(this.resumeState==this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE){
+                    this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
 
             break;

@@ -51,6 +51,24 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboard = new MyGameBoard(this, -2, 4, 4, -2, 2);
         this.gameboardSet = true;
     }
+    updateBoard(incomingArray) {
+        this.gameboardSet = false;
+
+        for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
+
+            for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
+                //Se existir uma peca e que vale a pena retirar
+
+                if (this.gameboard.matrixBoard[i][j].piece != null) {
+                    if (incomingArray[i][j] == 0) {
+                        this.gameboard.matrixBoard[i][j].piece = null;
+                    }
+                }
+            }
+
+        }
+        this.gameboardSet = true;
+    }
 
     orchestrate() {
 
@@ -91,33 +109,35 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.PICK_ACTIVE:
-                            
-            let obj=this.gameStateControl.pickObject;
-                
-                let id=this.gameStateControl.pickId;
+
+                let obj = this.gameStateControl.pickObject;
+
+                let id = this.gameStateControl.pickId;
                 let x = obj.piece.x;
                 let y = obj.piece.y;
                 let gameboardToPrologRaw = this.gameboard.matrixBoard;
-                let stringRequest=this.prolog.moveRequest(gameboardToPrologRaw,x,y);
+                let stringRequest = this.prolog.moveRequest(gameboardToPrologRaw, x, y);
                 let handlerVAR = this.handler;
                 console.log(stringRequest);
                 this.prolog.getPrologRequest(
-                    stringRequest,                    
+                    stringRequest,
                     function (data) {
                         handlerVAR.handleMove(data.target.response);
                     },
                     function (data) {
                         handlerVAR.handlerError(data.target.response);
                     });
-                
+
                 this.gameStateControl.nextState();
-                
+
                 break;
 
-                case this.states.PICK_REPLY:
-                    console.log('Aqui');
+            case this.states.PICK_REPLY:
+                if (this.gameStateControl.pickPending == false) {
+                    this.gameStateControl.nextState();
+                }
 
-                    break;
+                break;
 
         }
 
@@ -145,8 +165,8 @@ class MyGameOrchestrator extends CGFobject {
             let piece = obj.piece;
 
             if (piece != null)
-                this.gameStateControl.pickActive(obj,id);
-            
+                this.gameStateControl.pickActive(obj, id);
+
         }
 
         else {
