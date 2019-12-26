@@ -12,7 +12,7 @@ class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
         super(scene);
         this.scene = scene;
-        this.orchestrator=this;
+        this.orchestrator = this;
 
         //TODO:COMPLETAR OS STATES
         this.states = {
@@ -53,11 +53,11 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboard = new MyGameBoard(this, -2, 4, 4, -2, 2);
         this.gameboardSet = true;
     }
-    updateBoard(incomingArray,obj,id) {
+    updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
-        let pieceRemoved=null;
+        let pieceRemoved = null;
 
-        let newGameMove=new MyGameMove(this.orchestrator,obj,obj.piece)
+        let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
         this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
 
@@ -66,7 +66,7 @@ class MyGameOrchestrator extends CGFobject {
 
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
-                        pieceRemoved=this.gameboard.matrixBoard[i][j].piece;
+                        pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
@@ -91,29 +91,34 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.SET_THE_GAME_TYPE:
                 //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
-                if (this.scene.gameType != null && (this.scene.gameType=='AI vs Player'||this.scene.gameType=='1vs1'||this.scene.gameType=='AI vs AI'||this.scene.gameType=='Player vs AI')){
+                //alert('Inserir o game type');
+
+                if (this.scene.gameType != null && (this.scene.gameType == 'AI vs Player' || this.scene.gameType == '1vs1' || this.scene.gameType == 'AI vs AI' || this.scene.gameType == 'Player vs AI')) {
                     this.gameStateControl.nextState();
                 }
 
                 break;
 
             case this.states.SET_THE_AI_1_DIF:
-
+                if (this.scene.ai1Dificulty != null) {
+                    this.gameStateControl.nextState();
+                }
 
                 break;
 
             case this.states.SET_THE_AI_2_DIF:
-
-
+                if (this.scene.ai2Dificulty != null) {
+                    this.gameStateControl.nextState();
+                }
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                
+
 
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                
+
 
                 break;
 
@@ -130,10 +135,10 @@ class MyGameOrchestrator extends CGFobject {
                 this.prolog.getPrologRequest(
                     stringRequest,
                     function (data) {
-                        handlerVAR.handleMove(data.target.response,obj,id);
+                        handlerVAR.handleMove(data.target.response, obj, id);
                     },
                     function (data) {
-                        handlerVAR.handlerError(data.target.response,obj,id);
+                        handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
                 this.gameStateControl.nextState();
@@ -141,8 +146,8 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.PICK_REPLY:
-                
-            if (this.gameStateControl.pickPending == false) {
+
+                if (this.gameStateControl.pickPending == false) {
                     this.gameStateControl.nextState();
                 }
 
@@ -171,7 +176,7 @@ class MyGameOrchestrator extends CGFobject {
             let piece = obj.piece;
             if (piece != null)
                 this.gameStateControl.pickActive(obj, id);
-        }else {
+        } else {
 
         }
     }
