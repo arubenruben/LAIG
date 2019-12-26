@@ -18,8 +18,8 @@ class MyGameOrchestrator extends CGFobject {
         this.states = {
             INITIALIZING: 0,
             SET_THE_GAME_TYPE: 1,
-            SET_THE_AI_0_DIF: 2,
-            SET_THE_AI_1_DIF: 3,
+            SET_THE_AI_1_DIF: 2,
+            SET_THE_AI_2_DIF: 3,
             WAIT_PLAYER_1_MOVE: 4,
             WAIT_PLAYER_2_MOVE: 5,
             PICK_ACTIVE: 6,
@@ -91,16 +91,9 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.SET_THE_GAME_TYPE:
                 //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
-                //alert('Inserir o game type');
-
                 if (this.scene.gameType != null && (this.scene.gameType=='AI vs Player'||this.scene.gameType=='1vs1'||this.scene.gameType=='AI vs AI'||this.scene.gameType=='Player vs AI')){
                     this.gameStateControl.nextState();
                 }
-
-                break;
-
-            case this.states.SET_THE_AI_0_DIF:
-
 
                 break;
 
@@ -109,9 +102,14 @@ class MyGameOrchestrator extends CGFobject {
 
                 break;
 
+            case this.states.SET_THE_AI_2_DIF:
+
+
+                break;
+
             case this.states.WAIT_PLAYER_1_MOVE:
                 
-                
+
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
