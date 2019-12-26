@@ -45,36 +45,70 @@ class MyPrologInterface {
     }
 
 
-    sendBoardString(matrix) {
+    moveRequest(JSMatrix, coordX, coordY) {
+
+        let stringRequest = new String;
+        let numericBoardJS = this.buildNumericBoard(JSMatrix);
+        let stringMatrix = this.NumericBoardToString(numericBoardJS);
+        stringRequest ="executemove("+ stringMatrix + "," + coordX + "," + coordY + ")";
+        console.log(stringRequest);
+
+        return stringRequest;
+    }
+
+    buildNumericBoard(JSmatrix) {
+        let arrayNumeric = new Array();
+
+        for (let i = 0; i < JSmatrix.length; i++) {
+            arrayNumeric[i] = new Array();
+
+            for (let j = 0; j < JSmatrix[i].length; j++) {
+                let piece = JSmatrix[i][j].piece;
+                let pieceToInsertNumeric = -1;
+
+                if (piece != null) {
+                    if (piece.color == 'red') {
+                        pieceToInsertNumeric = 1;
+                    } else if (piece.color == 'blue') {
+                        pieceToInsertNumeric = 2;
+                    } else if (piece.color == 'yellow') {
+                        pieceToInsertNumeric = 3;
+                    } else if(piece.color==4) {
+                        pieceToInsertNumeric = 0;
+                    }else{
+                        console.error('ERROR IN THE BOARD ABORT');
+                    }
+                } else {
+                    pieceToInsertNumeric = 0;
+                }
+                arrayNumeric[i][j] = pieceToInsertNumeric;
+            }
+        }
+
+        return arrayNumeric;
+    }
+
+    /*JS MATRIX TO PROLOG SYNTAX*/
+    NumericBoardToString(matrix) {
 
         let strReturn = new String;
-        let str_index = 0;
-
-        strReturn+= '[';
-
+        strReturn += '[';
         for (let i = 0; i < matrix.length; i++) {
             strReturn += '[';
-
             for (let j = 0; j < matrix[i].length; j++) {
-
                 strReturn += matrix[i][j];
-
                 if (j < matrix[i].length - 1) {
                     strReturn += ',';
                 }
             }
             strReturn += ']';
-            if(i<matrix.length-1){
+            if (i < matrix.length - 1) {
                 strReturn += ',';
             }
         }
         strReturn += ']';
 
         return strReturn;
-
-
-
-
     }
 
 }

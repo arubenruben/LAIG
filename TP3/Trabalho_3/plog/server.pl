@@ -112,10 +112,14 @@ parse_input(quit, goodbye).
 %LAIG
 parse_input(start,Resposta):-
 	generate_starting_board(Resposta).
-parse_input(executemove(Board),Resposta):-
-	write('Entrei aqui').
-	write(Board).
-	%smove()
+
+parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
+		valid_move(Board,Move_X_Coord,Move_Y_Coord),
+		move(Board,Move_X_Coord,Move_Y_Coord,Resposta).
+
+parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
+		Resposta='FAIL'.
+		
 
 
 /*
@@ -126,7 +130,7 @@ parse_input(setAI0Difficulty0,Resposta):-
 
 %set_AI_0_difficulty(0):-
 %set_AI_1_difficulty(0):-
-%move(Board,Move_X_Coord,Move_Y_Coord,Result_Board,Active_Player,Player_Scores,Updated_Scores),
+
 
 %parse_input('k')
 test(_,[],N) :- N =< 0.

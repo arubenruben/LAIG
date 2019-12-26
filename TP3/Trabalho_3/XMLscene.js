@@ -21,48 +21,32 @@ class XMLscene extends CGFscene {
      */
     init(application) {
 
-            super.init(application);
-            this.sceneInited = false;
-            this.enableTextures(true);
-            this.gl.clearDepth(100.0);
-            this.gl.enable(this.gl.DEPTH_TEST);
-            this.gl.enable(this.gl.CULL_FACE);
-            this.gl.depthFunc(this.gl.LEQUAL);
-            this.setPickEnabled(true);
-            this.axis = new CGFaxis(this);
-
-            this.UPDATE_PERIOD = 30;
-
-            this.displayAxis = true;
-            this.displayNormals = false;
-            this.selectedCamera = 0;
-            this.gameType=null;
-            this.gameTypes=['1vs1','Player vs AI','AI vs Player','AI vs AI'];
-            this.gameOrchestrator = new MyGameOrchestrator(this);
-        }
-        /**
-         * updates the scene camera
-         */
+        super.init(application);
+        this.sceneInited = false;
+        this.enableTextures(true);
+        this.gl.clearDepth(100.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.CULL_FACE);
+        this.gl.depthFunc(this.gl.LEQUAL);
+        this.axis = new CGFaxis(this);
+        this.UPDATE_PERIOD = 30;
+        this.displayAxis = true;
+        this.displayNormals = false;
+        this.selectedCamera = 0;
+        this.gameType = null;
+        this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
+        this.gameOrchestrator = new MyGameOrchestrator(this);
+        this.setPickEnabled(true);
+    }
+    /**
+     * updates the scene camera
+     */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
     }
 
 
-    logPicking() {
-        if (this.pickMode == false) {
-            if (this.pickResults != null && this.pickResults.length > 0) {
-                for (var i = 0; i < this.pickResults.length; i++) {
-                    var obj = this.pickResults[i][0];
-                    if (obj) {
-                        var customId = this.pickResults[i][1];
-                        console.log("Picked object: " + obj + ", with pick id " + customId);
-                    }
-                }
-                this.pickResults.splice(0, this.pickResults.length);
-            }
-        }
-    }
 
     /**
      * initializes the security camera and the scene camera with the default values
@@ -153,7 +137,7 @@ class XMLscene extends CGFscene {
         this.initCameras();
 
         this.interface.gui_add_lights(this, this.graph.Lights);
-    
+
 
 
         //Time in ms
@@ -180,13 +164,15 @@ class XMLscene extends CGFscene {
         //this.gameOrchestrator.update(t);
     }
 
-
     /**
      * Displays the scene.
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
         this.gameOrchestrator.orchestrate();
+        //PICKABLE
+        this.gameOrchestrator.managePick(this.pickMode, this.pickResults);
+        this.clearPickRegistration();
 
         // Clear image and depth buffer everytime we update the scene
         if (this.sceneInited) {
@@ -218,7 +204,6 @@ class XMLscene extends CGFscene {
             //this.graph.displayScene();
         }
 
-        this.logPicking();
         this.gameOrchestrator.display();
 
         this.popMatrix();
