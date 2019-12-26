@@ -57,6 +57,7 @@ class MyGameStateControler {
             case this.orchestratorLocal.states.SET_THE_AI_1_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
+                    this.orchestratorLocal.scene.setPickEnabled(true);
                     this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
                 //BOT 
@@ -69,6 +70,7 @@ class MyGameStateControler {
 
             case this.orchestratorLocal.states.SET_THE_AI_2_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
+                this.orchestratorLocal.scene.setPickEnabled(true);
                 this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 /*if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
