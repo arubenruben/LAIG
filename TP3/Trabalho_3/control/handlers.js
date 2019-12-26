@@ -30,7 +30,7 @@ class handlerPrologReplys {
         this.gameOrchestrator.buildInitialBoard();
     }
 
-    handleMove(data){
+    handleMove(data,obj,id){
         
         let auxArray=new Array();
 
@@ -55,7 +55,7 @@ class handlerPrologReplys {
                 }
             }
 
-            this.gameOrchestrator.updateBoard(auxArray);
+            this.gameOrchestrator.updateBoard(auxArray,obj,id);
         }    
         this.gameOrchestrator.gameStateControl.pickPending=false;
     }
