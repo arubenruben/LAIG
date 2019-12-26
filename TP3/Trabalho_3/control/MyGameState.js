@@ -30,9 +30,11 @@ class MyGameStateControler {
             case this.orchestratorLocal.states.SET_THE_GAME_TYPE:
 
                 //1vs1. Nothing More to Select 
-                if(this.orchestratorLocal.scene.this.gameType==0){
+                if(this.orchestratorLocal.scene.gameType=='1vs1'){
 
                     this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                    //Picking avaiable
+                    this.orchestratorLocal.scene.setPickEnabled(true);
 
                     //BOT SELECT BOT LEVEL
                 }else if(this.orchestratorLocal.scene.this.gameType==1){
@@ -55,12 +57,17 @@ class MyGameStateControler {
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if(this.orchestratorLocal.scene.this.gameType=='AI vs Player'){
 
-
-
                 }
                 //BOT 
                 else if(this.orchestratorLocal.scene.this.gameType=='AI vs AI')
 
+            break;
+
+            case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
+                this.currentState;
+            break;
+            case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
+                this.currentState;
             break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:
@@ -68,7 +75,8 @@ class MyGameStateControler {
             break;
 
             case this.orchestratorLocal.states.PICK_REPLY:
-                
+
+            //Avanca para o proximo jogador
                 if(this.resumeState==this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE){
                     this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                 }

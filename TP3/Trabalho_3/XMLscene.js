@@ -36,7 +36,8 @@ class XMLscene extends CGFscene {
         this.gameType = null;
         this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
         this.gameOrchestrator = new MyGameOrchestrator(this);
-        this.setPickEnabled(true);
+        //JUST AFTER GameType Selected
+        this.setPickEnabled(false);
     }
     /**
      * updates the scene camera

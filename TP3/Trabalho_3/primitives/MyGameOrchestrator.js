@@ -89,7 +89,7 @@ class MyGameOrchestrator extends CGFobject {
                 //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
                 //alert('Inserir o game type');
 
-                if (this.scene.gameType != null && this.scene.gameType >= 0 && this.scene.gameType < 3) {
+                if (this.scene.gameType != null && (this.scene.gameType=='AI vs Player'||this.scene.gameType=='1vs1'||this.scene.gameType=='AI vs AI'||this.scene.gameType=='Player vs AI')){
                     //console.log('Aqui');
                     this.gameStateControl.nextState();
                 }
@@ -107,7 +107,12 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
+                console.log('Player 1');
 
+                break;
+
+            case this.states.WAIT_PLAYER_2_MOVE:
+                console.log('Player 2');
 
                 break;
 
@@ -121,7 +126,7 @@ class MyGameOrchestrator extends CGFobject {
                 let gameboardToPrologRaw = this.gameboard.matrixBoard;
                 let stringRequest = this.prolog.moveRequest(gameboardToPrologRaw, x, y);
                 let handlerVAR = this.handler;
-                console.log(stringRequest);
+
                 this.prolog.getPrologRequest(
                     stringRequest,
                     function (data) {
@@ -136,7 +141,8 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.PICK_REPLY:
-                if (this.gameStateControl.pickPending == false) {
+                
+            if (this.gameStateControl.pickPending == false) {
                     this.gameStateControl.nextState();
                 }
 
