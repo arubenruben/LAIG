@@ -37,17 +37,17 @@ class MyGameStateControler {
                     this.orchestratorLocal.scene.setPickEnabled(true);
 
                     //BOT SELECT BOT LEVEL
-                }else if(this.orchestratorLocal.scene.this.gameType==1){
+                }else if(this.orchestratorLocal.scene.gameType==1){
 
                     this.currentState=this.orchestratorLocal.states.SET_THE_AI_1_DIF;
 
                     //BOT SELECT BOT LEVEL
-                }else if(this.orchestratorLocal.scene.this.gameType==2){
+                }else if(this.orchestratorLocal.scene.gameType==2){
 
                     this.currentState=this.orchestratorLocal.states.SET_THE_AI_0_DIF;
                     
                     //BOTH BOTS SELECT BOT LEVEL
-                }else if(this.orchestratorLocal.scene.this.gameType==3){
+                }else if(this.orchestratorLocal.scene.gameType==3){
                     
                     this.currentState=this.orchestratorLocal.states.SET_THE_AI_0_DIF;
                 }
@@ -55,11 +55,11 @@ class MyGameStateControler {
             
             case this.orchestratorLocal.states.SET_THE_AI_0_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
-                if(this.orchestratorLocal.scene.this.gameType=='AI vs Player'){
+                if(this.orchestratorLocal.scene.gameType=='AI vs Player'){
 
                 }
                 //BOT 
-                else if(this.orchestratorLocal.scene.this.gameType=='AI vs AI')
+                else if(this.orchestratorLocal.scene.gameType=='AI vs AI')
 
             break;
 

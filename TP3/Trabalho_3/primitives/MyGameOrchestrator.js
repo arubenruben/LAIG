@@ -12,6 +12,7 @@ class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
         super(scene);
         this.scene = scene;
+        this.orchestrator=this;
 
         //TODO:COMPLETAR OS STATES
         this.states = {
@@ -41,7 +42,8 @@ class MyGameOrchestrator extends CGFobject {
             function (data) {
                 handlerVAR.handlerError(data.target.response);
             });
-        /* this.gameSequence = new MyGameSequence(…);
+        this.gameSequence = new MyGameSequence(this);
+        /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
         */
@@ -51,10 +53,12 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboard = new MyGameBoard(this, -2, 4, 4, -2, 2);
         this.gameboardSet = true;
     }
-    updateBoard(incomingArray) {
+    updateBoard(incomingArray,obj,id) {
         this.gameboardSet = false;
         let pieceRemoved=null;
 
+        let newGameMove=new MyGameMove(this.orchestrator,obj,obj.piece)
+        this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
 
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
@@ -90,7 +94,6 @@ class MyGameOrchestrator extends CGFobject {
                 //alert('Inserir o game type');
 
                 if (this.scene.gameType != null && (this.scene.gameType=='AI vs Player'||this.scene.gameType=='1vs1'||this.scene.gameType=='AI vs AI'||this.scene.gameType=='Player vs AI')){
-                    //console.log('Aqui');
                     this.gameStateControl.nextState();
                 }
 
@@ -107,19 +110,18 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                console.log('Player 1');
-
+                
+                
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                console.log('Player 2');
+                
 
                 break;
 
             case this.states.PICK_ACTIVE:
 
                 let obj = this.gameStateControl.pickObject;
-
                 let id = this.gameStateControl.pickId;
                 let x = obj.piece.x;
                 let y = obj.piece.y;
@@ -130,10 +132,10 @@ class MyGameOrchestrator extends CGFobject {
                 this.prolog.getPrologRequest(
                     stringRequest,
                     function (data) {
-                        handlerVAR.handleMove(data.target.response);
+                        handlerVAR.handleMove(data.target.response,obj,id);
                     },
                     function (data) {
-                        handlerVAR.handlerError(data.target.response);
+                        handlerVAR.handlerError(data.target.response,obj,id);
                     });
 
                 this.gameStateControl.nextState();
@@ -147,9 +149,7 @@ class MyGameOrchestrator extends CGFobject {
                 }
 
                 break;
-
         }
-
     }
 
     managePick(mode, results) {
@@ -170,20 +170,13 @@ class MyGameOrchestrator extends CGFobject {
     onObjectSelected(obj, id) {
 
         if (obj instanceof MyTile) {
-
             let piece = obj.piece;
-
             if (piece != null)
                 this.gameStateControl.pickActive(obj, id);
+        }else {
 
         }
-
-        else {
-
-        }
-
     }
-
 
     update(time) {
         //   this.animator.update(time);
@@ -194,7 +187,6 @@ class MyGameOrchestrator extends CGFobject {
         if (this.gameboardSet == true) {
 
             /* this.theme.display();
-            this.gameboard.display();
             this.animator.display();*/
             this.gameboard.display();
 

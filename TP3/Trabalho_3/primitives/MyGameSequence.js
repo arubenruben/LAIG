@@ -7,8 +7,39 @@
 • Feeds move replay
  */
 class MyGameSequence extends CGFobject {
-    constructor(scene) {
-        super(scene);
-        this.scene = scene;
+    constructor(orchestractor) {
+        super(orchestractor.scene);
+        this.orchestractor=orchestractor
+        this.scene = orchestractor.scene;
+        this.arrayGameSequence=new Array();
     }
+
+    addGameMove(gameMove){
+        this.arrayGameSequence.push(gameMove);
+        console.log(this.arrayGameSequence);
+    }
+
+
+    //TODO:UNDO
+    undo(){
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
