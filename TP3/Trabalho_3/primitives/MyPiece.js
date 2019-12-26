@@ -7,7 +7,7 @@
 • Display the piece (render)
  */
 class MyPiece extends CGFobject {
-    constructor(orchestrator, color, tile) {
+    constructor(orchestrator, color, tile,x,y) {
         super(orchestrator.scene);
         this.scene = orchestrator.scene;
         this.color = color;
@@ -41,6 +41,8 @@ class MyPiece extends CGFobject {
         this.yellow.setAmbient(1, 1, 0, 1);
         this.yellow.setDiffuse(1, 1, 0, 1);
         this.yellow.setSpecular(1, 1, 0, 1);
+        this.x=x;
+        this.y=y;
     }
 
     display() {

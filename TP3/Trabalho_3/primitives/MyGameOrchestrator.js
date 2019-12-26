@@ -22,6 +22,7 @@ class MyGameOrchestrator extends CGFobject {
             WAIT_PLAYER_1_MOVE: 4,
             WAIT_PLAYER_2_MOVE: 5,
             PICK_ACTIVE: 6,
+            PICK_REPLY: 7,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
             WIN: 9
@@ -90,10 +91,12 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.PICK_ACTIVE:
-                let obj=this.gameStateControl.pickObject;
+                            
+            let obj=this.gameStateControl.pickObject;
+                
                 let id=this.gameStateControl.pickId;
-                let x = obj.x;
-                let y = obj.y;
+                let x = obj.piece.x;
+                let y = obj.piece.y;
                 let gameboardToPrologRaw = this.gameboard.matrixBoard;
                 let stringRequest=this.prolog.moveRequest(gameboardToPrologRaw,x,y);
                 let handlerVAR = this.handler;
@@ -106,8 +109,15 @@ class MyGameOrchestrator extends CGFobject {
                     function (data) {
                         handlerVAR.handlerError(data.target.response);
                     });
-
+                
+                this.gameStateControl.nextState();
+                
                 break;
+
+                case this.states.PICK_REPLY:
+                    console.log('Aqui');
+
+                    break;
 
         }
 

@@ -63,15 +63,31 @@ class MyGameStateControler {
 
             break;
 
+            case this.orchestratorLocal.states.PICK_ACTIVE:
+                this.currentState=this.orchestratorLocal.states.PICK_REPLY;
+            break;
+
+            case this.orchestratorLocal.states.PICK_REPLY:
+                
+                if(this.resumeState==WAIT_PLAYER_1_MOVE){
+                    this.currentState=this.WAIT_PLAYER_2_MOVE;
+                }
+                else if(this.resumeState==WAIT_PLAYER_2_MOVE){
+                    this.currentState=this.WAIT_PLAYER_1_MOVE;
+                }
+
+            break;
 
             case this.orchestratorLocal.states.WIN:
                 //DO NOTHING
             break;
 
+
         }
 
     }
     pickActive(obj,id){
+        this.resumeState=this.currentState;
         this.currentState=this.orchestratorLocal.states.PICK_ACTIVE;
         this.pickPending=true;
         this.pickObject=obj;

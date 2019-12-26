@@ -81,17 +81,8 @@ class MyGameBoard extends CGFobject {
                 this.matrixBoard[i][j] = new MyTile(this.orchestrator, i * this.tiles_width + this.translation_x - this.aux, j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, height, i, j);
                 let initialPiece=this.orchestrator.initialBoardRaw[i][j];
                 if(initialPiece>0){
-                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j]);
+                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j],j,i);
                 }
-/*
-                if (i % 2 == 0) {
-                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'blue', this.matrixBoard[i][j]);
-                } else if (i % 3 == 0) {
-                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'yellow', this.matrixBoard[i][j]);
-                } else {
-                    this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, 'red', this.matrixBoard[i][j]);
-                }
-                */
             }
         }
     }

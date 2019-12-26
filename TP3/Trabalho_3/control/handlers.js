@@ -30,6 +30,8 @@ class handlerPrologReplys {
     handleMove(data){
         console.log('Aqui no handler');
 
+        this.gameOrchestrator.gameStateControl.pickPending=false;
+
     }
 
     handlerError(message) {
