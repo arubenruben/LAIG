@@ -11,7 +11,8 @@ class MyGameStateControler {
         this.currentPlayer = 1;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
-        this.playDone = true;
+        this.playDone = false;
+        this.playPending = false;
 
 
         this.currentState = this.orchestratorLocal.states.INITIALIZING;
@@ -19,7 +20,7 @@ class MyGameStateControler {
 
 
     nextState() {
-
+    
         switch (this.currentState) {
 
             case this.orchestratorLocal.states.INITIALIZING:
@@ -58,8 +59,7 @@ class MyGameStateControler {
             case this.orchestratorLocal.states.SET_THE_AI_1_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
-                    this.orchestratorLocal.scene.setPickEnabled(true);
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
                 }
                 //BOT 
                 else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
@@ -73,20 +73,47 @@ class MyGameStateControler {
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.orchestratorLocal.scene.setPickEnabled(true);
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                }else if(this.orchestratorLocal.scene.gameType == 'AI vs AI'){
+                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
                 }
-                this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
 
                 break;
 
             case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
-                //TODO:Testar Vitoria
                 this.currentPlayer = 2;
-                this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                if(this.orchestratorLocal.scene.gameType == 'Player vs AI'){
+                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
+                }else{
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                }
                 break;
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
-                //TODO:Testar Vitoria
                 this.currentPlayer = 1;
-                this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                
+                if(this.orchestratorLocal.scene.gameType == 'AI vs Player'){
+                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
+                }else{
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                }
+                break;
+
+            case this.orchestratorLocal.states.WAIT_BOT_1_MOVE:
+                this.currentPlayer = 2;
+                if(this.orchestratorLocal.scene.gameType == 'AI vs Player'){
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                }else{
+                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
+                }
+                break;
+            
+                case this.orchestratorLocal.states.WAIT_BOT_2_MOVE:
+                this.currentPlayer = 1;
+                if(this.orchestratorLocal.scene.gameType == 'Player vs AI'){
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                }else{
+                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
+                }
                 break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:
@@ -94,14 +121,9 @@ class MyGameStateControler {
                 break;
 
             case this.orchestratorLocal.states.PICK_REPLY:
-
+                
                 //Avanca para o proximo jogador
-                if (this.resumeState == this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE) {
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
-                }
-                else if (this.resumeState == this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE) {
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
-                }
+                this.currentState=this.resumeState;
 
                 break;
 
@@ -179,18 +201,10 @@ class MyGameStateControler {
                 score = this.score_player_2;
             }
         }
-        else {
-            if (this.playDone == false) {
-                return false;
-            } else {
-                this.playDone = false;
-                return true;
-            }
-        }
-
-
+        
         if (request == true) {
             this.playDone = false;
+            this.playPending=true;
             this.orchestratorLocal.scene.setPickEnabled(false);
             let board = this.orchestratorLocal.gameboard.matrixBoard;
             let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty, score);
