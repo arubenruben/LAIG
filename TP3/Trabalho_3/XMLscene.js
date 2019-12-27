@@ -161,7 +161,7 @@ class XMLscene extends CGFscene {
 
         //para fazer o update no my game orchestrator
 
-        //this.gameOrchestrator.update(t);
+        this.gameOrchestrator.update(t);
     }
 
     /**

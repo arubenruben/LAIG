@@ -55,7 +55,9 @@ class MyTile extends CGFobject {
     }
 
     update(t) {
-        if (piece_selected) {
+        //  console.log("chegueri aqi");
+        if (this.piece_selected) {
+            console.log("entrei aqui");
             if (this.first_time) {
                 this.delta = t;
             } else {
@@ -64,7 +66,7 @@ class MyTile extends CGFobject {
                     this.delta = 0;
                     this.first_time = true;
                     this.counter++;
-                    this.m = (this.counter + 1) % 2;
+                    this.m = this.counter % 2;
                 }
             }
         }
