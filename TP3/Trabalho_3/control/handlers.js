@@ -65,8 +65,8 @@ class handlerPrologReplys {
         let str=data.toString();
         if(data!=failMessage){
             let index=str.indexOf(',');
-            let x=str[index-1];
-            let y=str[index+1];
+            let x=Number(str[index-1]);
+            let y=Number(str[index+1]);
             this.gameOrchestrator.updateBoardBotMove(x,y);
         } 
        

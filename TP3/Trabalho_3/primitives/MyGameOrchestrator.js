@@ -131,14 +131,14 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.WAIT_PLAYER_1_MOVE:
                 
-                if(this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
+                if(this.gameStateControl.playDone==true&&this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
                 
-                if(this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
+                if(this.gameStateControl.playDone==true&&this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
                     this.gameStateControl.nextState();
                 }
                 break;

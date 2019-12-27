@@ -11,7 +11,7 @@ class MyGameStateControler {
         this.currentPlayer = 1;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
-        this.playDone = false;
+        this.playDone = true;
 
 
         this.currentState = this.orchestratorLocal.states.INITIALIZING;
@@ -158,12 +158,12 @@ class MyGameStateControler {
         let difficulty;
         let score;
 
-        if (gameType == 'Player vs AI' && currentPlayer == 2) {
+        if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
             request = true;
             difficulty = this.orchestratorLocal.scene.ai2Dificulty;
             score = this.score_player_2;
         }
-        else if (gameType == 'AI vs Player' && currentPlayer == 1) {
+        else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
 
             request = true;
             difficulty = this.orchestratorLocal.scene.ai1Dificulty;
@@ -183,7 +183,6 @@ class MyGameStateControler {
             }
         }
         else {
-
             if (this.playDone == false) {
                 return false;
             } else {
@@ -194,6 +193,7 @@ class MyGameStateControler {
 
 
         if (request == true) {
+            this.playDone=false;
 
             let board = this.orchestratorLocal.gameboard.matrixBoard;
             let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty,score);
