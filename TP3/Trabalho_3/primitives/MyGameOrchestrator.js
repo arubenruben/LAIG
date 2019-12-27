@@ -34,6 +34,10 @@ class MyGameOrchestrator extends CGFobject {
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
         let handlerVAR = this.handler;
+        /*
+        this.theme = new MyScenegraph(…);
+        this.animator = new MyAnimator(…);
+        */
         this.prolog.getPrologRequest(
             'start',
             function (data) {
@@ -43,10 +47,6 @@ class MyGameOrchestrator extends CGFobject {
                 handlerVAR.handlerError(data.target.response);
             });
         this.gameSequence = new MyGameSequence(this);
-        /*
-        this.theme = new MyScenegraph(…);
-        this.animator = new MyAnimator(…);
-        */
     }
 
     buildInitialBoard() {
@@ -60,10 +60,8 @@ class MyGameOrchestrator extends CGFobject {
         let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
         this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
-
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
-
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
@@ -71,12 +69,11 @@ class MyGameOrchestrator extends CGFobject {
                     }
                 }
             }
-
         }
         this.gameboardSet = true;
         this.gameStateControl.updateScores(pieceRemoved);
+        this.gameStateControl.playDone=true;
     }
-
     orchestrate() {
 
         switch (this.gameStateControl.currentState) {
@@ -113,13 +110,17 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-
-
+                
+                if(this.gameStateControl.handlePlayerWait(this.scene.gameType==true){
+                    this.gameStateControl.nextState()
+                }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-
-
+                
+                if(this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
+                    this.gameStateControl.nextState()
+                }
                 break;
 
             case this.states.PICK_ACTIVE:

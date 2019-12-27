@@ -60,6 +60,17 @@ class handlerPrologReplys {
         this.gameOrchestrator.gameStateControl.pickPending=false;
     }
 
+    handleBotMove(data){
+        
+        let auxArray=new Array();
+
+        if(data!=failMessage){
+
+            this.gameOrchestrator.updateBoard(auxArray,obj,id);
+        }    
+        this.gameOrchestrator.gameStateControl.pickPending=false;
+    }
+
     handlerError(message) {
         return false;
     }

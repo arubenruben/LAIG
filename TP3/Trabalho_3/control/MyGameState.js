@@ -11,6 +11,7 @@ class MyGameStateControler {
         this.currentPlayer = 0;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
+        this.playDone = false;
 
 
         this.currentState = this.orchestratorLocal.states.INITIALIZING;
@@ -58,12 +59,12 @@ class MyGameStateControler {
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
                     this.orchestratorLocal.scene.setPickEnabled(true);
-                    this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
                 //BOT 
                 else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
                     this.orchestratorLocal.scene.interface.gui.add(this.orchestratorLocal.scene, 'ai2Dificulty', this.orchestratorLocal.scene.ai2Dificulties).name('AI 2 Difficulty');
-                    this.currentState=this.orchestratorLocal.states.SET_THE_AI_2_DIF;
+                    this.currentState = this.orchestratorLocal.states.SET_THE_AI_2_DIF;
                 }
 
                 break;
@@ -83,9 +84,11 @@ class MyGameStateControler {
                 break;
 
             case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
+                //TODO:Atualizar o Jogador Ativo
                 this.currentState;
                 break;
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
+                //TODO:Atualizar o Jogador Ativo
                 this.currentState;
                 break;
 
@@ -144,10 +147,68 @@ class MyGameStateControler {
 
     }
 
+    handlePlayerWait(gameType) {
+        let request = false;
+        let difficulty;
+        let score;
+
+        if (gameType == 'Player vs AI' && currentPlayer == 2) {
+            request = true;
+            difficulty = this.orchestratorLocal.scene.ai2Dificulty;
+            score = this.score_player_2;
+        }
+        else if (gameType == 'AI vs Player' && currentPlayer == 1) {
+
+            request = true;
+            difficulty = this.orchestratorLocal.scene.ai1Dificulty;
+            score = this.score_player_1;
+
+        }
+        else if (gameType == 'AI vs AI') {
+
+            request = true;
+
+            if (this.currentPlayer == 1) {
+                difficulty = this.orchestratorLocal.scene.ai1Dificulty;
+                score = this.score_player_1;
+            } else {
+                difficulty = this.orchestratorLocal.scene.ai2Dificulty;
+                score = this.score_player_2;
+            }
+        }
+        else {
+
+            if (this.playDone == false) {
+                return false;
+            } else {
+                this.playDone = false;
+                return true;
+            }
+        }
+
+
+        if (request == true) {
+
+            let board = this.orchestratorLocal.gameboard.matrixBoard;
+            let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty,score);
+
+            let handlerVAR = this.orchestratorLocal.handler;
+
+            this.prolog.getPrologRequest(
+                stringRequest,
+                function (data) {
+                    handlerVAR.handleBotMove(data.target.response);
+                },
+                function (data) {
+                    handlerVAR.handlerError(data.target.response, obj, id);
+                });
 
 
 
 
 
+            return true;
+        }
+    }
 
 }

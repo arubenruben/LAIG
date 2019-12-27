@@ -172,7 +172,7 @@ valid_move(Board,Move_X_Coord,Move_Y_Coord):-
 %Para qualquer player valido
 move(Board,Move_X_Coord,Move_Y_Coord,Result_Board):-
   %Faco este get primeiro para obter o tipo de elemento que iremos retirar para poder usar como input na funcao para dar update aos score
-  get_board(Board,Move_X_Coord,Move_Y_Coord,Element_to_substitute), 
+  get_board(Board,Move_X_Coord,Move_Y_Coord,_Element_to_substitute), 
   set_board(Board,Move_X_Coord,Move_Y_Coord,Result_Board).
 
 %Em caso de jogada invalida

@@ -58,7 +58,7 @@ choose_move(Board, Cord_X, Cord_Y, Dificulty,_Active_Player,_Score):-
 %BOT LEVEL 2
 %Choose Between Valid Moves and choose the one that provides a result board of great value. According with evaluation function.
 
-choose_move(Board,Cord_X,Cord_Y,Dificulty,Active_Player,Scores):-
+choose_move(Board,Cord_X,Cord_Y,Dificulty,Score):-
   
   Dificulty==2,
   %Greedy aproach, doesnt make sense to sort invalid moves
@@ -67,7 +67,9 @@ choose_move(Board,Cord_X,Cord_Y,Dificulty,Active_Player,Scores):-
   %Return a list with the plays and their elements that have maximum value.
   %Then choose between this move the one that give us the piece we are missing more
   get_the_move_with_greastest_value(Board,ListOfMoves,List_Of_Great_Moves_Value),
-  get_the_element_the_Player_need_more(Active_Player,Scores,Need),
+  %Changed for LAIG%
+  get_the_element_the_Player_need_more(Score,Need),
+  %                %
   get_move_with_color(List_Of_Great_Moves_Value,Cord_X,Cord_Y,Need).
 
 
@@ -102,34 +104,23 @@ try_get_color_move([[_X,_Y,Element]|Resto_Moves],Cord_X,Cord_Y,Need):-
     try_get_color_move(Resto_Moves,Cord_X,Cord_Y,Need).
 
 
-
-get_the_element_the_Player_need_more(0,[[R,Y,G]|_Restantes_Scores],Need):-
+get_the_element_the_Player_need_more([R,Y,G],Need):-
   if_then_else_aux((R=<Y,R=<G),
                       Need is 1,
                         fail
                   ).
-                
-              
-  
-  
-
-get_the_element_the_Player_need_more(0,[[R,Y,G]|_Restantes_Scores],Need):-
+get_the_element_the_Player_need_more([R,Y,G],Need):-
 
   if_then_else_aux((Y=<R,Y=<G),
                   Need is 2,
                   fail
               ).
-get_the_element_the_Player_need_more(0,[[R,Y,G]|_Restantes_Scores],Need):-
+get_the_element_the_Player_need_more([R,Y,G],Need):-
 
   if_then_else_aux((G=<Y,G=<R),
                   Need is 3,
                   fail
               ).
-
-get_the_element_the_Player_need_more(Active_Player,[_Score|Other_Player],Need):-
-
-  Active_Player_Intemedio is Active_Player -1,
-  get_the_element_the_Player_need_more(Active_Player_Intemedio,Other_Player,Need).
 
   
 

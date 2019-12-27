@@ -50,9 +50,20 @@ class MyPrologInterface {
         let stringRequest = new String;
         let numericBoardJS = this.buildNumericBoard(JSMatrix);
         let stringMatrix = this.NumericBoardToString(numericBoardJS);
-        stringRequest ="executemove("+ stringMatrix + "," + coordX + "," + coordY + ")";
-        console.log(stringRequest);
+        stringRequest = "executemove(" + stringMatrix + "," + coordX + "," + coordY + ")";
+        return stringRequest;
+    }
+    
+    botRequest(JSMatrix,dificulty,score){
+        
+        let stringRequest = new String;
+        let numericBoardJS = this.buildNumericBoard(JSMatrix);
+        let stringMatrix = this.NumericBoardToString(numericBoardJS);
 
+        let scoreArrayString=this.scoreArrayToSting(stringMatrix);
+
+        stringRequest = "botMove(" + stringMatrix + "," + dificulty + "," + scoreArrayString + ")";
+        console.log(stringRequest);
         return stringRequest;
     }
 
@@ -73,9 +84,9 @@ class MyPrologInterface {
                         pieceToInsertNumeric = 2;
                     } else if (piece.color == 'yellow') {
                         pieceToInsertNumeric = 3;
-                    } else if(piece.color==4) {
+                    } else if (piece.color == 4) {
                         pieceToInsertNumeric = 0;
-                    }else{
+                    } else {
                         console.error('ERROR IN THE BOARD ABORT');
                     }
                 } else {
@@ -107,6 +118,23 @@ class MyPrologInterface {
             }
         }
         strReturn += ']';
+
+        return strReturn;
+    }
+
+    scoreArrayToSting(score) {
+
+        let strReturn = new String;
+        strReturn = '[[';
+        
+        for (let i = 0; i < score.length; i++) {
+            strReturn += score[i];
+
+            if (i < score.length - 1) {
+                strReturn += ',';
+            }
+        }
+        strReturn += ']]';
 
         return strReturn;
     }

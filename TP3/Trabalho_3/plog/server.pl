@@ -117,22 +117,18 @@ parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
 		valid_move(Board,Move_X_Coord,Move_Y_Coord),
 		move(Board,Move_X_Coord,Move_Y_Coord,Resposta).
 
-parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
+parse_input(executemove(_Board,_Move_X_Coord,_Move_Y_Coord),Resposta):-
+		Resposta='FAIL'.
+
+parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		write('Aqui'),nl,
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score).
+
+parse_input(botMove(_Board,_Dificulty,_Score),Resposta):-
 		Resposta='FAIL'.
 		
+%choose_move(Board, Cord_X, Cord_Y, Dificulty,_Active_Player,_Score)
 
-
-/*
-parse_input(setAI0Difficulty0,Resposta):-
-	set_AI_0_difficulty(0),
-	Resposta=0.
-*/
-
-%set_AI_0_difficulty(0):-
-%set_AI_1_difficulty(0):-
-
-
-%parse_input('k')
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
 	
