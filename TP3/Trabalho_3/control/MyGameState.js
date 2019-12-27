@@ -152,11 +152,11 @@ class MyGameStateControler {
 
         let indexPiece;
 
-        if (pieceRemoved == 'red') {
+        if (pieceRemoved.color == 'red') {
             indexPiece = 0;
-        } else if (pieceRemoved == 'blue') {
+        } else if (pieceRemoved.color == 'blue') {
             indexPiece = 1;
-        } else if (pieceRemoved == 'yellow') {
+        } else if (pieceRemoved.color == 'yellow') {
             indexPiece = 2;
         }
 
@@ -168,7 +168,7 @@ class MyGameStateControler {
             //TODO:Player Record
         }
 
-
+        this.checkVitory();
     }
 
     handlePlayerWait(gameType) {
@@ -256,8 +256,9 @@ class MyGameStateControler {
             winState = this.orchestratorLocal.states.WIN_PLAYER2;
         }
 
+        console.log(scoreArrayToTest);
         for (let i = 0; i < scoreArrayToTest.length; i++) {
-            if (scoreArrayToTest[i] != 5)
+            if (scoreArrayToTest[i] < 5)
                 return false;
         }
         this.currentState = winState;

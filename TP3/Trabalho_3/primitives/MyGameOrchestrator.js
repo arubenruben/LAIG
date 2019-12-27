@@ -69,12 +69,15 @@ class MyGameOrchestrator extends CGFobject {
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
+                        console.log('Antes');
+                        console.log(pieceRemoved);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
             }
         }
         this.gameboardSet = true;
+        console.log('Depois');
         this.gameStateControl.updateScores(pieceRemoved);
 
         this.gameStateControl.playPending = false;
@@ -93,7 +96,6 @@ class MyGameOrchestrator extends CGFobject {
             invalidPlay = true;
         }
         this.gameboardSet = false;
-        let pieceRemoved = null;
         let tile;
         let piece;
 
@@ -104,7 +106,7 @@ class MyGameOrchestrator extends CGFobject {
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            this.gameStateControl.updateScores(pieceRemoved);
+            this.gameStateControl.updateScores(piece);
             this.gameStateControl.checkVitory();
         } else {
             piece = null;
@@ -121,7 +123,6 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     orchestrate() {
-        //TODO:TESTAR VITORIA
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
