@@ -117,22 +117,35 @@ parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
 		valid_move(Board,Move_X_Coord,Move_Y_Coord),
 		move(Board,Move_X_Coord,Move_Y_Coord,Resposta).
 
-parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
+parse_input(executemove(_Board,_Move_X_Coord,_Move_Y_Coord),Resposta):-
+		Resposta='FAIL'.
+
+parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		Dificulty>=1,
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
+		Resposta=[Cord_X,Cord_Y].
+
+parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		Dificulty==0,
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
+		valid_move(Board,Cord_X,Cord_Y),
+		Resposta=[Cord_X,Cord_Y].
+
+parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		Dificulty==0,
+		write('NOT VALID'),nl,
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
+		/*POR CAUSA DO 0 porque -0,-0 pode ser invalido ADICIONAR 1 no JS*/
+		CoordRetX is -Cord_X-1,
+		CoordRetY is -Cord_Y-1,
+
+		Resposta=[CoordRetX,CoordRetY].
+
+parse_input(botMove(_Board,_Dificulty,_Score),Resposta):-
 		Resposta='FAIL'.
 		
+%choose_move(Board, Cord_X, Cord_Y, Dificulty,_Active_Player,_Score)
 
-
-/*
-parse_input(setAI0Difficulty0,Resposta):-
-	set_AI_0_difficulty(0),
-	Resposta=0.
-*/
-
-%set_AI_0_difficulty(0):-
-%set_AI_1_difficulty(0):-
-
-
-%parse_input('k')
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
 	

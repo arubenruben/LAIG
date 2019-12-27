@@ -22,11 +22,15 @@ class MyGameOrchestrator extends CGFobject {
             SET_THE_AI_2_DIF: 3,
             WAIT_PLAYER_1_MOVE: 4,
             WAIT_PLAYER_2_MOVE: 5,
-            PICK_ACTIVE: 6,
-            PICK_REPLY: 7,
+            WAIT_BOT_1_MOVE: 6,
+            WAIT_BOT_2_MOVE: 7,
+            PICK_ACTIVE: 8,
+            PICK_REPLY: 9,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            WIN: 9
+            WIN_PLAYER1: 10,
+            WIN_PLAYER2: 11
+
         };
         this.gameStateControl = new MyGameStateControler(this);
         this.initialBoardRaw = new Array();
@@ -34,6 +38,10 @@ class MyGameOrchestrator extends CGFobject {
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
         let handlerVAR = this.handler;
+        /*
+        this.theme = new MyScenegraph(…);
+        this.animator = new MyAnimator(…);
+        */
         this.prolog.getPrologRequest(
             'start',
             function(data) {
@@ -43,10 +51,6 @@ class MyGameOrchestrator extends CGFobject {
                 handlerVAR.handlerError(data.target.response);
             });
         this.gameSequence = new MyGameSequence(this);
-        /*
-        this.theme = new MyScenegraph(…);
-        this.animator = new MyAnimator(…);
-        */
     }
 
     buildInitialBoard() {
@@ -60,25 +64,65 @@ class MyGameOrchestrator extends CGFobject {
         let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
         this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
-
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
-
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
+                        console.log('Antes');
+                        console.log(pieceRemoved);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
             }
-
         }
         this.gameboardSet = true;
+        console.log('Depois');
         this.gameStateControl.updateScores(pieceRemoved);
+
+        this.gameStateControl.playPending = false;
+        this.gameStateControl.playDone = true;
+    }
+
+    updateBoardBotMove(coordX, coordY) {
+        /*DESFAZER PROTOCOLO*/
+        let invalidPlay = false;
+
+        if (coordX < 0 && coordY < 0) {
+            coordX++;
+            coordY++;
+            coordX = -coordX;
+            coordY = -coordY;
+            invalidPlay = true;
+        }
+        this.gameboardSet = false;
+        let tile;
+        let piece;
+
+        tile = this.gameboard.matrixBoard[coordY][coordX];
+        piece = tile.piece;
+
+        if (invalidPlay == false) {
+            this.gameboard.matrixBoard[coordY][coordX].piece = null;
+            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            this.orchestrator.gameSequence.addGameMove(newGameMove);
+            this.gameStateControl.updateScores(piece);
+            this.gameStateControl.checkVitory();
+        } else {
+            piece = null;
+            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            this.orchestrator.gameSequence.addGameMove(newGameMove);
+        }
+        this.gameboardSet = true;
+
+        if (this.scene.gameType != 'AI vs AI')
+            this.scene.setPickEnabled(true);
+
+        this.gameStateControl.playPending = false;
+        this.gameStateControl.playDone = true;
     }
 
     orchestrate() {
-
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
@@ -114,13 +158,31 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.WAIT_PLAYER_1_MOVE:
 
-
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                    this.gameStateControl.nextState();
+                }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
 
-
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                    this.gameStateControl.nextState();
+                }
                 break;
+            case this.states.WAIT_BOT_1_MOVE:
+
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                    this.gameStateControl.nextState();
+                }
+                break;
+
+            case this.states.WAIT_BOT_2_MOVE:
+
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                    this.gameStateControl.nextState();
+                }
+                break;
+
 
             case this.states.PICK_ACTIVE:
 
@@ -146,11 +208,17 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.PICK_REPLY:
-
                 if (this.gameStateControl.pickPending == false) {
                     this.gameStateControl.nextState();
                 }
+                break;
 
+            case this.states.this.orchestratorLocal.states.WIN_PLAYER1:
+                console.log('Player 1 Won');
+                break;
+
+            case this.states.this.orchestratorLocal.states.WIN_PLAYER2:
+                console.log('Player 2 Won');
                 break;
         }
     }

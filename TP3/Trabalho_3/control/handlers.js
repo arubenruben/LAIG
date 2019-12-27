@@ -60,6 +60,19 @@ class handlerPrologReplys {
         this.gameOrchestrator.gameStateControl.pickPending=false;
     }
 
+    handleBotMove(data){
+        
+        let str=data.toString();
+        if(data!=failMessage){
+            let index=str.indexOf(',');
+            let x=Number(str.slice(1,index));
+            let y=Number(str.slice(index+1,str.length-1));
+
+            this.gameOrchestrator.updateBoardBotMove(x,y);
+        } 
+       
+    }
+
     handlerError(message) {
         return false;
     }
