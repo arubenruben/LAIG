@@ -62,13 +62,14 @@ class handlerPrologReplys {
 
     handleBotMove(data){
         
-        let auxArray=new Array();
-
+        let str=data.toString();
         if(data!=failMessage){
-
-            this.gameOrchestrator.updateBoard(auxArray,obj,id);
-        }    
-        this.gameOrchestrator.gameStateControl.pickPending=false;
+            let index=str.indexOf(',');
+            let x=str[index-1];
+            let y=str[index+1];
+            this.gameOrchestrator.updateBoardBotMove(x,y);
+        } 
+       
     }
 
     handlerError(message) {

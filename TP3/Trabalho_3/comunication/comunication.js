@@ -59,8 +59,7 @@ class MyPrologInterface {
         let stringRequest = new String;
         let numericBoardJS = this.buildNumericBoard(JSMatrix);
         let stringMatrix = this.NumericBoardToString(numericBoardJS);
-
-        let scoreArrayString=this.scoreArrayToSting(stringMatrix);
+        let scoreArrayString=this.scoreArrayToSting(score);
 
         stringRequest = "botMove(" + stringMatrix + "," + dificulty + "," + scoreArrayString + ")";
         console.log(stringRequest);
@@ -125,8 +124,8 @@ class MyPrologInterface {
     scoreArrayToSting(score) {
 
         let strReturn = new String;
-        strReturn = '[[';
-        
+        strReturn = '[';
+
         for (let i = 0; i < score.length; i++) {
             strReturn += score[i];
 
@@ -134,7 +133,7 @@ class MyPrologInterface {
                 strReturn += ',';
             }
         }
-        strReturn += ']]';
+        strReturn += ']';
 
         return strReturn;
     }

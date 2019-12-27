@@ -121,8 +121,8 @@ parse_input(executemove(_Board,_Move_X_Coord,_Move_Y_Coord),Resposta):-
 		Resposta='FAIL'.
 
 parse_input(botMove(Board,Dificulty,Score),Resposta):-
-		write('Aqui'),nl,
-		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score).
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
+		Resposta=[Cord_X,Cord_Y].
 
 parse_input(botMove(_Board,_Dificulty,_Score),Resposta):-
 		Resposta='FAIL'.

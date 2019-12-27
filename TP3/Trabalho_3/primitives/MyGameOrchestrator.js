@@ -74,6 +74,26 @@ class MyGameOrchestrator extends CGFobject {
         this.gameStateControl.updateScores(pieceRemoved);
         this.gameStateControl.playDone=true;
     }
+
+    updateBoardBotMove(coordX, coordY) {
+        this.gameboardSet = false;
+        let pieceRemoved = null;
+        let tile;
+        let piece;
+        
+        tile=this.gameboard.matrixBoard[coordY][coordX];
+        piece=tile.piece;
+        this.gameboard.matrixBoard[coordY][coordX].piece=null;
+
+        let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+        this.orchestrator.gameSequence.addGameMove(newGameMove);
+
+        this.gameboardSet = true;
+        this.gameStateControl.updateScores(pieceRemoved);
+        //TODO:Check if needed
+        this.gameStateControl.playDone=true;
+    }
+
     orchestrate() {
 
         switch (this.gameStateControl.currentState) {
@@ -111,15 +131,15 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.WAIT_PLAYER_1_MOVE:
                 
-                if(this.gameStateControl.handlePlayerWait(this.scene.gameType==true){
-                    this.gameStateControl.nextState()
+                if(this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
+                    this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
                 
                 if(this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
-                    this.gameStateControl.nextState()
+                    this.gameStateControl.nextState();
                 }
                 break;
 

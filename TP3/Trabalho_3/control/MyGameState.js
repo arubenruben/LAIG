@@ -6,9 +6,9 @@ class MyGameStateControler {
 
         this.player1_record_moves = new Array(3);
         this.player2_record_moves = new Array(3);
-        this.score_player_1 = new Array(3);
-        this.score_player_2 = new Array(3);
-        this.currentPlayer = 0;
+        this.score_player_1 = [0,0,0];
+        this.score_player_2 = [0,0,0];
+        this.currentPlayer = 1;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
         this.playDone = false;
@@ -71,8 +71,11 @@ class MyGameStateControler {
 
             case this.orchestratorLocal.states.SET_THE_AI_2_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
+                
                 this.orchestratorLocal.scene.setPickEnabled(true);
-                this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                
+                
                 /*if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
@@ -84,12 +87,14 @@ class MyGameStateControler {
                 break;
 
             case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
-                //TODO:Atualizar o Jogador Ativo
-                this.currentState;
+                //TODO:Testar Vitoria
+                this.currentPlayer=2;
+                this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                 break;
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
-                //TODO:Atualizar o Jogador Ativo
-                this.currentState;
+                //TODO:Testar Vitoria
+                this.currentPlayer=1;
+                this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:
@@ -148,6 +153,7 @@ class MyGameStateControler {
     }
 
     handlePlayerWait(gameType) {
+        
         let request = false;
         let difficulty;
         let score;
@@ -191,10 +197,9 @@ class MyGameStateControler {
 
             let board = this.orchestratorLocal.gameboard.matrixBoard;
             let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty,score);
-
             let handlerVAR = this.orchestratorLocal.handler;
 
-            this.prolog.getPrologRequest(
+            this.orchestratorLocal.prolog.getPrologRequest(
                 stringRequest,
                 function (data) {
                     handlerVAR.handleBotMove(data.target.response);
@@ -202,10 +207,6 @@ class MyGameStateControler {
                 function (data) {
                     handlerVAR.handlerError(data.target.response, obj, id);
                 });
-
-
-
-
 
             return true;
         }
