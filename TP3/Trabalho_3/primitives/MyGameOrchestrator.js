@@ -78,6 +78,16 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     updateBoardBotMove(coordX, coordY) {
+        /*DESFAZER PROTOCOLO*/
+        let invalidPlay=false;
+
+        if(coordX<0&&coordY<0){
+            coordX++;
+            coordY++;
+            coordX=-coordX;
+            coordY=-coordY;
+            invalidPlay=true;
+        }
         this.gameboardSet = false;
         let pieceRemoved = null;
         let tile;
@@ -85,14 +95,20 @@ class MyGameOrchestrator extends CGFobject {
 
         tile = this.gameboard.matrixBoard[coordY][coordX];
         piece = tile.piece;
-        this.gameboard.matrixBoard[coordY][coordX].piece = null;
-
-        let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
-        this.orchestrator.gameSequence.addGameMove(newGameMove);
-
+        
+        
+        if(invalidPlay==false){
+            this.gameboard.matrixBoard[coordY][coordX].piece = null;
+            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            this.orchestrator.gameSequence.addGameMove(newGameMove);
+            this.gameStateControl.updateScores(pieceRemoved);
+            this.gameStateControl.checkVitory();
+        }else{
+            piece=null;    
+            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            this.orchestrator.gameSequence.addGameMove(newGameMove);
+        }
         this.gameboardSet = true;
-        this.gameStateControl.updateScores(pieceRemoved);
-        this.gameStateControl.checkVitory();
         //TODO:Check if needed
         this.gameStateControl.playDone = true;
     }

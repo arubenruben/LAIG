@@ -121,8 +121,25 @@ parse_input(executemove(_Board,_Move_X_Coord,_Move_Y_Coord),Resposta):-
 		Resposta='FAIL'.
 
 parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		Dificulty>=1,
 		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
 		Resposta=[Cord_X,Cord_Y].
+
+parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		Dificulty==0,
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
+		valid_move(Board,Cord_X,Cord_Y),
+		Resposta=[Cord_X,Cord_Y].
+
+parse_input(botMove(Board,Dificulty,Score),Resposta):-
+		Dificulty==0,
+		write('NOT VALID'),nl,
+		choose_move(Board,Cord_X,Cord_Y,Dificulty,Score),
+		/*POR CAUSA DO 0 porque -0,-0 pode ser invalido ADICIONAR 1 no JS*/
+		CoordRetX is -Cord_X-1,
+		CoordRetY is -Cord_Y-1,
+
+		Resposta=[CoordRetX,CoordRetY].
 
 parse_input(botMove(_Board,_Dificulty,_Score),Resposta):-
 		Resposta='FAIL'.
