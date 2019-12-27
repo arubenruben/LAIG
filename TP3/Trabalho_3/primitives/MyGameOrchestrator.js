@@ -76,8 +76,8 @@ class MyGameOrchestrator extends CGFobject {
         }
         this.gameboardSet = true;
         this.gameStateControl.updateScores(pieceRemoved);
-        
-        this.gameStateControl.playPending=false;
+
+        this.gameStateControl.playPending = false;
         this.gameStateControl.playDone = true;
     }
 
@@ -115,8 +115,8 @@ class MyGameOrchestrator extends CGFobject {
 
         if (this.scene.gameType != 'AI vs AI')
             this.scene.setPickEnabled(true);
-        
-        this.gameStateControl.playPending=false;
+
+        this.gameStateControl.playPending = false;
         this.gameStateControl.playDone = true;
     }
 
@@ -157,38 +157,28 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.WAIT_PLAYER_1_MOVE:
 
-                if (this.gameStateControl.playDone == true) {
-                    this.gameStateControl.playDone=false;
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
 
-                if (this.gameStateControl.playDone == true) {
-                    this.gameStateControl.playDone=false;
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
 
-                if (this.gameStateControl.playDone == true) {
-                    this.gameStateControl.playDone=false;
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
-                }
-                else if(this.gameStateControl.playPending==false){
-                    this.gameStateControl.handlePlayerWait(this.scene.gameType);
                 }
                 break;
 
             case this.states.WAIT_BOT_2_MOVE:
 
-                if (this.gameStateControl.playDone == true) {
-                    this.gameStateControl.playDone=false;
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
-                }
-                else if(this.gameStateControl.playPending==false){
-                    this.gameStateControl.handlePlayerWait(this.scene.gameType);
                 }
                 break;
 

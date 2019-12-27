@@ -11,7 +11,7 @@ class MyGameStateControler {
         this.currentPlayer = 1;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
-        this.playDone = false;
+        this.playDone = true;
         this.playPending = false;
 
 
@@ -20,7 +20,7 @@ class MyGameStateControler {
 
 
     nextState() {
-    
+
         switch (this.currentState) {
 
             case this.orchestratorLocal.states.INITIALIZING:
@@ -74,7 +74,7 @@ class MyGameStateControler {
                 if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.orchestratorLocal.scene.setPickEnabled(true);
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
-                }else if(this.orchestratorLocal.scene.gameType == 'AI vs AI'){
+                } else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
                     this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
                 }
 
@@ -82,36 +82,36 @@ class MyGameStateControler {
 
             case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
                 this.currentPlayer = 2;
-                if(this.orchestratorLocal.scene.gameType == 'Player vs AI'){
+                if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
-                }else{
+                } else {
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                 }
                 break;
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
                 this.currentPlayer = 1;
-                
-                if(this.orchestratorLocal.scene.gameType == 'AI vs Player'){
+
+                if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
                     this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
-                }else{
+                } else {
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_1_MOVE:
                 this.currentPlayer = 2;
-                if(this.orchestratorLocal.scene.gameType == 'AI vs Player'){
+                if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
-                }else{
+                } else {
                     this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
                 }
                 break;
-            
-                case this.orchestratorLocal.states.WAIT_BOT_2_MOVE:
+
+            case this.orchestratorLocal.states.WAIT_BOT_2_MOVE:
                 this.currentPlayer = 1;
-                if(this.orchestratorLocal.scene.gameType == 'Player vs AI'){
+                if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
-                }else{
+                } else {
                     this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
                 }
                 break;
@@ -121,20 +121,20 @@ class MyGameStateControler {
                 break;
 
             case this.orchestratorLocal.states.PICK_REPLY:
-                
+
                 //Avanca para o proximo jogador
-                this.currentState=this.resumeState;
+                this.currentState = this.resumeState;
 
                 break;
 
             case this.orchestratorLocal.states.WIN_PLAYER1:
                 //DO NOTHING
                 break;
-            
+
             case this.orchestratorLocal.states.WIN_PLAYER2:
-                    //DO NOTHING
+                //DO NOTHING
                 break;
-            
+
 
 
         }
@@ -177,70 +177,90 @@ class MyGameStateControler {
         let difficulty;
         let score;
 
-        if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
-            request = true;
-            difficulty = this.orchestratorLocal.scene.ai2Dificulty;
-            score = this.score_player_2;
-        }
-        else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
+        if (this.playPending == false && this.playDone == true) {
 
-            request = true;
-            difficulty = this.orchestratorLocal.scene.ai1Dificulty;
-            score = this.score_player_1;
 
-        }
-        else if (gameType == 'AI vs AI') {
-
-            request = true;
-
-            if (this.currentPlayer == 1) {
-                difficulty = this.orchestratorLocal.scene.ai1Dificulty;
-                score = this.score_player_1;
-            } else {
+            if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
+                request = true;
                 difficulty = this.orchestratorLocal.scene.ai2Dificulty;
                 score = this.score_player_2;
             }
-        }
-        
-        if (request == true) {
-            this.playDone = false;
-            this.playPending=true;
-            this.orchestratorLocal.scene.setPickEnabled(false);
-            let board = this.orchestratorLocal.gameboard.matrixBoard;
-            let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty, score);
-            let handlerVAR = this.orchestratorLocal.handler;
+            else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
 
-            this.orchestratorLocal.prolog.getPrologRequest(
-                stringRequest,
-                function (data) {
-                    handlerVAR.handleBotMove(data.target.response);
-                },
-                function (data) {
-                    handlerVAR.handlerError(data.target.response, obj, id);
-                });
+                request = true;
+                difficulty = this.orchestratorLocal.scene.ai1Dificulty;
+                score = this.score_player_1;
 
-            return true;
+            }
+            else if (gameType == 'AI vs AI') {
+
+                request = true;
+
+                if (this.currentPlayer == 1) {
+                    difficulty = this.orchestratorLocal.scene.ai1Dificulty;
+                    score = this.score_player_1;
+                } else {
+                    difficulty = this.orchestratorLocal.scene.ai2Dificulty;
+                    score = this.score_player_2;
+                }
+            }
+            else {
+                request = false;
+                if (this.playDone == true) {
+
+                    this.playDone = false;
+                    return true;
+
+                } else {
+
+                    return false;
+
+                }
+
+            }
+
+            if (request == true) {
+                this.playDone = false;
+                this.playPending = true;
+                this.orchestratorLocal.scene.setPickEnabled(false);
+                let board = this.orchestratorLocal.gameboard.matrixBoard;
+                let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty, score);
+                let handlerVAR = this.orchestratorLocal.handler;
+
+                this.orchestratorLocal.prolog.getPrologRequest(
+                    stringRequest,
+                    function (data) {
+                        handlerVAR.handleBotMove(data.target.response);
+                    },
+                    function (data) {
+                        handlerVAR.handlerError(data.target.response, obj, id);
+                    });
+
+                return true;
+            }
         }
+
+        return false;
     }
 
-    checkVitory(){
+    checkVitory() {
         let scoreArrayToTest;
         let winState;
 
-        if(this.currentPlayer==1){
-            scoreArrayToTest=this.score_player_1;
-            winState=this.orchestratorLocal.states.WIN_PLAYER1;
+        if (this.currentPlayer == 1) {
+            scoreArrayToTest = this.score_player_1;
+            winState = this.orchestratorLocal.states.WIN_PLAYER1;
         }
-        else{
-            scoreArrayToTest=this.score_player_2;
-            winState=this.orchestratorLocal.states.WIN_PLAYER2;
+        else {
+            scoreArrayToTest = this.score_player_2;
+            winState = this.orchestratorLocal.states.WIN_PLAYER2;
         }
 
-        for(let i=0;i<scoreArrayToTest.length;i++){
-            if(scoreArrayToTest[i]!=5)
+        for (let i = 0; i < scoreArrayToTest.length; i++) {
+            if (scoreArrayToTest[i] != 5)
                 return false;
         }
-        this.currentState=winState;
+        this.currentState = winState;
     }
 
 }
