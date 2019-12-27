@@ -26,7 +26,9 @@ class MyGameOrchestrator extends CGFobject {
             PICK_REPLY: 7,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            WIN: 9
+            WIN_PLAYER1: 9,
+            WIN_PLAYER2: 10
+
         };
         this.gameStateControl = new MyGameStateControler(this);
         this.initialBoardRaw = new Array();
@@ -72,7 +74,7 @@ class MyGameOrchestrator extends CGFobject {
         }
         this.gameboardSet = true;
         this.gameStateControl.updateScores(pieceRemoved);
-        this.gameStateControl.playDone=true;
+        this.gameStateControl.playDone = true;
     }
 
     updateBoardBotMove(coordX, coordY) {
@@ -80,18 +82,19 @@ class MyGameOrchestrator extends CGFobject {
         let pieceRemoved = null;
         let tile;
         let piece;
-        
-        tile=this.gameboard.matrixBoard[coordY][coordX];
-        piece=tile.piece;
-        this.gameboard.matrixBoard[coordY][coordX].piece=null;
+
+        tile = this.gameboard.matrixBoard[coordY][coordX];
+        piece = tile.piece;
+        this.gameboard.matrixBoard[coordY][coordX].piece = null;
 
         let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
         this.orchestrator.gameSequence.addGameMove(newGameMove);
 
         this.gameboardSet = true;
         this.gameStateControl.updateScores(pieceRemoved);
+        this.gameStateControl.checkVitory();
         //TODO:Check if needed
-        this.gameStateControl.playDone=true;
+        this.gameStateControl.playDone = true;
     }
 
     orchestrate() {
@@ -130,15 +133,15 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                
-                if(this.gameStateControl.playDone==true&&this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
+
+                if (this.gameStateControl.playDone == true && this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                
-                if(this.gameStateControl.playDone==true&&this.gameStateControl.handlePlayerWait(this.scene.gameType)==true){
+
+                if (this.gameStateControl.playDone == true && this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -167,11 +170,17 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.PICK_REPLY:
-
                 if (this.gameStateControl.pickPending == false) {
                     this.gameStateControl.nextState();
                 }
+                break;
 
+            case this.states.this.orchestratorLocal.states.WIN_PLAYER1:
+                console.log('Player 1 Won');
+                break;
+            
+            case this.states.this.orchestratorLocal.states.WIN_PLAYER2:
+                console.log('Player 2 Won');
                 break;
         }
     }

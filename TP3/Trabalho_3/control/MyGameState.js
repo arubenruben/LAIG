@@ -6,8 +6,8 @@ class MyGameStateControler {
 
         this.player1_record_moves = new Array(3);
         this.player2_record_moves = new Array(3);
-        this.score_player_1 = [0,0,0];
-        this.score_player_2 = [0,0,0];
+        this.score_player_1 = [0, 0, 0];
+        this.score_player_2 = [0, 0, 0];
         this.currentPlayer = 1;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
@@ -71,30 +71,22 @@ class MyGameStateControler {
 
             case this.orchestratorLocal.states.SET_THE_AI_2_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
-                
-                this.orchestratorLocal.scene.setPickEnabled(true);
-                this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
-                
-                
-                /*if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
-                    this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
+                    this.orchestratorLocal.scene.setPickEnabled(true);
                 }
-                //BOT 
-                else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
-                    
+                this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
 
-                }*/
                 break;
 
             case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
                 //TODO:Testar Vitoria
-                this.currentPlayer=2;
-                this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                this.currentPlayer = 2;
+                this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                 break;
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
                 //TODO:Testar Vitoria
-                this.currentPlayer=1;
-                this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                this.currentPlayer = 1;
+                this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:
@@ -113,9 +105,14 @@ class MyGameStateControler {
 
                 break;
 
-            case this.orchestratorLocal.states.WIN:
+            case this.orchestratorLocal.states.WIN_PLAYER1:
                 //DO NOTHING
                 break;
+            
+            case this.orchestratorLocal.states.WIN_PLAYER2:
+                    //DO NOTHING
+                break;
+            
 
 
         }
@@ -153,7 +150,7 @@ class MyGameStateControler {
     }
 
     handlePlayerWait(gameType) {
-        
+
         let request = false;
         let difficulty;
         let score;
@@ -193,10 +190,10 @@ class MyGameStateControler {
 
 
         if (request == true) {
-            this.playDone=false;
+            this.playDone = false;
 
             let board = this.orchestratorLocal.gameboard.matrixBoard;
-            let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty,score);
+            let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty, score);
             let handlerVAR = this.orchestratorLocal.handler;
 
             this.orchestratorLocal.prolog.getPrologRequest(
@@ -210,6 +207,26 @@ class MyGameStateControler {
 
             return true;
         }
+    }
+
+    checkVitory(){
+        let scoreArrayToTest;
+        let winState;
+
+        if(this.currentPlayer==1){
+            scoreArrayToTest=this.score_player_1;
+            winState=this.orchestratorLocal.states.WIN_PLAYER1;
+        }
+        else{
+            scoreArrayToTest=this.score_player_2;
+            winState=this.orchestratorLocal.states.WIN_PLAYER2;
+        }
+
+        for(let i=0;i<scoreArrayToTest.length;i++){
+            if(scoreArrayToTest[i]!=5)
+                return false;
+        }
+        this.currentState=winState;
     }
 
 }
