@@ -6,8 +6,8 @@ class MyGameStateControler {
 
         this.player1_record_moves = new Array(3);
         this.player2_record_moves = new Array(3);
-        this.score_player_1 = new Array(3);
-        this.score_player_2 = new Array(3);
+        this.score_player_1 = [2, 1, 4];
+        this.score_player_2 = [2, 2, 1];
         this.currentPlayer = 0;
         this.orchestratorLocal = orchestrator;
         this.pickPending = false;
@@ -37,13 +37,11 @@ class MyGameStateControler {
                     this.orchestratorLocal.scene.setPickEnabled(true);
 
                     //BOT SELECT BOT LEVEL
-                }
-                else if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
+                } else if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
                     this.orchestratorLocal.scene.interface.gui.add(this.orchestratorLocal.scene, 'ai1Dificulty', this.orchestratorLocal.scene.ai1Dificulties).name('AI 1 Difficulty');
                     this.currentState = this.orchestratorLocal.states.SET_THE_AI_1_DIF;
 
-                }
-                else if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
+                } else if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
                     this.orchestratorLocal.scene.interface.gui.add(this.orchestratorLocal.scene, 'ai2Dificulty', this.orchestratorLocal.scene.ai2Dificulties).name('AI 2 Difficulty');
                     this.currentState = this.orchestratorLocal.states.SET_THE_AI_2_DIF;
 
@@ -58,12 +56,12 @@ class MyGameStateControler {
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
                     this.orchestratorLocal.scene.setPickEnabled(true);
-                    this.currentState=this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
                 //BOT 
                 else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
                     this.orchestratorLocal.scene.interface.gui.add(this.orchestratorLocal.scene, 'ai2Dificulty', this.orchestratorLocal.scene.ai2Dificulties).name('AI 2 Difficulty');
-                    this.currentState=this.orchestratorLocal.states.SET_THE_AI_2_DIF;
+                    this.currentState = this.orchestratorLocal.states.SET_THE_AI_2_DIF;
                 }
 
                 break;
@@ -98,8 +96,7 @@ class MyGameStateControler {
                 //Avanca para o proximo jogador
                 if (this.resumeState == this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE) {
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
-                }
-                else if (this.resumeState == this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE) {
+                } else if (this.resumeState == this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE) {
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                 }
 

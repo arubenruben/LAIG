@@ -12,7 +12,7 @@ tile)
  */
 
 class MyTile extends CGFobject {
-    constructor(orchestrator, x, z, new_width, new_length, height, index_i, index_j) {
+    constructor(orchestrator, x, z, new_width, new_length, index_i, index_j) {
         super(orchestrator.scene);
         this.orchestrator = orchestrator
         this.scene = orchestrator.scene;
@@ -20,7 +20,6 @@ class MyTile extends CGFobject {
         this.index_j = index_j;
         this.scale_x = new_width / 1;
         this.scale_z = new_length / (Math.cos(Math.PI / 6) * 0.5 * 2);
-        this.height = height;
         this.piece = null;
 
         this.sphere = new MySphere(this.scene, 0.5, 6, 6);
@@ -79,12 +78,12 @@ class MyTile extends CGFobject {
         if (this.piece != null) {
 
             this.scene.translate(0, 0.01 * this.scale_x, 0);
-            this.scene.scale(this.scale_x, this.scale_x / 2, -this.scale_z);
+            this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.piece.display();
         }
 
         this.scene.popMatrix();
-        this.scene.scale(this.scale_x, 1, this.scale_z);
+        this.scene.scale(this.scale_x, 1, -1 * this.scale_z);
         this.scene.rotate(Math.PI / 2, 1, 0, 0);
 
         this.scene.pushMatrix();

@@ -36,10 +36,10 @@ class MyGameOrchestrator extends CGFobject {
         let handlerVAR = this.handler;
         this.prolog.getPrologRequest(
             'start',
-            function (data) {
+            function(data) {
                 handlerVAR.handleInitialBoard(data.target.response);
             },
-            function (data) {
+            function(data) {
                 handlerVAR.handlerError(data.target.response);
             });
         this.gameSequence = new MyGameSequence(this);
@@ -50,7 +50,7 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     buildInitialBoard() {
-        this.gameboard = new MyGameBoard(this, -2, 4, 4, -2, 2);
+        this.gameboard = new MyGameBoard(this, 2, 4, 4, 2);
         this.gameboardSet = true;
     }
     updateBoard(incomingArray, obj, id) {
@@ -134,10 +134,10 @@ class MyGameOrchestrator extends CGFobject {
 
                 this.prolog.getPrologRequest(
                     stringRequest,
-                    function (data) {
+                    function(data) {
                         handlerVAR.handleMove(data.target.response, obj, id);
                     },
-                    function (data) {
+                    function(data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 

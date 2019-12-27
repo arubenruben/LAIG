@@ -6,7 +6,7 @@
  * @param slices the number of slices of the torus
  * @param loops the number of loops of the torus
  */
-class MyTorus extends CGFobject {
+class MyTorus2 extends CGFobject {
     constructor(scene, radius_inner, radius_outter, slices, loops) {
         super(scene);
         this.scene = scene;
@@ -45,7 +45,7 @@ class MyTorus extends CGFobject {
         this.texCoords = [];
 
         let incremeto_teta = (2 * Math.PI) / this.slices;
-        let incremento_fi = (2 * Math.PI) / this.loops;
+        let incremento_fi = (Math.PI / 2) / this.loops;
         let teta = 0;
         let fi = 0;
         let x, y, z, nx, ny, nz;
