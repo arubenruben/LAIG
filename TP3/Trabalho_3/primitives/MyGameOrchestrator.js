@@ -36,10 +36,10 @@ class MyGameOrchestrator extends CGFobject {
         let handlerVAR = this.handler;
         this.prolog.getPrologRequest(
             'start',
-            function(data) {
+            function (data) {
                 handlerVAR.handleInitialBoard(data.target.response);
             },
-            function(data) {
+            function (data) {
                 handlerVAR.handlerError(data.target.response);
             });
         this.gameSequence = new MyGameSequence(this);
@@ -183,7 +183,6 @@ class MyGameOrchestrator extends CGFobject {
 
     update(time) {
         //   this.animator.update(time);
-        this.gameboard.update(time);
     }
 
     display() {
