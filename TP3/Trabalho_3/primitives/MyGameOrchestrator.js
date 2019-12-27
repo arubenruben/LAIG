@@ -96,7 +96,6 @@ class MyGameOrchestrator extends CGFobject {
         tile = this.gameboard.matrixBoard[coordY][coordX];
         piece = tile.piece;
         
-        
         if(invalidPlay==false){
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
@@ -109,7 +108,10 @@ class MyGameOrchestrator extends CGFobject {
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;
-        //TODO:Check if needed
+        
+        if(this.scene.gameType!='AI vs AI')
+            this.scene.setPickEnabled(true);
+
         this.gameStateControl.playDone = true;
     }
 

@@ -191,7 +191,7 @@ class MyGameStateControler {
 
         if (request == true) {
             this.playDone = false;
-
+            this.orchestratorLocal.scene.setPickEnabled(false);
             let board = this.orchestratorLocal.gameboard.matrixBoard;
             let stringRequest = this.orchestratorLocal.prolog.botRequest(board, difficulty, score);
             let handlerVAR = this.orchestratorLocal.handler;
