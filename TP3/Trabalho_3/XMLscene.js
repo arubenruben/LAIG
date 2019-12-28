@@ -40,6 +40,9 @@ class XMLscene extends CGFscene {
         this.ai1Dificulties = [0, 1, 2];
         this.ai2Dificulties = [0, 1, 2];
         this.gameOrchestrator = new MyGameOrchestrator(this);
+        this.undo = function(){
+            this.gameOrchestrator.gameSequence.undo();
+        }
         //JUST AFTER GameType Selected
         this.setPickEnabled(false);
     }

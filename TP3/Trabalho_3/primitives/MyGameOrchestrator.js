@@ -69,15 +69,12 @@ class MyGameOrchestrator extends CGFobject {
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
-                        console.log('Antes');
-                        console.log(pieceRemoved);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
             }
         }
         this.gameboardSet = true;
-        console.log('Depois');
         this.gameStateControl.updateScores(pieceRemoved);
 
         this.gameStateControl.playPending = false;

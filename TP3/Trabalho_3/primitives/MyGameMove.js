@@ -10,13 +10,13 @@ Stores a game move
 • Animate
  */
 class MyGameMove extends CGFobject {
-    constructor(gameOrchestractor,Tile,movedPiece) {
+    constructor(gameOrchestractor,Tile,removedPiece) {
         super(gameOrchestractor.scene);
         this.gameOrchestractor=gameOrchestractor;
         this.scene = gameOrchestractor.scene;
-        this.storeBoard=gameOrchestractor.gameboard;
+        this.storeBoard=gameOrchestractor.gameboard.matrixBoard;
         this.Tile=Tile;
-        this.movedPiece=movedPiece;
+        this.removedPiece=removedPiece;
     }
 
 
