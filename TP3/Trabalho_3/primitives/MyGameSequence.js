@@ -18,10 +18,12 @@ class MyGameSequence extends CGFobject {
         this.arrayGameSequence.push(gameMove);
     }
     undo() {
-
+        
+        this.orchestractor.gameStateControl.playDone=false;
+        
         let gameMove;
 
-        if (this.arrayGameSequence.length > 1) {
+        if (this.arrayGameSequence.length > 0) {
             gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
             this.arrayGameSequence.pop();
 
@@ -33,10 +35,14 @@ class MyGameSequence extends CGFobject {
             }
 
             this.installGameSequence(gameMove);
+
+            this.orchestractor.gameStateControl.playDone=true;
+            //TODO:Ver se isto e suficiente
+            this.orchestractor.gameStateControl.nextState();
+
         }
 
     }
-
     installGameSequence(gameMove){
 
         this.orchestractor.gameboardSet = false;
@@ -52,7 +58,6 @@ class MyGameSequence extends CGFobject {
             else {
                 scoreArray = this.orchestractor.gameStateControl.score_player_2;
             }
-
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
             }
@@ -65,8 +70,8 @@ class MyGameSequence extends CGFobject {
 
             scoreArray[pieceToInsertNumeric]--;
         }
-
-        this.orchestractor.gameboard.matrixBoard=gameMove.storeBoard;
+        
+        this.orchestractor.gameboard=gameMove.storeBoard;    
         this.orchestractor.gameboardSet = true;
     }
 }

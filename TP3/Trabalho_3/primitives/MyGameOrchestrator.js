@@ -93,21 +93,25 @@ class MyGameOrchestrator extends CGFobject {
             invalidPlay = true;
         }
         this.gameboardSet = false;
-        let tile;
-        let piece;
+        let oldTile,newTile;
+        let oldPiece;
+        let newPiece;
 
-        tile = this.gameboard.matrixBoard[coordY][coordX];
-        piece = tile.piece;
-
+        oldTile = this.gameboard.matrixBoard[coordY][coordX];
+        oldPiece = oldTile.piece;
+        
+        newTile=new MyTile(this.orchestrator,oldTile.x,oldTile.z,oldTile.new_width,oldTile.new_length,oldTile.index_i,oldTile.index_j);
+        
         if (invalidPlay == false) {
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
-            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            newPiece=new MyPiece(this.orchestrator,oldPiece.color,newTile,oldPiece.x,oldPiece.y);
+            let newGameMove = new MyGameMove(this.orchestrator, newTile, newPiece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
             this.gameStateControl.updateScores(piece);
             this.gameStateControl.checkVitory();
         } else {
-            piece = null;
-            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            oldPiece=null;
+            let newGameMove = new MyGameMove(this.orchestrator, newTile, piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;
