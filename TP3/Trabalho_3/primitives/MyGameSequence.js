@@ -43,36 +43,47 @@ class MyGameSequence extends CGFobject {
     }
 
     gameMovie() {
-        if (this.orchestractor.gameStateControl.currentState == this.orchestractor.states.GAME_OVER || this.orchestractor.gameStateControl.currentState == WIN_PLAYER1 || this.orchestractor.gameStateControl.currentState == WIN_PLAYER2) {
+        if (this.orchestractor.gameStateControl.currentState == this.orchestractor.states.GAME_OVER || this.orchestractor.gameStateControl.currentState == this.orchestractor.states.WIN_PLAYER1 || this.orchestractor.gameStateControl.currentState == this.orchestractor.states.WIN_PLAYER2) {
             //To use a simple POP, order inverted, restablished at the end
-            this.arrayGameSequence.reverse();
-            while (this.arrayGameSequence.length > 0) {
-                //TODO: Executa isto a cada 2seg
-                let gameMovie = this.arrayGameSequence[this.arrayGameSequence.length - 1];
-                this.installGameSequence(gameMovie);
-                this.arrayGameSequence.pop();
-            }
+            this.orchestractor.gameStateControl.resumeState = this.orchestractor.gameStateControl.currentState;
+            this.arrayGameSequence = this.arrayGameSequence.reverse();
+            this.orchestractor.gameStateControl.currentState = this.orchestractor.states.MOVIE_REPLY;
+
+            //Executa isto a cada 2seg
+            let arrayVar=this.arrayGameSequence;
+            let functionVar=this.installGameSequence;
+
+            let id=window.setInterval(function(){
+                if(arrayVar.length==0){
+                    console.log('Aqui1');
+                    window.clearInterval(id);
+                }else{
+                    console.log('Aqui2');
+                    let gameMove = arrayVar[arrayVar.length - 1];
+                    functionVar(gameMove);
+                    arrayVar.pop();
+                }
+            },2000);
         }
         else {
             console.error('Not allowed gameMovie on this state');
         }
         //Restablish order
-        this.arrayGameSequence.reverse();
     }
     installGameSequence(gameMove) {
 
-        this.orchestractor.gameboardSet = false;
+        gameMove.gameOrchestractor.gameboardSet = false;
         let scoreArray;
         let pieceToInsertNumeric;
         let pieceRemoved = gameMove.removedPiece;
 
         if (pieceRemoved != null) {
 
-            if (this.orchestractor.gameStateControl.currentPlayer == 1) {
-                scoreArray = this.orchestractor.gameStateControl.score_player_1;
+            if (gameMove.gameOrchestractor.gameStateControl.currentPlayer == 1) {
+                scoreArray = gameMove.gameOrchestractor.gameStateControl.score_player_1;
             }
             else {
-                scoreArray = this.orchestractor.gameStateControl.score_player_2;
+                scoreArray = gameMove.gameOrchestractor.gameStateControl.score_player_2;
             }
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
@@ -86,7 +97,7 @@ class MyGameSequence extends CGFobject {
 
             scoreArray[pieceToInsertNumeric]--;
         }
-        this.orchestractor.gameboard = gameMove.storeBoard;
-        this.orchestractor.gameboardSet = true;
+        gameMove.gameOrchestractor.gameboard = gameMove.storeBoard;
+        gameMove.gameOrchestractor.gameboardSet = true;
     }
 }

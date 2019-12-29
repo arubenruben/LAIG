@@ -27,10 +27,11 @@ class MyGameOrchestrator extends CGFobject {
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
             GAME_OVER:10,
+            MOVIE_REPLY:11,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            WIN_PLAYER1: 11,
-            WIN_PLAYER2: 12
+            WIN_PLAYER1: 12,
+            WIN_PLAYER2: 13
 
         };
         this.gameStateControl = new MyGameStateControler(this);
@@ -208,8 +209,8 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.GAME_OVER:
 
-            //TODO:Disable Picking.
-            //TODO: GameoverMenu;
+                //TODO:Disable Picking.
+                //TODO: GameoverMenu;
                 console.log('Game Over');
                 break;
 
