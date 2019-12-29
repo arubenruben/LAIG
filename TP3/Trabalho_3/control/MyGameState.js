@@ -159,11 +159,11 @@ class MyGameStateControler {
         }
 
         if (this.currentPlayer == 1) {
+            //TODO:Player Record
             this.score_player_1[indexPiece]++;
-            //TODO:Player Record
         } else {
-            this.score_player_2[indexPiece]++;
             //TODO:Player Record
+            this.score_player_2[indexPiece]++;
         }
 
         this.checkVitory();
@@ -253,8 +253,6 @@ class MyGameStateControler {
             scoreArrayToTest = this.score_player_2;
             winState = this.orchestratorLocal.states.WIN_PLAYER2;
         }
-
-        console.log(scoreArrayToTest);
         for (let i = 0; i < scoreArrayToTest.length; i++) {
             if (scoreArrayToTest[i] < 5)
                 return false;

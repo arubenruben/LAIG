@@ -60,7 +60,7 @@ class MyGameOrchestrator extends CGFobject {
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
         let pieceRemoved = null;
-
+        
         let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
         this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
@@ -69,17 +69,14 @@ class MyGameOrchestrator extends CGFobject {
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
-                        console.log('Antes');
-                        console.log(pieceRemoved);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
             }
         }
-        this.gameboardSet = true;
-        console.log('Depois');
         this.gameStateControl.updateScores(pieceRemoved);
-
+        
+        this.gameboardSet = true;
         this.gameStateControl.playPending = false;
         this.gameStateControl.playDone = true;
     }
@@ -96,21 +93,16 @@ class MyGameOrchestrator extends CGFobject {
             invalidPlay = true;
         }
         this.gameboardSet = false;
-        let tile;
-        let piece;
 
-        tile = this.gameboard.matrixBoard[coordY][coordX];
-        piece = tile.piece;
 
         if (invalidPlay == false) {
-            this.gameboard.matrixBoard[coordY][coordX].piece = null;
-            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            this.gameStateControl.updateScores(piece);
+            this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
+            this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
         } else {
-            piece = null;
-            let newGameMove = new MyGameMove(this.orchestrator, tile, piece)
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;

@@ -14,9 +14,9 @@
 • Display the gameboard (render). Calls display of tiles and of pieces
  */
 class MyAuxiliarBoard extends CGFobject {
-    constructor(orchestrator, x1, z1, x2, z2, tiles_width, tiles_height, player) {
+    constructor(orchestrator, tiles_width, tiles_height, player) {
 
-        if (orchestrator == null || x1 == null || z1 == null || x2 == null || z2 == null || player == null) {
+        if (orchestrator == null || player == null) {
             console.error('Parameters null on the board constructor')
         }
         super(orchestrator.scene);

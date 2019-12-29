@@ -18,6 +18,8 @@ class MyTile extends CGFobject {
         this.scene = orchestrator.scene;
         this.index_i = index_i;
         this.index_j = index_j;
+        this.new_width=new_width;
+        this.new_length=new_length;
         this.scale_x = new_width / 1;
         this.scale_z = new_length / (Math.cos(Math.PI / 6) * 0.5 * 2);
         this.piece = null;
@@ -106,4 +108,6 @@ class MyTile extends CGFobject {
 
         this.scene.popMatrix();
     }
+
+    
 }
