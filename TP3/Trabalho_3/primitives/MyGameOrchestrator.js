@@ -207,14 +207,21 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.GAME_OVER:
+
+            //TODO:Disable Picking.
+            //TODO: GameoverMenu;
                 console.log('Game Over');
                 break;
 
             case this.states.WIN_PLAYER1:
+                //TODO:Disable Picking.
+                //TODO: Win Menu;
                 console.log('Player 1 Won');
                 break;
 
             case this.states.WIN_PLAYER2:
+                //TODO:Disable Picking.
+                //TODO: Win Menu;
                 console.log('Player 2 Won');
                 break;
         }

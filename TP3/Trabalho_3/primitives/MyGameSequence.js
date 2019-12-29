@@ -18,9 +18,9 @@ class MyGameSequence extends CGFobject {
         this.arrayGameSequence.push(gameMove);
     }
     undo() {
-        
-        this.orchestractor.gameStateControl.playDone=false;
-        
+
+        this.orchestractor.gameStateControl.playDone = false;
+
         let gameMove;
 
         if (this.arrayGameSequence.length > 0) {
@@ -36,19 +36,35 @@ class MyGameSequence extends CGFobject {
 
             this.installGameSequence(gameMove);
 
-            this.orchestractor.gameStateControl.playDone=true;
-            //TODO:Ver se isto e suficiente
+            this.orchestractor.gameStateControl.playDone = true;
             this.orchestractor.gameStateControl.nextState();
-
         }
 
     }
-    installGameSequence(gameMove){
+
+    gameMovie() {
+        if (this.orchestractor.gameStateControl.currentState == this.orchestractor.states.GAME_OVER || this.orchestractor.gameStateControl.currentState == WIN_PLAYER1 || this.orchestractor.gameStateControl.currentState == WIN_PLAYER2) {
+            //To use a simple POP, order inverted, restablished at the end
+            this.arrayGameSequence.reverse();
+            while (this.arrayGameSequence.length > 0) {
+                //TODO: Executa isto a cada 2seg
+                let gameMovie = this.arrayGameSequence[this.arrayGameSequence.length - 1];
+                this.installGameSequence(gameMovie);
+                this.arrayGameSequence.pop();
+            }
+        }
+        else {
+            console.error('Not allowed gameMovie on this state');
+        }
+        //Restablish order
+        this.arrayGameSequence.reverse();
+    }
+    installGameSequence(gameMove) {
 
         this.orchestractor.gameboardSet = false;
         let scoreArray;
         let pieceToInsertNumeric;
-        let pieceRemoved=gameMove.removedPiece;
+        let pieceRemoved = gameMove.removedPiece;
 
         if (pieceRemoved != null) {
 
@@ -70,7 +86,7 @@ class MyGameSequence extends CGFobject {
 
             scoreArray[pieceToInsertNumeric]--;
         }
-        this.orchestractor.gameboard=gameMove.storeBoard;
+        this.orchestractor.gameboard = gameMove.storeBoard;
         this.orchestractor.gameboardSet = true;
     }
 }
