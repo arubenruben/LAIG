@@ -60,7 +60,7 @@ class MyGameOrchestrator extends CGFobject {
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
         let pieceRemoved = null;
-
+        
         let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
         this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
@@ -74,9 +74,9 @@ class MyGameOrchestrator extends CGFobject {
                 }
             }
         }
-        this.gameboardSet = true;
         this.gameStateControl.updateScores(pieceRemoved);
-
+        
+        this.gameboardSet = true;
         this.gameStateControl.playPending = false;
         this.gameStateControl.playDone = true;
     }
@@ -99,7 +99,7 @@ class MyGameOrchestrator extends CGFobject {
 
         oldTile = this.gameboard.matrixBoard[coordY][coordX];
         oldPiece = oldTile.piece;
-        
+        //TODO:Preciso disto ????
         newTile=new MyTile(this.orchestrator,oldTile.x,oldTile.z,oldTile.new_width,oldTile.new_length,oldTile.index_i,oldTile.index_j);
         
         if (invalidPlay == false) {
@@ -107,7 +107,7 @@ class MyGameOrchestrator extends CGFobject {
             newPiece=new MyPiece(this.orchestrator,oldPiece.color,newTile,oldPiece.x,oldPiece.y);
             let newGameMove = new MyGameMove(this.orchestrator, newTile, newPiece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            this.gameStateControl.updateScores(piece);
+            this.gameStateControl.updateScores(oldPiece);
             this.gameStateControl.checkVitory();
         } else {
             oldPiece=null;

@@ -70,8 +70,7 @@ class MyGameSequence extends CGFobject {
 
             scoreArray[pieceToInsertNumeric]--;
         }
-        
-        this.orchestractor.gameboard=gameMove.storeBoard;    
+        this.orchestractor.gameboard=gameMove.storeBoard;
         this.orchestractor.gameboardSet = true;
     }
 }
