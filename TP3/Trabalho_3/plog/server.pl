@@ -117,6 +117,11 @@ parse_input(executemove(Board,Move_X_Coord,Move_Y_Coord),Resposta):-
 		valid_move(Board,Move_X_Coord,Move_Y_Coord),
 		move(Board,Move_X_Coord,Move_Y_Coord,Resposta).
 
+parse_input(executemove(Board,_Move_X_Coord,_Move_Y_Coord),Resposta):-
+		valid_moves(Board,ListValidMoves),
+		length(ListValidMoves,NumberValidMoves),
+		NumberValidMoves==0,
+		Resposta='GAME OVER'.
 parse_input(executemove(_Board,_Move_X_Coord,_Move_Y_Coord),Resposta):-
 		Resposta='FAIL'.
 
@@ -140,6 +145,12 @@ parse_input(botMove(Board,Dificulty,Score),Resposta):-
 		CoordRetY is -Cord_Y-1,
 
 		Resposta=[CoordRetX,CoordRetY].
+
+parse_input(botMove(Board,_Dificulty,_Score),Resposta):-
+		valid_moves(Board,ListValidMoves),
+		length(ListValidMoves,NumberValidMoves),
+		NumberValidMoves==0,
+		Resposta='GAME OVER'.
 
 parse_input(botMove(_Board,_Dificulty,_Score),Resposta):-
 		Resposta='FAIL'.

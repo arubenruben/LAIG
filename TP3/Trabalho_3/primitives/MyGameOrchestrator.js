@@ -26,10 +26,11 @@ class MyGameOrchestrator extends CGFobject {
             WAIT_BOT_2_MOVE: 7,
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
+            GAME_OVER:10,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            WIN_PLAYER1: 10,
-            WIN_PLAYER2: 11
+            WIN_PLAYER1: 11,
+            WIN_PLAYER2: 12
 
         };
         this.gameStateControl = new MyGameStateControler(this);
@@ -205,11 +206,15 @@ class MyGameOrchestrator extends CGFobject {
                 }
                 break;
 
-            case this.states.this.orchestratorLocal.states.WIN_PLAYER1:
+            case this.states.GAME_OVER:
+                console.log('Game Over');
+                break;
+
+            case this.states.WIN_PLAYER1:
                 console.log('Player 1 Won');
                 break;
 
-            case this.states.this.orchestratorLocal.states.WIN_PLAYER2:
+            case this.states.WIN_PLAYER2:
                 console.log('Player 2 Won');
                 break;
         }
