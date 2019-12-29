@@ -39,6 +39,8 @@ class MyAuxiliarBoard extends CGFobject {
         this.z1 = z1;
         this.x2 = x2;
         this.z2 = z2;
+        this.tiles_height = tiles_height;
+        this.tiles_width = tiles_width;
 
         this.white = new CGFappearance(this.scene);
         this.white.setShininess(200);
@@ -61,9 +63,13 @@ class MyAuxiliarBoard extends CGFobject {
         this.number7 = new CGFtexture(this.scene, './scenes/images/numbers/number7.jpg');
         this.number8 = new CGFtexture(this.scene, './scenes/images/numbers/number8.jpg');
         this.number9 = new CGFtexture(this.scene, './scenes/images/numbers/number9.jpg');
+        this.numberTimes = new CGFtexture(this.scene, './scenes/images/numbers/numberTimes.png');
+        this.light_wood = new CGFtexture(this.scene, './primitives/madeirasides.jpg');
 
-        this.numberRectangle = new MyRectangle(this.scene, null, -tiles_height, -tiles_width, tiles_height, tiles_width);
+        this.numberRectangle = new MyRectangle(this.scene, null, -tiles_width / 2, -tiles_height / 2, tiles_width / 2, tiles_height / 2);
+        this.numberRectangleTimes = new MyRectangle(this.scene, null, -tiles_width / 4, -tiles_height / 4, tiles_width / 4, tiles_height / 4);
 
+        this.floor = new MyRectangle(this.scene, null, -this.tiles_width, 2 * 1.2 * this.tiles_height, 2 * this.tiles_width + this.tiles_width / 2, -this.tiles_height);
         // vai ser preciso para fazer a parte gráfica do stash
         // this.white = new CGFappearance(this.scene);
         // this.white.setShininess(200);
@@ -166,57 +172,99 @@ class MyAuxiliarBoard extends CGFobject {
         this.scene.pushMatrix();
 
 
-
-
         if (this.player == 2) {
-            this.scene.translate(0, 0, 5);
+            this.scene.translate(this.x2 + this.tiles_width, 0, this.z2 - this.tiles_height);
+            this.scene.translate(this.tiles_height / 2, 0, -this.tiles_width / 2);
+            this.scene.rotate(Math.PI / 2, 0, 1, 0);
+
+        } else if (this.player == 1) {
+            this.scene.translate(this.x1 - this.tiles_width, 0, this.z1 + this.tiles_height);
+            this.scene.translate(-this.tiles_height / 2, 0, this.tiles_width / 2);
+            this.scene.rotate(-Math.PI / 2, 0, 1, 0);
         }
+
+        this.scene.pushMatrix();
+        this.white.setTexture(this.light_wood);
+        this.white.apply();
+        this.scene.translate(this.tiles_width / 2, -0.01, this.tiles_height * 1.9);
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this.floor.display();
+        this.scene.popMatrix();
 
 
 
         for (let i = 0; i < this.player_stash[0]; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(0, i * this.scale_x / 2, 0);
+            this.scene.translate(0, i * this.tiles_width / 6, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.redPiece.display();
             this.scene.popMatrix();
         }
 
         this.scene.pushMatrix();
+        this.scene.translate(this.tiles_width, 0, 0);
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this.white.setTexture(this.numberTimes);
+        this.white.apply();
+        this.numberRectangleTimes.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.tiles_width + this.tiles_width, 0, 0);
         this.scene.rotate(-Math.PI / 2, 1, 0, 0);
         this.white.setTexture(this.numberTexture(this.player_stash[0]));
         this.white.apply();
         this.numberRectangle.display();
         this.scene.popMatrix();
 
-        this.scene.translate(2, 0, 0);
+        this.scene.translate(0, 0, this.tiles_height * 1.2);
 
         for (let i = 0; i < this.player_stash[1]; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(0, i * this.scale_x / 2, 0);
+            this.scene.translate(0, i * this.tiles_width / 6, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.bluePiece.display();
             this.scene.popMatrix();
         }
 
         this.scene.pushMatrix();
+        this.scene.translate(this.tiles_width, 0, 0);
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this.white.setTexture(this.numberTimes);
+        this.white.apply();
+        this.numberRectangleTimes.display();
+        this.scene.popMatrix();
+
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.tiles_width + this.tiles_width, 0, 0);
         this.scene.rotate(-Math.PI / 2, 1, 0, 0);
         this.white.setTexture(this.numberTexture(this.player_stash[1]));
         this.white.apply();
         this.numberRectangle.display();
         this.scene.popMatrix();
 
-        this.scene.translate(2, 0, 0);
+        this.scene.translate(0, 0, this.tiles_height * 1.2);
 
         for (let i = 0; i < this.player_stash[2]; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(0, i * this.scale_x / 2, 0);
+            this.scene.translate(0, i * this.tiles_width / 6, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.yellowPiece.display();
             this.scene.popMatrix();
         }
 
         this.scene.pushMatrix();
+        this.scene.translate(this.tiles_width, 0, 0);
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this.white.setTexture(this.numberTimes);
+        this.white.apply();
+        this.numberRectangleTimes.display();
+        this.scene.popMatrix();
+
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.tiles_width + this.tiles_width, 0, 0);
         this.scene.rotate(Math.PI / 2, -1, 0, 0);
         this.white.setTexture(this.numberTexture(this.player_stash[2]));
         this.white.apply();
