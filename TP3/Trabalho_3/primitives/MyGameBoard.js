@@ -80,8 +80,8 @@ class MyGameBoard extends CGFobject {
             [x2 + this.tiles_width / 4, -this.height, z1 + this.tiles_height / 2],
         ];
 
-        this.player1_stash = new MyAuxiliarBoard(orchestrator, this.tiles_width, this.tiles_height, 1);
-        this.player2_stash = new MyAuxiliarBoard(orchestrator, this.tiles_width, this.tiles_height, 2);
+        this.player1_stash = new MyAuxiliarBoard(orchestrator, x1, z1, x2, z2, this.tiles_width, this.tiles_height, 1);
+        this.player2_stash = new MyAuxiliarBoard(orchestrator, x1, z1, x2, z2, this.tiles_width, this.tiles_height, 2);
 
         this.player1_stash["blue"] = 0;
         this.player1_stash["red"] = 0;
