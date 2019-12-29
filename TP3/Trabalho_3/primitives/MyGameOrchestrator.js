@@ -93,25 +93,16 @@ class MyGameOrchestrator extends CGFobject {
             invalidPlay = true;
         }
         this.gameboardSet = false;
-        let oldTile,newTile;
-        let oldPiece;
-        let newPiece;
 
-        oldTile = this.gameboard.matrixBoard[coordY][coordX];
-        oldPiece = oldTile.piece;
-        //TODO:Preciso disto ????
-        newTile=new MyTile(this.orchestrator,oldTile.x,oldTile.z,oldTile.new_width,oldTile.new_length,oldTile.index_i,oldTile.index_j);
-        
+
         if (invalidPlay == false) {
-            this.gameboard.matrixBoard[coordY][coordX].piece = null;
-            newPiece=new MyPiece(this.orchestrator,oldPiece.color,newTile,oldPiece.x,oldPiece.y);
-            let newGameMove = new MyGameMove(this.orchestrator, newTile, newPiece);
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            this.gameStateControl.updateScores(oldPiece);
+            this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
+            this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
         } else {
-            oldPiece=null;
-            let newGameMove = new MyGameMove(this.orchestrator, newTile, piece);
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;
