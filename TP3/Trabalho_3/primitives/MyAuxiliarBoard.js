@@ -14,7 +14,7 @@
 • Display the gameboard (render). Calls display of tiles and of pieces
  */
 class MyAuxiliarBoard extends CGFobject {
-    constructor(orchestrator, tiles_width, tiles_height, player) {
+    constructor(orchestrator, x1, z1, x2, z2, tiles_width, tiles_height, player) {
 
         if (orchestrator == null || player == null) {
             console.error('Parameters null on the board constructor')
@@ -170,7 +170,6 @@ class MyAuxiliarBoard extends CGFobject {
 
         //desenhar peças vermelhas
         this.scene.pushMatrix();
-
 
         if (this.player == 2) {
             this.scene.translate(this.x2 + this.tiles_width, 0, this.z2 - this.tiles_height);
