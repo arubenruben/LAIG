@@ -62,7 +62,6 @@ class MyPrologInterface {
         let scoreArrayString=this.scoreArrayToSting(score);
 
         stringRequest = "botMove(" + stringMatrix + "," + dificulty + "," + scoreArrayString + ")";
-        console.log(stringRequest);
         return stringRequest;
     }
 
