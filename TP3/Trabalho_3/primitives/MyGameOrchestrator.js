@@ -27,10 +27,11 @@ class MyGameOrchestrator extends CGFobject {
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
             GAME_OVER:10,
+            MOVIE_REPLY:11,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            WIN_PLAYER1: 11,
-            WIN_PLAYER2: 12
+            WIN_PLAYER1: 12,
+            WIN_PLAYER2: 13
 
         };
         this.gameStateControl = new MyGameStateControler(this);
@@ -62,19 +63,23 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboardSet = false;
         let pieceRemoved = null;
         
-        let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
-        this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
+                        let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
+                        this.orchestrator.gameSequence.addGameMove(newGameMove);
                         this.gameboard.matrixBoard[i][j].piece = null;
+                    }else{
+                        let newGameMove = new MyGameMove(this.orchestrator, obj, null)
+                        this.orchestrator.gameSequence.addGameMove(newGameMove);
                     }
                 }
             }
         }
+
         this.gameStateControl.updateScores(pieceRemoved);
         
         this.gameboardSet = true;
@@ -103,7 +108,7 @@ class MyGameOrchestrator extends CGFobject {
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
         } else {
-            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],null);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;
@@ -207,14 +212,21 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.GAME_OVER:
+
+                //TODO:Disable Picking.
+                //TODO: GameoverMenu;
                 console.log('Game Over');
                 break;
 
             case this.states.WIN_PLAYER1:
+                //TODO:Disable Picking.
+                //TODO: Win Menu;
                 console.log('Player 1 Won');
                 break;
 
             case this.states.WIN_PLAYER2:
+                //TODO:Disable Picking.
+                //TODO: Win Menu;
                 console.log('Player 2 Won');
                 break;
         }

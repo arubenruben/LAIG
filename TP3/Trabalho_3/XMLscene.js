@@ -43,6 +43,9 @@ class XMLscene extends CGFscene {
         this.undo = function(){
             this.gameOrchestrator.gameSequence.undo();
         }
+        this.gameMovie=function(){
+            this.gameOrchestrator.gameSequence.gameMovie();
+        }
         //JUST AFTER GameType Selected
         this.setPickEnabled(false);
     }
