@@ -63,19 +63,23 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboardSet = false;
         let pieceRemoved = null;
         
-        let newGameMove = new MyGameMove(this.orchestrator, obj, obj.piece)
-        this.orchestrator.gameSequence.addGameMove(newGameMove);
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
+                        let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
+                        this.orchestrator.gameSequence.addGameMove(newGameMove);
                         this.gameboard.matrixBoard[i][j].piece = null;
+                    }else{
+                        let newGameMove = new MyGameMove(this.orchestrator, obj, null)
+                        this.orchestrator.gameSequence.addGameMove(newGameMove);
                     }
                 }
             }
         }
+
         this.gameStateControl.updateScores(pieceRemoved);
         
         this.gameboardSet = true;
@@ -104,7 +108,7 @@ class MyGameOrchestrator extends CGFobject {
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
         } else {
-            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],null);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;

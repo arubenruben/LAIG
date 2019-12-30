@@ -169,6 +169,15 @@ class MyAuxiliarBoard extends CGFobject {
     display() {
 
         //desenhar peças vermelhas
+        
+        if (this.player == 1) {
+            this.player_stash = this.orchestrator.gameStateControl.score_player_1;
+        } else if (this.player == 2) {
+            this.player_stash = this.orchestrator.gameStateControl.score_player_2;
+        } else {
+            console.error('Player ' + player + ' doesnt exits');
+        }
+        
         this.scene.pushMatrix();
 
         if (this.player == 2) {

@@ -4,8 +4,6 @@ class MyGameStateControler {
 
     constructor(orchestrator) {
 
-        this.player1_record_moves = new Array(3);
-        this.player2_record_moves = new Array(3);
         this.score_player_1 = [0, 0, 0];
         this.score_player_2 = [0, 0, 0];
         this.currentPlayer = 1;
