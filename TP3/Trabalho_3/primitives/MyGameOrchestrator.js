@@ -39,6 +39,7 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboardSet = false;
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
+        this.imagesAssets=new MyImageStorage(this);
         let handlerVAR = this.handler;
         /*
         this.theme = new MyScenegraph(…);

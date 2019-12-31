@@ -70,6 +70,7 @@ serialInclude(['../lib/CGF.js',
     'comunication/comunication.js',
     'control/handlers.js',
     'control/MyGameState.js',
+    'model/images.js',
 
 
     main = function() {

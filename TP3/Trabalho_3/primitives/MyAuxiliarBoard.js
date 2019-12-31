@@ -53,18 +53,18 @@ class MyAuxiliarBoard extends CGFobject {
         this.bluePiece = new MyPiece(this.orchestrator, 2, null, null, null)
         this.yellowPiece = new MyPiece(this.orchestrator, 3, null, null, null);
 
-        this.number0 = new CGFtexture(this.scene, './scenes/images/numbers/number0.jpg');
-        this.number1 = new CGFtexture(this.scene, './scenes/images/numbers/number1.jpg');
-        this.number2 = new CGFtexture(this.scene, './scenes/images/numbers/number2.jpg');
-        this.number3 = new CGFtexture(this.scene, './scenes/images/numbers/number3.jpg');
-        this.number4 = new CGFtexture(this.scene, './scenes/images/numbers/number4.jpg');
-        this.number5 = new CGFtexture(this.scene, './scenes/images/numbers/number5.jpg');
-        this.number6 = new CGFtexture(this.scene, './scenes/images/numbers/number6.jpg');
-        this.number7 = new CGFtexture(this.scene, './scenes/images/numbers/number7.jpg');
-        this.number8 = new CGFtexture(this.scene, './scenes/images/numbers/number8.jpg');
-        this.number9 = new CGFtexture(this.scene, './scenes/images/numbers/number9.jpg');
-        this.numberTimes = new CGFtexture(this.scene, './scenes/images/numbers/numberTimes.png');
-        this.light_wood = new CGFtexture(this.scene, './scenes/images/madeirasides.jpg');
+        this.number0 = this.orchestrator.imagesAssets.number0;
+        this.number1 = this.orchestrator.imagesAssets.number1;
+        this.number2 = this.orchestrator.imagesAssets.number2;
+        this.number3 = this.orchestrator.imagesAssets.number3;
+        this.number4 = this.orchestrator.imagesAssets.number4;
+        this.number5 = this.orchestrator.imagesAssets.number5;
+        this.number6 = this.orchestrator.imagesAssets.number6;
+        this.number7 = this.orchestrator.imagesAssets.number7;
+        this.number8 = this.orchestrator.imagesAssets.number8;
+        this.number9 = this.orchestrator.imagesAssets.number9;
+        this.numberTimes = this.orchestrator.imagesAssets.numberTimes;
+        this.light_wood = this.orchestrator.imagesAssets.light_wood;
 
         this.numberRectangle = new MyRectangle(this.scene, null, -tiles_width / 2, -tiles_height / 2, tiles_width / 2, tiles_height / 2);
         this.numberRectangleTimes = new MyRectangle(this.scene, null, -tiles_width / 4, -tiles_height / 4, tiles_width / 4, tiles_height / 4);
