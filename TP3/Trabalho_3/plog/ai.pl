@@ -68,9 +68,7 @@ choose_move(Board,Cord_X,Cord_Y,Dificulty,Score):-
   %Then choose between this move the one that give us the piece we are missing more
   get_the_move_with_greastest_value(Board,ListOfMoves,List_Of_Great_Moves_Value),
   %Changed for LAIG%
-  write(Score),nl,
   get_the_element_the_Player_need_more(Score,Need),
-  write(Need),nl,
   %                %
   get_move_with_color(List_Of_Great_Moves_Value,Cord_X,Cord_Y,Need).
 
