@@ -62,7 +62,6 @@ class MyGameSequence extends CGFobject {
                     window.clearInterval(id);
                 }else{
                     let gameMove = arrayVar[arrayVar.length - 1];
-                    console.log(gameMove.currentPlayer);
                     gameMove.gameOrchestractor.gameStateControl.currentPlayer=gameMove.currentPlayer;
                     functionVar(gameMove);
                     arrayVar.pop();             
