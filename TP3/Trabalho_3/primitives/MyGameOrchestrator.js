@@ -158,22 +158,12 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                
-                if(this.currentTime>this.gameStateControl.stateTime+timeForPlay){
-                    console.log('Mudei Player 1');
-                    this.gameStateControl.nextState();
-                }
-
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                if(this.currentTime>this.gameStateControl.stateTime+timeForPlay){
-                    console.log('Mudei Player 2');
-                    this.gameStateControl.nextState();
-                }
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }

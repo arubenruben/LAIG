@@ -70,7 +70,10 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
+                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
+                console.log('depois'+this.currentPlayer);
+
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'Player vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
@@ -79,7 +82,10 @@ class MyGameStateControler {
                 }
                 break;
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
+                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
+                console.log('depois'+this.currentPlayer);
+
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'AI vs Player') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
@@ -89,7 +95,10 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
+                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
+                console.log('depois'+this.currentPlayer);
+
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'AI vs Player') {
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
@@ -99,7 +108,10 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_BOT_2_MOVE:
+                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
+                console.log('depois'+this.currentPlayer);
+
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'Player vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
@@ -238,11 +250,10 @@ class MyGameStateControler {
 
     refreshPlayer() {
 
-        if (this.orchestrator.currentPlayer == 1) {
-            this.orchestrator.currentPlayer = 2;
-        }
-        if (this.orchestrator.currentPlayer == 2) {
-            this.orchestrator.currentPlayer = 1;
+        if (this.currentPlayer == 1) {
+            this.currentPlayer = 2;
+        }else if (this.currentPlayer == 2) {
+            this.currentPlayer = 1;
         }
     }
 }
