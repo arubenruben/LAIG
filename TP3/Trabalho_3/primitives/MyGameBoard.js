@@ -91,8 +91,8 @@ class MyGameBoard extends CGFobject {
         this.player2_stash["red"] = 0;
         this.player2_stash["yellow"] = 0;
 
-        this.madeira_sides_tex = new CGFtexture(this.scene, './primitives/madeirasides.jpg');
-        this.madeira_cilindro_tex = new CGFtexture(this.scene, './primitives/madeiracilindro.jpg');
+        this.madeira_sides_tex = new CGFtexture(this.scene, './scenes/images/madeirasides.jpg');
+        this.madeira_cilindro_tex = new CGFtexture(this.scene, './scenes/images/madeiracilindro.jpg');
 
         this.madeira_sides = new CGFappearance(this.scene);
         this.madeira_sides.setShininess(200);

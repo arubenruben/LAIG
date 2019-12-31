@@ -64,7 +64,7 @@ class MyAuxiliarBoard extends CGFobject {
         this.number8 = new CGFtexture(this.scene, './scenes/images/numbers/number8.jpg');
         this.number9 = new CGFtexture(this.scene, './scenes/images/numbers/number9.jpg');
         this.numberTimes = new CGFtexture(this.scene, './scenes/images/numbers/numberTimes.png');
-        this.light_wood = new CGFtexture(this.scene, './primitives/madeirasides.jpg');
+        this.light_wood = new CGFtexture(this.scene, './scenes/images/madeirasides.jpg');
 
         this.numberRectangle = new MyRectangle(this.scene, null, -tiles_width / 2, -tiles_height / 2, tiles_width / 2, tiles_height / 2);
         this.numberRectangleTimes = new MyRectangle(this.scene, null, -tiles_width / 4, -tiles_height / 4, tiles_width / 4, tiles_height / 4);
