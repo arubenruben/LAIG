@@ -10,31 +10,31 @@ Stores a game move
 • Animate
  */
 class MyGameMove extends CGFobject {
-    constructor(gameOrchestractor,Tile,removedPiece) {
-        super(gameOrchestractor.scene);
-        this.gameOrchestractor=gameOrchestractor;
-        this.scene = gameOrchestractor.scene;
-        this.storeBoard=new MyGameBoard(gameOrchestractor,this.gameOrchestractor.gameboard.x1,this.gameOrchestractor.gameboard.z1,this.gameOrchestractor.gameboard.x2,this.gameOrchestractor.gameboard.z2);
-        this.removedPiece=removedPiece;
-        this.currentPlayer=gameOrchestractor.gameStateControl.currentPlayer;
-        
-        for(let i=0;i<gameOrchestractor.gameboard.matrixBoard.length;i++){
-            for(let j=0;j<gameOrchestractor.gameboard.matrixBoard[i].length;j++){
-                if(gameOrchestractor.gameboard.matrixBoard[i][j].piece!=null){
-                    this.storeBoard.matrixBoard[i][j].piece=null;
-                    this.storeBoard.matrixBoard[i][j].piece=new MyPiece(this.gameOrchestractor, gameOrchestractor.gameboard.matrixBoard[i][j].piece.color, this.storeBoard.matrixBoard[i][j], j, i);
-                }else{
-                    this.storeBoard.matrixBoard[i][j].piece=null;
+    constructor(orchestrator, Tile, removedPiece) {
+        super(orchestrator.scene);
+        this.orchestrator = orchestrator;
+        this.scene = orchestrator.scene;
+        this.storeBoard = new MyGameBoard(orchestrator, this.orchestrator.gameboard.x1, this.orchestrator.gameboard.z1, this.orchestrator.gameboard.x2, this.orchestrator.gameboard.z2);
+        this.removedPiece = removedPiece;
+        this.currentPlayer = orchestrator.gameStateControl.currentPlayer;
+
+        for (let i = 0; i < orchestrator.gameboard.matrixBoard.length; i++) {
+            for (let j = 0; j < orchestrator.gameboard.matrixBoard[i].length; j++) {
+                if (orchestrator.gameboard.matrixBoard[i][j].piece != null) {
+                    this.storeBoard.matrixBoard[i][j].piece = null;
+                    this.storeBoard.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, orchestrator.gameboard.matrixBoard[i][j].piece.color, this.storeBoard.matrixBoard[i][j], j, i);
+                } else {
+                    this.storeBoard.matrixBoard[i][j].piece = null;
                 }
             }
         }
-    
-        this.Tile=Tile;
-        this.removedPiece=removedPiece;
+
+        this.Tile = Tile;
+        this.removedPiece = removedPiece;
     }
 
-//TODO:Animate Piece
-    animate(){
+    //TODO:Animate Piece
+    animate() {
 
 
 

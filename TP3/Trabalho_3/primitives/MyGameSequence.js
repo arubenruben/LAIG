@@ -26,47 +26,38 @@ class MyGameSequence extends CGFobject {
         if (this.arrayGameSequence.length > 0) {
             gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
             this.arrayGameSequence.pop();
-
-            if (this.orchestractor.gameStateControl.currentPlayer == 1) {
-                this.orchestractor.gameStateControl.currentPlayer = 2;
-            }
-            else {
-                this.orchestractor.gameStateControl.currentPlayer = 1;
-            }
-
+            this.orchestractor.gameStateControl.refreshPlayer();
             this.installGameSequence(gameMove);
-
             this.orchestractor.gameStateControl.playDone = true;
             this.orchestractor.gameStateControl.nextState();
         }
-
     }
 
     gameMovie() {
         if (this.orchestractor.gameStateControl.currentState == this.orchestractor.states.GAME_OVER || this.orchestractor.gameStateControl.currentState == this.orchestractor.states.WIN_PLAYER1 || this.orchestractor.gameStateControl.currentState == this.orchestractor.states.WIN_PLAYER2) {
             //To use a simple POP, order inverted, restablished at the end
             this.orchestractor.gameStateControl.resumeState = this.orchestractor.gameStateControl.currentState;
-            let initialGameBoard=this.arrayGameSequence[0].storeBoard;
-            this.orchestractor.gameboard=initialGameBoard;
-            this.orchestractor.gameStateControl.currentPlayer=1;
-            this.orchestractor.gameStateControl.score_player_1=[0,0,0];
-            this.orchestractor.gameStateControl.score_player_2=[0,0,0];
+            let initialGameBoard = this.arrayGameSequence[0].storeBoard;
+            this.orchestractor.gameboard = initialGameBoard;
+            this.orchestractor.gameStateControl.currentPlayer = 1;
+            this.orchestractor.gameStateControl.score_player_1 = [0, 0, 0];
+            this.orchestractor.gameStateControl.score_player_2 = [0, 0, 0];
             this.arrayGameSequence = this.arrayGameSequence.reverse();
             this.orchestractor.gameStateControl.currentState = this.orchestractor.states.MOVIE_REPLY;
             //Executa isto a cada 2seg
-            let arrayVar=this.arrayGameSequence;
-            let functionVar=this.gameMovieInstallerSequence;
+            let arrayVar = this.arrayGameSequence;
+            let functionVar = this.gameMovieInstallerSequence;
 
-            let id=window.setInterval(function(){
-                if(arrayVar.length==0){
+            let id = window.setInterval(function () {
+                if (arrayVar.length == 0) {
                     window.clearInterval(id);
-                }else{
+                } else {
                     let gameMove = arrayVar[arrayVar.length - 1];
-                    gameMove.gameOrchestractor.gameStateControl.currentPlayer=gameMove.currentPlayer;
+                    gameMove.orchestractor.gameStateControl.currentPlayer = gameMove.currentPlayer;
                     functionVar(gameMove);
-                    arrayVar.pop();             
+                    arrayVar.pop();
                 }
-            },2000);
+            }, 2000);
         }
         else {
             console.error('Not allowed gameMovie on this state');
@@ -75,19 +66,13 @@ class MyGameSequence extends CGFobject {
     }
     installGameSequence(gameMove) {
 
-        gameMove.gameOrchestractor.gameboardSet = false;
+        gameMove.orchestractor.gameboardSet = false;
         let scoreArray;
         let pieceToInsertNumeric;
         let pieceRemoved = gameMove.removedPiece;
 
         if (pieceRemoved != null) {
-
-            if (gameMove.gameOrchestractor.gameStateControl.currentPlayer == 1) {
-                scoreArray = gameMove.gameOrchestractor.gameStateControl.score_player_1;
-            }
-            else {
-                scoreArray = gameMove.gameOrchestractor.gameStateControl.score_player_2;
-            }
+            this.orchestractor.gameStateControl.refreshPlayer();
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
             }
@@ -100,25 +85,25 @@ class MyGameSequence extends CGFobject {
 
             scoreArray[pieceToInsertNumeric]--;
         }
-        gameMove.gameOrchestractor.gameboard = gameMove.storeBoard;
-        gameMove.gameOrchestractor.gameboardSet = true;
+        gameMove.orchestractor.gameboard = gameMove.storeBoard;
+        gameMove.orchestractor.gameboardSet = true;
     }
 
-    gameMovieInstallerSequence(gameMove){
+    gameMovieInstallerSequence(gameMove) {
 
-        gameMove.gameOrchestractor.gameboardSet = false;
+        gameMove.orchestractor.gameboardSet = false;
         let scoreArray;
         let pieceToInsertNumeric;
         let pieceRemoved = gameMove.removedPiece;
-        
-        
+
+
         if (pieceRemoved != null) {
 
-            if (gameMove.gameOrchestractor.gameStateControl.currentPlayer == 1) {
-                scoreArray = gameMove.gameOrchestractor.gameStateControl.score_player_1;
+            if (gameMove.orchestractor.gameStateControl.currentPlayer == 1) {
+                scoreArray = gameMove.orchestractor.gameStateControl.score_player_1;
             }
             else {
-                scoreArray = gameMove.gameOrchestractor.gameStateControl.score_player_2;
+                scoreArray = gameMove.orchestractor.gameStateControl.score_player_2;
             }
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
@@ -129,10 +114,9 @@ class MyGameSequence extends CGFobject {
             else if (pieceRemoved.color == 'yellow') {
                 pieceToInsertNumeric = 2;
             }
-
             scoreArray[pieceToInsertNumeric]++;
         }
-        gameMove.gameOrchestractor.gameboard = gameMove.storeBoard;
-        gameMove.gameOrchestractor.gameboardSet = true;
+        gameMove.orchestractor.gameboard = gameMove.storeBoard;
+        gameMove.orchestractor.gameboardSet = true;
     }
 }

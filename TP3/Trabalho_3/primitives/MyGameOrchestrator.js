@@ -8,6 +8,9 @@
 • Manage object selection
  */
 
+ //30 Mil segundos
+const timeForPlay=5*1000;
+
 class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
         super(scene);
@@ -26,8 +29,8 @@ class MyGameOrchestrator extends CGFobject {
             WAIT_BOT_2_MOVE: 7,
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
-            GAME_OVER:10,
-            MOVIE_REPLY:11,
+            GAME_OVER: 10,
+            MOVIE_REPLY: 11,
 
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
             WIN_PLAYER1: 12,
@@ -39,18 +42,19 @@ class MyGameOrchestrator extends CGFobject {
         this.gameboardSet = false;
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
-        this.imagesAssets=new MyImageStorage(this);
+        this.imagesAssets = new MyImageStorage(this);
         let handlerVAR = this.handler;
+        this.currentTime=Date.now();
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
         */
         this.prolog.getPrologRequest(
             'start',
-            function(data) {
+            function (data) {
                 handlerVAR.handleInitialBoard(data.target.response);
             },
-            function(data) {
+            function (data) {
                 handlerVAR.handlerError(data.target.response);
             });
         this.gameSequence = new MyGameSequence(this);
@@ -63,7 +67,7 @@ class MyGameOrchestrator extends CGFobject {
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
         let pieceRemoved = null;
-        
+
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
@@ -73,7 +77,7 @@ class MyGameOrchestrator extends CGFobject {
                         let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
                         this.gameboard.matrixBoard[i][j].piece = null;
-                    }else{
+                    } else {
                         let newGameMove = new MyGameMove(this.orchestrator, obj, null)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
                     }
@@ -82,7 +86,7 @@ class MyGameOrchestrator extends CGFobject {
         }
 
         this.gameStateControl.updateScores(pieceRemoved);
-        
+
         this.gameboardSet = true;
         this.gameStateControl.playPending = false;
         this.gameStateControl.playDone = true;
@@ -103,13 +107,13 @@ class MyGameOrchestrator extends CGFobject {
 
 
         if (invalidPlay == false) {
-            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],this.gameboard.matrixBoard[coordY][coordX].piece);
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
             this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
         } else {
-            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX],null);
+            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], null);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameboardSet = true;
@@ -129,7 +133,6 @@ class MyGameOrchestrator extends CGFobject {
                 if (this.gameboardSet == true) {
                     this.gameStateControl.nextState();
                 }
-
                 break;
 
             case this.states.SET_THE_GAME_TYPE:
@@ -139,7 +142,6 @@ class MyGameOrchestrator extends CGFobject {
                 if (this.scene.gameType != null && (this.scene.gameType == 'AI vs Player' || this.scene.gameType == '1vs1' || this.scene.gameType == 'AI vs AI' || this.scene.gameType == 'Player vs AI')) {
                     this.gameStateControl.nextState();
                 }
-
                 break;
 
             case this.states.SET_THE_AI_1_DIF:
@@ -156,6 +158,11 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
+                
+                if(this.currentTime>this.gameStateControl.stateTime+timeForPlay){
+                    console.log('Mudei Player 1');
+                    this.gameStateControl.nextState();
+                }
 
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
@@ -163,7 +170,10 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-
+                if(this.currentTime>this.gameStateControl.stateTime+timeForPlay){
+                    console.log('Mudei Player 2');
+                    this.gameStateControl.nextState();
+                }
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
@@ -195,10 +205,10 @@ class MyGameOrchestrator extends CGFobject {
 
                 this.prolog.getPrologRequest(
                     stringRequest,
-                    function(data) {
+                    function (data) {
                         handlerVAR.handleMove(data.target.response, obj, id);
                     },
-                    function(data) {
+                    function (data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
@@ -249,32 +259,24 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     onObjectSelected(obj, id) {
-
+        
         if (obj instanceof MyTile) {
             let piece = obj.piece;
             if (piece != null)
                 this.gameStateControl.pickActive(obj, id);
-        } else {
-
         }
     }
 
-    update(time) {
-        //   this.animator.update(time);
+    update(currentTime) {
+        this.currentTime=currentTime;
     }
 
     display() {
-
         if (this.gameboardSet == true) {
-
             /* this.theme.display();
             this.animator.display();*/
             this.gameboard.display();
-
-
-
             // this.piece3.display();
-
         }
 
     }

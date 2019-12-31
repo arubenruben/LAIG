@@ -12,7 +12,7 @@ class XMLscene extends CGFscene {
         super();
         this.interface = myinterface;
 
-        //this.gameOrchestrator = new MyGameOrchestrator(this);
+        //this.orchestrator = new MyGameOrchestrator(this);
     }
 
     /**
@@ -39,12 +39,12 @@ class XMLscene extends CGFscene {
         this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
         this.ai1Dificulties = [0, 1, 2];
         this.ai2Dificulties = [0, 1, 2];
-        this.gameOrchestrator = new MyGameOrchestrator(this);
-        this.undo = function(){
-            this.gameOrchestrator.gameSequence.undo();
+        this.orchestrator = new MyGameOrchestrator(this);
+        this.undo = function () {
+            this.orchestrator.gameSequence.undo();
         }
-        this.gameMovie=function(){
-            this.gameOrchestrator.gameSequence.gameMovie();
+        this.gameMovie = function () {
+            this.orchestrator.gameSequence.gameMovie();
         }
         //JUST AFTER GameType Selected
         this.setPickEnabled(false);
@@ -144,16 +144,10 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
         this.initLights();
-
         this.initCameras();
-
         this.interface.gui_add_lights(this, this.graph.Lights);
-
-
-
         //Time in ms
         this.setUpdatePeriod((1 / this.UPDATE_PERIOD) * 1000);
-
         this.sceneInited = true;
     }
 
@@ -170,9 +164,8 @@ class XMLscene extends CGFscene {
             }
         }
 
-        //para fazer o update no my game orchestrator
-
-        //this.gameOrchestrator.update(t);
+        //TODO:Para fazer o update no my game orchestrator
+        this.orchestrator.update(t);
     }
 
     /**
@@ -180,9 +173,9 @@ class XMLscene extends CGFscene {
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
-        this.gameOrchestrator.orchestrate();
+        this.orchestrator.orchestrate();
         //PICKABLE
-        this.gameOrchestrator.managePick(this.pickMode, this.pickResults);
+        this.orchestrator.managePick(this.pickMode, this.pickResults);
         this.clearPickRegistration();
 
         // Clear image and depth buffer everytime we update the scene
@@ -215,7 +208,7 @@ class XMLscene extends CGFscene {
             //this.graph.displayScene();
         }
 
-        this.gameOrchestrator.display();
+        this.orchestrator.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
