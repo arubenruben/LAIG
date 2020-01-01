@@ -76,40 +76,58 @@ class MyGameStateControler {
 
                 break;
 
-            case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
-                this.currentPlayer = 2;
-                if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
-                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
-                } else {
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+            case this.orchestratorLocal.states.ROTATING_CAMERA:
+                if (this.currentPlayer == 1) {
+
+                    if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
+                    } else if (this.orchestratorLocal.scene.gameType == 'Player vs Player') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                    } else if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
+                    } else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
+                    }
+
+
+                } else if (this.currentPlayer == 2) {
+
+                    if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
+                    } else if (this.orchestratorLocal.scene.gameType == 'Player vs Player') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                    } else if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                    } else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
+                        this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
+                    }
                 }
                 break;
+
+            case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
+                this.currentPlayer = 2;
+                this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
+                this.orchestratorLocal.scene.cameraAnimation = true;
+                break;
+
+
+
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
                 this.currentPlayer = 1;
-
-                if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
-                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
-                } else {
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
-                }
+                this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
+                this.orchestratorLocal.scene.cameraAnimation = true;
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_1_MOVE:
                 this.currentPlayer = 2;
-                if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
-                } else {
-                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
-                }
+                this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
+                this.orchestratorLocal.scene.cameraAnimation = true;
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_2_MOVE:
                 this.currentPlayer = 1;
-                if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
-                    this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
-                } else {
-                    this.currentState = this.orchestratorLocal.states.WAIT_BOT_1_MOVE;
-                }
+                this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
+                this.orchestratorLocal.scene.cameraAnimation = true;
                 break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:

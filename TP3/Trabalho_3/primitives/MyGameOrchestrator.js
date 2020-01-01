@@ -28,10 +28,10 @@ class MyGameOrchestrator extends CGFobject {
             PICK_REPLY: 9,
             GAME_OVER: 10,
             MOVIE_REPLY: 11,
-
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
             WIN_PLAYER1: 12,
-            WIN_PLAYER2: 13
+            WIN_PLAYER2: 13,
+            ROTATING_CAMERA: 14,
 
         };
         this.gameStateControl = new MyGameStateControler(this);
@@ -175,12 +175,20 @@ class MyGameOrchestrator extends CGFobject {
                 }
                 break;
 
+
             case this.states.WAIT_BOT_2_MOVE:
 
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
+
+            case this.states.ROTATING_CAMERA:
+                if (!this.scene.cameraAnimation) {
+                    this.gameStateControl.nextState();
+                }
+                break;
+
 
 
             case this.states.PICK_ACTIVE:

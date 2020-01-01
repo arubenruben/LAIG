@@ -49,7 +49,7 @@ class XMLscene extends CGFscene {
             this.gameMovie = function() {
                 this.gameOrchestrator.gameSequence.gameMovie();
             }
-            this.cameraAnimation = true;
+            this.cameraAnimation = false;
             //JUST AFTER GameType Selected
             this.setPickEnabled(false);
 
@@ -65,24 +65,40 @@ class XMLscene extends CGFscene {
 
     updateBoardCamera() {
 
-            if (this.cameraAnimation) {
-                this.boardCameraOrbitValue = this.boardCameraOrbitValue + this.boardCameraDelta;
-                if (this.boardCameraOrbitValue > Math.PI) {
+        // if the camera animation is active, meaning the current state of the orchestrator is ROTATING_CAMERA
+        if (this.cameraAnimation) {
+
+            // If conditions to make sure to rotation is done properly and the angle at the end of the animation is correct and the camera
+            // is stationed precisely looking at the board
+            this.boardCameraOrbitValue = this.boardCameraOrbitValue + this.boardCameraDelta;
+            if (this.boardCameraOrbitValue > Math.PI) {
+                if (this.selectedCamera == this.graph.boardCamera) {
                     this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
-                    this.cameraAnimation = false
-                } else if (this.boardCameraOrbitValue == Math.PI) {
-                    this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
-                    this.cameraAnimation = false;
-                } else {
+                }
+                // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
+                this.graph.Views[this.graph.boardCamera].orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
+                this.cameraAnimation = false;
+
+            } else if (this.boardCameraOrbitValue == Math.PI) {
+                if (this.selectedCamera == this.graph.boardCamera) {
                     this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
                 }
-                this.lastBoardCameraOrbitValue = this.boardCameraOrbitValue;
+                // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
+                this.graph.Views[this.graph.boardCamera].orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.cameraAnimation = false;
+            } else {
+                if (this.selectedCamera == this.graph.boardCamera) {
+                    this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                }
+                // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
+                this.graph.Views[this.graph.boardCamera].orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
             }
 
+            // used for the last transition to make sure it rotates always PI rad
+            this.lastBoardCameraOrbitValue = this.boardCameraOrbitValue;
         }
-        // this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
 
-
+    }
 
     /**
      * initializes the security camera and the scene camera with the default values
@@ -197,9 +213,9 @@ class XMLscene extends CGFscene {
             }
         }
 
-        this.updateBoardCamera()
-            //para fazer o update no my game orchestrator1
-            //this.gameOrchestrator.update(t);
+        this.updateBoardCamera();
+        //para fazer o update no my game orchestrator1
+        //this.gameOrchestrator.update(t);
     }
 
     /**
