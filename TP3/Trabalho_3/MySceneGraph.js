@@ -282,6 +282,7 @@ class MySceneGraph {
 
 
         var view_root = this.reader.getString(viewsNode, 'default');
+        var view_boardCamera = this.reader.getString(viewsNode, 'boardCamera');
 
         if (view_root == null)
             return "Default view is not defined";
@@ -298,6 +299,7 @@ class MySceneGraph {
 
 
         this.view_default = view_root;
+        this.boardCamera = view_boardCamera;
         this.active_camera = view_root;
         var grandChildren = [];
         var from = [];

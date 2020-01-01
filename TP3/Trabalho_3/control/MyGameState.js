@@ -31,7 +31,6 @@ class MyGameStateControler {
 
                 //1vs1. Nothing More to Select 
                 if (this.orchestratorLocal.scene.gameType == '1vs1') {
-
                     this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE;
                     //Picking avaiable
                     this.orchestratorLocal.scene.setPickEnabled(true);
@@ -108,26 +107,29 @@ class MyGameStateControler {
                 this.currentPlayer = 2;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
+                this.orchestratorLocal.scene.setPickEnabled(false);
                 break;
-
 
 
             case this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE:
                 this.currentPlayer = 1;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
+                this.orchestratorLocal.scene.setPickEnabled(false);
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_1_MOVE:
                 this.currentPlayer = 2;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
+                this.orchestratorLocal.scene.setPickEnabled(false);
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_2_MOVE:
                 this.currentPlayer = 1;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
+                this.orchestratorLocal.scene.setPickEnabled(false);
                 break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:

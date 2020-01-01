@@ -39,7 +39,7 @@ class XMLscene extends CGFscene {
             this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
             this.ai1Dificulties = [0, 1, 2];
             this.ai2Dificulties = [0, 1, 2];
-            this.boardCameraDelta = Math.PI / 100;
+            this.boardCameraDelta = Math.PI / 60;
             this.boardCameraOrbitValue = 0;
             this.lastBoardCameraOrbitValue = 0;
             this.gameOrchestrator = new MyGameOrchestrator(this);
@@ -72,26 +72,18 @@ class XMLscene extends CGFscene {
             // is stationed precisely looking at the board
             this.boardCameraOrbitValue = this.boardCameraOrbitValue + this.boardCameraDelta;
             if (this.boardCameraOrbitValue > Math.PI) {
-                if (this.selectedCamera == this.graph.boardCamera) {
-                    this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
-                }
+                this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
+
+                this.boardCameraOrbitValue = 0;
                 // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
-                this.graph.Views[this.graph.boardCamera].orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
                 this.cameraAnimation = false;
 
             } else if (this.boardCameraOrbitValue == Math.PI) {
-                if (this.selectedCamera == this.graph.boardCamera) {
-                    this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
-                }
-                // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
-                this.graph.Views[this.graph.boardCamera].orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.boardCameraOrbitValue = 0;
                 this.cameraAnimation = false;
             } else {
-                if (this.selectedCamera == this.graph.boardCamera) {
-                    this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
-                }
-                // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
-                this.graph.Views[this.graph.boardCamera].orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
             }
 
             // used for the last transition to make sure it rotates always PI rad
