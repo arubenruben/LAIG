@@ -32,7 +32,7 @@ class MySceneGraph {
 
         this.nodes = [];
 
-        this.idRoot = null;                    // The id of the root element.
+        this.idRoot = null; // The id of the root element.
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -356,8 +356,7 @@ class MySceneGraph {
                     this.onXMLMinorError("perspective attribute for view element with id " + view_id + "is not defined or as a invalid value, view not added");
                     continue;
                 }
-            }
-            else if (view_type == "ortho") {
+            } else if (view_type == "ortho") {
                 //starting to parse specific attributes and elements for view of type ortho
 
                 left = this.reader.getFloat(children[i], 'left');
@@ -551,219 +550,213 @@ class MySceneGraph {
      */
     parseLights(lightsNode) {
 
-        var children = lightsNode.children;
-        let attributeNames = ["location", "ambient", "diffuse", "specular", "attenuation", "target"];
-        let attributeTypes = ["position", "color", "color", "color"];
+            var children = lightsNode.children;
+            let attributeNames = ["location", "ambient", "diffuse", "specular", "attenuation", "target"];
+            let attributeTypes = ["position", "color", "color", "color"];
 
-        this.Lights = [];
-        this.numLights = 0;
-        var grandChildren = [];
-        var one_light_defined = false;
-        var decomp_atten;
-
-
-        if (children.length == 0) {
-            return "Error: must have at least one light";
-        }
-
-        // Any number of lights.
-        for (var i = 0; i < children.length; i++) {
+            this.Lights = [];
+            this.numLights = 0;
+            var grandChildren = [];
+            var one_light_defined = false;
+            var decomp_atten;
 
 
-            // Storing light information
-            var store_light_info = [];
-            let nodeNames = [];
-
-            var light_is_invalid = false;
-            //Check type of light
-            if (children[i].nodeName != "omni" && children[i].nodeName != "spot") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
-                continue;
+            if (children.length == 0) {
+                return "Error: must have at least one light";
             }
 
-            // Get id of the current light.
-            var lightId = this.reader.getString(children[i], 'id');
-
-            if (lightId == null) {
-                this.onXMLMinorError("no ID defined for light of type " + children[i].nodeName + ", light not added");
-                continue;
-            }
-
-            // Checks for repeated IDs.
-            if (this.Lights[lightId] != null) {
-                this.onXMLMinorError("ID must be unique for each light (conflict: ID = " + lightId + "), light not added, first light with same id remains");
-                continue;
-            }
+            // Any number of lights.
+            for (var i = 0; i < children.length; i++) {
 
 
+                // Storing light information
+                var store_light_info = [];
+                let nodeNames = [];
 
-            //store_light_info fica com a info temporaria
-            store_light_info["type"] = children[i].nodeName;
-
-            // Light enable/disable
-            var enableLight = false;
-            var aux = this.reader.getBoolean(children[i], 'enabled');
-
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))) {
-                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
-                enableLight = aux || 1;
-
-            } else {
-                enableLight = aux;
-            }
-
-            // assuming enable value is 1 or true
-
-            store_light_info["enable"] = enableLight;
-
-            grandChildren = children[i].children;
-            // Specifications for the current light.
-
-
-            // Gets the additional attributes of the spot light
-            if (children[i].nodeName == "spot") {
-
-
-                var angle = this.reader.getFloat(children[i], 'angle');
-
-                if (!(angle != null && !isNaN(angle))) {
-                    this.onXMLMinorError("unable to parse angle of the light for ID = " + lightId + ", light not added");
+                var light_is_invalid = false;
+                //Check type of light
+                if (children[i].nodeName != "omni" && children[i].nodeName != "spot") {
+                    this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                     continue;
                 }
 
-                store_light_info["angle"] = angle;
+                // Get id of the current light.
+                var lightId = this.reader.getString(children[i], 'id');
 
-                var exponent = this.reader.getFloat(children[i], 'exponent');
-
-                if (!(exponent != null && !isNaN(exponent))) {
-                    this.onXMLMinorError("unable to parse exponent of the light for ID = " + lightId + ", light not added");
+                if (lightId == null) {
+                    this.onXMLMinorError("no ID defined for light of type " + children[i].nodeName + ", light not added");
                     continue;
                 }
-                store_light_info["exponent"] = exponent;
 
-            }
-
-            nodeNames = [];
-
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
-            }
-
-
-
-            for (var j = 0; j < attributeNames.length; j++) {
-
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
-
-                if (attributeIndex != -1) {
-
-                    if (attributeNames[j] == "location") {
-
-                        var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID " + lightId + ", light not added");
-
-                        if (!Array.isArray(aux)) {
-                            this.onXMLMinorError(aux);
-                            light_is_invalid = true;
-                            break;
-                        }
-                        store_light_info["location"] = aux;
-
-                    }
-
-                    else if (attributeNames[j] == "attenuation") {
-
-                        var aux = [];
-
-                        decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'constant');
-
-                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
-                            this.onXMLMinorError("constant attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
-                            light_is_invalid = true;
-                            break;
-                        }
-                        aux.push(decomp_atten);
-
-                        decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'linear');
-                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
-                            this.onXMLMinorError("linear attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
-                            light_is_invalid = true;
-                            break;
-                        }
-                        aux.push(decomp_atten);
-
-                        decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'quadratic');
-                        if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
-                            this.onXMLMinorError("quadratic attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
-                            light_is_invalid = true;
-                            break;
-                        }
-                        aux.push(decomp_atten);
-
-
-                        //atenuation e um array
-                        store_light_info["attenuation"] = aux;
-
-
-                    }
-
-                    else if (attributeNames[j] == "target") {
-
-                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "target light for ID " + lightId);
-                        if (!Array.isArray(aux)) {
-                            light_is_invalid = true;
-                            this.onXMLMinorError(aux + ", light not added");
-                        }
-                        store_light_info["target"] = aux;
-
-                    }
-
-                    //Se nao for nenhum dos acima, entao e uma cor
-                    else {
-
-                        var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
-                        if (!Array.isArray(aux)) {
-                            this.onXMLMinorError(aux + ", light not added");
-                            light_is_invalid = true;
-                            break;
-                        }
-                        store_light_info[attributeNames[j]] = aux;
-                    }
+                // Checks for repeated IDs.
+                if (this.Lights[lightId] != null) {
+                    this.onXMLMinorError("ID must be unique for each light (conflict: ID = " + lightId + "), light not added, first light with same id remains");
+                    continue;
                 }
 
-                else {
-                    //Por causa de so o spot ter target o index retorna -1, para nao estar a mudar tudo
-                    if (attributeNames[j] != "target" && children[i].nodeName != "spot") {
 
-                        this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
+
+                //store_light_info fica com a info temporaria
+                store_light_info["type"] = children[i].nodeName;
+
+                // Light enable/disable
+                var enableLight = false;
+                var aux = this.reader.getBoolean(children[i], 'enabled');
+
+                if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))) {
+                    this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+                    enableLight = aux || 1;
+
+                } else {
+                    enableLight = aux;
+                }
+
+                // assuming enable value is 1 or true
+
+                store_light_info["enable"] = enableLight;
+
+                grandChildren = children[i].children;
+                // Specifications for the current light.
+
+
+                // Gets the additional attributes of the spot light
+                if (children[i].nodeName == "spot") {
+
+
+                    var angle = this.reader.getFloat(children[i], 'angle');
+
+                    if (!(angle != null && !isNaN(angle))) {
+                        this.onXMLMinorError("unable to parse angle of the light for ID = " + lightId + ", light not added");
                         continue;
                     }
+
+                    store_light_info["angle"] = angle;
+
+                    var exponent = this.reader.getFloat(children[i], 'exponent');
+
+                    if (!(exponent != null && !isNaN(exponent))) {
+                        this.onXMLMinorError("unable to parse exponent of the light for ID = " + lightId + ", light not added");
+                        continue;
+                    }
+                    store_light_info["exponent"] = exponent;
+
                 }
+
+                nodeNames = [];
+
+                for (var j = 0; j < grandChildren.length; j++) {
+                    nodeNames.push(grandChildren[j].nodeName);
+                }
+
+
+
+                for (var j = 0; j < attributeNames.length; j++) {
+
+                    var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+
+                    if (attributeIndex != -1) {
+
+                        if (attributeNames[j] == "location") {
+
+                            var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID " + lightId + ", light not added");
+
+                            if (!Array.isArray(aux)) {
+                                this.onXMLMinorError(aux);
+                                light_is_invalid = true;
+                                break;
+                            }
+                            store_light_info["location"] = aux;
+
+                        } else if (attributeNames[j] == "attenuation") {
+
+                            var aux = [];
+
+                            decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'constant');
+
+                            if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
+                                this.onXMLMinorError("constant attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+                                light_is_invalid = true;
+                                break;
+                            }
+                            aux.push(decomp_atten);
+
+                            decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'linear');
+                            if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
+                                this.onXMLMinorError("linear attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+                                light_is_invalid = true;
+                                break;
+                            }
+                            aux.push(decomp_atten);
+
+                            decomp_atten = this.reader.getFloat(grandChildren[attributeIndex], 'quadratic');
+                            if (decomp_atten > 1 || decomp_atten < 0 || isNaN(decomp_atten) || decomp_atten == null) {
+                                this.onXMLMinorError("quadratic attribute of attenuation tag of light element with id" + lightId + " is not defined or as a invalid value, light not added");
+                                light_is_invalid = true;
+                                break;
+                            }
+                            aux.push(decomp_atten);
+
+
+                            //atenuation e um array
+                            store_light_info["attenuation"] = aux;
+
+
+                        } else if (attributeNames[j] == "target") {
+
+                            var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "target light for ID " + lightId);
+                            if (!Array.isArray(aux)) {
+                                light_is_invalid = true;
+                                this.onXMLMinorError(aux + ", light not added");
+                            }
+                            store_light_info["target"] = aux;
+
+                        }
+
+                        //Se nao for nenhum dos acima, entao e uma cor
+                        else {
+
+                            var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
+                            if (!Array.isArray(aux)) {
+                                this.onXMLMinorError(aux + ", light not added");
+                                light_is_invalid = true;
+                                break;
+                            }
+                            store_light_info[attributeNames[j]] = aux;
+                        }
+                    } else {
+                        //Por causa de so o spot ter target o index retorna -1, para nao estar a mudar tudo
+                        if (attributeNames[j] != "target" && children[i].nodeName != "spot") {
+
+                            this.onXMLMinorError("light target undefined for ID = " + lightId + " , light not added");
+                            continue;
+                        }
+                    }
+                }
+
+                if (light_is_invalid == true) {
+                    continue;
+                }
+
+                this.Lights[lightId] = store_light_info;
+
+                one_light_defined = true;
+
+                this.numLights++;
             }
 
-            if (light_is_invalid == true) {
-                continue;
-            }
+            if (this.numLights > 8)
+                return ("too many lights defined; WebGL imposes a limit of 8 lights");
 
-            this.Lights[lightId] = store_light_info;
+            if (one_light_defined == false)
+                return ("At least one light must be defined without erros - reminder elements with errors are not added");
 
-            one_light_defined = true;
-
-            this.numLights++;
+            this.log("Parsed lights");
+            return null;
         }
-
-        if (this.numLights > 8)
-            return ("too many lights defined; WebGL imposes a limit of 8 lights");
-
-        if (one_light_defined == false)
-            return ("At least one light must be defined without erros - reminder elements with errors are not added");
-
-        this.log("Parsed lights");
-        return null;
-    }
-    /**
-     * Parses the <textures> block. 
-     * @param {textures block element} texturesNode
-     */
+        /**
+         * Parses the <textures> block. 
+         * @param {textures block element} texturesNode
+         */
     parseTextures(texturesNode) {
         var children = texturesNode.children;
         this.textures = [];
@@ -970,7 +963,9 @@ class MySceneGraph {
                 case 'rotate':
                     // angle
                     //Os angulos e preciso converter para radianos
-                    var x = 0, y = 0, z = 0;
+                    var x = 0,
+                        y = 0,
+                        z = 0;
                     var aux_array_axis = [];
 
                     var axis = this.reader.getString(children[j], 'axis');
@@ -1087,7 +1082,9 @@ class MySceneGraph {
                     case 'rotate':
                         // angle
                         //Os angulos e preciso converter para radianos
-                        var x = 0, y = 0, z = 0;
+                        var x = 0,
+                            y = 0,
+                            z = 0;
                         var aux_array_axis = [];
 
                         var axis = this.reader.getString(grandChildren[j], 'axis');
@@ -1221,82 +1218,82 @@ class MySceneGraph {
 
                         switch (transf_pos) {
 
-                            case TRANSLATION_POS: {
+                            case TRANSLATION_POS:
+                                {
 
-                                if (grandgrandChildren[transf_pos].nodeName != "translate") {
-                                    this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
-                                    return ("Animation order not respected");
-                                }
-                                else {
-                                    let translate_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Translate keyfram" + animationId);
+                                    if (grandgrandChildren[transf_pos].nodeName != "translate") {
+                                        this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
+                                        return ("Animation order not respected");
+                                    } else {
+                                        let translate_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Translate keyfram" + animationId);
 
-                                    if (!(Array.isArray(translate_array))) {
-                                        return "Translate Array invalid";
+                                        if (!(Array.isArray(translate_array))) {
+                                            return "Translate Array invalid";
+                                        }
+
+                                        keyframe_auxiliar_var.translate_vec = translate_array;
                                     }
-
-                                    keyframe_auxiliar_var.translate_vec = translate_array;
+                                    break;
                                 }
-                                break;
-                            }
 
-                            case ROTATION_POS: {
+                            case ROTATION_POS:
+                                {
 
-                                if (grandgrandChildren[transf_pos].nodeName != "rotate") {
+                                    if (grandgrandChildren[transf_pos].nodeName != "rotate") {
 
-                                    this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
-                                    return ("Animation order not respected");
-                                }
-                                else {
+                                        this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
+                                        return ("Animation order not respected");
+                                    } else {
 
-                                    let angle_x = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_x');
+                                        let angle_x = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_x');
 
-                                    if (angle_x == null) {
-                                        this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
-                                        break;
+                                        if (angle_x == null) {
+                                            this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
+                                            break;
+                                        }
+
+                                        keyframe_auxiliar_var.rotate_vec.push(angle_x);
+
+                                        let angle_y = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_y');
+
+                                        if (angle_y == null) {
+                                            this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
+                                            break;
+                                        }
+
+                                        keyframe_auxiliar_var.rotate_vec.push(angle_y);
+
+                                        let angle_z = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_z');
+
+                                        if (angle_z == null) {
+                                            this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
+                                            break;
+                                        }
+
+                                        keyframe_auxiliar_var.rotate_vec.push(angle_z);
+
                                     }
-
-                                    keyframe_auxiliar_var.rotate_vec.push(angle_x);
-
-                                    let angle_y = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_y');
-
-                                    if (angle_y == null) {
-                                        this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
-                                        break;
-                                    }
-
-                                    keyframe_auxiliar_var.rotate_vec.push(angle_y);
-
-                                    let angle_z = this.reader.getFloat(grandgrandChildren[transf_pos], 'angle_z');
-
-                                    if (angle_z == null) {
-                                        this.onXMLMinorError("Keyframe" + animationId + "invalid x_rotation");
-                                        break;
-                                    }
-
-                                    keyframe_auxiliar_var.rotate_vec.push(angle_z);
-
+                                    break;
                                 }
-                                break;
-                            }
-                            case SCALE_POS: {
+                            case SCALE_POS:
+                                {
 
-                                if (grandgrandChildren[transf_pos].nodeName != "scale") {
+                                    if (grandgrandChildren[transf_pos].nodeName != "scale") {
 
-                                    this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
-                                    return ("Animation order not respected");
-                                }
-                                else {
+                                        this.onXMLMinorError("Keyframe" + animationId + keyframe_instant);
+                                        return ("Animation order not respected");
+                                    } else {
 
-                                    let scale_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Scale keyfram" + animationId);
+                                        let scale_array = this.parseCoordinates3D(grandgrandChildren[transf_pos], "Scale keyfram" + animationId);
 
-                                    if (!Array.isArray(scale_array)) {
-                                        return ("Invalid scale_array");
+                                        if (!Array.isArray(scale_array)) {
+                                            return ("Invalid scale_array");
+                                        }
+                                        keyframe_auxiliar_var.scale_vec = scale_array;
+
                                     }
-                                    keyframe_auxiliar_var.scale_vec = scale_array;
-
+                                    break;
                                 }
-                                break;
-                            }
                         }
                     }
                     /*Introduce the keyframe(i) in the animations array*/
@@ -1305,8 +1302,7 @@ class MySceneGraph {
                 //faz a traducao de keyframes para segmentos na animacao
                 animation.parse_keyframes(keyframes_array_aux);
                 this.animations[animationId] = animation;
-            }
-            else {
+            } else {
                 return "It must be at least a keyframe defined in the animation:" + animationId;
             }
 
@@ -1349,7 +1345,7 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'cylinder2' && grandChildren[0].nodeName != 'plane' && grandChildren[0].nodeName != 'patch')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'cylinder2' && grandChildren[0].nodeName != 'plane' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'gameboard')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, patch, plane or cylinder2)"
             }
 
@@ -1378,9 +1374,9 @@ class MySceneGraph {
     }
 
     /**
-   * Parses the <components> block.
-   * @param {components block element} componentsNode
-   */
+     * Parses the <components> block.
+     * @param {components block element} componentsNode
+     */
     parseComponents(componentsNode) {
 
         var children = componentsNode.children;
@@ -1413,8 +1409,7 @@ class MySceneGraph {
                     return "ID must be unique for each component (conflict: ID = " + componentID + ")";
                 }
                 component_aux = this.components[componentID];
-            }
-            else {
+            } else {
                 this.components[componentID] = new MyComponent(componentID, false);
                 component_aux = this.components[componentID];
             }
@@ -1444,9 +1439,7 @@ class MySceneGraph {
                     if (grandgrandChildren.length == 0) {
                         component_aux.transformation = mat4.create();
 
-                    }
-
-                    else {
+                    } else {
                         //transformation ref
                         if (grandgrandChildren[0].nodeName == "transformationref") {
 
@@ -1469,8 +1462,7 @@ class MySceneGraph {
                         }
                     }
 
-                }
-                else if (grandChildren[j].nodeName == "animationref") {
+                } else if (grandChildren[j].nodeName == "animationref") {
 
                     let animation_in_componet_id = this.reader.getString(grandChildren[j], 'id');
 
@@ -1509,16 +1501,13 @@ class MySceneGraph {
                                 return "ID in the material Block for component of id " + componentID + " must be a valid reference";
                             }
                             component_aux.materials.push(this.materials[material_id]);
-                        }
-                        else {
+                        } else {
                             component_aux.materials.push(material_id);
                         }
 
                     }
 
-                }
-
-                else if (grandChildren[j].nodeName == "texture") {
+                } else if (grandChildren[j].nodeName == "texture") {
 
                     block_texture = true;
 
@@ -1526,8 +1515,7 @@ class MySceneGraph {
                     if (texture_id == "inherit") {
                         component_aux.texture.push(texture_id);
 
-                    }
-                    else if (texture_id == "none") {
+                    } else if (texture_id == "none") {
                         component_aux.texture.push(texture_id);
                     }
 
@@ -1559,14 +1547,12 @@ class MySceneGraph {
                         if (this.reader.getString(grandChildren[j], 'length_s', false) != null) {
                             this.onXMLError("Nao podemos definir lenght_s quando a texture esta inherit ou none");
                         }
-            
+
                         if (this.reader.getString(grandChildren[j], 'length_t', false) != null) {
                             this.onXMLError("Nao podemos definir lenght_t quando a texture esta inherit ou none");
                         }
                     }
-                }
-
-                else if (grandChildren[j].nodeName == "children") {
+                } else if (grandChildren[j].nodeName == "children") {
 
                     block_children = true;
 
@@ -1586,9 +1572,7 @@ class MySceneGraph {
                                 this.components[children_component_id] = new MyComponent(children_component_id, false);
                                 component_aux.children_component.push(this.components[children_component_id]);
                             }
-                        }
-
-                        else if (grandgrandChildren[k].nodeName == "primitiveref") {
+                        } else if (grandgrandChildren[k].nodeName == "primitiveref") {
 
                             var children_primitive_id = this.reader.getString(grandgrandChildren[k], 'id');
 
@@ -1596,14 +1580,10 @@ class MySceneGraph {
                                 return "ID in the children Block for component of id" + componentID + "must be a valid reference";
                             }
                             component_aux.children_primitives.push(this.primitives[children_primitive_id]);
-                        }
-
-                        else
+                        } else
                             return "unknown tag " + grandgrandChildren[k].nodeName + " in children for component of id " + componentID;
                     }
-                }
-
-                else
+                } else
                     return "Unknown block with name " + grandChildren[j].nodeName + " for component of id " + componentID;
 
             }

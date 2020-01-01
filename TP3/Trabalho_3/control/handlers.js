@@ -36,9 +36,8 @@ class handlerPrologReplys {
         let auxArray = new Array();
 
         if (data == gameOverMessage) {
-            this.gameOrchestrator.gameStateControl.currentState=this.gameOrchestrator.states.GAME_OVER;
-        }
-        else if (data != failMessage) {
+            this.gameOrchestrator.gameStateControl.currentState = this.gameOrchestrator.states.GAME_OVER;
+        } else if (data != failMessage) {
 
             let board = String(data);
             let arrayLinesOfBoard;
@@ -69,9 +68,8 @@ class handlerPrologReplys {
         let str = data.toString();
 
         if (data == gameOverMessage) {
-            this.gameOrchestrator.gameStateControl.currentState=this.gameOrchestrator.states.GAME_OVER;
-        }
-        else if (data != failMessage) {
+            this.gameOrchestrator.gameStateControl.currentState = this.gameOrchestrator.states.GAME_OVER;
+        } else if (data != failMessage) {
             let index = str.indexOf(',');
             let x = Number(str.slice(1, index));
             let y = Number(str.slice(index + 1, str.length - 1));

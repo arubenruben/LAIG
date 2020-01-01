@@ -21,41 +21,66 @@ class XMLscene extends CGFscene {
      */
     init(application) {
 
-        super.init(application);
-        this.sceneInited = false;
-        this.enableTextures(true);
-        this.gl.clearDepth(100.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.CULL_FACE);
-        this.gl.depthFunc(this.gl.LEQUAL);
-        this.axis = new CGFaxis(this);
-        this.UPDATE_PERIOD = 30;
-        this.displayAxis = true;
-        this.displayNormals = false;
-        this.selectedCamera = 0;
-        this.gameType = null;
-        this.ai1Dificulty = null;
-        this.ai2Dificulty = null;
-        this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
-        this.ai1Dificulties = [0, 1, 2];
-        this.ai2Dificulties = [0, 1, 2];
-        this.gameOrchestrator = new MyGameOrchestrator(this);
-        this.undo = function(){
-            this.gameOrchestrator.gameSequence.undo();
+            super.init(application);
+            this.sceneInited = false;
+            this.enableTextures(true);
+            this.gl.clearDepth(100.0);
+            this.gl.enable(this.gl.DEPTH_TEST);
+            this.gl.enable(this.gl.CULL_FACE);
+            this.gl.depthFunc(this.gl.LEQUAL);
+            this.axis = new CGFaxis(this);
+            this.UPDATE_PERIOD = 30;
+            this.displayAxis = true;
+            this.displayNormals = false;
+            this.selectedCamera = 0;
+            this.gameType = null;
+            this.ai1Dificulty = null;
+            this.ai2Dificulty = null;
+            this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
+            this.ai1Dificulties = [0, 1, 2];
+            this.ai2Dificulties = [0, 1, 2];
+            this.boardCameraDelta = Math.PI / 100;
+            this.boardCameraOrbitValue = 0;
+            this.lastBoardCameraOrbitValue = 0;
+            this.gameOrchestrator = new MyGameOrchestrator(this);
+            this.undo = function() {
+                this.gameOrchestrator.gameSequence.undo();
+            }
+            this.gameMovie = function() {
+                this.gameOrchestrator.gameSequence.gameMovie();
+            }
+            this.cameraAnimation = true;
+            //JUST AFTER GameType Selected
+            this.setPickEnabled(false);
+
         }
-        this.gameMovie=function(){
-            this.gameOrchestrator.gameSequence.gameMovie();
-        }
-        //JUST AFTER GameType Selected
-        this.setPickEnabled(false);
-    }
-    /**
-     * updates the scene camera
-     */
+        /**
+         * updates the scene camera
+         */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
     }
+
+
+    updateBoardCamera() {
+
+            if (this.cameraAnimation) {
+                this.boardCameraOrbitValue = this.boardCameraOrbitValue + this.boardCameraDelta;
+                if (this.boardCameraOrbitValue > Math.PI) {
+                    this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
+                    this.cameraAnimation = false
+                } else if (this.boardCameraOrbitValue == Math.PI) {
+                    this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                    this.cameraAnimation = false;
+                } else {
+                    this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                }
+                this.lastBoardCameraOrbitValue = this.boardCameraOrbitValue;
+            }
+
+        }
+        // this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
 
 
 
@@ -67,6 +92,8 @@ class XMLscene extends CGFscene {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
     }
+
+
 
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -152,7 +179,7 @@ class XMLscene extends CGFscene {
 
 
         //Time in ms
-        this.setUpdatePeriod((1 / this.UPDATE_PERIOD) * 1000);
+        this.setUpdatePeriod(this.UPDATE_PERIOD);
 
         this.sceneInited = true;
     }
@@ -170,9 +197,9 @@ class XMLscene extends CGFscene {
             }
         }
 
-        //para fazer o update no my game orchestrator
-
-        //this.gameOrchestrator.update(t);
+        this.updateBoardCamera()
+            //para fazer o update no my game orchestrator1
+            //this.gameOrchestrator.update(t);
     }
 
     /**

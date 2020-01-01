@@ -180,15 +180,13 @@ class MyGameStateControler {
                 request = true;
                 difficulty = this.orchestratorLocal.scene.ai2Dificulty;
                 score = this.score_player_2;
-            }
-            else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
+            } else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
 
                 request = true;
                 difficulty = this.orchestratorLocal.scene.ai1Dificulty;
                 score = this.score_player_1;
 
-            }
-            else if (gameType == 'AI vs AI') {
+            } else if (gameType == 'AI vs AI') {
 
                 request = true;
 
@@ -199,8 +197,7 @@ class MyGameStateControler {
                     difficulty = this.orchestratorLocal.scene.ai2Dificulty;
                     score = this.score_player_2;
                 }
-            }
-            else {
+            } else {
                 request = false;
                 if (this.playDone == true) {
 
@@ -225,10 +222,10 @@ class MyGameStateControler {
 
                 this.orchestratorLocal.prolog.getPrologRequest(
                     stringRequest,
-                    function (data) {
+                    function(data) {
                         handlerVAR.handleBotMove(data.target.response);
                     },
-                    function (data) {
+                    function(data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
@@ -246,8 +243,7 @@ class MyGameStateControler {
         if (this.currentPlayer == 1) {
             scoreArrayToTest = this.score_player_1;
             winState = this.orchestratorLocal.states.WIN_PLAYER1;
-        }
-        else {
+        } else {
             scoreArrayToTest = this.score_player_2;
             winState = this.orchestratorLocal.states.WIN_PLAYER2;
         }
