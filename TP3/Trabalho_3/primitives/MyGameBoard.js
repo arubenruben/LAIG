@@ -129,12 +129,36 @@ class MyGameBoard extends CGFobject {
             for (let j = 0; j < this.n_columns; j++) {
                 this.matrixBoard[i][j] = new MyTile(this.orchestrator, i * this.tiles_width + this.translation_x - this.aux, -1 * j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, i, j);
                 let initialPiece = this.orchestrator.initialBoardRaw[i][j];
-                if (initialPiece > 0&&initialPiece<4) {
+                if (initialPiece > 0 && initialPiece < 4) {
                     this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j], j, i);
                 }
             }
         }
     }
+
+    // updateMatrixOfTiles() {
+    //     //MATRIX WITH THE TILE
+    //     for (let i = 0; i < this.n_lines; i++) {
+    //         this.matrixBoard[i] = new Array();
+    //         if (i % 2 == 0) {
+    //             this.translation_x = this.tiles_width / 4;
+    //             this.translation_z = -1 * this.tiles_height / 2;
+    //             this.aux = this.counter * this.tiles_width / 2;
+
+    //             this.counter++;
+    //         } else {
+    //             this.translation_x = 0;
+    //             this.translation_z = 0;
+    //         }
+    //         for (let j = 0; j < this.n_columns; j++) {
+    //             this.matrixBoard[i][j] = new MyTile(this.orchestrator, i * this.tiles_width + this.translation_x - this.aux, -1 * j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, i, j);
+    //             let initialPiece = this.orchestrator.initialBoardRaw[i][j];
+    //             if (initialPiece > 0 && initialPiece < 4) {
+    //                 this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j], j, i);
+    //             }
+    //         }
+    //     }
+    // }
 
     display() {
 

@@ -33,8 +33,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyRectangle(this.graph.scene, 0, this.args[0], this.args[1], this.args[2], this.args[3]);
                 break;
 
@@ -43,8 +42,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyTriangle(this.graph.scene, this.args[0], this.args[1], this.args[2]);
                 break;
 
@@ -53,8 +51,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyCylinder(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);
                 break;
 
@@ -63,8 +60,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MySphere(this.graph.scene, this.args[0], this.args[1], this.args[2]);
                 break;
 
@@ -73,8 +69,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MySemiSphere(this.graph.scene, this.args[0], this.args[1], this.args[2]);
                 break;
 
@@ -83,8 +78,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyTorus(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3]);
                 break;
 
@@ -93,8 +87,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyPlane(this.graph.scene, this.args[0], this.args[1]);
 
                 break;
@@ -105,8 +98,7 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyPatch(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.controlPoints);
                 break;
 
@@ -115,11 +107,18 @@ class MyPrimitive {
                 if (!Array.isArray(this.args)) {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
-                }
-                else
+                } else
                     this.primitive = new MyCylinder2(this.graph.scene, this.args[0], this.args[1], this.args[2], this.args[3], this.args[4]);
                 break;
-
+            case "gameboard":
+                this.args = this.parse_gameboard_attributes(primitive_element);
+                if (!Array.isArray(this.args)) {
+                    this.args = this.args + " primitive of type " + this.primitiveType;
+                    this.error = true;
+                } else {
+                    //this.graph.scene.gameOrchestrator.gameboard = new MyGameBoard(this.graph.scene.gameOrchestrator, this.args[0], this.args[1], this.args[2], this.args[3]);
+                }
+                break;
             default:
                 this.onXMLMinorError("unknown tag <" + this.primitiveType + ">");
                 break;
@@ -153,6 +152,34 @@ class MyPrimitive {
         }
 
         args_aux.push(...[x1, y1, x2, y2]);
+
+        return args_aux;
+    }
+
+    parse_gameboard_attributes(primitive_element) {
+
+        let args_aux = [];
+        let x1, z1, x2, z2;
+
+        x1 = this.graph.reader.getFloat(primitive_element, 'x1');
+        if (!(x1 != null && !isNaN(x1))) {
+            return "No attribute x1 or incorrect value for it, ";
+        }
+        z1 = this.graph.reader.getFloat(primitive_element, 'z1');
+        if (!(z1 != null && !isNaN(z1))) {
+            return "No attribute z1 or incorrect value for it, ";
+        }
+        x2 = this.graph.reader.getFloat(primitive_element, 'x2');
+        if (!(x2 != null && !isNaN(x2))) {
+            return "No attribute x2 or incorrect value for it, ";
+        }
+
+        z2 = this.graph.reader.getFloat(primitive_element, 'z2');
+        if (!(z2 != null && !isNaN(z2))) {
+            return "No attribute z2 or incorrect value for it, ";
+        }
+
+        args_aux.push(...[x1, z1, x2, z2]);
 
         return args_aux;
     }
@@ -369,4 +396,3 @@ class MyPrimitive {
         return args_aux;
     }
 }
-

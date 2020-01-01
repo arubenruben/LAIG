@@ -46,8 +46,12 @@ class XMLscene extends CGFscene {
         this.gameMovie = function () {
             this.orchestrator.gameSequence.gameMovie();
         }
+        this.cameraAnimation = false;
         //JUST AFTER GameType Selected
         this.setPickEnabled(false);
+        this.boardCameraDelta = Math.PI / 60;
+        this.boardCameraOrbitValue = 0;
+        this.lastBoardCameraOrbitValue = 0;
     }
     /**
      * updates the scene camera
@@ -58,6 +62,34 @@ class XMLscene extends CGFscene {
     }
 
 
+    updateBoardCamera() {
+
+        // if the camera animation is active, meaning the current state of the orchestrator is ROTATING_CAMERA
+        if (this.cameraAnimation) {
+
+            // If conditions to make sure to rotation is done properly and the angle at the end of the animation is correct and the camera
+            // is stationed precisely looking at the board
+            this.boardCameraOrbitValue = this.boardCameraOrbitValue + this.boardCameraDelta;
+            if (this.boardCameraOrbitValue > Math.PI) {
+                this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
+
+                this.boardCameraOrbitValue = 0;
+                // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
+                this.cameraAnimation = false;
+
+            } else if (this.boardCameraOrbitValue == Math.PI) {
+                this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.boardCameraOrbitValue = 0;
+                this.cameraAnimation = false;
+            } else {
+                this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+            }
+
+            // used for the last transition to make sure it rotates always PI rad
+            this.lastBoardCameraOrbitValue = this.boardCameraOrbitValue;
+        }
+
+    }
 
     /**
      * initializes the security camera and the scene camera with the default values
@@ -67,6 +99,8 @@ class XMLscene extends CGFscene {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
     }
+
+
 
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -147,7 +181,8 @@ class XMLscene extends CGFscene {
         this.initCameras();
         this.interface.gui_add_lights(this, this.graph.Lights);
         //Time in ms
-        this.setUpdatePeriod((1 / this.UPDATE_PERIOD) * 1000);
+        this.setUpdatePeriod(this.UPDATE_PERIOD);
+
         this.sceneInited = true;
     }
 
@@ -166,6 +201,9 @@ class XMLscene extends CGFscene {
 
         //TODO:Para fazer o update no my game orchestrator
         this.orchestrator.update(t);
+        this.updateBoardCamera();
+        //para fazer o update no my game orchestrator1
+        //this.gameOrchestrator.update(t);
     }
 
     /**
