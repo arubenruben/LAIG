@@ -64,6 +64,7 @@ serialInclude(['../lib/CGF.js',
     'primitives/MyAnimator.js',
     'primitives/MyGameBoard.js',
     'primitives/MyAuxiliarBoard.js',
+    'primitives/MyTimeBoard.js',
     'primitives/MyGameMove.js',
     'primitives/MyGameOrchestrator.js',
     'primitives/MyGameSequence.js',
@@ -71,7 +72,6 @@ serialInclude(['../lib/CGF.js',
     'control/handlers.js',
     'control/MyGameState.js',
     'model/images.js',
-    'primitives/MyTimeBoard.js',
 
 
     main = function() {

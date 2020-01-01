@@ -43,7 +43,7 @@ class MyGameOrchestrator extends CGFobject {
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
-        this.timeBoard=new MyTimeBoard(this);
+        this.timeBoard= new MyTimeBoard(this);
         let handlerVAR = this.handler;
         this.currentTime=Date.now();
         /*

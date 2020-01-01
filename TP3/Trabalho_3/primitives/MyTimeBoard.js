@@ -2,10 +2,9 @@
 class MyTimeBoard extends CGFobject {
     
     constructor(orchestrator,distanceBetweenBoards=1,scaleFactor=1){
-        
         super(orchestrator.scene);
-        this.orchestrator=orchestrator;
         this.scene=this.scene;
+        this.orchestrator=orchestrator;
         this.number0 = this.orchestrator.imagesAssets.number0;
         this.number1 = this.orchestrator.imagesAssets.number1;
         this.number2 = this.orchestrator.imagesAssets.number2;
@@ -23,6 +22,8 @@ class MyTimeBoard extends CGFobject {
         this.white.setAmbient(1, 1, 1, 1);
         this.white.setDiffuse(1, 1, 1, 1);
         this.white.setSpecular(1, 1, 1, 1);
+        this.distanceBetweenBoards=distanceBetweenBoards;
+        this.scaleFactor=scaleFactor;
 
         this.plane=new MyPlane(this.scene,5,5);
 
@@ -41,14 +42,14 @@ class MyTimeBoard extends CGFobject {
 
             arrayTime[0]=Math.floor(time/60);
             let seconds=time%60;
-            seconds=seconds.toString();
+            let secondsStr=seconds.toString();
 
-            if(seconds.length==1){
+            if(secondsStr.length==1){
                 arrayTime[1]=0;
             }else{
-                arrayTime[1]=Number(seconds[1]);
+                arrayTime[1]=Number(secondsStr[1]);
             }
-            arrayTime=[2]=Number(arrayTime[0]);
+            arrayTime[2]=Number(secondsStr[0]);
 
             console.log(arrayTime);
         }
