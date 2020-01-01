@@ -70,10 +70,7 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
-                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
-                console.log('depois'+this.currentPlayer);
-
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'Player vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
@@ -82,10 +79,7 @@ class MyGameStateControler {
                 }
                 break;
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
-                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
-                console.log('depois'+this.currentPlayer);
-
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'AI vs Player') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
@@ -95,10 +89,7 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
-                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
-                console.log('depois'+this.currentPlayer);
-
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'AI vs Player') {
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
@@ -108,10 +99,7 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_BOT_2_MOVE:
-                console.log('antes'+this.currentPlayer);
                 this.refreshPlayer();
-                console.log('depois'+this.currentPlayer);
-
                 this.stateTime=this.orchestrator.currentTime;
                 if (this.orchestrator.scene.gameType == 'Player vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;

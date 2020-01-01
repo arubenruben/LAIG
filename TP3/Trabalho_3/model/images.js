@@ -15,6 +15,7 @@ class MyImageStorage {
         this.number9 = new CGFtexture(this.orchestrator.scene, './scenes/images/numbers/number9.jpg');
         this.numberTimes = new CGFtexture(this.orchestrator.scene, './scenes/images/numbers/numberTimes.png');
         this.light_wood = new CGFtexture(this.orchestrator.scene, './scenes/images/madeirasides.jpg');
+        this.doisPontos=new CGFtexture(this.orchestrator.scene, './scenes/images/doisPontos.jpg');
     };
 
 
