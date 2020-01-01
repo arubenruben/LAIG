@@ -42,14 +42,14 @@ class MyTimeBoard extends CGFobject {
 
             arrayTime[0]=Math.floor(time/60);
             let seconds=time%60;
-            let secondsStr=seconds.toString();
+            seconds=seconds.toString();
 
-            if(secondsStr.length==1){
+            if(seconds.length==1){
                 arrayTime[1]=0;
             }else{
-                arrayTime[1]=Number(secondsStr[1]);
+                arrayTime[1]=Number(seconds[1]);
             }
-            arrayTime[2]=Number(secondsStr[0]);
+            arrayTime[2]=Number(seconds[0]);
 
             console.log(arrayTime);
         }
