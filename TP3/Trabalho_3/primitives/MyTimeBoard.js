@@ -24,6 +24,8 @@ class MyTimeBoard extends CGFobject {
         this.white.setSpecular(1, 1, 1, 1);
         this.distanceBetweenBoards = distanceBetweenBoards;
         this.scaleFactor = scaleFactor;
+        //[0]=Minute [1] Dezenas segundos [2] unidades segundos
+        this.arrayTime=[0,0,0];
 
         this.plane = new MyPlane(this.scene, 5, 5);
 
@@ -61,14 +63,74 @@ class MyTimeBoard extends CGFobject {
 
     }
 
+    numberTexture(number) {
+        switch (number) {
+            case 0:
+                return this.number0;
+            case 1:
+                return this.number1;
+            case 2:
+                return this.number2;
+            case 3:
+                return this.number3;
+            case 4:
+                return this.number4;
+            case 5:
+                return this.number5;
+            case 6:
+                return this.number6;
+            case 7:
+                return this.number7;
+            case 8:
+                return this.number8;
+            case 9:
+                return this.number9;
+            default:
+                return this.number0;
+        }
+
+    }
+
     update(currentTime) {
         this.currentTime = currentTime;
+        //[0]=Minute [1] Dezenas segundos [2] unidades segundos
+        this.arrayTime = this.parseTime();
     }
 
     display() {
-        //[0]=Minute [1] Dezenas segundos [2] unidades segundos
-        let arrayTime = this.parseTime();
-        //this.white.setTexture(this.light_wood);
+
+        this.scene.pushMatrix();
+        this.scene.translate(0,10,0);
+        this.scene.rotate(Math.PI/2.0,1,0,0);
+        this.scene.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+        this.white.setTexture(this.numberTexture(this.arrayTime[0]));
+        this.white.apply();
+        this.plane.display();
+
+        this.scene.pushMatrix();
+        //this.scene.translate(10,0,0);
+        this.scene.translate(this.distanceBetweenBoards,0,0);
+        this.white.setTexture(this.doisPontos);
+        this.white.apply();
+        this.plane.display();
+        
+        this.scene.pushMatrix();
+        this.scene.translate(this.distanceBetweenBoards,0,0);
+        this.white.setTexture(this.numberTexture(this.arrayTime[1]));
+        this.white.apply();
+        this.plane.display();
+        
+        this.scene.pushMatrix();
+        this.scene.translate(this.distanceBetweenBoards,0,0);
+        this.white.setTexture(this.numberTexture(this.arrayTime[2]));
+        this.white.apply();
+        this.plane.display();
+        this.scene.popMatrix();
+        
+        this.scene.popMatrix();
+        this.scene.popMatrix();
+        this.scene.popMatrix();
+        
     }
 
 }
