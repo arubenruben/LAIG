@@ -9,7 +9,7 @@
  */
 
  //30 Mil segundos
-const timeForPlay=120*1000;
+const timeForPlay=75*1000;
 
 class MyGameOrchestrator extends CGFobject {
     constructor(scene) {

@@ -51,11 +51,12 @@ class MyTimeBoard extends CGFobject {
                 seconds = seconds.toString();
                 
                 if (seconds.length == 1) {
-                    arrayTime[2] = 0;
+                    arrayTime[1] = 0;
+                    arrayTime[2] = Number(seconds[0]);
                 } else {
                     arrayTime[2] = Number(seconds[1]);
+                    arrayTime[1] = Number(seconds[0]);
                 }
-                arrayTime[1] = Number(seconds[0]);
             }
         }
         return arrayTime;
@@ -126,8 +127,8 @@ class MyTimeBoard extends CGFobject {
         this.white.apply();
         this.plane.display();
         this.scene.popMatrix();
-        
         this.scene.popMatrix();
+        
         this.scene.popMatrix();
         this.scene.popMatrix();
         
