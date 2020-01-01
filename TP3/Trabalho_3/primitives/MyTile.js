@@ -18,8 +18,8 @@ class MyTile extends CGFobject {
         this.scene = orchestrator.scene;
         this.index_i = index_i;
         this.index_j = index_j;
-        this.new_width=new_width;
-        this.new_length=new_length;
+        this.new_width = new_width;
+        this.new_length = new_length;
         this.scale_x = new_width / 1;
         this.scale_z = new_length / (Math.cos(Math.PI / 6) * 0.5 * 2);
         this.piece = null;
@@ -78,7 +78,6 @@ class MyTile extends CGFobject {
         this.scene.translate(this.x, 0, this.z);
         this.scene.pushMatrix();
         if (this.piece != null) {
-
             this.scene.translate(0, 0.01 * this.scale_x, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.piece.display();
@@ -109,5 +108,5 @@ class MyTile extends CGFobject {
         this.scene.popMatrix();
     }
 
-    
+
 }

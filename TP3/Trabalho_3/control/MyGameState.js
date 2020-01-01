@@ -92,22 +92,23 @@ class MyGameStateControler {
                 } else if (this.currentPlayer == 2) {
 
                     if (this.orchestratorLocal.scene.gameType == 'AI vs Player') {
-                        this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
+                        this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                     } else if (this.orchestratorLocal.scene.gameType == 'Player vs Player') {
                         this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
                     } else if (this.orchestratorLocal.scene.gameType == 'Player vs AI') {
-                        this.currentState = this.orchestratorLocal.states.WAIT_PLAYER_2_MOVE;
+                        this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
                     } else if (this.orchestratorLocal.scene.gameType == 'AI vs AI') {
                         this.currentState = this.orchestratorLocal.states.WAIT_BOT_2_MOVE;
                     }
                 }
+                this.orchestratorLocal.scene.setPickEnabled(true);
                 break;
 
             case this.orchestratorLocal.states.WAIT_PLAYER_1_MOVE:
                 this.currentPlayer = 2;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
-                this.orchestratorLocal.scene.setPickEnabled(false);
+                this.orchestratorLocal.scene.setPickEnabled(true);
                 break;
 
 
@@ -115,21 +116,21 @@ class MyGameStateControler {
                 this.currentPlayer = 1;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
-                this.orchestratorLocal.scene.setPickEnabled(false);
+                this.orchestratorLocal.scene.setPickEnabled(true);
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_1_MOVE:
                 this.currentPlayer = 2;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
-                this.orchestratorLocal.scene.setPickEnabled(false);
+                this.orchestratorLocal.scene.setPickEnabled(true);
                 break;
 
             case this.orchestratorLocal.states.WAIT_BOT_2_MOVE:
                 this.currentPlayer = 1;
                 this.currentState = this.orchestratorLocal.states.ROTATING_CAMERA;
                 this.orchestratorLocal.scene.cameraAnimation = true;
-                this.orchestratorLocal.scene.setPickEnabled(false);
+                this.orchestratorLocal.scene.setPickEnabled(true);
                 break;
 
             case this.orchestratorLocal.states.PICK_ACTIVE:
@@ -137,7 +138,6 @@ class MyGameStateControler {
                 break;
 
             case this.orchestratorLocal.states.PICK_REPLY:
-
                 //Avanca para o proximo jogador
                 this.currentState = this.resumeState;
 
