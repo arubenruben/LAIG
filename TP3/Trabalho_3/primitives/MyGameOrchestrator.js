@@ -29,10 +29,10 @@ class MyGameOrchestrator extends CGFobject {
             WAIT_BOT_2_MOVE: 7,
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
-            GAME_OVER: 10,
-            MOVIE_REPLY: 11,
+            MOVIE_REPLY: 10,
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            ROTATING_CAMERA: 12,
+            ROTATING_CAMERA: 11,
+            GAME_OVER: 12,
             WIN_PLAYER1: 13,
             WIN_PLAYER2: 14,
 
@@ -94,13 +94,21 @@ class MyGameOrchestrator extends CGFobject {
 
         this.gameStateControl.updateScores(pieceRemoved);
         
-        this.gameboardSet = true;
-        this.gameStateControl.playPending = false;
         let orchestratorVar = this.orchestrator;
         window.setTimeout(function () {
             orchestratorVar.scene.cameraAnimation = true;
         }, 2000);
+        
+        if (this.scene.gameType == 'Player vs AI'&& this.gameStateControl.currentPlayer==1||
+        this.scene.gameType == 'AI vs Player'&& this.gameStateControl.currentPlayer==2
+        ){
+            this.scene.setPickEnabled(false);
+        }else{
+            this.scene.setPickEnabled(true);
+        }
         this.gameStateControl.playDone = true;
+        this.gameboardSet = true;
+        this.gameStateControl.playPending = false;
     }
 
     updateBoardBotMove(coordX, coordY) {

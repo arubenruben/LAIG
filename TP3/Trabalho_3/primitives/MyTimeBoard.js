@@ -55,12 +55,16 @@ class MyTimeBoard extends CGFobject {
                 arrayTime[2] = Number(seconds[1]);
                 arrayTime[1] = Number(seconds[0]);
             }
-        }else if(this.orchestrator.gameStateControl.pickPending==false&&
-            (this.orchestrator.scene.gameType=='1vs1'||
-            this.orchestrator.scene.gameType=='Player vs AI' && this.orchestrator.gameStateControl.currentPlayer==1||
-            this.orchestrator.scene.gameType=='AI vs Player' && this.orchestrator.gameStateControl.currentPlayer==2)
-            ){
+        } 
+        /*else if(this.orchestrator.scene.gameType == '1vs1' ||
+                this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
+                this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2) {
+            this.orchestrator.gameStateControl.pickPending = false;
+            this.orchestrator.gameStateControl.playDone = true;
+            this.orchestrator.scene.cameraAnimationDone=true;
+            arrayTime = [0, 0, 0];
         }
+        */
         return arrayTime;
     }
 

@@ -60,9 +60,20 @@ class handlerPrologReplys {
             }
 
             this.orchestrator.updateBoard(auxArray, obj, id);
-        }else{
-            this.orchestrator.gameStateControl.playDone=true;
-            this.orchestrator.gameStateControl.playPending=false;
+        } else {
+            if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
+                this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2
+            ) {
+                this.orchestrator.scene.setPickEnabled(false);
+            } else {
+                this.orchestrator.scene.setPickEnabled(true);
+            }
+            let orchestratorVar = this.orchestrator;
+            window.setTimeout(function () {
+                orchestratorVar.scene.cameraAnimation = true;
+            }, 2000);
+            
+            this.orchestrator.gameStateControl.playDone = true;
         }
         this.orchestrator.gameStateControl.pickPending = false;
     }

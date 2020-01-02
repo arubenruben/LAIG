@@ -11,7 +11,6 @@ class MyGameStateControler {
         this.pickPending = false;
         this.playDone = true;
         this.playPending = false;
-        this.cameraAnimationPending = false;
         this.stateTime = Date.now();
         this.currentState = this.orchestrator.states.INITIALIZING;
     }
