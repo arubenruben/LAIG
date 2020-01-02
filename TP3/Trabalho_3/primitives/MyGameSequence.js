@@ -48,7 +48,7 @@ class MyGameSequence extends CGFobject {
             let arrayVar = this.arrayGameSequence;
             let functionVar = this.gameMovieInstallerSequence;
 
-            let id = window.setInterval(function () {
+            let id = window.setInterval(function() {
                 if (arrayVar.length == 0) {
                     window.clearInterval(id);
                 } else {
@@ -58,8 +58,7 @@ class MyGameSequence extends CGFobject {
                     arrayVar.pop();
                 }
             }, 2000);
-        }
-        else {
+        } else {
             console.error('Not allowed gameMovie on this state');
         }
         //Restablish order
@@ -75,11 +74,9 @@ class MyGameSequence extends CGFobject {
             this.orchestractor.gameStateControl.refreshPlayer();
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
-            }
-            else if (pieceRemoved.color == 'blue') {
+            } else if (pieceRemoved.color == 'blue') {
                 pieceToInsertNumeric = 1;
-            }
-            else if (pieceRemoved.color == 'yellow') {
+            } else if (pieceRemoved.color == 'yellow') {
                 pieceToInsertNumeric = 2;
             }
 
@@ -101,17 +98,14 @@ class MyGameSequence extends CGFobject {
 
             if (gameMove.orchestractor.gameStateControl.currentPlayer == 1) {
                 scoreArray = gameMove.orchestractor.gameStateControl.score_player_1;
-            }
-            else {
+            } else {
                 scoreArray = gameMove.orchestractor.gameStateControl.score_player_2;
             }
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
-            }
-            else if (pieceRemoved.color == 'blue') {
+            } else if (pieceRemoved.color == 'blue') {
                 pieceToInsertNumeric = 1;
-            }
-            else if (pieceRemoved.color == 'yellow') {
+            } else if (pieceRemoved.color == 'yellow') {
                 pieceToInsertNumeric = 2;
             }
             scoreArray[pieceToInsertNumeric]++;

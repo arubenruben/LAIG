@@ -299,7 +299,8 @@ class MySceneGraph {
 
 
         this.view_default = view_root;
-        this.boardCamera = view_boardCamera;
+        this.boardCameraId = view_boardCamera;
+        this.boardCamera = null;
         this.active_camera = view_root;
         var grandChildren = [];
         var from = [];
@@ -454,20 +455,26 @@ class MySceneGraph {
 
             var camera;
             var cameraS;
+            let cameraBoard;
 
             //CGFcamera( fov, near, far, position, target )
             if (view_type == "perspective") {
 
                 camera = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
                 cameraS = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+                cameraBoard = new CGFcamera(angle, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
             }
 
             // CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up)
             else if (view_type == "ortho") {
                 camera = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
                 cameraS = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
+                cameraBoard = new CGFcameraOrtho(left, right, bottom, top, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]), vec3.fromValues(up[0], up[1], up[2]));
             }
 
+            if (view_id == this.boardCameraId) {
+                this.boardCamera = cameraBoard;
+            }
 
             //O array de views fica no indice "nome da camara" com o objeto do tipo camara
             this.Views[view_id] = camera;
@@ -1865,7 +1872,7 @@ class MySceneGraph {
             let type = current_node.children_primitives[i].primitiveType;
 
             // if the primitive is of type plane patch and cylinder2 then we cant show normals, wecgf error not ours
-            if (type != "patch" && type != "plane" && type != "cylinder2") {
+            if (type != "patch" && type != "plane" && type != "cylinder2" && type != "gameboard") {
 
                 if (this.scene.displayNormals)
                     current_node.children_primitives[i].primitive.enableNormalViz();

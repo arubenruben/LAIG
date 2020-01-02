@@ -1,6 +1,6 @@
 /**
-* MyInterface class, creating a GUI interface.
-*/
+ * MyInterface class, creating a GUI interface.
+ */
 class MyInterface extends CGFinterface {
     /**
      * @constructor
@@ -33,6 +33,20 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
+
+    /**
+     * adds the cameras options
+     * @param scene Reference to the scene
+     * @param views array holding the cameras ids
+     */
+    gui_add_camera(scene, views) {
+        let views_key = [];
+        for (let key in views) {
+            views_key.push(key)
+        }
+        this.gui.add(scene, 'selectedCamera', views_key).onChange(this.scene.updateCamera.bind(this.scene));
+    }
+
     /**
      * adds the lights checkbox option
      * @param scene Reference to the scene
@@ -53,13 +67,13 @@ class MyInterface extends CGFinterface {
      * initKeys
      */
     initKeys() {
-        this.scene.gui = this;
-        this.processKeyboard = function () { };
-        this.activeKeys = {};
-    }
-    /**
-    * function to process the event of a key being pressed down
-    */
+            this.scene.gui = this;
+            this.processKeyboard = function() {};
+            this.activeKeys = {};
+        }
+        /**
+         * function to process the event of a key being pressed down
+         */
     processKeyDown(event) {
         this.activeKeys[event.code] = true;
         if (event.code == "KeyM" && !event.repeat) {
@@ -68,15 +82,15 @@ class MyInterface extends CGFinterface {
     };
 
     /**
-    * function to process the event of a key being let up, sttoping pressing it
-    */
+     * function to process the event of a key being let up, sttoping pressing it
+     */
     processKeyUp(event) {
         this.activeKeys[event.code] = false;
     };
 
     /**
-    * function to determine if a key is being pressed or not
-    */
+     * function to determine if a key is being pressed or not
+     */
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
