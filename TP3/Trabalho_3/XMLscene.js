@@ -21,41 +21,42 @@ class XMLscene extends CGFscene {
      */
     init(application) {
 
-        super.init(application);
-        this.sceneInited = false;
-        this.enableTextures(true);
-        this.gl.clearDepth(100.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.CULL_FACE);
-        this.gl.depthFunc(this.gl.LEQUAL);
-        this.axis = new CGFaxis(this);
-        this.UPDATE_PERIOD = 30;
-        this.displayAxis = true;
-        this.displayNormals = false;
-        this.selectedCamera = 0;
-        this.gameType = null;
-        this.ai1Dificulty = null;
-        this.ai2Dificulty = null;
-        this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
-        this.ai1Dificulties = [0, 1, 2];
-        this.ai2Dificulties = [0, 1, 2];
-        this.orchestrator = new MyGameOrchestrator(this);
-        this.undo = function () {
-            this.orchestrator.gameSequence.undo();
+            super.init(application);
+            this.sceneInited = false;
+            this.enableTextures(true);
+            this.gl.clearDepth(100.0);
+            this.gl.enable(this.gl.DEPTH_TEST);
+            this.gl.enable(this.gl.CULL_FACE);
+            this.gl.depthFunc(this.gl.LEQUAL);
+            this.axis = new CGFaxis(this);
+            this.UPDATE_PERIOD = 30;
+            this.displayAxis = true;
+            this.displayNormals = false;
+            this.selectedCamera = 0;
+            this.gameType = null;
+            this.ai1Dificulty = null;
+            this.ai2Dificulty = null;
+            this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
+            this.ai1Dificulties = [0, 1, 2];
+            this.ai2Dificulties = [0, 1, 2];
+            this.orchestrator = new MyGameOrchestrator(this);
+            this.undo = function() {
+                this.orchestrator.gameSequence.undo();
+            }
+            this.gameMovie = function() {
+                this.orchestrator.gameSequence.gameMovie();
+            }
+            this.cameraAnimation = false;
+            //JUST AFTER GameType Selected
+            this.setPickEnabled(false);
+            this.boardCameraDelta = Math.PI / 60;
+            this.boardCameraOrbitValue = 0;
+            this.lastBoardCameraOrbitValue = 0;
+            this.cameraAnimationDone = false;
         }
-        this.gameMovie = function () {
-            this.orchestrator.gameSequence.gameMovie();
-        }
-        this.cameraAnimation = false;
-        //JUST AFTER GameType Selected
-        this.setPickEnabled(false);
-        this.boardCameraDelta = Math.PI / 60;
-        this.boardCameraOrbitValue = 0;
-        this.lastBoardCameraOrbitValue = 0;
-    }
-    /**
-     * updates the scene camera
-     */
+        /**
+         * updates the scene camera
+         */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
         this.interface.setActiveCamera(this.camera);
@@ -76,11 +77,13 @@ class XMLscene extends CGFscene {
                 this.boardCameraOrbitValue = 0;
                 // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
                 this.cameraAnimation = false;
+                this.cameraAnimationDone = true;
 
             } else if (this.boardCameraOrbitValue == Math.PI) {
                 this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
                 this.boardCameraOrbitValue = 0;
                 this.cameraAnimation = false;
+                this.cameraAnimationDone = true;
             } else {
                 this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
             }
@@ -202,8 +205,7 @@ class XMLscene extends CGFscene {
         //TODO:Para fazer o update no my game orchestrator
         this.orchestrator.update(t);
         this.updateBoardCamera();
-        //para fazer o update no my game orchestrator1
-        //this.gameOrchestrator.update(t);
+
     }
 
     /**

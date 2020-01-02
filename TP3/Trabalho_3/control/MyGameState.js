@@ -11,12 +11,13 @@ class MyGameStateControler {
         this.pickPending = false;
         this.playDone = true;
         this.playPending = false;
-        this.cameraAnimationPending=false;
+        this.cameraAnimationPending = false;
         this.stateTime = Date.now();
         this.currentState = this.orchestrator.states.INITIALIZING;
     }
     nextState() {
         //Refresh Counter
+        let orchestratorVar = this.orchestrator;
         switch (this.currentState) {
 
             case this.orchestrator.states.INITIALIZING:
@@ -77,22 +78,34 @@ class MyGameStateControler {
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 this.orchestrator.scene.setPickEnabled(false);
+                window.setTimeout(function() {
+                    orchestratorVar.scene.cameraAnimation = true;
+                }, 2000);
                 break;
 
 
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 this.orchestrator.scene.setPickEnabled(false);
+                window.setTimeout(function() {
+                    orchestratorVar.scene.cameraAnimation = true;
+                }, 2000);
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 this.orchestrator.scene.setPickEnabled(false);
+                window.setTimeout(function() {
+                    orchestratorVar.scene.cameraAnimation = true;
+                }, 2000);
                 break;
 
             case this.orchestrator.states.WAIT_BOT_2_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 this.orchestrator.scene.setPickEnabled(false);
+                window.setTimeout(function() {
+                    orchestratorVar.scene.cameraAnimation = true;
+                }, 2000);
                 break;
 
             case this.orchestrator.states.PICK_ACTIVE:
@@ -105,41 +118,33 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.ROTATING_CAMERA:
-            let orchestratorVar=this.orchestrator;
 
-            window.setTimeout(function(){
-                orchestratorVar.scene.cameraAnimation = true;
+
                 if (orchestratorVar.gameStateControl.currentPlayer == 1) {
                     if (orchestratorVar.scene.gameType == 'AI vs Player') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_BOT_2_MOVE;
-                    } else if (orchestratorVar.scene.gameType == 'Player vs Player') {
-                        orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_2_MOVE;
                     } else if (orchestratorVar.scene.gameType == 'Player vs AI') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_2_MOVE;
                     } else if (orchestratorVar.scene.gameType == 'AI vs AI') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_BOT_2_MOVE;
-                    }else if (orchestratorVar.scene.gameType == '1vs1') {
+                    } else if (orchestratorVar.scene.gameType == '1vs1') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_2_MOVE;
                     }
                 } else if (orchestratorVar.gameStateControl.currentPlayer == 2) {
 
                     if (orchestratorVar.scene.gameType == 'AI vs Player') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_1_MOVE;
-                    } else if (orchestratorVar.scene.gameType == 'Player vs Player') {
-                        orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_1_MOVE;
                     } else if (orchestratorVar.scene.gameType == 'Player vs AI') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_BOT_1_MOVE;
                     } else if (orchestratorVar.scene.gameType == 'AI vs AI') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_BOT_1_MOVE;
-                    }else if (orchestratorVar.scene.gameType == '1vs1') {
+                    } else if (orchestratorVar.scene.gameType == '1vs1') {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_1_MOVE;
                     }
                 }
-                orchestratorVar.gameStateControl.stateTime=Date.now();
-                orchestratorVar.scene.setPickEnabled(true);                
+                orchestratorVar.gameStateControl.stateTime = Date.now();
+                orchestratorVar.scene.setPickEnabled(true);
                 orchestratorVar.gameStateControl.refreshPlayer();
-                orchestratorVar.gameStateControl.cameraAnimationPending=false;
-            },2000);
                 break;
             case this.orchestrator.states.WIN_PLAYER1:
                 //TODO:MENU VITORIA
@@ -191,13 +196,11 @@ class MyGameStateControler {
                 request = true;
                 difficulty = this.orchestrator.scene.ai2Dificulty;
                 score = this.score_player_2;
-            }
-            else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
+            } else if (gameType == 'AI vs Player' && this.currentPlayer == 1) {
                 request = true;
                 difficulty = this.orchestrator.scene.ai1Dificulty;
                 score = this.score_player_1;
-            }
-            else if (gameType == 'AI vs AI') {
+            } else if (gameType == 'AI vs AI') {
                 request = true;
                 if (this.currentPlayer == 1) {
                     difficulty = this.orchestrator.scene.ai1Dificulty;
@@ -217,10 +220,10 @@ class MyGameStateControler {
 
                 this.orchestrator.prolog.getPrologRequest(
                     stringRequest,
-                    function (data) {
+                    function(data) {
                         handlerVAR.handleBotMove(data.target.response);
                     },
-                    function (data) {
+                    function(data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
@@ -249,8 +252,7 @@ class MyGameStateControler {
         if (this.currentPlayer == 1) {
             scoreArrayToTest = this.score_player_1;
             winState = this.orchestrator.states.WIN_PLAYER1;
-        }
-        else {
+        } else {
             scoreArrayToTest = this.score_player_2;
             winState = this.orchestrator.states.WIN_PLAYER2;
         }

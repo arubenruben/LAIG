@@ -44,31 +44,31 @@ class MyGameOrchestrator extends CGFobject {
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
         this.timeBoard = new MyTimeBoard(this);
-        
-        
+
+
         let handlerVAR = this.handler;
         this.currentTime = Date.now();
-        this.mutex=true;
+        this.mutex = true;
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
         */
-       this.prolog.getPrologRequest(
-           'start',
-           function (data) {
-               handlerVAR.handleInitialBoard(data.target.response);
+        this.prolog.getPrologRequest(
+            'start',
+            function(data) {
+                handlerVAR.handleInitialBoard(data.target.response);
             },
-            function (data) {
+            function(data) {
                 handlerVAR.handlerError(data.target.response);
             });
-            this.gameSequence = new MyGameSequence(this);
-            this.gameboard = null;
-        }
-        
-        buildInitialBoard() {
+        this.gameSequence = new MyGameSequence(this);
+        this.gameboard = null;
+    }
+
+    buildInitialBoard() {
         this.gameboardSet = true;
         this.gameboard = new MyGameBoard(this, 2, 4, 4, 2);
-        
+
         this.player1_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 1);
         this.player2_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 2);
     }
@@ -166,29 +166,30 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                this.mutex=true;
-                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                this.mutex = true;
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                    this.startCountingTime = true;
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                this.mutex=true;
-                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                this.mutex = true;
+                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-                this.mutex=true;
-                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                this.mutex = true;
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
 
             case this.states.WAIT_BOT_2_MOVE:
-                this.mutex=true;
-                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                this.mutex = true;
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -205,10 +206,10 @@ class MyGameOrchestrator extends CGFobject {
 
                 this.prolog.getPrologRequest(
                     stringRequest,
-                    function (data) {
+                    function(data) {
                         handlerVAR.handleMove(data.target.response, obj, id);
                     },
-                    function (data) {
+                    function(data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
@@ -230,10 +231,11 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.ROTATING_CAMERA:
-                if (this.gameStateControl.cameraAnimationPending==false&&this.mutex==true&&this.gameStateControl.playPending==false) {
-                    this.mutex=false;
+                if (this.scene.cameraAnimationDone) {
+                    this.scene.cameraAnimationDone = false;
                     this.gameStateControl.nextState();
                 }
+
                 break;
             case this.states.WIN_PLAYER1:
                 //TODO:Disable Picking.
