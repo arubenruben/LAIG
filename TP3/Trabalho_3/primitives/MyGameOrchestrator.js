@@ -48,6 +48,7 @@ class MyGameOrchestrator extends CGFobject {
 
         let handlerVAR = this.handler;
         this.currentTime = Date.now()
+        this.cameraSeqId=null;
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
@@ -98,7 +99,7 @@ class MyGameOrchestrator extends CGFobject {
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {
 
             let orchestratorVar = this.orchestrator;
-            window.setTimeout(function () {
+            this.cameraSeqId=window.setTimeout(function () {
                 orchestratorVar.scene.cameraAnimation = true;
             }, 2000);
         }
@@ -150,7 +151,7 @@ class MyGameOrchestrator extends CGFobject {
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {
 
             let orchestratorVar = this.orchestrator;
-            window.setTimeout(function () {
+            this.cameraSeqId=window.setTimeout(function () {
                 orchestratorVar.scene.cameraAnimation = true;
             }, 2000);
         }

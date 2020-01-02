@@ -83,10 +83,13 @@ class MyGameSequence extends CGFobject {
     }
     installGameSequence(gameMove) {
 
+        this.orchestrator.scene.cameraAnimation=true;
         gameMove.orchestrator.gameboardSet = false;
         let scoreArray;
         let pieceToInsertNumeric;
         let pieceRemoved = gameMove.removedPiece;
+        
+        window.clearTimeout(this.orchestrator.cameraSeqId);
 
         if (pieceRemoved != null) {
             
@@ -111,7 +114,21 @@ class MyGameSequence extends CGFobject {
         }
         gameMove.orchestrator.gameboard = gameMove.storeBoard;
         gameMove.orchestrator.gameboardSet = true;
-        this.orchestrator.gameStateControl.refreshPlayer();
+        
+        if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 2 ||
+            this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 1
+        ) {
+            this.orchestrator.gameStateControl.playDone = false;
+            this.orchestrator.scene.setPickEnabled(true);
+        } else {
+            this.orchestrator.gameStateControl.playDone = true;
+            this.orchestrator.scene.setPickEnabled(false);
+        }
+        this.orchestrator.gameStateControl.currentState=this.orchestrator.states.ROTATING_CAMERA;
+        let orchestratorVar=this.orchestrator;
+        window.setTimeout(function () {
+            orchestratorVar.scene.cameraAnimation = true;
+        }, 2000);
     }
 
     gameMovieInstallerSequence(gameMove) {
