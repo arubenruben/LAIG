@@ -27,6 +27,7 @@ class MyGameStateControler {
                 if (this.orchestrator.scene.gameType == '1vs1') {
                     //TODO:Improve this solution
                     this.playDone = false;
+                    this.stateTime=Date.now();
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     //Picking avaiable
                     this.orchestrator.scene.setPickEnabled(true);
@@ -66,14 +67,14 @@ class MyGameStateControler {
                     //TODO:Improve this solution
                     this.playDone = false;
                     this.orchestrator.scene.setPickEnabled(true);
+                    this.stateTime=Date.now();
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                 } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                 }
 
                 break;
-
-
+                
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 this.orchestrator.scene.setPickEnabled(false);
@@ -106,31 +107,31 @@ class MyGameStateControler {
 
             case this.orchestrator.states.ROTATING_CAMERA:
 
-                if (this.orchestrator.gameStateControl.currentPlayer == 1) {
+                if (this.currentPlayer == 1) {
                     if (this.orchestrator.scene.gameType == 'AI vs Player') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
                     } else if (this.orchestrator.scene.gameType == '1vs1') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
                     }
-                } else if (this.orchestrator.gameStateControl.currentPlayer == 2) {
+                } else if (this.currentPlayer == 2) {
                     if (this.orchestrator.scene.gameType == 'AI vs Player') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == '1vs1') {
-                        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     }
                 }
+                this.stateTime = Date.now();
                 //TODO:Ajustar picking a cada caso
-                this.orchestrator.gameStateControl.stateTime = Date.now();
                 this.orchestrator.scene.setPickEnabled(true);
-                this.orchestrator.gameStateControl.refreshPlayer();
+                this.refreshPlayer();
                 break;
             case this.orchestrator.states.WIN_PLAYER1:
                 //TODO:MENU VITORIA

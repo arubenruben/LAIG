@@ -28,6 +28,7 @@ class MyTimeBoard extends CGFobject {
         this.arrayTime = [0, 0, 0];
 
         this.plane = new MyPlane(this.scene, 5, 5);
+        this.orchestrator.gameStateControl.stateTime=Date.now();
 
     }
 
@@ -56,15 +57,23 @@ class MyTimeBoard extends CGFobject {
                 arrayTime[1] = Number(seconds[0]);
             }
         } 
-        /*else if(this.orchestrator.scene.gameType == '1vs1' ||
-                this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
+        else if(this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
                 this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2) {
+            
             this.orchestrator.gameStateControl.pickPending = false;
             this.orchestrator.gameStateControl.playDone = true;
-            this.orchestrator.scene.cameraAnimationDone=true;
+            this.orchestrator.gameStateControl.currentState=this.orchestrator.states.ROTATING_CAMERA;
+            this.orchestrator.scene.cameraAnimation=true;
             arrayTime = [0, 0, 0];
         }
-        */
+        else if(this.orchestrator.scene.gameType == '1vs1'){    
+            this.orchestrator.gameStateControl.pickPending = false;
+            this.orchestrator.gameStateControl.playDone = false;
+            this.orchestrator.gameStateControl.currentState=this.orchestrator.states.ROTATING_CAMERA;
+            this.orchestrator.scene.cameraAnimation=true;
+            arrayTime = [0, 0, 0];
+        }
+        
         return arrayTime;
     }
 
