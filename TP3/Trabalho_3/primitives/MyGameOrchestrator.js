@@ -9,7 +9,7 @@
  */
 
 //30 Mil segundos
-const timeForPlay = 75 * 1000;
+const timeForPlay = 5 * 1000;
 
 class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
@@ -47,8 +47,7 @@ class MyGameOrchestrator extends CGFobject {
 
 
         let handlerVAR = this.handler;
-        this.currentTime = Date.now();
-        this.mutex = true;
+        this.currentTime = Date.now()
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
@@ -94,9 +93,13 @@ class MyGameOrchestrator extends CGFobject {
         }
 
         this.gameStateControl.updateScores(pieceRemoved);
-
+        
         this.gameboardSet = true;
         this.gameStateControl.playPending = false;
+        let orchestratorVar = this.orchestrator;
+        window.setTimeout(function () {
+            orchestratorVar.scene.cameraAnimation = true;
+        }, 2000);
         this.gameStateControl.playDone = true;
     }
 
@@ -126,11 +129,21 @@ class MyGameOrchestrator extends CGFobject {
         }
         this.gameboardSet = true;
 
-        if (this.scene.gameType != 'AI vs AI')
+        if (this.scene.gameType == 'Player vs AI'&& this.gameStateControl.currentPlayer==2||
+            this.scene.gameType == 'AI vs Player'&& this.gameStateControl.currentPlayer==1
+            ){
+            this.gameStateControl.playDone = false;
             this.scene.setPickEnabled(true);
+        }else{
+            this.gameStateControl.playDone = true;
+            this.scene.setPickEnabled(false);
+        }
+        let orchestratorVar = this.orchestrator;
+        window.setTimeout(function () {
+            orchestratorVar.scene.cameraAnimation = true;
+        }, 2000);
 
         this.gameStateControl.playPending = false;
-        this.gameStateControl.playDone = true;
     }
 
     orchestrate() {
@@ -166,21 +179,20 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                this.mutex = true;
+
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
-                    this.startCountingTime = true;
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                this.mutex = true;
+
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-                this.mutex = true;
+
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
@@ -188,7 +200,7 @@ class MyGameOrchestrator extends CGFobject {
 
 
             case this.states.WAIT_BOT_2_MOVE:
-                this.mutex = true;
+
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
@@ -285,7 +297,12 @@ class MyGameOrchestrator extends CGFobject {
             /* this.theme.display();
             this.animator.display();*/
             this.gameboard.display();
-            this.timeBoard.display();
+            if((this.orchestrator.scene.gameType=='1vs1'||
+            this.orchestrator.scene.gameType=='Player vs AI' && this.orchestrator.gameStateControl.currentPlayer==1||
+            this.orchestrator.scene.gameType=='AI vs Player' && this.orchestrator.gameStateControl.currentPlayer==2)
+            ){
+                this.timeBoard.display();
+            }
             this.player1_stash.display();
             this.player2_stash.display();
             // this.piece3.display();

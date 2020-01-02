@@ -55,11 +55,13 @@ class MyTimeBoard extends CGFobject {
                 arrayTime[2] = Number(seconds[1]);
                 arrayTime[1] = Number(seconds[0]);
             }
+        }else if(this.orchestrator.gameStateControl.pickPending==false&&
+            (this.orchestrator.scene.gameType=='1vs1'||
+            this.orchestrator.scene.gameType=='Player vs AI' && this.orchestrator.gameStateControl.currentPlayer==1||
+            this.orchestrator.scene.gameType=='AI vs Player' && this.orchestrator.gameStateControl.currentPlayer==2)
+            ){
         }
-
         return arrayTime;
-
-
     }
 
     numberTexture(number) {
@@ -91,7 +93,10 @@ class MyTimeBoard extends CGFobject {
     }
 
     update(currentTime) {
-        if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER&&this.orchestrator.gameStateControl.playPending==false) {
+        if (this.orchestrator.gameStateControl.playPending == true) {
+            this.arrayTime = [0, 0, 0];
+        }
+        else if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER) {
             this.currentTime = currentTime;
             //[0]=Minute [1] Dezenas segundos [2] unidades segundos
             this.arrayTime = this.parseTime();
