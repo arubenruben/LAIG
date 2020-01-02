@@ -54,10 +54,10 @@ class MyGameOrchestrator extends CGFobject {
         */
         this.prolog.getPrologRequest(
             'start',
-            function(data) {
+            function (data) {
                 handlerVAR.handleInitialBoard(data.target.response);
             },
-            function(data) {
+            function (data) {
                 handlerVAR.handlerError(data.target.response);
             });
         this.gameSequence = new MyGameSequence(this);
@@ -74,7 +74,7 @@ class MyGameOrchestrator extends CGFobject {
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
         let pieceRemoved = null;
-        let numberChanges=0;
+        let numberChanges = 0;
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
@@ -90,17 +90,18 @@ class MyGameOrchestrator extends CGFobject {
             }
         }
         this.gameStateControl.updateScores(pieceRemoved);
-        
-        let orchestratorVar = this.orchestrator;
-        window.setTimeout(function () {
-            orchestratorVar.scene.cameraAnimation = true;
-        }, 2000);
-        
-        if (this.scene.gameType == 'Player vs AI'&& this.gameStateControl.currentPlayer==1||
-        this.scene.gameType == 'AI vs Player'&& this.gameStateControl.currentPlayer==2
-        ){
+        if (this.gameStateControl.currentState < this.states.GAME_OVER) {
+
+            let orchestratorVar = this.orchestrator;
+            window.setTimeout(function () {
+                orchestratorVar.scene.cameraAnimation = true;
+            }, 2000);
+        }
+        if (this.scene.gameType == 'Player vs AI' && this.gameStateControl.currentPlayer == 1 ||
+            this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 2
+        ) {
             this.scene.setPickEnabled(false);
-        }else{
+        } else {
             this.scene.setPickEnabled(true);
         }
         this.gameStateControl.playDone = true;
@@ -130,22 +131,25 @@ class MyGameOrchestrator extends CGFobject {
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
         }
-        
+
         this.gameboardSet = true;
 
-        if (this.scene.gameType == 'Player vs AI'&& this.gameStateControl.currentPlayer==2||
-            this.scene.gameType == 'AI vs Player'&& this.gameStateControl.currentPlayer==1
-            ){
+        if (this.scene.gameType == 'Player vs AI' && this.gameStateControl.currentPlayer == 2 ||
+            this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 1
+        ) {
             this.gameStateControl.playDone = false;
             this.scene.setPickEnabled(true);
-        }else{
+        } else {
             this.gameStateControl.playDone = true;
             this.scene.setPickEnabled(false);
         }
-        let orchestratorVar = this.orchestrator;
-        window.setTimeout(function () {
-            orchestratorVar.scene.cameraAnimation = true;
-        }, 2000);
+        if (this.gameStateControl.currentState < this.states.GAME_OVER) {
+
+            let orchestratorVar = this.orchestrator;
+            window.setTimeout(function () {
+                orchestratorVar.scene.cameraAnimation = true;
+            }, 2000);
+        }
 
         this.gameStateControl.playPending = false;
     }
@@ -222,10 +226,10 @@ class MyGameOrchestrator extends CGFobject {
 
                 this.prolog.getPrologRequest(
                     stringRequest,
-                    function(data) {
+                    function (data) {
                         handlerVAR.handleMove(data.target.response, obj, id);
                     },
-                    function(data) {
+                    function (data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
@@ -239,12 +243,6 @@ class MyGameOrchestrator extends CGFobject {
                 }
                 break;
 
-            case this.states.GAME_OVER:
-
-                //TODO:Disable Picking.
-                //TODO: GameoverMenu;
-                console.log('Game Over');
-                break;
 
             case this.states.ROTATING_CAMERA:
                 if (this.scene.cameraAnimationDone) {
@@ -252,6 +250,12 @@ class MyGameOrchestrator extends CGFobject {
                     this.gameStateControl.nextState();
                 }
 
+                break;
+            case this.states.GAME_OVER:
+
+                //TODO:Disable Picking.
+                //TODO: GameoverMenu;
+                console.log('Game Over');
                 break;
             case this.states.WIN_PLAYER1:
                 //TODO:Disable Picking.
@@ -301,10 +305,10 @@ class MyGameOrchestrator extends CGFobject {
             /* this.theme.display();
             this.animator.display();*/
             this.gameboard.display();
-            if((this.orchestrator.scene.gameType=='1vs1'||
-            this.orchestrator.scene.gameType=='Player vs AI' && this.orchestrator.gameStateControl.currentPlayer==1||
-            this.orchestrator.scene.gameType=='AI vs Player' && this.orchestrator.gameStateControl.currentPlayer==2)
-            ){
+            if ((this.orchestrator.scene.gameType == '1vs1' ||
+                this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
+                this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2)
+            ) {
                 this.timeBoard.display();
             }
             this.player1_stash.display();
