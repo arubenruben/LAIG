@@ -134,8 +134,6 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     orchestrate() {
-        console.log(this.gameStateControl.currentPlayer);
-
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:

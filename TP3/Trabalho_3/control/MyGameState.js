@@ -135,10 +135,8 @@ class MyGameStateControler {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_1_MOVE;
                     }
                 }
-                orchestratorVar.scene.setPickEnabled(true);
-                console.log('Antes'+orchestratorVar.gameStateControl.currentPlayer);
+                orchestratorVar.scene.setPickEnabled(true);                
                 orchestratorVar.gameStateControl.refreshPlayer();
-                console.log('Depois'+orchestratorVar.gameStateControl.currentPlayer);
                 orchestratorVar.gameStateControl.cameraAnimationPending=false;
             },2000);
                 break;

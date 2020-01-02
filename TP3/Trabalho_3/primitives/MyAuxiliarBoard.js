@@ -178,12 +178,12 @@ class MyAuxiliarBoard extends CGFobject {
         
         this.scene.pushMatrix();
 
-        if (this.player == 2) {
+        if (this.player == 1) {
             this.scene.translate(this.x2 + this.tiles_width, 0, this.z2 - this.tiles_height);
             this.scene.translate(this.tiles_height / 2, 0, -this.tiles_width / 2);
             this.scene.rotate(Math.PI / 2, 0, 1, 0);
 
-        } else if (this.player == 1) {
+        } else if (this.player == 2) {
             this.scene.translate(this.x1 - this.tiles_width, 0, this.z1 + this.tiles_height);
             this.scene.translate(-this.tiles_height / 2, 0, this.tiles_width / 2);
             this.scene.rotate(-Math.PI / 2, 0, 1, 0);
