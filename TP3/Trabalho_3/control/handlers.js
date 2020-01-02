@@ -60,6 +60,9 @@ class handlerPrologReplys {
             }
 
             this.orchestrator.updateBoard(auxArray, obj, id);
+        }else{
+            this.orchestrator.gameStateControl.playDone=true;
+            this.orchestrator.gameStateControl.playPending=false;
         }
         this.orchestrator.gameStateControl.pickPending = false;
     }
