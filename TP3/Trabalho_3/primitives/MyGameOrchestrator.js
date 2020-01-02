@@ -8,8 +8,8 @@
 • Manage object selection
  */
 
- //30 Mil segundos
-const timeForPlay=75*1000;
+//30 Mil segundos
+const timeForPlay = 75 * 1000;
 
 class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
@@ -43,9 +43,9 @@ class MyGameOrchestrator extends CGFobject {
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
-        this.timeBoard= new MyTimeBoard(this);
+        this.timeBoard = new MyTimeBoard(this);
         let handlerVAR = this.handler;
-        this.currentTime=Date.now();
+        this.currentTime = Date.now();
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
@@ -128,6 +128,7 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     orchestrate() {
+        console.log(this.gameStateControl.currentPlayer);
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
@@ -172,7 +173,7 @@ class MyGameOrchestrator extends CGFobject {
                 break;
             case this.states.WAIT_BOT_1_MOVE:
 
-                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -180,18 +181,10 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.WAIT_BOT_2_MOVE:
 
-                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
-
-            case this.states.ROTATING_CAMERA:
-                if (!this.scene.cameraAnimation) {
-                    this.gameStateControl.nextState();
-                }
-                break;
-
-
 
             case this.states.PICK_ACTIVE:
 
@@ -229,6 +222,11 @@ class MyGameOrchestrator extends CGFobject {
                 console.log('Game Over');
                 break;
 
+            case this.states.ROTATING_CAMERA:
+                if (!this.scene.cameraAnimation) {
+                    this.gameStateControl.nextState();
+                }
+                break;
             case this.states.WIN_PLAYER1:
                 //TODO:Disable Picking.
                 //TODO: Win Menu;
@@ -259,7 +257,7 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     onObjectSelected(obj, id) {
-        
+
         if (obj instanceof MyTile) {
             let piece = obj.piece;
             if (piece != null)
@@ -268,7 +266,7 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     update(currentTime) {
-        this.currentTime=currentTime;
+        this.currentTime = currentTime;
         this.timeBoard.update(currentTime);
     }
 
