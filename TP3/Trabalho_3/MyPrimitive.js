@@ -116,8 +116,8 @@ class MyPrimitive {
                     this.args = this.args + " primitive of type " + this.primitiveType;
                     this.error = true;
                 } else {
-                    this.graph.scene.gameOrchestrator.gameboard = new MyGameBoard(this.graph.scene.gameOrchestrator, this.args[0], this.args[1], this.args[2], this.args[3]);
-                    this.primitive = this.graph.scene.gameOrchestrator.gameboard;
+                    this.graph.scene.orchestrator.gameboard = new MyGameBoard(this.graph.scene.orchestrator, this.args[0], this.args[1], this.args[2], this.args[3]);
+                    this.primitive = this.graph.scene.orchestrator.gameboard;
                 }
                 break;
             default:

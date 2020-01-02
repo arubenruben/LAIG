@@ -67,7 +67,11 @@ class MyGameOrchestrator extends CGFobject {
 
     buildInitialBoard() {
         this.gameboardSet = true;
-        this.gameboard = new MyGameBoard(this, 2, 4, 4, 2);
+        this.gameboard.updateMatrixOfTiles();
+        // if (this.gameboard == null) {
+        //     console.log('Merda');
+        // }
+        // this.gameboard.updateMatrix();
 
         this.player1_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 1);
         this.player2_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 2);
@@ -284,7 +288,6 @@ class MyGameOrchestrator extends CGFobject {
         if (this.gameboardSet == true) {
             /* this.theme.display();
             this.animator.display();*/
-            this.gameboard.display();
             this.timeBoard.display();
             this.player1_stash.display();
             this.player2_stash.display();
