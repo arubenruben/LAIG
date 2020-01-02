@@ -76,23 +76,23 @@ class MyGameStateControler {
 
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                this.orchestrator.scene.setPickEnabled(true);
+                this.orchestrator.scene.setPickEnabled(false);
                 break;
 
 
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                this.orchestrator.scene.setPickEnabled(true);
+                this.orchestrator.scene.setPickEnabled(false);
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                this.orchestrator.scene.setPickEnabled(true);
+                this.orchestrator.scene.setPickEnabled(false);
                 break;
 
             case this.orchestrator.states.WAIT_BOT_2_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                this.orchestrator.scene.setPickEnabled(true);
+                this.orchestrator.scene.setPickEnabled(false);
                 break;
 
             case this.orchestrator.states.PICK_ACTIVE:

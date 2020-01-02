@@ -230,7 +230,7 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.ROTATING_CAMERA:
-                if (this.gameStateControl.cameraAnimationPending==false&&this.mutex==true&&this.gameStateControl.playPending==false&&this.gameStateControl.playDone==true) {
+                if (this.gameStateControl.cameraAnimationPending==false&&this.mutex==true&&this.gameStateControl.playPending==false) {
                     this.mutex=false;
                     this.gameStateControl.nextState();
                 }
