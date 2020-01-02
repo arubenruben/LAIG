@@ -44,27 +44,33 @@ class MyGameOrchestrator extends CGFobject {
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
         this.timeBoard = new MyTimeBoard(this);
+        
+        
         let handlerVAR = this.handler;
         this.currentTime = Date.now();
+        this.mutex=true;
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
         */
-        this.prolog.getPrologRequest(
-            'start',
-            function (data) {
-                handlerVAR.handleInitialBoard(data.target.response);
+       this.prolog.getPrologRequest(
+           'start',
+           function (data) {
+               handlerVAR.handleInitialBoard(data.target.response);
             },
             function (data) {
                 handlerVAR.handlerError(data.target.response);
             });
-        this.gameSequence = new MyGameSequence(this);
-        this.gameboard = null;
-    }
-
-    buildInitialBoard() {
+            this.gameSequence = new MyGameSequence(this);
+            this.gameboard = null;
+        }
+        
+        buildInitialBoard() {
         this.gameboardSet = true;
         this.gameboard = new MyGameBoard(this, 2, 4, 4, 2);
+        
+        this.player1_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 1);
+        this.player2_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 2);
     }
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
@@ -128,6 +134,8 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     orchestrate() {
+        console.log(this.gameStateControl.currentPlayer);
+
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
@@ -160,27 +168,29 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.WAIT_PLAYER_1_MOVE:
-                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                this.mutex=true;
+                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.WAIT_PLAYER_2_MOVE:
-                if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+                this.mutex=true;
+                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-
-                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                this.mutex=true;
+                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
 
             case this.states.WAIT_BOT_2_MOVE:
-
-                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                this.mutex=true;
+                if (this.gameStateControl.cameraAnimationPending==false&&this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -222,7 +232,8 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.ROTATING_CAMERA:
-                if (!this.scene.cameraAnimation) {
+                if (this.gameStateControl.cameraAnimationPending==false&&this.mutex==true&&this.gameStateControl.playPending==false&&this.gameStateControl.playDone==true) {
+                    this.mutex=false;
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -274,7 +285,9 @@ class MyGameOrchestrator extends CGFobject {
             /* this.theme.display();
             this.animator.display();*/
             this.gameboard.display();
-            this.timeBoard.display();
+            //this.timeBoard.display();
+            this.player1_stash.display();
+            this.player2_stash.display();
             // this.piece3.display();
         }
 

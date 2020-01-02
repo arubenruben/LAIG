@@ -24,7 +24,7 @@ class MyAuxiliarBoard extends CGFobject {
         this.scene = this.orchestrator.scene;
         this.player = player;
 
-        this.scale_x = tiles_width / 1;
+        this.scale_x = tiles_width;
         this.scale_z = tiles_height / (Math.cos(Math.PI / 6) * 0.5 * 2);
 
         if (this.player == 1) {
@@ -52,7 +52,7 @@ class MyAuxiliarBoard extends CGFobject {
         this.redPiece = new MyPiece(this.orchestrator, 1, null, null, null);
         this.bluePiece = new MyPiece(this.orchestrator, 2, null, null, null)
         this.yellowPiece = new MyPiece(this.orchestrator, 3, null, null, null);
-
+        
         this.number0 = this.orchestrator.imagesAssets.number0;
         this.number1 = this.orchestrator.imagesAssets.number1;
         this.number2 = this.orchestrator.imagesAssets.number2;
@@ -167,7 +167,6 @@ class MyAuxiliarBoard extends CGFobject {
     }
 
     display() {
-
         //desenhar peças vermelhas
         if (this.player == 1) {
             this.player_stash = this.orchestrator.gameStateControl.score_player_1;
