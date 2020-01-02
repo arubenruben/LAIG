@@ -18,18 +18,22 @@ class MyGameSequence extends CGFobject {
         this.arrayGameSequence.push(gameMove);
     }
     undo() {
+        if(this.orchestrator.gameStateControl.currentState>this.orchestrator.states.SET_THE_AI_2_DIF&&this.orchestrator.gameStateControl.currentState<this.orchestrator.states.PICK_ACTIVE){
 
-        this.orchestrator.gameStateControl.playDone = false;
-
-        let gameMove;
-
-        if (this.arrayGameSequence.length > 0) {
-            gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
-            this.arrayGameSequence.pop();
-            this.orchestrator.gameStateControl.refreshPlayer();
-            this.installGameSequence(gameMove);
-            this.orchestrator.gameStateControl.playDone = true;
-            this.orchestrator.gameStateControl.nextState();
+            this.orchestrator.gameStateControl.playDone = false;
+            let gameMove;
+            
+            if (this.arrayGameSequence.length > 0) {
+                gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
+                this.arrayGameSequence.pop();
+                this.orchestrator.gameStateControl.refreshPlayer();
+                this.installGameSequence(gameMove);
+                this.orchestrator.gameStateControl.playDone = true;
+                this.orchestrator.gameStateControl.nextState();
+            }
+        }else{
+            console.log(this.orchestrator.gameStateControl.currentState);
+            console.error('Cannot use undo in this state');
         }
     }
 
@@ -85,7 +89,13 @@ class MyGameSequence extends CGFobject {
         let pieceRemoved = gameMove.removedPiece;
 
         if (pieceRemoved != null) {
-            this.orchestrator.gameStateControl.refreshPlayer();
+            
+            if (gameMove.orchestrator.gameStateControl.currentPlayer == 1) {
+                scoreArray = gameMove.orchestrator.gameStateControl.score_player_1;
+            }
+            else {
+                scoreArray = gameMove.orchestrator.gameStateControl.score_player_2;
+            }
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
             }
@@ -96,10 +106,12 @@ class MyGameSequence extends CGFobject {
                 pieceToInsertNumeric = 2;
             }
 
+            
             scoreArray[pieceToInsertNumeric]--;
         }
         gameMove.orchestrator.gameboard = gameMove.storeBoard;
         gameMove.orchestrator.gameboardSet = true;
+        this.orchestrator.gameStateControl.refreshPlayer();
     }
 
     gameMovieInstallerSequence(gameMove) {
