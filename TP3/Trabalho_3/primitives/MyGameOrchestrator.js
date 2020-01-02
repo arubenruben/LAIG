@@ -29,12 +29,12 @@ class MyGameOrchestrator extends CGFobject {
             WAIT_BOT_2_MOVE: 7,
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
-            MOVIE_REPLY: 10,
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            ROTATING_CAMERA: 11,
-            GAME_OVER: 12,
-            WIN_PLAYER1: 13,
-            WIN_PLAYER2: 14,
+            ROTATING_CAMERA: 10,
+            GAME_OVER: 11,
+            MOVIE_REPLY: 13,
+            WIN_PLAYER1: 14,
+            WIN_PLAYER2: 15,
 
         };
         this.gameStateControl = new MyGameStateControler(this);
@@ -88,6 +88,11 @@ class MyGameOrchestrator extends CGFobject {
                     }
                 }
             }
+        }
+
+        if(numberChanges==0){
+            let newGameMove = new MyGameMove(this.orchestrator, obj, null);
+            this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
         this.gameStateControl.updateScores(pieceRemoved);
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {

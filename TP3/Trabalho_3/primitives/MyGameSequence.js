@@ -39,6 +39,9 @@ class MyGameSequence extends CGFobject {
             this.orchestrator.gameStateControl.resumeState = this.orchestrator.gameStateControl.currentState;
             let initialGameBoard = this.arrayGameSequence[0].storeBoard;
             this.orchestrator.gameboard = initialGameBoard;
+            if(this.orchestrator.gameStateControl.currentPlayer==2){
+                this.orchestrator.scene.cameraAnimation=true;
+            }
             this.orchestrator.gameStateControl.currentPlayer = 1;
             this.orchestrator.gameStateControl.score_player_1 = [0, 0, 0];
             this.orchestrator.gameStateControl.score_player_2 = [0, 0, 0];
@@ -47,6 +50,14 @@ class MyGameSequence extends CGFobject {
             //Executa isto a cada 2seg
             let arrayVar = this.arrayGameSequence;
             let functionVar = this.gameMovieInstallerSequence;
+            let varOrchestrator=this.orchestrator;
+            let id2 = window.setInterval(function () {
+                if (arrayVar.length == 0) {
+                    window.clearInterval(id2);
+                } else {
+                    varOrchestrator.scene.cameraAnimation=true;
+                }
+            }, 3500);
 
             let id = window.setInterval(function () {
                 if (arrayVar.length == 0) {
@@ -57,7 +68,9 @@ class MyGameSequence extends CGFobject {
                     functionVar(gameMove);
                     arrayVar.pop();
                 }
-            }, 2000);
+            }, 3500);
+
+
         }
         else {
             console.error('Not allowed gameMovie on this state');
