@@ -25,7 +25,7 @@ class MyTimeBoard extends CGFobject {
         this.distanceBetweenBoards = distanceBetweenBoards;
         this.scaleFactor = scaleFactor;
         //[0]=Minute [1] Dezenas segundos [2] unidades segundos
-        this.arrayTime=[0,0,0];
+        this.arrayTime = [0, 0, 0];
 
         this.plane = new MyPlane(this.scene, 5, 5);
 
@@ -35,30 +35,28 @@ class MyTimeBoard extends CGFobject {
         //NOTICE THE NEGATION
         let arrayTime = [0, 0, 0];
 
-        if (!(this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER)) {
+        let time = this.orchestrator.gameStateControl.stateTime + timeForPlay - this.currentTime;
 
-            let time = this.orchestrator.gameStateControl.stateTime + timeForPlay - this.currentTime;
+        if (time > 0) {
 
-            if (time > 0) {
+            //from ms to s
+            time = time / 1000;
+            time = Math.round(time);
+            let minutes = Math.floor(time / 60);
+            arrayTime[0] = minutes;
+            time -= minutes * 60;
+            let seconds = time % 60;
+            seconds = seconds.toString();
 
-                //from ms to s
-                time =time/ 1000;
-                time = Math.round(time);
-                let minutes= Math.floor(time / 60);
-                arrayTime[0] = minutes;
-                time-=minutes*60;
-                let seconds = time % 60;
-                seconds = seconds.toString();
-                
-                if (seconds.length == 1) {
-                    arrayTime[1] = 0;
-                    arrayTime[2] = Number(seconds[0]);
-                } else {
-                    arrayTime[2] = Number(seconds[1]);
-                    arrayTime[1] = Number(seconds[0]);
-                }
+            if (seconds.length == 1) {
+                arrayTime[1] = 0;
+                arrayTime[2] = Number(seconds[0]);
+            } else {
+                arrayTime[2] = Number(seconds[1]);
+                arrayTime[1] = Number(seconds[0]);
             }
         }
+
         return arrayTime;
 
 
@@ -93,45 +91,48 @@ class MyTimeBoard extends CGFobject {
     }
 
     update(currentTime) {
-        this.currentTime = currentTime;
-        //[0]=Minute [1] Dezenas segundos [2] unidades segundos
-        this.arrayTime = this.parseTime();
+        if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER&&this.orchestrator.gameStateControl.playPending==false) {
+            this.currentTime = currentTime;
+            //[0]=Minute [1] Dezenas segundos [2] unidades segundos
+            this.arrayTime = this.parseTime();
+        }
     }
 
     display() {
 
         this.scene.pushMatrix();
-        this.scene.translate(0,10,0);
-        this.scene.rotate(Math.PI/2.0,1,0,0);
-        this.scene.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+        this.scene.translate(0, 3, 0);
+        this.scene.rotate(Math.PI / 2.0, 1, 0, 0);
+        this.scene.rotate(-Math.PI / 2.0, 0, 0, 1);
+        this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         this.white.setTexture(this.numberTexture(this.arrayTime[0]));
         this.white.apply();
         this.plane.display();
 
         this.scene.pushMatrix();
         //this.scene.translate(10,0,0);
-        this.scene.translate(this.distanceBetweenBoards,0,0);
+        this.scene.translate(this.distanceBetweenBoards, 0, 0);
         this.white.setTexture(this.doisPontos);
         this.white.apply();
         this.plane.display();
-        
+
         this.scene.pushMatrix();
-        this.scene.translate(this.distanceBetweenBoards,0,0);
+        this.scene.translate(this.distanceBetweenBoards, 0, 0);
         this.white.setTexture(this.numberTexture(this.arrayTime[1]));
         this.white.apply();
         this.plane.display();
-        
+
         this.scene.pushMatrix();
-        this.scene.translate(this.distanceBetweenBoards,0,0);
+        this.scene.translate(this.distanceBetweenBoards, 0, 0);
         this.white.setTexture(this.numberTexture(this.arrayTime[2]));
         this.white.apply();
         this.plane.display();
         this.scene.popMatrix();
         this.scene.popMatrix();
-        
+
         this.scene.popMatrix();
         this.scene.popMatrix();
-        
+
     }
 
 }

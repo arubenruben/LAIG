@@ -283,7 +283,7 @@ class MyGameOrchestrator extends CGFobject {
             /* this.theme.display();
             this.animator.display();*/
             this.gameboard.display();
-            //this.timeBoard.display();
+            this.timeBoard.display();
             this.player1_stash.display();
             this.player2_stash.display();
             // this.piece3.display();

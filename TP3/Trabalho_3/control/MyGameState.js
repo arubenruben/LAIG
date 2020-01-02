@@ -16,7 +16,7 @@ class MyGameStateControler {
         this.currentState = this.orchestrator.states.INITIALIZING;
     }
     nextState() {
-
+        //Refresh Counter
         switch (this.currentState) {
 
             case this.orchestrator.states.INITIALIZING:
@@ -106,7 +106,7 @@ class MyGameStateControler {
 
             case this.orchestrator.states.ROTATING_CAMERA:
             let orchestratorVar=this.orchestrator;
-            console.log('setTimeout');
+
             window.setTimeout(function(){
                 orchestratorVar.scene.cameraAnimation = true;
                 if (orchestratorVar.gameStateControl.currentPlayer == 1) {
@@ -135,6 +135,7 @@ class MyGameStateControler {
                         orchestratorVar.gameStateControl.currentState = orchestratorVar.states.WAIT_PLAYER_1_MOVE;
                     }
                 }
+                orchestratorVar.gameStateControl.stateTime=Date.now();
                 orchestratorVar.scene.setPickEnabled(true);                
                 orchestratorVar.gameStateControl.refreshPlayer();
                 orchestratorVar.gameStateControl.cameraAnimationPending=false;
