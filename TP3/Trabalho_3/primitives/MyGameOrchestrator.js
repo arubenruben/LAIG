@@ -74,7 +74,7 @@ class MyGameOrchestrator extends CGFobject {
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
         let pieceRemoved = null;
-
+        let numberChanges=0;
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
@@ -83,16 +83,12 @@ class MyGameOrchestrator extends CGFobject {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
-                        console.log(this.orchestrator.gameSequence);
+                        numberChanges++;
                         this.gameboard.matrixBoard[i][j].piece = null;
-                    } else {
-                        let newGameMove = new MyGameMove(this.orchestrator, obj, null)
-                        this.orchestrator.gameSequence.addGameMove(newGameMove);
                     }
                 }
             }
         }
-
         this.gameStateControl.updateScores(pieceRemoved);
         
         let orchestratorVar = this.orchestrator;
@@ -129,14 +125,12 @@ class MyGameOrchestrator extends CGFobject {
         if (invalidPlay == false) {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            console.log(this.orchestrator.gameSequence);
+            console.log(this.orchestrator.gameSequence.arrayGameSequence);
             this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
-        } else {
-            let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], null);
-            this.orchestrator.gameSequence.addGameMove(newGameMove);
         }
+        
         this.gameboardSet = true;
 
         if (this.scene.gameType == 'Player vs AI'&& this.gameStateControl.currentPlayer==2||
