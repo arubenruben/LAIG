@@ -83,6 +83,7 @@ class MyGameOrchestrator extends CGFobject {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
+                        console.log(this.orchestrator.gameSequence);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     } else {
                         let newGameMove = new MyGameMove(this.orchestrator, obj, null)
@@ -128,6 +129,7 @@ class MyGameOrchestrator extends CGFobject {
         if (invalidPlay == false) {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
+            console.log(this.orchestrator.gameSequence);
             this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();

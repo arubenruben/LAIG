@@ -5,7 +5,7 @@ class MyGameStateControler {
     constructor(orchestrator) {
 
         this.score_player_1 = [0, 0, 0];
-        this.score_player_2 = [0, 0, 0];
+        this.score_player_2 = [5, 5, 4];
         this.currentPlayer = 1;
         this.orchestrator = orchestrator;
         this.pickPending = false;
