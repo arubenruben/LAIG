@@ -162,8 +162,6 @@ class MyGameOrchestrator extends CGFobject {
     
     orchestrate() {
         
-        console.log(this.gameStateControl.currentPlayer);
-        console.log(this.gameStateControl.currentState);
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
@@ -209,7 +207,7 @@ class MyGameOrchestrator extends CGFobject {
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-
+                console.log('Bot1');
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
@@ -217,7 +215,7 @@ class MyGameOrchestrator extends CGFobject {
 
 
             case this.states.WAIT_BOT_2_MOVE:
-
+                console.log('Bot2');
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }

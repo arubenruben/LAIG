@@ -20,7 +20,7 @@ class MyGameSequence {
 
         if(this.orchestrator.gameStateControl.currentState==this.orchestrator.states.UNDO_PROGRESS||
             this.orchestrator.gameStateControl.currentState==this.orchestrator.states.ROTATE_CAMERA||
-            this.orchestrator.scene.cameraAnimation==true
+            this.orchestrator.scene.cameraAnimation==true||this.orchestrator.gameStateControl.playPending==true
             ){
                 return false;
             }
@@ -48,10 +48,12 @@ class MyGameSequence {
                 if(animationUsed==true){
                     window.setTimeout(
                     functionVar(gameMove)
-                    ),2000
+                    ),3000
                 }
                 else{
-                    functionVar(gameMove)
+                    window.setTimeout(
+                        functionVar(gameMove)
+                        ),2000
 
                 }
             }
