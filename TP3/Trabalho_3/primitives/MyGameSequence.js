@@ -71,7 +71,6 @@ class MyGameSequence {
         
         this.timeoutUndo=window.setTimeout(
             function(){
-                console.log('Disparei');
                 gameMove.orchestrator.undoPending=false;
             }
         ,5000);

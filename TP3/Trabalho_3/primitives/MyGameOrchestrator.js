@@ -86,8 +86,6 @@ class MyGameOrchestrator extends CGFobject {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
-                        console.log(newGameMove);
-                        console.log(newGameMove.currentPlayer);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
