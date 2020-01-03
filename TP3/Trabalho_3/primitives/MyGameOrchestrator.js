@@ -51,7 +51,7 @@ class MyGameOrchestrator {
         this.gameboardSet = true;
         this.gameboard.updateMatrixOfTiles();
         // if (this.gameboard == null) {
-        //     console.log('Merda');
+        //     console.log('erro');
         // }
         // this.gameboard.updateMatrix();
 
