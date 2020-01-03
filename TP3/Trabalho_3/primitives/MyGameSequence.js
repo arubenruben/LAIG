@@ -6,9 +6,8 @@
 • Manage undo
 • Feeds move replay
  */
-class MyGameSequence extends CGFobject {
+class MyGameSequence {
     constructor(orchestrator) {
-        super(orchestrator.scene);
         this.orchestrator = orchestrator
         this.scene = orchestrator.scene;
         this.undoPending = false;
@@ -187,22 +186,22 @@ class MyGameSequence extends CGFobject {
     }
 
     reset(){
-        this.orchestractor.gameStateControl.currentState=this.orchestractor.states.INITIALIZING;
-        this.orchestractor.scene.gameType=null;
-        this.orchestractor.scene.ai1Dificulty=null;
-        this.orchestractor.scene.ai2Dificulty=null;
-        if(this.orchestractor.gameStateControl.currentPlayer==2){
+        this.orchestrator.gameStateControl.currentState=this.orchestrator.states.INITIALIZING;
+        this.orchestrator.scene.gameType=null;
+        this.orchestrator.scene.ai1Dificulty=null;
+        this.orchestrator.scene.ai2Dificulty=null;
+        if(this.orchestrator.gameStateControl.currentPlayer==2){
             this.scene.cameraAnimation=true;    
         }
-        this.orchestractor.gameStateControl.currentPlayer=1;
-        this.orchestractor.currentTime=Date.now();
-        this.orchestractor.gameStateControl=new MyGameStateControler(this.orchestractor);
+        this.orchestrator.gameStateControl.currentPlayer=1;
+        this.orchestrator.currentTime=Date.now();
+        this.orchestrator.gameStateControl=new MyGameStateControler(this.orchestrator);
 
-        for(let i=0;i<this.orchestractor.gameboard.matrixBoard.length;i++){
-            for(let j=0;j<this.orchestractor.gameboard.matrixBoard[i].length;j++){
-                let initialPiece = this.orchestractor.initialBoardRaw[i][j];
+        for(let i=0;i<this.orchestrator.gameboard.matrixBoard.length;i++){
+            for(let j=0;j<this.orchestrator.gameboard.matrixBoard[i].length;j++){
+                let initialPiece = this.orchestrator.initialBoardRaw[i][j];
                 if (initialPiece > 0 && initialPiece < 4) {
-                    this.orchestractor.gameboard.matrixBoard[i][j].piece = new MyPiece(this.orchestractor, initialPiece, this.orchestractor.gameboard.matrixBoard[i][j], j, i);
+                    this.orchestrator.gameboard.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.orchestrator.gameboard.matrixBoard[i][j], j, i);
                 }
             }
         }
