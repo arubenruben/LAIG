@@ -26,11 +26,11 @@ class MyGameSequence {
             }
             
             if(this.arrayGameSequence.length>0){
-
+                this.orchestrator.gameStateControl.currentState=this.orchestrator.states.UNDO_PROGRESS;
+                
                 window.clearTimeout(this.orchestrator.cameraSeqId);
                 this.orchestrator.undoPending=true;
                 this.orchestrator.scene.setPickEnabled(false);
-                this.orchestrator.gameStateControl.currentState=this.orchestrator.states.UNDO_PROGRESS;
                 let gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
                 
                 let animationUsed=false;

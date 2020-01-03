@@ -165,7 +165,7 @@ class MyGameStateControler {
                     window.setTimeout(function(){
                         orchestratorVar.gameStateControl.playDone = true;
                         orchestratorVar.scene.setPickEnabled(false);
-                    },3000)
+                    },5000)
                 } else {
                     this.orchestrator.gameStateControl.playDone = false;
                     this.orchestrator.scene.setPickEnabled(true);
