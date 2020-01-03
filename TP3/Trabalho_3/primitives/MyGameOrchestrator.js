@@ -101,13 +101,6 @@ class MyGameOrchestrator extends CGFobject {
                 orchestratorVar.scene.cameraAnimation = true;
             }, 2000);
         }
-        if (this.scene.gameType == 'Player vs AI' && this.gameStateControl.currentPlayer == 1 ||
-            this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 2
-        ) {
-            this.scene.setPickEnabled(false);
-        } else {
-            this.scene.setPickEnabled(true);
-        }
         this.gameStateControl.playDone = true;
         this.gameboardSet = true;
         this.gameStateControl.playPending = false;
@@ -129,8 +122,6 @@ class MyGameOrchestrator extends CGFobject {
         if (invalidPlay == false) {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            console.log('New game move');
-            console.log(newGameMove.currentPlayer);
             this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
@@ -142,10 +133,8 @@ class MyGameOrchestrator extends CGFobject {
         this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 1
         ) {
             this.gameStateControl.playDone = false;
-            this.scene.setPickEnabled(true);
         } else {
             this.gameStateControl.playDone = true;
-            this.scene.setPickEnabled(false);
         }
         
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {
@@ -206,7 +195,6 @@ class MyGameOrchestrator extends CGFobject {
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-                console.log('Bot1');
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
@@ -214,7 +202,6 @@ class MyGameOrchestrator extends CGFobject {
 
 
             case this.states.WAIT_BOT_2_MOVE:
-                console.log('Bot2');
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
@@ -251,7 +238,6 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.UNDO_PROGRESS:
                 if (this.undoPending == false && this.orchestrator.scene.cameraAnimation == false) {
-                    console.log('Fiz next');
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -325,7 +311,6 @@ class MyGameOrchestrator extends CGFobject {
             }
             this.player1_stash.display();
             this.player2_stash.display();
-            // this.piece3.display();
         }
 
     }

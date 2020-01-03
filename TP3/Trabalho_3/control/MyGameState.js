@@ -76,22 +76,26 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
-                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                this.orchestrator.scene.cameraAnimationDone=false;
                 this.orchestrator.scene.setPickEnabled(false);
+                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 break;
 
 
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
-                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                this.orchestrator.scene.cameraAnimationDone=false;
                 this.orchestrator.scene.setPickEnabled(false);
+                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
-                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                this.orchestrator.scene.cameraAnimationDone=false;
                 this.orchestrator.scene.setPickEnabled(false);
+                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 break;
 
             case this.orchestrator.states.WAIT_BOT_2_MOVE:
+                this.orchestrator.scene.cameraAnimationDone=false;
                 this.orchestrator.scene.setPickEnabled(false);
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 break;
@@ -109,28 +113,34 @@ class MyGameStateControler {
 
                 if (this.currentPlayer == 1) {
                     if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                        this.orchestrator.scene.setPickEnabled(true);
                         this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                        this.orchestrator.scene.setPickEnabled(false);
                         this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
+                        this.orchestrator.scene.setPickEnabled(false);
                         this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
                     } else if (this.orchestrator.scene.gameType == '1vs1') {
+                        this.orchestrator.scene.setPickEnabled(true);
                         this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
                     }
                 } else if (this.currentPlayer == 2) {
                     if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                        this.orchestrator.scene.setPickEnabled(false);
                         this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                        this.orchestrator.scene.setPickEnabled(true);
                         this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
+                        this.orchestrator.scene.setPickEnabled(false);
                         this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == '1vs1') {
+                        this.orchestrator.scene.setPickEnabled(true);
                         this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     }
                 }
                 this.stateTime = Date.now();
-                //TODO:Ajustar picking a cada caso
-                this.orchestrator.scene.setPickEnabled(true);
                 this.refreshPlayer();
                 break;
 
@@ -221,7 +231,7 @@ class MyGameStateControler {
         }
 
         if (this.orchestrator.undoPending==false&&this.playPending == false && this.playDone == true && this.orchestrator.scene.cameraAnimation == false) {
-            
+
             if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
                 request = true;
                 difficulty = this.orchestrator.scene.ai2Dificulty;
@@ -243,7 +253,6 @@ class MyGameStateControler {
             if (request == true) {
                 this.playDone = false;
                 this.playPending = true;
-                console.log('PlayPending no bot');
                 this.orchestrator.scene.setPickEnabled(false);
                 let board = this.orchestrator.gameboard.matrixBoard;
                 let stringRequest = this.orchestrator.prolog.botRequest(board, difficulty, score);

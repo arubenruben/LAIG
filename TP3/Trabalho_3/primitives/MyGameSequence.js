@@ -11,6 +11,7 @@ class MyGameSequence {
         this.orchestrator = orchestrator
         this.scene = orchestrator.scene;
         this.arrayGameSequence = new Array();
+        this.timeoutUndo;
     }
 
     addGameMove(gameMove) {
@@ -24,6 +25,7 @@ class MyGameSequence {
         ) {
             return false;
         }
+        window.clearTimeout(this.timeoutUndo);
 
         if (this.arrayGameSequence.length > 0) {
             this.orchestrator.gameStateControl.currentState = this.orchestrator.states.UNDO_PROGRESS;
@@ -67,8 +69,9 @@ class MyGameSequence {
 
         gameMove.orchestrator.gameboard = gameMove.storeBoard;
         
-        window.setTimeout(
+        this.timeoutUndo=window.setTimeout(
             function(){
+                console.log('Disparei');
                 gameMove.orchestrator.undoPending=false;
             }
         ,5000);
