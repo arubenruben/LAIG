@@ -26,6 +26,7 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'gameType', this.scene.gameTypes).name('Game Type');
         this.gui.add(this.scene, 'undo').name('Undo');
         this.gui.add(this.scene, 'gameMovie').name('Game Movie');
+        this.gui.add(this.scene, 'reset').name('Reset');
         //this.gui.add(this.scene, 'gameType', this.scene.gameTypes)
         this.m_pressed = 0;
         this.initKeys();
