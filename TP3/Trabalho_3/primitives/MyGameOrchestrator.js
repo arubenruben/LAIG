@@ -9,7 +9,7 @@
  */
 
 //30 Mil segundos
-const timeForPlay = 10 * 1000;
+const timeForPlay = 30 * 1000;
 
 class MyGameOrchestrator extends CGFobject {
     constructor(scene) {
@@ -160,6 +160,8 @@ class MyGameOrchestrator extends CGFobject {
     }
 
     orchestrate() {
+
+        console.log(this.gameStateControl.currentPlayer);
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:

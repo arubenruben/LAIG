@@ -5,7 +5,7 @@ class MyGameStateControler {
     constructor(orchestrator) {
 
         this.score_player_1 = [0, 0, 0];
-        this.score_player_2 = [5, 5, 4];
+        this.score_player_2 = [0, 0, 0];
         this.currentPlayer = 1;
         this.orchestrator = orchestrator;
         this.pickPending = false;
@@ -176,7 +176,7 @@ class MyGameStateControler {
         let difficulty;
         let score;
 
-        if (this.playPending == false && this.playDone == true) {
+        if (this.playPending == false && this.playDone == true&&this.orchestrator.gameSequence.undoPending==false&&this.orchestrator.scene.cameraAnimation==false) {
 
             if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
                 request = true;

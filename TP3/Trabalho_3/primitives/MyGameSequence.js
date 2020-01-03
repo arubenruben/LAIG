@@ -11,6 +11,7 @@ class MyGameSequence extends CGFobject {
         super(orchestrator.scene);
         this.orchestrator = orchestrator
         this.scene = orchestrator.scene;
+        this.undoPending = false;
         this.arrayGameSequence = new Array();
     }
 
@@ -18,22 +19,32 @@ class MyGameSequence extends CGFobject {
         this.arrayGameSequence.push(gameMove);
     }
     undo() {
-        if(this.orchestrator.gameStateControl.currentState>this.orchestrator.states.SET_THE_AI_2_DIF&&this.orchestrator.gameStateControl.currentState<this.orchestrator.states.PICK_ACTIVE){
-
-            this.orchestrator.gameStateControl.playDone = false;
-            let gameMove;
+        if (this.undoPending == false&&this.orchestrator.scene.cameraAnimation==false) {
             
-            if (this.arrayGameSequence.length > 0) {
-                gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
-                this.arrayGameSequence.pop();
-                this.orchestrator.gameStateControl.refreshPlayer();
-                this.installGameSequence(gameMove);
-                this.orchestrator.gameStateControl.playDone = true;
-                this.orchestrator.gameStateControl.nextState();
+            this.undoPending = true;
+
+            if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.PICK_ACTIVE || this.orchestrator.gameStateControl.currentState == this.orchestrator.states.ROTATING_CAMERA) {
+                if (this.arrayGameSequence.length > 0) {
+                    window.clearTimeout(this.orchestrator.cameraSeqId);
+                    this.orchestrator.gameStateControl.playDone = false;
+                    let gameMove;
+                    gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
+                    this.arrayGameSequence.pop();
+
+                    if (gameMove.currentPlayer != this.orchestrator.gameStateControl.currentPlayer) {
+                        this.orchestrator.scene.cameraAnimation = true;
+                    }
+                    this.orchestrator.gameStateControl.currentPlayer = gameMove.currentPlayer;
+                    this.orchestrator.gameStateControl.stateTime = Date.now();
+
+                    this.installGameSequence(gameMove);
+
+                }
+            } else {
+                console.log(this.orchestrator.gameStateControl.currentState);
+                console.error('Cannot use undo in this state');
             }
-        }else{
-            console.log(this.orchestrator.gameStateControl.currentState);
-            console.error('Cannot use undo in this state');
+            this.undoPending = false;
         }
     }
 
@@ -43,8 +54,8 @@ class MyGameSequence extends CGFobject {
             this.orchestrator.gameStateControl.resumeState = this.orchestrator.gameStateControl.currentState;
             let initialGameBoard = this.arrayGameSequence[0].storeBoard;
             this.orchestrator.gameboard = initialGameBoard;
-            if(this.orchestrator.gameStateControl.currentPlayer==2){
-                this.orchestrator.scene.cameraAnimation=true;
+            if (this.orchestrator.gameStateControl.currentPlayer == 2) {
+                this.orchestrator.scene.cameraAnimation = true;
             }
             this.orchestrator.gameStateControl.currentPlayer = 1;
             this.orchestrator.gameStateControl.score_player_1 = [0, 0, 0];
@@ -54,12 +65,12 @@ class MyGameSequence extends CGFobject {
             //Executa isto a cada 2seg
             let arrayVar = this.arrayGameSequence;
             let functionVar = this.gameMovieInstallerSequence;
-            let varOrchestrator=this.orchestrator;
+            let varOrchestrator = this.orchestrator;
             let id2 = window.setInterval(function () {
                 if (arrayVar.length == 0) {
                     window.clearInterval(id2);
                 } else {
-                    varOrchestrator.scene.cameraAnimation=true;
+                    varOrchestrator.scene.cameraAnimation = true;
                 }
             }, 3500);
 
@@ -83,16 +94,13 @@ class MyGameSequence extends CGFobject {
     }
     installGameSequence(gameMove) {
 
-        this.orchestrator.scene.cameraAnimation=true;
         gameMove.orchestrator.gameboardSet = false;
         let scoreArray;
         let pieceToInsertNumeric;
         let pieceRemoved = gameMove.removedPiece;
-        
-        window.clearTimeout(this.orchestrator.cameraSeqId);
 
         if (pieceRemoved != null) {
-            
+
             if (gameMove.orchestrator.gameStateControl.currentPlayer == 1) {
                 scoreArray = gameMove.orchestrator.gameStateControl.score_player_1;
             }
@@ -108,27 +116,43 @@ class MyGameSequence extends CGFobject {
             else if (pieceRemoved.color == 'yellow') {
                 pieceToInsertNumeric = 2;
             }
-
-            
             scoreArray[pieceToInsertNumeric]--;
         }
         gameMove.orchestrator.gameboard = gameMove.storeBoard;
-        gameMove.orchestrator.gameboardSet = true;
-        
+
         if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 2 ||
-            this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 1
+            this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 1 || this.orchestrator.scene.gameType == 'AI vs AI'
         ) {
-            this.orchestrator.gameStateControl.playDone = false;
-            this.orchestrator.scene.setPickEnabled(true);
-        } else {
             this.orchestrator.gameStateControl.playDone = true;
             this.orchestrator.scene.setPickEnabled(false);
+        } else {
+            this.orchestrator.gameStateControl.playDone = false;
+            this.orchestrator.scene.setPickEnabled(true);
         }
-        this.orchestrator.gameStateControl.currentState=this.orchestrator.states.ROTATING_CAMERA;
-        let orchestratorVar=this.orchestrator;
-        window.setTimeout(function () {
-            orchestratorVar.scene.cameraAnimation = true;
-        }, 2000);
+
+        if (this.orchestrator.gameStateControl.currentPlayer == 1) {
+            if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+            } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+            } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+            } else if (this.orchestrator.scene.gameType == '1vs1') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+            }
+        } else if (this.orchestrator.gameStateControl.currentPlayer == 2) {
+            if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
+            } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
+            } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
+            } else if (this.orchestrator.scene.gameType == '1vs1') {
+                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
+            }
+        }
+        console.log(this.orchestrator.gameStateControl.currentState);
+        gameMove.orchestrator.gameboardSet = true;
     }
 
     gameMovieInstallerSequence(gameMove) {
