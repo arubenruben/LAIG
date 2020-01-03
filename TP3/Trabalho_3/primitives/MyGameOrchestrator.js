@@ -55,7 +55,7 @@ class MyGameOrchestrator extends CGFobject {
         this.animator = new MyAnimator(…);
         */
         this.requestAtive = true;
-        this.undoPending=false;
+        this.undoPending = false;
         this.prolog.getPrologRequest(
             'start',
             function (data) {
@@ -138,9 +138,9 @@ class MyGameOrchestrator extends CGFobject {
         }
 
         this.gameboardSet = true;
-
+        
         if (this.scene.gameType == 'Player vs AI' && this.gameStateControl.currentPlayer == 2 ||
-            this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 1
+        this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 1
         ) {
             this.gameStateControl.playDone = false;
             this.scene.setPickEnabled(true);
@@ -148,19 +148,20 @@ class MyGameOrchestrator extends CGFobject {
             this.gameStateControl.playDone = true;
             this.scene.setPickEnabled(false);
         }
+        
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {
-
+    
             let orchestratorVar = this.orchestrator;
             this.cameraSeqId = window.setTimeout(function () {
                 orchestratorVar.scene.cameraAnimation = true;
             }, 2000);
         }
-
+        
         this.gameStateControl.playPending = false;
     }
-
+    
     orchestrate() {
-
+        
         console.log(this.gameStateControl.currentPlayer);
         switch (this.gameStateControl.currentState) {
 
@@ -251,7 +252,7 @@ class MyGameOrchestrator extends CGFobject {
                 break;
 
             case this.states.UNDO_PROGRESS:
-                if(this.undoPending==false&&this.orchestrator.scene.cameraAnimation==false){
+                if (this.undoPending == false && this.orchestrator.scene.cameraAnimation == false) {
                     this.gameStateControl.nextState();
                 }
                 break;

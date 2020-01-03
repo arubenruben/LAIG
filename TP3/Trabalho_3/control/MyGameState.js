@@ -157,12 +157,15 @@ class MyGameStateControler {
                         this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
                     }
                 }
-                
+
                 if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 2 ||
                     this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 1 || this.orchestrator.scene.gameType == 'AI vs AI'
                 ) {
-                    this.orchestrator.gameStateControl.playDone = true;
-                    this.orchestrator.scene.setPickEnabled(false);
+                    let orchestratorVar=this.orchestrator;
+                    window.setTimeout(function(){
+                        orchestratorVar.gameStateControl.playDone = true;
+                        orchestratorVar.scene.setPickEnabled(false);
+                    },3000)
                 } else {
                     this.orchestrator.gameStateControl.playDone = false;
                     this.orchestrator.scene.setPickEnabled(true);
