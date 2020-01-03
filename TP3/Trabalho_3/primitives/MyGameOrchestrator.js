@@ -31,10 +31,11 @@ class MyGameOrchestrator extends CGFobject {
             PICK_REPLY: 9,
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
             ROTATING_CAMERA: 10,
-            GAME_OVER: 11,
+            UNDO_PROGRESS: 11,
+            GAME_OVER: 12,
             MOVIE_REPLY: 13,
             WIN_PLAYER1: 14,
-            WIN_PLAYER2: 15,
+            WIN_PLAYER2: 15
 
         };
         this.gameStateControl = new MyGameStateControler(this);
@@ -48,11 +49,13 @@ class MyGameOrchestrator extends CGFobject {
 
         let handlerVAR = this.handler;
         this.currentTime = Date.now()
-        this.cameraSeqId=null;
+        this.cameraSeqId = null;
         /*
         this.theme = new MyScenegraph(…);
         this.animator = new MyAnimator(…);
         */
+        this.requestAtive = true;
+        this.undoPending=false;
         this.prolog.getPrologRequest(
             'start',
             function (data) {
@@ -75,7 +78,6 @@ class MyGameOrchestrator extends CGFobject {
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
         let pieceRemoved = null;
-        let numberChanges = 0;
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
@@ -84,22 +86,18 @@ class MyGameOrchestrator extends CGFobject {
                         pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
-                        numberChanges++;
+                        console.log(newGameMove);
+                        console.log(newGameMove.currentPlayer);
                         this.gameboard.matrixBoard[i][j].piece = null;
                     }
                 }
             }
         }
-
-        if(numberChanges==0){
-            let newGameMove = new MyGameMove(this.orchestrator, obj, null);
-            this.orchestrator.gameSequence.addGameMove(newGameMove);
-        }
         this.gameStateControl.updateScores(pieceRemoved);
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {
 
             let orchestratorVar = this.orchestrator;
-            this.cameraSeqId=window.setTimeout(function () {
+            this.cameraSeqId = window.setTimeout(function () {
                 orchestratorVar.scene.cameraAnimation = true;
             }, 2000);
         }
@@ -128,10 +126,12 @@ class MyGameOrchestrator extends CGFobject {
         }
         this.gameboardSet = false;
 
-
         if (invalidPlay == false) {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
+            console.log('New game move');
+            console.log(newGameMove);
+            console.log(newGameMove.currentPlayer);
             this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
             this.gameStateControl.checkVitory();
@@ -151,7 +151,7 @@ class MyGameOrchestrator extends CGFobject {
         if (this.gameStateControl.currentState < this.states.GAME_OVER) {
 
             let orchestratorVar = this.orchestrator;
-            this.cameraSeqId=window.setTimeout(function () {
+            this.cameraSeqId = window.setTimeout(function () {
                 orchestratorVar.scene.cameraAnimation = true;
             }, 2000);
         }
@@ -161,6 +161,7 @@ class MyGameOrchestrator extends CGFobject {
 
     orchestrate() {
 
+        console.log(this.gameStateControl.currentPlayer);
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
@@ -229,7 +230,7 @@ class MyGameOrchestrator extends CGFobject {
                 let gameboardToPrologRaw = this.gameboard.matrixBoard;
                 let stringRequest = this.prolog.moveRequest(gameboardToPrologRaw, x, y);
                 let handlerVAR = this.handler;
-
+                this.requestAtive = true;
                 this.prolog.getPrologRequest(
                     stringRequest,
                     function (data) {
@@ -249,6 +250,11 @@ class MyGameOrchestrator extends CGFobject {
                 }
                 break;
 
+            case this.states.UNDO_PROGRESS:
+                if(this.undoPending==false&&this.orchestrator.scene.cameraAnimation==false){
+                    this.gameStateControl.nextState();
+                }
+                break;
 
             case this.states.ROTATING_CAMERA:
                 if (this.scene.cameraAnimationDone) {

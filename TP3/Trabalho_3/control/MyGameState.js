@@ -27,7 +27,7 @@ class MyGameStateControler {
                 if (this.orchestrator.scene.gameType == '1vs1') {
                     //TODO:Improve this solution
                     this.playDone = false;
-                    this.stateTime=Date.now();
+                    this.stateTime = Date.now();
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     //Picking avaiable
                     this.orchestrator.scene.setPickEnabled(true);
@@ -67,14 +67,14 @@ class MyGameStateControler {
                     //TODO:Improve this solution
                     this.playDone = false;
                     this.orchestrator.scene.setPickEnabled(true);
-                    this.stateTime=Date.now();
+                    this.stateTime = Date.now();
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                 } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                 }
 
                 break;
-                
+
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
                 this.orchestrator.scene.setPickEnabled(false);
@@ -133,6 +133,43 @@ class MyGameStateControler {
                 this.orchestrator.scene.setPickEnabled(true);
                 this.refreshPlayer();
                 break;
+
+            case this.orchestrator.states.UNDO_PROGRESS:
+
+                if (this.currentPlayer == 1) {
+                    if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                        this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+                    } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+                    } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
+                        this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+                    } else if (this.orchestrator.scene.gameType == '1vs1') {
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+                    }
+                } else if (this.currentPlayer == 2) {
+                    if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
+                    } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                        this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
+                    } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
+                        this.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
+                    } else if (this.orchestrator.scene.gameType == '1vs1') {
+                        this.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
+                    }
+                }
+                
+                if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 2 ||
+                    this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 1 || this.orchestrator.scene.gameType == 'AI vs AI'
+                ) {
+                    this.orchestrator.gameStateControl.playDone = true;
+                    this.orchestrator.scene.setPickEnabled(false);
+                } else {
+                    this.orchestrator.gameStateControl.playDone = false;
+                    this.orchestrator.scene.setPickEnabled(true);
+                }
+                this.stateTime = Date.now();
+
+                break;
             case this.orchestrator.states.WIN_PLAYER1:
                 //TODO:MENU VITORIA
                 break;
@@ -176,7 +213,11 @@ class MyGameStateControler {
         let difficulty;
         let score;
 
-        if (this.playPending == false && this.playDone == true&&this.orchestrator.gameSequence.undoPending==false&&this.orchestrator.scene.cameraAnimation==false) {
+        if (this.orchestrator.currentState == this.orchestrator.states.UNDO_PROGRESS) {
+            return false;
+        }
+
+        if (this.playPending == false && this.playDone == true && this.orchestrator.scene.cameraAnimation == false) {
 
             if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
                 request = true;
@@ -203,7 +244,7 @@ class MyGameStateControler {
                 let board = this.orchestrator.gameboard.matrixBoard;
                 let stringRequest = this.orchestrator.prolog.botRequest(board, difficulty, score);
                 let handlerVAR = this.orchestrator.handler;
-
+                this.requestAtive = true;
                 this.orchestrator.prolog.getPrologRequest(
                     stringRequest,
                     function (data) {
@@ -222,14 +263,21 @@ class MyGameStateControler {
 
     handlePlayerWait(gameType) {
 
-        if(gameType=='1vs1'){
+        if (this.pickPending == true || this.playDone == false || this.orchestrator.scene.cameraAnimation == true || this.pickPending == true) {
+            return false;
+        }
+
+        if (this.orchestrator.currentState == this.orchestrator.states.UNDO_PROGRESS) {
+            return false;
+        }
+        if (gameType == '1vs1') {
 
             if (this.playDone == true && this.pickPending == false) {
                 this.playDone = false;
                 return true;
             }
             return false;
-        }else{
+        } else {
             if (this.playDone == true && this.pickPending == false) {
                 return true;
             }

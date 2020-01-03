@@ -29,6 +29,7 @@ class handlerPrologReplys {
             }
         }
         this.orchestrator.buildInitialBoard();
+        this.orchestrator.requestAtive=false;
     }
 
     handleMove(data, obj, id) {
@@ -58,11 +59,10 @@ class handlerPrologReplys {
                     }
                 }
             }
-
             this.orchestrator.updateBoard(auxArray, obj, id);
         } else {
             if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
-                this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2
+            this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2
             ) {
                 this.orchestrator.scene.setPickEnabled(false);
             } else {
@@ -76,6 +76,7 @@ class handlerPrologReplys {
             this.orchestrator.gameStateControl.playDone = true;
         }
         this.orchestrator.gameStateControl.pickPending = false;
+        this.orchestrator.requestAtive=false;
     }
 
     handleBotMove(data) {
@@ -92,6 +93,7 @@ class handlerPrologReplys {
 
             this.orchestrator.updateBoardBotMove(x, y);
         }
+        this.orchestrator.requestAtive=false;
 
     }
 

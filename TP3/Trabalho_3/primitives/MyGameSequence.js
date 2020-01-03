@@ -10,7 +10,6 @@ class MyGameSequence {
     constructor(orchestrator) {
         this.orchestrator = orchestrator
         this.scene = orchestrator.scene;
-        this.undoPending = false;
         this.arrayGameSequence = new Array();
     }
 
@@ -18,35 +17,71 @@ class MyGameSequence {
         this.arrayGameSequence.push(gameMove);
     }
     undo() {
-        if (this.undoPending == false&&this.orchestrator.scene.cameraAnimation==false) {
+
+        if(this.orchestrator.gameStateControl.currentState==this.orchestrator.states.UNDO_PROGRESS||
+            this.orchestrator.gameStateControl.currentState==this.orchestrator.states.ROTATE_CAMERA||
+            this.orchestrator.scene.cameraAnimation==true
+            ){
+                return false;
+            }
             
-            this.undoPending = true;
+            if(this.arrayGameSequence.length>0){
 
-            if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.PICK_ACTIVE || this.orchestrator.gameStateControl.currentState == this.orchestrator.states.ROTATING_CAMERA) {
-                if (this.arrayGameSequence.length > 0) {
-                    window.clearTimeout(this.orchestrator.cameraSeqId);
-                    this.orchestrator.gameStateControl.playDone = false;
-                    let gameMove;
-                    gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
-                    this.arrayGameSequence.pop();
+                window.clearTimeout(this.orchestrator.cameraSeqId);
+                this.orchestrator.undoPending=true;
+                this.orchestrator.scene.setPickEnabled(false);
+                this.orchestrator.gameStateControl.currentState=this.orchestrator.states.UNDO_PROGRESS;
+                let gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
+                
+                let animationUsed=false;
+                
+                if(this.orchestrator.gameStateControl.currentPlayer!=gameMove.currentPlayer){
+                    animationUsed=true;
+                    this.orchestrator.scene.cameraAnimation=true;
+                }
 
-                    if (gameMove.currentPlayer != this.orchestrator.gameStateControl.currentPlayer) {
-                        this.orchestrator.scene.cameraAnimation = true;
-                    }
-                    this.orchestrator.gameStateControl.currentPlayer = gameMove.currentPlayer;
-                    this.orchestrator.gameStateControl.stateTime = Date.now();
+                this.orchestrator.gameStateControl.currentPlayer=gameMove.currentPlayer;
+                this.arrayGameSequence.pop();
+                
+                let functionVar=this.installGameSequence;
 
-                    this.installGameSequence(gameMove);
+                if(animationUsed==true){
+                    window.setTimeout(
+                    functionVar(gameMove)
+                    ),2000
+                }
+                else{
+                    functionVar(gameMove)
 
                 }
-            } else {
-                console.log(this.orchestrator.gameStateControl.currentState);
-                console.error('Cannot use undo in this state');
             }
-            this.undoPending = false;
-        }
     }
+    installGameSequence(gameMove){
+        
+        let scoreArray;
+        let pieceToInsertNumeric;
+        let pieceRemoved = gameMove.removedPiece;
 
+        if (gameMove.orchestrator.gameStateControl.currentPlayer == 1) {
+            scoreArray = gameMove.orchestrator.gameStateControl.score_player_1;
+        }
+        else {
+            scoreArray = gameMove.orchestrator.gameStateControl.score_player_2;
+        }
+        if (pieceRemoved.color == 'red') {
+            pieceToInsertNumeric = 0;
+        }
+        else if (pieceRemoved.color == 'blue') {
+            pieceToInsertNumeric = 1;
+        }
+        else if (pieceRemoved.color == 'yellow') {
+            pieceToInsertNumeric = 2;
+        }
+        scoreArray[pieceToInsertNumeric]--;
+        
+        gameMove.orchestrator.gameboard = gameMove.storeBoard;
+        gameMove.orchestrator.undoPending=false;
+    }
     gameMovie() {
         if (this.orchestrator.gameStateControl.currentState == this.orchestrator.states.GAME_OVER || this.orchestrator.gameStateControl.currentState == this.orchestrator.states.WIN_PLAYER1 || this.orchestrator.gameStateControl.currentState == this.orchestrator.states.WIN_PLAYER2) {
             //To use a simple POP, order inverted, restablished at the end
@@ -91,68 +126,6 @@ class MyGameSequence {
         }
         //Restablish order
     }
-    installGameSequence(gameMove) {
-
-        gameMove.orchestrator.gameboardSet = false;
-        let scoreArray;
-        let pieceToInsertNumeric;
-        let pieceRemoved = gameMove.removedPiece;
-
-        if (pieceRemoved != null) {
-
-            if (gameMove.orchestrator.gameStateControl.currentPlayer == 1) {
-                scoreArray = gameMove.orchestrator.gameStateControl.score_player_1;
-            }
-            else {
-                scoreArray = gameMove.orchestrator.gameStateControl.score_player_2;
-            }
-            if (pieceRemoved.color == 'red') {
-                pieceToInsertNumeric = 0;
-            }
-            else if (pieceRemoved.color == 'blue') {
-                pieceToInsertNumeric = 1;
-            }
-            else if (pieceRemoved.color == 'yellow') {
-                pieceToInsertNumeric = 2;
-            }
-            scoreArray[pieceToInsertNumeric]--;
-        }
-        gameMove.orchestrator.gameboard = gameMove.storeBoard;
-
-        if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 2 ||
-            this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 1 || this.orchestrator.scene.gameType == 'AI vs AI'
-        ) {
-            this.orchestrator.gameStateControl.playDone = true;
-            this.orchestrator.scene.setPickEnabled(false);
-        } else {
-            this.orchestrator.gameStateControl.playDone = false;
-            this.orchestrator.scene.setPickEnabled(true);
-        }
-
-        if (this.orchestrator.gameStateControl.currentPlayer == 1) {
-            if (this.orchestrator.scene.gameType == 'AI vs Player') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
-            } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
-            } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
-            } else if (this.orchestrator.scene.gameType == '1vs1') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
-            }
-        } else if (this.orchestrator.gameStateControl.currentPlayer == 2) {
-            if (this.orchestrator.scene.gameType == 'AI vs Player') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
-            } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
-            } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_BOT_2_MOVE;
-            } else if (this.orchestrator.scene.gameType == '1vs1') {
-                this.orchestrator.gameStateControl.currentState = this.orchestrator.states.WAIT_PLAYER_2_MOVE;
-            }
-        }
-        console.log(this.orchestrator.gameStateControl.currentState);
-        gameMove.orchestrator.gameboardSet = true;
-    }
 
     gameMovieInstallerSequence(gameMove) {
 
@@ -185,23 +158,22 @@ class MyGameSequence {
         gameMove.orchestrator.gameboardSet = true;
     }
 
-    reset(){
-        this.orchestrator.gameStateControl.currentState=this.orchestrator.states.INITIALIZING;
-        console.log('Aqui');
-        this.orchestrator.scene.interface=new MyInterface();
+    reset() {
+        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.INITIALIZING;
+        this.orchestrator.scene.interface = new MyInterface();
         this.orchestrator.scene.interface.reset(this.orchestrator.scene);
-        this.orchestrator.scene.gameType=null;
-        this.orchestrator.scene.ai1Dificulty=null;
-        this.orchestrator.scene.ai2Dificulty=null;
-        if(this.orchestrator.gameStateControl.currentPlayer==2){
-            this.scene.cameraAnimation=true;    
+        this.orchestrator.scene.gameType = null;
+        this.orchestrator.scene.ai1Dificulty = null;
+        this.orchestrator.scene.ai2Dificulty = null;
+        if (this.orchestrator.gameStateControl.currentPlayer == 2) {
+            this.scene.cameraAnimation = true;
         }
-        this.orchestrator.gameStateControl.currentPlayer=1;
-        this.orchestrator.currentTime=Date.now();
-        this.orchestrator.gameStateControl=new MyGameStateControler(this.orchestrator);
+        this.orchestrator.gameStateControl.currentPlayer = 1;
+        this.orchestrator.currentTime = Date.now();
+        this.orchestrator.gameStateControl = new MyGameStateControler(this.orchestrator);
 
-        for(let i=0;i<this.orchestrator.gameboard.matrixBoard.length;i++){
-            for(let j=0;j<this.orchestrator.gameboard.matrixBoard[i].length;j++){
+        for (let i = 0; i < this.orchestrator.gameboard.matrixBoard.length; i++) {
+            for (let j = 0; j < this.orchestrator.gameboard.matrixBoard[i].length; j++) {
                 let initialPiece = this.orchestrator.initialBoardRaw[i][j];
                 if (initialPiece > 0 && initialPiece < 4) {
                     this.orchestrator.gameboard.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.orchestrator.gameboard.matrixBoard[i][j], j, i);
