@@ -119,4 +119,26 @@ class MyGameSequence extends CGFobject {
         gameMove.orchestractor.gameboard = gameMove.storeBoard;
         gameMove.orchestractor.gameboardSet = true;
     }
+
+    reset(){
+        this.orchestractor.gameStateControl.currentState=this.orchestractor.states.INITIALIZING;
+        this.orchestractor.scene.gameType=null;
+        this.orchestractor.scene.ai1Dificulty=null;
+        this.orchestractor.scene.ai2Dificulty=null;
+        if(this.orchestractor.gameStateControl.currentPlayer==2){
+            this.scene.cameraAnimation=true;    
+        }
+        this.orchestractor.gameStateControl.currentPlayer=1;
+        this.orchestractor.currentTime=Date.now();
+        this.orchestractor.gameStateControl=new MyGameStateControler(this.orchestractor);
+
+        for(let i=0;i<this.orchestractor.gameboard.matrixBoard.length;i++){
+            for(let j=0;j<this.orchestractor.gameboard.matrixBoard[i].length;j++){
+                let initialPiece = this.orchestractor.initialBoardRaw[i][j];
+                if (initialPiece > 0 && initialPiece < 4) {
+                    this.orchestractor.gameboard.matrixBoard[i][j].piece = new MyPiece(this.orchestractor, initialPiece, this.orchestractor.gameboard.matrixBoard[i][j], j, i);
+                }
+            }
+        }
+    }
 }
