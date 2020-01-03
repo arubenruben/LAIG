@@ -38,7 +38,6 @@ valid_moves_with_elements_returned(Board, ListOfMoves):-
 choose_move(Board, Cord_X, Cord_Y, Dificulty,_Score):-
 
   Dificulty==0,
-  sleep(3),
   possible_moves(Board, ListOfMoves),
   listlenght(ListOfMoves,ListSize),
   random(0,ListSize,Rand_Result),
@@ -50,7 +49,6 @@ choose_move(Board, Cord_X, Cord_Y, Dificulty,_Score):-
 % Invocar random de acordo com tamanho de ListOfMoves
 choose_move(Board, Cord_X, Cord_Y, Dificulty,_Score):-
   Dificulty==1,
-  sleep(3),
   valid_moves(Board, ListOfMoves),
   listlenght(ListOfMoves,ListSize),
   random(0,ListSize,Rand_Result),

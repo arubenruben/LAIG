@@ -18,48 +18,32 @@ class MyGameSequence {
     }
     undo() {
 
-        if(this.orchestrator.gameStateControl.currentState==this.orchestrator.states.UNDO_PROGRESS||
-            this.orchestrator.gameStateControl.currentState==this.orchestrator.states.ROTATE_CAMERA||
-            this.orchestrator.scene.cameraAnimation==true||this.orchestrator.gameStateControl.playPending==true
-            ){
-                return false;
+        if (
+            this.orchestrator.gameStateControl.currentState == this.orchestrator.states.ROTATE_CAMERA ||
+            this.orchestrator.scene.cameraAnimation == true || this.orchestrator.requestAtive == true
+        ) {
+            return false;
+        }
+
+        if (this.arrayGameSequence.length > 0) {
+            this.orchestrator.gameStateControl.currentState = this.orchestrator.states.UNDO_PROGRESS;
+
+            window.clearTimeout(this.orchestrator.cameraSeqId);
+            this.orchestrator.undoPending = true;
+            this.orchestrator.scene.setPickEnabled(false);
+            let gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
+
+            if (this.orchestrator.gameStateControl.currentPlayer != gameMove.currentPlayer) {
+                this.orchestrator.scene.cameraAnimation = true;
             }
-            
-            if(this.arrayGameSequence.length>0){
-                this.orchestrator.gameStateControl.currentState=this.orchestrator.states.UNDO_PROGRESS;
-                
-                window.clearTimeout(this.orchestrator.cameraSeqId);
-                this.orchestrator.undoPending=true;
-                this.orchestrator.scene.setPickEnabled(false);
-                let gameMove = this.arrayGameSequence[this.arrayGameSequence.length - 1];
-                
-                let animationUsed=false;
-                
-                if(this.orchestrator.gameStateControl.currentPlayer!=gameMove.currentPlayer){
-                    animationUsed=true;
-                    this.orchestrator.scene.cameraAnimation=true;
-                }
 
-                this.orchestrator.gameStateControl.currentPlayer=gameMove.currentPlayer;
-                this.arrayGameSequence.pop();
-                
-                let functionVar=this.installGameSequence;
+            this.orchestrator.gameStateControl.currentPlayer = gameMove.currentPlayer;
+            this.arrayGameSequence.pop();
 
-                if(animationUsed==true){
-                    window.setTimeout(
-                    functionVar(gameMove)
-                    ),3000
-                }
-                else{
-                    window.setTimeout(
-                        functionVar(gameMove)
-                        ),2000
-
-                }
-            }
+            this.installGameSequence(gameMove);
+        }
     }
-    installGameSequence(gameMove){
-        
+    installGameSequence(gameMove) {
         let scoreArray;
         let pieceToInsertNumeric;
         let pieceRemoved = gameMove.removedPiece;
@@ -80,9 +64,14 @@ class MyGameSequence {
             pieceToInsertNumeric = 2;
         }
         scoreArray[pieceToInsertNumeric]--;
-        
+
         gameMove.orchestrator.gameboard = gameMove.storeBoard;
-        gameMove.orchestrator.undoPending=false;
+        
+        window.setTimeout(
+            function(){
+                gameMove.orchestrator.undoPending=false;
+            }
+        ,5000);
     }
     gameMovie() {
         if (this.orchestrator.gameStateControl.currentState == this.orchestrator.states.GAME_OVER || this.orchestrator.gameStateControl.currentState == this.orchestrator.states.WIN_PLAYER1 || this.orchestrator.gameStateControl.currentState == this.orchestrator.states.WIN_PLAYER2) {

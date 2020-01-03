@@ -220,8 +220,8 @@ class MyGameStateControler {
             return false;
         }
 
-        if (this.playPending == false && this.playDone == true && this.orchestrator.scene.cameraAnimation == false) {
-
+        if (this.orchestrator.undoPending==false&&this.playPending == false && this.playDone == true && this.orchestrator.scene.cameraAnimation == false) {
+            
             if (gameType == 'Player vs AI' && this.currentPlayer == 2) {
                 request = true;
                 difficulty = this.orchestrator.scene.ai2Dificulty;
@@ -243,11 +243,12 @@ class MyGameStateControler {
             if (request == true) {
                 this.playDone = false;
                 this.playPending = true;
+                console.log('PlayPending no bot');
                 this.orchestrator.scene.setPickEnabled(false);
                 let board = this.orchestrator.gameboard.matrixBoard;
                 let stringRequest = this.orchestrator.prolog.botRequest(board, difficulty, score);
                 let handlerVAR = this.orchestrator.handler;
-                this.requestAtive = true;
+                this.orchestrator.requestAtive=true;
                 this.orchestrator.prolog.getPrologRequest(
                     stringRequest,
                     function (data) {

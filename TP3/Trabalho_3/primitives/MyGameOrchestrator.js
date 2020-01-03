@@ -130,7 +130,6 @@ class MyGameOrchestrator extends CGFobject {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
             console.log('New game move');
-            console.log(newGameMove);
             console.log(newGameMove.currentPlayer);
             this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
             this.gameboard.matrixBoard[coordY][coordX].piece = null;
@@ -252,6 +251,7 @@ class MyGameOrchestrator extends CGFobject {
 
             case this.states.UNDO_PROGRESS:
                 if (this.undoPending == false && this.orchestrator.scene.cameraAnimation == false) {
+                    console.log('Fiz next');
                     this.gameStateControl.nextState();
                 }
                 break;
