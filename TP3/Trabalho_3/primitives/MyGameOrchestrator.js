@@ -11,9 +11,8 @@
 //30 Mil segundos
 const timeForPlay = 75 * 1000;
 
-class MyGameOrchestrator extends CGFobject {
+class MyGameOrchestrator {
     constructor(scene) {
-        super(scene);
         this.scene = scene;
         this.orchestrator = this;
 
@@ -35,7 +34,6 @@ class MyGameOrchestrator extends CGFobject {
             ROTATING_CAMERA: 12,
             WIN_PLAYER1: 13,
             WIN_PLAYER2: 14,
-
         };
         this.gameStateControl = new MyGameStateControler(this);
         this.initialBoardRaw = new Array();
@@ -45,22 +43,6 @@ class MyGameOrchestrator extends CGFobject {
         this.imagesAssets = new MyImageStorage(this);
         this.timeBoard = new MyTimeBoard(this);
 
-
-        let handlerVAR = this.handler;
-        this.currentTime = Date.now();
-        this.mutex = true;
-        /*
-        this.theme = new MyScenegraph(…);
-        this.animator = new MyAnimator(…);
-        */
-        this.prolog.getPrologRequest(
-            'start',
-            function(data) {
-                handlerVAR.handleInitialBoard(data.target.response);
-            },
-            function(data) {
-                handlerVAR.handlerError(data.target.response);
-            });
         this.gameSequence = new MyGameSequence(this);
         this.gameboard = null;
     }
@@ -282,17 +264,5 @@ class MyGameOrchestrator extends CGFobject {
     update(currentTime) {
         this.currentTime = currentTime;
         this.timeBoard.update(currentTime);
-    }
-
-    display() {
-        if (this.gameboardSet == true) {
-            /* this.theme.display();
-            this.animator.display();*/
-            this.timeBoard.display();
-            this.player1_stash.display();
-            this.player2_stash.display();
-            // this.piece3.display();
-        }
-
     }
 }

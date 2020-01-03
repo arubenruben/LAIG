@@ -7,21 +7,21 @@
 • Display the piece (render)
  */
 class MyPiece extends CGFobject {
-    constructor(orchestrator, color, tile,x,y) {
+    constructor(orchestrator, color, tile, x, y) {
         super(orchestrator.scene);
         this.scene = orchestrator.scene;
         this.color = color;
 
-        if(this.color==1){
-            this.color='red';
-        }else if(this.color==2){
-            this.color='blue';
-        }else if(this.color==3){
-            this.color='yellow';
+        if (this.color == 1) {
+            this.color = 'red';
+        } else if (this.color == 2) {
+            this.color = 'blue';
+        } else if (this.color == 3) {
+            this.color = 'yellow';
         }
 
-        this.cylinder = new MyCylinder(this.scene, 6, 6, 0.15, 0.3, 0.3);
-        this.sphere = new MySphere(this.scene, 0.3, 6, 6);
+        this.cylinder = new MyCylinder(this.scene, 20, 20, 0.15, 0.3, 0.3);
+        this.sphere = new MySphere(this.scene, 0.3, 20, 20);
         this.tile = tile;
 
         this.red = new CGFappearance(this.scene);
@@ -41,8 +41,8 @@ class MyPiece extends CGFobject {
         this.yellow.setAmbient(1, 1, 0, 1);
         this.yellow.setDiffuse(1, 1, 0, 1);
         this.yellow.setSpecular(1, 1, 0, 1);
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
     }
 
     display() {

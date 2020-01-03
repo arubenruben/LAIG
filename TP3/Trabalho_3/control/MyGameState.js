@@ -175,7 +175,7 @@ class MyGameStateControler {
         } else if (pieceRemoved.color == 'yellow') {
             indexPiece = 2;
         }
-        console.log(this.currentPlayer);
+
         if (this.currentPlayer == 1) {
             this.score_player_1[indexPiece]++;
         } else {

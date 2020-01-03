@@ -184,6 +184,18 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
+        let handlerVAR = this.orchestrator.handler;
+
+        this.orchestrator.prolog.getPrologRequest(
+            'start',
+            function(data) {
+                handlerVAR.handleInitialBoard(data.target.response);
+            },
+            function(data) {
+                handlerVAR.handlerError(data.target.response);
+            });
+
+
         this.initLights();
         this.initCameras();
         this.interface.gui_add_lights(this, this.graph.Lights);
@@ -246,6 +258,8 @@ class XMLscene extends CGFscene {
             this.lights[i].update();
         }
 
+
+
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
@@ -255,7 +269,7 @@ class XMLscene extends CGFscene {
             this.graph.displayScene();
         }
 
-        this.orchestrator.display();
+
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

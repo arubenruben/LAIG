@@ -134,6 +134,8 @@ class MyGameBoard extends CGFobject {
 
     display() {
 
+        this.scene.pushMatrix();
+
         this.madeira_sides.setTexture(this.madeira_cilindro_tex);
         this.madeira_sides.apply();
 
@@ -213,7 +215,6 @@ class MyGameBoard extends CGFobject {
         this.scene.rotate(-Math.PI / 2, 0, 0, 1)
         this.sideGeometry2.display()
         this.scene.popMatrix()
-        this.scene.pushMatrix()
 
         //Right
         this.scene.pushMatrix()
@@ -221,16 +222,11 @@ class MyGameBoard extends CGFobject {
         this.scene.rotate(Math.PI / 2, 0, 0, 1)
         this.sideGeometry2.display()
         this.scene.popMatrix()
-        this.scene.pushMatrix()
 
         // bottom
         this.scene.pushMatrix();
         this.bottom.display();
         this.scene.popMatrix();
-
-
-
-
 
         this.white.apply();
         this.scene.pushMatrix();
@@ -252,7 +248,21 @@ class MyGameBoard extends CGFobject {
             }
         }
 
-        this.scene.popMatrix()
+        this.scene.popMatrix();
+
+        if (this.orchestrator.gameboardSet) {
+            this.scene.pushMatrix();
+
+            this.orchestrator.timeBoard.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.orchestrator.player1_stash.display();
+            this.orchestrator.player2_stash.display();
+            this.scene.popMatrix();
+        }
+
+        this.scene.popMatrix();
     }
 
 }
