@@ -187,6 +187,9 @@ class MyGameSequence {
 
     reset(){
         this.orchestrator.gameStateControl.currentState=this.orchestrator.states.INITIALIZING;
+        console.log('Aqui');
+        this.orchestrator.scene.interface=new MyInterface();
+        this.orchestrator.scene.interface.reset(this.orchestrator.scene);
         this.orchestrator.scene.gameType=null;
         this.orchestrator.scene.ai1Dificulty=null;
         this.orchestrator.scene.ai2Dificulty=null;
