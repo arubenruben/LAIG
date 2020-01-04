@@ -52,7 +52,7 @@ class MyAuxiliarBoard extends CGFobject {
         this.redPiece = new MyPiece(this.orchestrator, 1, null, null, null);
         this.bluePiece = new MyPiece(this.orchestrator, 2, null, null, null)
         this.yellowPiece = new MyPiece(this.orchestrator, 3, null, null, null);
-        
+
         this.number0 = this.orchestrator.imagesAssets.number0;
         this.number1 = this.orchestrator.imagesAssets.number1;
         this.number2 = this.orchestrator.imagesAssets.number2;
@@ -66,75 +66,23 @@ class MyAuxiliarBoard extends CGFobject {
         this.numberTimes = this.orchestrator.imagesAssets.numberTimes;
         this.light_wood = this.orchestrator.imagesAssets.light_wood;
 
+        this.madeira_sides_tex = new CGFtexture(this.scene, './scenes/images/madeirasides.jpg');
+        this.madeira_cilindro_tex = new CGFtexture(this.scene, './scenes/images/madeiracilindro.jpg');
+
         this.numberRectangle = new MyRectangle(this.scene, null, -tiles_width / 2, -tiles_height / 2, tiles_width / 2, tiles_height / 2);
         this.numberRectangleTimes = new MyRectangle(this.scene, null, -tiles_width / 4, -tiles_height / 4, tiles_width / 4, tiles_height / 4);
 
         this.floor = new MyRectangle(this.scene, null, -this.tiles_width, 2 * 1.2 * this.tiles_height, 2 * this.tiles_width + this.tiles_width / 2, -this.tiles_height);
-        // vai ser preciso para fazer a parte gráfica do stash
-        // this.white = new CGFappearance(this.scene);
-        // this.white.setShininess(200);
-        // this.white.setAmbient(1, 1, 1, 1);
-        // this.white.setDiffuse(1, 1, 1, 1);
-        // this.white.setSpecular(1, 1, 1, 1);
+        this.boardLenghtX = x2 + this.tiles_width / 4 - (x1 - this.tiles_width / 4);
+        this.boardLenghtZ = z1 + this.tiles_height / 2 - z2;
 
-        // this.n_lines = 11;
-        // this.n_columns = 12;
+        this.sideCylinderRadius = this.boardLenghtX * 0.02;
+        this.sideCylinderLength = 3 * this.tiles_width + this.tiles_width / 2;
+        this.sideCylinder1Length = 2 * 1.2 * this.tiles_height + this.tiles_height;
 
-        // this.tiles_width = Math.abs((x2 - x1) / 8);
-        // this.tiles_height = Math.abs((z2 - z1) / 12);
-        // this.boardset = false;
-
-        // this.boardLenghtX = x2 + this.tiles_width / 4 - (x1 - this.tiles_width / 4);
-        // this.boardLenghtZ = z1 + this.tiles_height / 2 - z2;
-
-        // this.sideCylinderRadius = this.boardLenghtX * 0.02;
-
-        // this.cylinder_sides1 = new MyCylinder(this.scene, 10, 10, this.boardLenghtX, this.sideCylinderRadius, this.sideCylinderRadius);
-        // this.cylinder_sides2 = new MyCylinder(this.scene, 10, 10, this.boardLenghtZ, this.sideCylinderRadius, this.sideCylinderRadius);
-
-        // this.cylinder_corner = new MyTorus2(this.scene, this.sideCylinderRadius, this.sideCylinderRadius, 10, 10);
-        // let controlPoinsFromParser = [
-        //     [x1 - this.tiles_width / 4, 0, z1 + this.tiles_height / 2],
-        //     [x1 - this.tiles_width / 4, 0, z2],
-        //     [x2 + this.tiles_width / 4, 0, z1 + this.tiles_height / 2],
-        //     [x2 + this.tiles_width / 4, 0, z2],
-        // ]
-        // let controlPoinsFromParserSide = [
-        //     [x1 - this.tiles_width / 4, 0, this.height],
-        //     [x1 - this.tiles_width / 4, 0, 0],
-        //     [x2 + this.tiles_width / 4, 0, this.height],
-        //     [x2 + this.tiles_width / 4, 0, 0],
-        // ];
-
-
-        // let controlPoinsFromParserSide2 = [
-        //     [this.height, 0, z2],
-        //     [0, 0, z2],
-        //     [this.height, 0, z1 + this.tiles_height / 2],
-        //     [0, 0, z1 + this.tiles_height / 2],
-        // ];
-
-        // let controlPoinsFromParserBottom = [
-        //     [x1 - this.tiles_width / 4, -this.height, z2],
-        //     [x1 - this.tiles_width / 4, -this.height, z1 + this.tiles_height / 2],
-        //     [x2 + this.tiles_width / 4, -this.height, z2],
-        //     [x2 + this.tiles_width / 4, -this.height, z1 + this.tiles_height / 2],
-        // ];
-
-        // this.madeira_sides_tex = new CGFtexture(this.scene, './primitives/madeirasides.jpg');
-        // this.madeira_cilindro_tex = new CGFtexture(this.scene, './primitives/madeiracilindro.jpg');
-
-        // this.madeira_sides = new CGFappearance(this.scene);
-        // this.madeira_sides.setShininess(200);
-        // this.madeira_sides.setAmbient(1, 1, 1, 1);
-        // this.madeira_sides.setDiffuse(1, 1, 1, 1);
-        // this.madeira_sides.setSpecular(1, 1, 1, 1);
-
-        // this.mainGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParser);
-        // this.sideGeometry = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParserSide);
-        // this.sideGeometry2 = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParserSide2);
-        // this.bottom = new MyPatch(this.scene, 2, 2, 15, 15, controlPoinsFromParserBottom);
-
+        this.cylinder_sides1 = new MyCylinder(this.scene, 10, 10, this.sideCylinderLength, this.sideCylinderRadius, this.sideCylinderRadius);
+        this.cylinder_sides2 = new MyCylinder(this.scene, 10, 10, this.sideCylinder1Length, this.sideCylinderRadius, this.sideCylinderRadius);
+        this.cylinder_corner = new MyTorus2(this.scene, this.sideCylinderRadius, this.sideCylinderRadius, 10, 10);
 
     }
 
@@ -175,33 +123,71 @@ class MyAuxiliarBoard extends CGFobject {
         } else {
             console.error('Player ' + player + ' doesnt exits');
         }
-        
+
         this.scene.pushMatrix();
 
+
         if (this.player == 1) {
-            this.scene.translate(this.x2 + this.tiles_width, 0, this.z2 - this.tiles_height);
+            this.scene.translate(this.x2 - 2 * this.tiles_width, 0, this.z2 - this.tiles_height / 2);
             this.scene.translate(this.tiles_height / 2, 0, -this.tiles_width / 2);
             this.scene.rotate(Math.PI / 2, 0, 1, 0);
 
         } else if (this.player == 2) {
-            this.scene.translate(this.x1 - this.tiles_width, 0, this.z1 + this.tiles_height);
+            this.scene.translate(this.x1 + 2 * this.tiles_width, 0, this.z1 + this.tiles_height);
             this.scene.translate(-this.tiles_height / 2, 0, this.tiles_width / 2);
             this.scene.rotate(-Math.PI / 2, 0, 1, 0);
         }
 
         this.scene.pushMatrix();
+        this.scene.translate(this.sideCylinderLength - this.tiles_height, 0, -this.tiles_width / 2);
+        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.white.setTexture(this.madeira_cilindro_tex);
+        this.white.apply();
+        this.cylinder_sides1.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.sideCylinderLength - this.tiles_height, 0, this.sideCylinder1Length - this.tiles_height / 4);
+        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.cylinder_sides1.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.sideCylinderLength - this.tiles_width / 2, 0, -this.tiles_height / 2);
+        this.cylinder_sides2.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.sideCylinderLength - this.tiles_width / 2 - this.sideCylinderRadius, 0, -this.tiles_height / 2);
+        this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this.cylinder_corner.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(this.sideCylinderLength - this.tiles_width / 2 - this.sideCylinderRadius, 0, this.sideCylinder1Length - this.tiles_height / 4 - this.sideCylinderRadius);
+        this.scene.rotate(Math.PI / 2, 1, 0, 0);
+        this.cylinder_corner.display();
+        this.scene.popMatrix();
+
+
+
+
+
+        this.scene.pushMatrix();
         this.white.setTexture(this.light_wood);
         this.white.apply();
-        this.scene.translate(this.tiles_width / 2, -0.01, this.tiles_height * 1.9);
+        this.scene.translate(this.tiles_height / 2, -0.01, this.tiles_height * 1.9);
         this.scene.rotate(-Math.PI / 2, 1, 0, 0);
         this.floor.display();
         this.scene.popMatrix();
 
 
 
+
+
         for (let i = 0; i < this.player_stash[0]; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(0, i * this.tiles_width / 6, 0);
+            this.scene.translate(this.tiles_width / 4, i * this.tiles_width / 6, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.redPiece.display();
             this.scene.popMatrix();
@@ -227,7 +213,7 @@ class MyAuxiliarBoard extends CGFobject {
 
         for (let i = 0; i < this.player_stash[1]; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(0, i * this.tiles_width / 6, 0);
+            this.scene.translate(this.tiles_width / 4, i * this.tiles_width / 6, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.bluePiece.display();
             this.scene.popMatrix();
@@ -254,7 +240,7 @@ class MyAuxiliarBoard extends CGFobject {
 
         for (let i = 0; i < this.player_stash[2]; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(0, i * this.tiles_width / 6, 0);
+            this.scene.translate(this.tiles_width / 4, i * this.tiles_width / 6, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
             this.yellowPiece.display();
             this.scene.popMatrix();

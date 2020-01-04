@@ -62,9 +62,9 @@ class XMLscene extends CGFscene {
          */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
-        if (this.selectedCamera != this.graph.boardCameraId) {
-            this.interface.setActiveCamera(this.camera);
-        }
+        //if (this.selectedCamera != this.graph.boardCameraId) {
+        this.interface.setActiveCamera(this.camera);
+        //}
     }
 
 
@@ -105,9 +105,9 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.selectedCamera = this.graph.view_default;
         this.camera = this.graph.Views[this.selectedCamera];
-        if (this.selectedCamera != this.graph.boardCameraId) {
-            this.interface.setActiveCamera(this.camera);
-        }
+        //if (this.selectedCamera != this.graph.boardCameraId) {
+        this.interface.setActiveCamera(this.camera);
+        //}
     }
 
 
@@ -187,6 +187,18 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
+        let handlerVAR = this.orchestrator.handler;
+
+        this.orchestrator.prolog.getPrologRequest(
+            'start',
+            function(data) {
+                handlerVAR.handleInitialBoard(data.target.response);
+            },
+            function(data) {
+                handlerVAR.handlerError(data.target.response);
+            });
+
+
         this.initLights();
         this.initCameras();
         this.interface.gui_add_lights(this, this.graph.Lights);
@@ -204,7 +216,7 @@ class XMLscene extends CGFscene {
             key = this.graph.idsComponentsAnimation[i];
             this.component_animation = this.graph.components[key].animation;
 
-            /*Animacoes com NULL sao components em animationref definido*/
+            /*Animacoes com NULL sao components sem animationref definido*/
             if (this.component_animation != null) {
                 this.component_animation.update(t);
             }
@@ -249,6 +261,8 @@ class XMLscene extends CGFscene {
             this.lights[i].update();
         }
 
+
+
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
@@ -258,7 +272,7 @@ class XMLscene extends CGFscene {
             this.graph.displayScene();
         }
 
-        this.orchestrator.display();
+
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

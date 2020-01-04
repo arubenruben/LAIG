@@ -25,8 +25,7 @@ class MyGameMove extends CGFobject {
                     this.storeBoard.matrixBoard[i][j].piece = null;
                     this.storeBoard.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, orchestrator.gameboard.matrixBoard[i][j].piece.color, this.storeBoard.matrixBoard[i][j], j, i);
                 } else {
-                    console.log(i);
-                    console.log(j);
+
                     this.storeBoard.matrixBoard[i][j].piece = null;
                 }
             }

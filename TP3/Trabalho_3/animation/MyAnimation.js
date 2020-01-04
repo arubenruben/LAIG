@@ -47,13 +47,12 @@ class MyAnimation {
 
     /**
      *Function update, used to update the total time and the parameters used in transformation happening in a certain segment
-    * @param t - current time since epoch 
-    */
+     * @param t - current time since epoch 
+     */
     update(t) {
 
         this.delta = t - this.previous_t;
         this.previous_t = t;
-
         if (this.firstime == false) {
             this.totalTime += this.delta / 1000
         } else {
@@ -76,16 +75,21 @@ class MyAnimation {
             if (this.segments_array[this.segmentTime_active].keyframe_posterior.instant < this.totalTime) {
                 this.segmentTime_active++
 
-                // if the current segment is equal to the size of the array of segments means the animation has come to an end
-                if (this.segmentTime_active == this.segments_array.length) {
-                    this.animationDone = true;
-                    this.segmentTime_active--;
-                }
+                    // if the current segment is equal to the size of the array of segments means the animation has come to an end
+                    if (this.segmentTime_active == this.segments_array.length) {
+                        this.animationDone = true;
+                        this.segmentTime_active--;
+                        if (this.scene.orchestrator.pieceAnimation) {
+                            this.scene.orchestrator.pieceAnimation = false;
+                            this.scene.orchestrator.gameboard.matrixBoard[this.scene.orchestrator.pieceAnimationIndexI][this.scene.orchestrator.pieceAnimationIndexJ].piece = null;
+                            this.scene.orchestrator.gameStateControl.updateScores();
+                        }
+                    }
 
-                // if the animation has not come to an end updates parameters
-                else {
-                    this.update_parameters(this.segments_array[this.segmentTime_active])
-                }
+                    // if the animation has not come to an end updates parameters
+                    else {
+                        this.update_parameters(this.segments_array[this.segmentTime_active])
+                    }
 
             }
 
@@ -113,9 +117,9 @@ class MyAnimation {
 
 
     /**
-   *Function to build the animation matrix using the current segment and the ratio of completion of that segment
-   *@param segmento current active segment
-  */
+     *Function to build the animation matrix using the current segment and the ratio of completion of that segment
+     *@param segmento current active segment
+     */
     build_matrix(segmento) {
 
         // Creates a matrix 4x4
@@ -181,9 +185,9 @@ class MyAnimation {
     }
 
     /**
-* Function to update the current parameters used to calculate the animation matrix 
-*@param segmento current active segment
-*/
+     * Function to update the current parameters used to calculate the animation matrix 
+     *@param segmento current active segment
+     */
     update_parameters(segmento) {
 
         // Test if the animation is done or not
