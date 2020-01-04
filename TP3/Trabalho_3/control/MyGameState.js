@@ -103,6 +103,7 @@ class MyGameStateControler {
             case this.orchestrator.states.ANIMATING_PIECE:
                 this.orchestrator.scene.cameraAnimationDone=false;
                 this.orchestrator.scene.cameraAnimation = true;
+                this.orchestrator.timeBoard.timerActive=true;
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
             break;
 
@@ -111,7 +112,7 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.PICK_REPLY:
-                //TODO:Avanca para o proximo jogador
+                this.orchestrator.timeBoard.timerActive=false;
                 this.currentState = this.resumeState;
                 break;
 
@@ -148,15 +149,16 @@ class MyGameStateControler {
                 }
                 this.stateTime = Date.now();
                 this.refreshPlayer();
+                this.orchestrator.timeBoard.timerActive=true;
                 break;
-
-            case this.orchestrator.states.UNDO_PROGRESS:
-
-                if (this.currentPlayer == 1) {
-                    if (this.orchestrator.scene.gameType == 'AI vs Player') {
-                        this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
-                    } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
-                        this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+                
+                case this.orchestrator.states.UNDO_PROGRESS:
+                    
+                    if (this.currentPlayer == 1) {
+                        if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                            this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+                        } else if (this.orchestrator.scene.gameType == 'Player vs AI') {
+                            this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
                         this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                     } else if (this.orchestrator.scene.gameType == '1vs1') {

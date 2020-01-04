@@ -43,9 +43,6 @@ class MyGameOrchestrator {
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
 
-
-
-        let handlerVAR = this.handler;
         this.currentTime = Date.now()
         this.cameraSeqId = null;
         /*
@@ -70,6 +67,7 @@ class MyGameOrchestrator {
         this.player1_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 1);
         this.player2_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 2);
         this.timeBoard = new MyTimeBoard(this, 1, this.gameboard.boardLenghtZ * 0.08);
+        this.loaded=true;
     }
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
@@ -134,6 +132,7 @@ class MyGameOrchestrator {
     }
 
     orchestrate() {
+        console.log(this.gameStateControl.currentState);
 
         switch (this.gameStateControl.currentState) {
 

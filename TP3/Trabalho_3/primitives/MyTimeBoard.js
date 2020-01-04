@@ -25,7 +25,7 @@ class MyTimeBoard extends CGFobject {
         this.scaleFactor = scaleFactor;
         //[0]=Minute [1] Dezenas segundos [2] unidades segundos
         this.arrayTime = [0, 0, 0];
-
+        this.timerActive=true;
         this.plane = new MyPlane(this.scene, 5, 5);
         this.orchestrator.gameStateControl.stateTime = Date.now();
 
@@ -103,9 +103,9 @@ class MyTimeBoard extends CGFobject {
     }
 
     update(currentTime) {
-        if (this.orchestrator.gameStateControl.playPending == true) {
+        if (this.orchestrator.gameStateControl.playPending == true||this.timerActive==false) {
             this.arrayTime = [0, 0, 0];
-        } else if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER) {
+        } else if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.PICK_ACTIVE) {
             this.currentTime = currentTime;
             //[0]=Minute [1] Dezenas segundos [2] unidades segundos
             this.arrayTime = this.parseTime();
@@ -114,12 +114,8 @@ class MyTimeBoard extends CGFobject {
 
     display() {
 
-
         this.scene.pushMatrix();
         this.scene.rotate(Math.PI / 4, 0, 0, 1);
-
-
-
         this.scene.pushMatrix();
         this.scene.rotate(Math.PI / 2.0, 1, 0, 0);
         this.scene.rotate(-Math.PI / 2.0, 0, 0, 1);

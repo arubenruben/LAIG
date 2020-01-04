@@ -223,7 +223,9 @@ class XMLscene extends CGFscene {
         }
 
         //TODO:Para fazer o update no my game orchestrator
-        this.orchestrator.update(t);
+        if(this.orchestrator.loaded==true){
+            this.orchestrator.update(t);
+        }
         this.updateBoardCamera();
 
     }
