@@ -51,6 +51,7 @@ class MyGameOrchestrator {
         this.pieceAnimation = false;
         this.pieceAnimationIndexI = null;
         this.pieceAnimationIndexJ = null;
+        this.prologResponseReceived = false;
 
 
     }
@@ -116,8 +117,11 @@ class MyGameOrchestrator {
         if (invalidPlay == false) {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], this.gameboard.matrixBoard[coordY][coordX].piece);
             this.orchestrator.gameSequence.addGameMove(newGameMove);
-            this.gameStateControl.updateScores(this.gameboard.matrixBoard[coordY][coordX].piece);
-            this.gameboard.matrixBoard[coordY][coordX].piece = null;
+            this.pieceRemoved = this.gameboard.matrixBoard[coordY][coordX].piece;
+            this.orchestrator.prologResponseReceived = true;
+            this.orchestrator.pieceAnimation = true;
+            this.orchestrator.pieceAnimationIndexI = coordY;
+            this.orchestrator.pieceAnimationIndexJ = coordX;
             this.gameStateControl.checkVitory();
         } else {
             let newGameMove = new MyGameMove(this.orchestrator, this.gameboard.matrixBoard[coordY][coordX], null);
@@ -167,7 +171,7 @@ class MyGameOrchestrator {
             case this.states.WAIT_PLAYER_1_MOVE:
                 this.mutex = true;
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
-                    console.log("entrei aqui");
+
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -175,12 +179,14 @@ class MyGameOrchestrator {
             case this.states.WAIT_PLAYER_2_MOVE:
                 this.mutex = true;
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
+
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
                 this.mutex = true;
-                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true && this.prologResponseReceived) {
+                    this.prologResponseReceived = false;
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -196,7 +202,8 @@ class MyGameOrchestrator {
 
             case this.states.WAIT_BOT_2_MOVE:
                 this.mutex = true;
-                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true && this.prologResponseReceived) {
+                    this.prologResponseReceived = false;
                     this.gameStateControl.nextState();
                 }
                 break;

@@ -108,7 +108,7 @@ class MyGameStateControler {
                     window.setTimeout(function() {
                         orchestratorVar.scene.cameraAnimation = true;
                     }, 2000);
-                } else {
+                } else if (this.orchestrator.pieceAnimation) {
                     this.currentState = this.orchestrator.states.ANIMATING_PIECE;
 
                 }
@@ -126,9 +126,8 @@ class MyGameStateControler {
                     window.setTimeout(function() {
                         orchestratorVar.scene.cameraAnimation = true;
                     }, 2000);
-                } else {
+                } else if (this.orchestrator.pieceAnimation) {
                     this.currentState = this.orchestrator.states.ANIMATING_PIECE;
-
                 }
                 this.orchestrator.scene.setPickEnabled(false);
                 break;
@@ -208,6 +207,7 @@ class MyGameStateControler {
         }
         this.checkVitory();
     }
+
 
     handleBotWait(gameType) {
 

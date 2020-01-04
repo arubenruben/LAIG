@@ -114,6 +114,7 @@ class MyGameBoard extends CGFobject {
         let positionTileXAbsolute, positionTileZAbsolute;
         let positionTileAuxiliarBoard1X, positionTileAuxiliarBoard1Z;
         let positionTileAuxiliarBoard2X, positionTileAuxiliarBoard2Z;
+        let pieceColorAnimation;
 
         this.tilesAreDefined = true;
         //MATRIX WITH THE TILE
@@ -148,9 +149,9 @@ class MyGameBoard extends CGFobject {
                     positionTileAuxiliarBoard1Z = Math.abs(this.z2 - positionTileZAbsolute);
 
                     positionTileAuxiliarBoard2X = Math.abs(this.x1 - positionTileXAbsolute);
-                    positionTileAuxiliarBoard2Z = Math.abs(this.z1 - positionTileXAbsolute);
+                    positionTileAuxiliarBoard2Z = Math.abs(this.z1 - positionTileZAbsolute);
 
-                    console.log(positionTileAuxiliarBoard1X + ' AND ' + positionTileAuxiliarBoard1Z);
+
 
                     this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j], j, i);
                     this.matrixBoard[i][j].piece.animation = new MyAnimation(this.scene);
@@ -168,31 +169,38 @@ class MyGameBoard extends CGFobject {
                     keyframe2.rotate_vec = [0, 0, 0];
                     keyframe2.scale_vec = [1, 1, 1];
 
+
+                    if (initialPiece == 1) {
+                        pieceColorAnimation = 1.2 * this.tiles_width;
+                    } else if (initialPiece == 2) {
+                        pieceColorAnimation = 0;
+                    } else if (initialPiece == 3) {
+                        pieceColorAnimation = -1.2 * this.tiles_width;
+                    }
+
                     keyframe3 = new MyKeyFrameAnimation(this.orchestrator.scene);
                     keyframe3.instant = 5;
-                    keyframe3.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width, this.boardLenghtX / 2, -positionTileAuxiliarBoard1Z - this.tiles_height];
+                    keyframe3.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width - pieceColorAnimation, this.boardLenghtX / 2, -positionTileAuxiliarBoard1Z - 2 * this.tiles_height];
                     keyframe3.rotate_vec = [0, 0, 0];
                     keyframe3.scale_vec = [1, 1, 1];
 
                     keyframe4 = new MyKeyFrameAnimation(this.orchestrator.scene);
                     keyframe4.instant = 7.5;
-                    keyframe4.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width, 0, -positionTileAuxiliarBoard1Z - this.tiles_height];
+                    keyframe4.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width - pieceColorAnimation, 0, -positionTileAuxiliarBoard1Z - 2 * this.tiles_height];
                     keyframe4.rotate_vec = [0, 90, 0];
                     keyframe4.scale_vec = [1, 1, 1];
 
                     keyframe5 = new MyKeyFrameAnimation(this.orchestrator.scene);
                     keyframe5.instant = 5;
-                    keyframe5.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width, this.boardLenghtX / 2, positionTileAuxiliarBoard2Z - 2 * this.tiles_height];
+                    keyframe5.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width + pieceColorAnimation, this.boardLenghtX / 2, positionTileAuxiliarBoard2Z + 2 * this.tiles_height];
                     keyframe5.rotate_vec = [0, 0, 0];
                     keyframe5.scale_vec = [1, 1, 1];
 
                     keyframe6 = new MyKeyFrameAnimation(this.orchestrator.scene);
                     keyframe6.instant = 7.5;
-                    keyframe6.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width, 0, positionTileAuxiliarBoard2Z - 2 * this.tiles_height];
+                    keyframe6.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width + pieceColorAnimation, 0, positionTileAuxiliarBoard2Z + 2 * this.tiles_height];
                     keyframe6.rotate_vec = [0, 90, 0];
                     keyframe6.scale_vec = [1, 1, 1];
-
-
 
                     arrayOfKeyframes = [keyframe1, keyframe2, keyframe3, keyframe4];
                     arrayOfKeyframes2 = [keyframe1, keyframe2, keyframe5, keyframe6];
