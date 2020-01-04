@@ -34,6 +34,7 @@ class MyGameOrchestrator {
             ROTATING_CAMERA: 12,
             WIN_PLAYER1: 13,
             WIN_PLAYER2: 14,
+            ANIMATING_PIECE: 15,
         };
         this.gameStateControl = new MyGameStateControler(this);
         this.initialBoardRaw = new Array();
@@ -45,6 +46,13 @@ class MyGameOrchestrator {
 
         this.gameSequence = new MyGameSequence(this);
         this.gameboard = null;
+
+
+        this.pieceAnimation = false;
+        this.pieceAnimationIndexI = null;
+        this.pieceAnimationIndexJ = null;
+
+
     }
 
     buildInitialBoard() {
@@ -60,17 +68,19 @@ class MyGameOrchestrator {
     }
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
-        let pieceRemoved = null;
 
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
-                        pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
-                        let newGameMove = new MyGameMove(this.orchestrator, obj, pieceRemoved)
+                        this.pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
+                        let newGameMove = new MyGameMove(this.orchestrator, obj, this.pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
-                        this.gameboard.matrixBoard[i][j].piece = null;
+                        this.orchestrator.pieceAnimation = true;
+                        this.orchestrator.pieceAnimationIndexI = i;
+                        this.orchestrator.pieceAnimationIndexJ = j;
+                        //this.gameboard.matrixBoard[i][j].piece = null;
                     } else {
                         let newGameMove = new MyGameMove(this.orchestrator, obj, null)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
@@ -79,7 +89,10 @@ class MyGameOrchestrator {
             }
         }
 
-        this.gameStateControl.updateScores(pieceRemoved);
+
+        // faço apenas quando a animação acabar e não aqui
+
+        //this.gameStateControl.updateScores(pieceRemoved);
 
         this.gameboardSet = true;
         this.gameStateControl.playPending = false;
@@ -154,7 +167,7 @@ class MyGameOrchestrator {
             case this.states.WAIT_PLAYER_1_MOVE:
                 this.mutex = true;
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
-                    this.startCountingTime = true;
+                    console.log("entrei aqui");
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -171,6 +184,14 @@ class MyGameOrchestrator {
                     this.gameStateControl.nextState();
                 }
                 break;
+
+            case this.states.ANIMATING_PIECE:
+                this.mutex = true;
+                if (!this.pieceAnimation) {
+                    this.gameStateControl.nextState();
+                }
+                break;
+
 
 
             case this.states.WAIT_BOT_2_MOVE:
@@ -264,5 +285,13 @@ class MyGameOrchestrator {
     update(currentTime) {
         this.currentTime = currentTime;
         this.timeBoard.update(currentTime);
+
+        if (this.pieceAnimation && this.pieceAnimationIndexI != null && this.pieceAnimationIndexJ != null) {
+            if (this.orchestrator.gameStateControl.currentPlayer == 1) {
+                this.gameboard.matrixBoard[this.pieceAnimationIndexI][this.pieceAnimationIndexJ].piece.animation.update(currentTime);
+            } else if (this.orchestrator.gameStateControl.currentPlayer == 2) {
+                this.gameboard.matrixBoard[this.pieceAnimationIndexI][this.pieceAnimationIndexJ].piece.animation2.update(currentTime);
+            }
+        }
     }
 }

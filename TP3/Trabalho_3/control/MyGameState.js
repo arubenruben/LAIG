@@ -14,6 +14,7 @@ class MyGameStateControler {
         this.cameraAnimationPending = false;
         this.stateTime = Date.now();
         this.currentState = this.orchestrator.states.INITIALIZING;
+        this.pieceRemoved = null;
     }
     nextState() {
         //Refresh Counter
@@ -71,41 +72,65 @@ class MyGameStateControler {
                 } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                 }
-
                 break;
 
 
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
-                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                if (!this.orchestrator.pieceAnimation) {
+                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                    window.setTimeout(function() {
+                        orchestratorVar.scene.cameraAnimation = true;
+                    }, 2000);
+                } else {
+                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
+
+                }
                 this.orchestrator.scene.setPickEnabled(false);
-                window.setTimeout(function() {
-                    orchestratorVar.scene.cameraAnimation = true;
-                }, 2000);
                 break;
 
 
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
-                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                if (!this.orchestrator.pieceAnimation) {
+                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                    window.setTimeout(function() {
+                        orchestratorVar.scene.cameraAnimation = true;
+                    }, 2000);
+                } else {
+                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
+
+                }
                 this.orchestrator.scene.setPickEnabled(false);
-                window.setTimeout(function() {
-                    orchestratorVar.scene.cameraAnimation = true;
-                }, 2000);
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
-                this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                if (!this.orchestrator.pieceAnimation) {
+                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                    window.setTimeout(function() {
+                        orchestratorVar.scene.cameraAnimation = true;
+                    }, 2000);
+                } else {
+                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
+
+                }
                 this.orchestrator.scene.setPickEnabled(false);
-                window.setTimeout(function() {
-                    orchestratorVar.scene.cameraAnimation = true;
-                }, 2000);
                 break;
 
-            case this.orchestrator.states.WAIT_BOT_2_MOVE:
+            case this.orchestrator.states.ANIMATING_PIECE:
                 this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                orchestratorVar.scene.cameraAnimation = true;
+
+
+            case this.orchestrator.states.WAIT_BOT_2_MOVE:
+                if (!this.orchestrator.pieceAnimation) {
+                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
+                    window.setTimeout(function() {
+                        orchestratorVar.scene.cameraAnimation = true;
+                    }, 2000);
+                } else {
+                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
+
+                }
                 this.orchestrator.scene.setPickEnabled(false);
-                window.setTimeout(function() {
-                    orchestratorVar.scene.cameraAnimation = true;
-                }, 2000);
                 break;
 
             case this.orchestrator.states.PICK_ACTIVE:
@@ -164,15 +189,15 @@ class MyGameStateControler {
         this.pickId = id;
     }
 
-    updateScores(pieceRemoved) {
+    updateScores() {
 
         let indexPiece;
 
-        if (pieceRemoved.color == 'red') {
+        if (this.orchestrator.pieceRemoved.color == 'red') {
             indexPiece = 0;
-        } else if (pieceRemoved.color == 'blue') {
+        } else if (this.orchestrator.pieceRemoved.color == 'blue') {
             indexPiece = 1;
-        } else if (pieceRemoved.color == 'yellow') {
+        } else if (this.orchestrator.pieceRemoved.color == 'yellow') {
             indexPiece = 2;
         }
 

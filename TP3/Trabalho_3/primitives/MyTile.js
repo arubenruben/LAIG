@@ -77,9 +77,21 @@ class MyTile extends CGFobject {
         this.scene.pushMatrix();
         this.scene.translate(this.x, 0, this.z);
         this.scene.pushMatrix();
+
+        if (this.orchestrator.pieceAnimation && this.orchestrator.pieceAnimationIndexI == this.index_i && this.orchestrator.pieceAnimationIndexJ == this.index_j) {
+            if (this.orchestrator.gameStateControl.currentPlayer == 1) {
+                this.piece.animation.apply();
+            } else if (this.orchestrator.gameStateControl.currentPlayer == 2) {
+                this.piece.animation2.apply();
+            }
+        }
+
         if (this.piece != null) {
             this.scene.translate(0, 0.01 * this.scale_x, 0);
             this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
+
+
+
             this.piece.display();
         }
 

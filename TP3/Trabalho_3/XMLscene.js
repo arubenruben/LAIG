@@ -59,9 +59,9 @@ class XMLscene extends CGFscene {
          */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
-        if (this.selectedCamera != this.graph.boardCameraId) {
-            this.interface.setActiveCamera(this.camera);
-        }
+        //if (this.selectedCamera != this.graph.boardCameraId) {
+        this.interface.setActiveCamera(this.camera);
+        //}
     }
 
 
@@ -102,9 +102,9 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.selectedCamera = this.graph.view_default;
         this.camera = this.graph.Views[this.selectedCamera];
-        if (this.selectedCamera != this.graph.boardCameraId) {
-            this.interface.setActiveCamera(this.camera);
-        }
+        //if (this.selectedCamera != this.graph.boardCameraId) {
+        this.interface.setActiveCamera(this.camera);
+        //}
     }
 
 
@@ -213,7 +213,7 @@ class XMLscene extends CGFscene {
             key = this.graph.idsComponentsAnimation[i];
             this.component_animation = this.graph.components[key].animation;
 
-            /*Animacoes com NULL sao components em animationref definido*/
+            /*Animacoes com NULL sao components sem animationref definido*/
             if (this.component_animation != null) {
                 this.component_animation.update(t);
             }
