@@ -183,26 +183,17 @@ class MyGameOrchestrator {
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-
-                /*TODO:TRATAR if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
-                */
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
-                    this.prologResponseReceived = false;
                     this.gameStateControl.nextState();
                 }
                 break;
-
-
             case this.states.WAIT_BOT_2_MOVE:
-                /*TODO:TRATAR if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
-                    */
                 if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.ANIMATING_PIECE:
-                if (!this.pieceAnimation) {
-                    console.log('Next animation');
+                if (!this.pieceAnimation&&this.orchestrator.requestAtive==false) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -245,7 +236,6 @@ class MyGameOrchestrator {
             case this.states.ROTATING_CAMERA:
                 if (this.scene.cameraAnimationDone) {
                     this.scene.cameraAnimationDone = false;
-                    console.log('Camera next');
                     this.gameStateControl.nextState();
                 }
                 break;
