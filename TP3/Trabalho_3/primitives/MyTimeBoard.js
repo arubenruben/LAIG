@@ -1,4 +1,3 @@
-
 class MyTimeBoard extends CGFobject {
 
     constructor(orchestrator, distanceBetweenBoards = 1, scaleFactor = 1) {
@@ -28,7 +27,7 @@ class MyTimeBoard extends CGFobject {
         this.arrayTime = [0, 0, 0];
 
         this.plane = new MyPlane(this.scene, 5, 5);
-        this.orchestrator.gameStateControl.stateTime=Date.now();
+        this.orchestrator.gameStateControl.stateTime = Date.now();
 
     }
 
@@ -56,24 +55,22 @@ class MyTimeBoard extends CGFobject {
                 arrayTime[2] = Number(seconds[1]);
                 arrayTime[1] = Number(seconds[0]);
             }
-        } 
-        else if(this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
-                this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2) {
-            
+        } else if (this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
+            this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2) {
+
             this.orchestrator.gameStateControl.pickPending = false;
             this.orchestrator.gameStateControl.playDone = true;
-            this.orchestrator.gameStateControl.currentState=this.orchestrator.states.ROTATING_CAMERA;
-            this.orchestrator.scene.cameraAnimation=true;
+            this.orchestrator.gameStateControl.currentState = this.orchestrator.states.ROTATING_CAMERA;
+            this.orchestrator.scene.cameraAnimation = true;
             arrayTime = [0, 0, 0];
-        }
-        else if(this.orchestrator.scene.gameType == '1vs1'){    
+        } else if (this.orchestrator.scene.gameType == '1vs1') {
             this.orchestrator.gameStateControl.pickPending = false;
             this.orchestrator.gameStateControl.playDone = false;
-            this.orchestrator.gameStateControl.currentState=this.orchestrator.states.ROTATING_CAMERA;
-            this.orchestrator.scene.cameraAnimation=true;
+            this.orchestrator.gameStateControl.currentState = this.orchestrator.states.ROTATING_CAMERA;
+            this.orchestrator.scene.cameraAnimation = true;
             arrayTime = [0, 0, 0];
         }
-        
+
         return arrayTime;
     }
 
@@ -108,8 +105,7 @@ class MyTimeBoard extends CGFobject {
     update(currentTime) {
         if (this.orchestrator.gameStateControl.playPending == true) {
             this.arrayTime = [0, 0, 0];
-        }
-        else if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER) {
+        } else if (this.orchestrator.gameStateControl.currentState > this.orchestrator.states.SET_THE_AI_2_DIF && this.orchestrator.gameStateControl.currentState < this.orchestrator.states.GAME_OVER) {
             this.currentTime = currentTime;
             //[0]=Minute [1] Dezenas segundos [2] unidades segundos
             this.arrayTime = this.parseTime();
@@ -118,8 +114,13 @@ class MyTimeBoard extends CGFobject {
 
     display() {
 
+
         this.scene.pushMatrix();
-        this.scene.translate(0, 3, 0);
+        this.scene.rotate(Math.PI / 4, 0, 0, 1);
+
+
+
+        this.scene.pushMatrix();
         this.scene.rotate(Math.PI / 2.0, 1, 0, 0);
         this.scene.rotate(-Math.PI / 2.0, 0, 0, 1);
         this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
@@ -149,6 +150,8 @@ class MyTimeBoard extends CGFobject {
         this.scene.popMatrix();
 
         this.scene.popMatrix();
+        this.scene.popMatrix();
+
         this.scene.popMatrix();
 
     }

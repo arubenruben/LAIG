@@ -329,7 +329,13 @@ class MyGameBoard extends CGFobject {
 
         if (this.orchestrator.gameboardSet) {
             this.scene.pushMatrix();
+            this.scene.translate(0, 0, -this.boardLenghtZ / 2 - 2 * this.tiles_height);
+            this.orchestrator.timeBoard.display();
+            this.scene.popMatrix();
 
+            this.scene.pushMatrix();
+            this.scene.translate(0, 0, this.boardLenghtZ / 2 + 2 * this.tiles_height);
+            this.scene.rotate(Math.PI, 0, 1, 0);
             this.orchestrator.timeBoard.display();
             this.scene.popMatrix();
 
