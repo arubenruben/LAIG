@@ -15,20 +15,20 @@ class MyInterface extends CGFinterface {
      */
     init(application) {
         super.init(application);
-        this.application=application;
+        this.application = application;
         // init GUI. For more information on the methods, check:
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI;
-        this.scene.gui=this.gui;
+        this.scene.gui = this.gui;
 
         // add a group of controls (and open/expand by defult)
-        this.scene.interface1=this.gui.add(this.scene, 'displayAxis').name("Display axis");
-        this.scene.interface2=this.gui.add(this.scene, 'displayNormals').name("Display Normals");
-        this.scene.interface3=this.gui.add(this.scene, 'gameType', this.scene.gameTypes).name('Game Type');
-        this.scene.interface4=this.gui.add(this.scene, 'undo').name('Undo');
-        this.scene.interface5=this.gui.add(this.scene, 'gameMovie').name('Game Movie');
-        this.scene.interface6=this.gui.add(this.scene, 'reset').name('Reset');
+        this.scene.interface1 = this.gui.add(this.scene, 'displayAxis').name("Display axis");
+        this.scene.interface2 = this.gui.add(this.scene, 'displayNormals').name("Display Normals");
+        this.scene.interface3 = this.gui.add(this.scene, 'gameType', this.scene.gameTypes).name('Game Type');
+        this.scene.interface4 = this.gui.add(this.scene, 'undo').name('Undo');
+        this.scene.interface5 = this.gui.add(this.scene, 'gameMovie').name('Game Movie');
+        this.scene.interface6 = this.gui.add(this.scene, 'reset').name('Reset');
         this.m_pressed = 0;
         this.initKeys();
 
@@ -97,9 +97,9 @@ class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
 
-    reset(scene){
+    reset(scene) {
         scene.gui.gui.destroy();
-        this.gui=new dat.GUI();
+        this.gui = new dat.GUI();
         this.gui.add(scene, 'displayAxis').name("Display axis");
         this.gui.add(scene, 'displayNormals').name("Display Normals");
         this.gui.add(scene, 'gameType', scene.gameTypes).name('Game Type');
