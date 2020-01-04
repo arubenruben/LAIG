@@ -188,7 +188,7 @@ class MyAuxiliarBoard extends CGFobject {
         for (let i = 0; i < this.player_stash[0]; i++) {
             this.scene.pushMatrix();
             this.scene.translate(this.tiles_width / 4, i * this.tiles_width / 6, 0);
-            this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
+            this.scene.scale(this.scale_x, this.scale_x / 1.5, this.scale_z);
             this.redPiece.display();
             this.scene.popMatrix();
         }
@@ -214,7 +214,7 @@ class MyAuxiliarBoard extends CGFobject {
         for (let i = 0; i < this.player_stash[1]; i++) {
             this.scene.pushMatrix();
             this.scene.translate(this.tiles_width / 4, i * this.tiles_width / 6, 0);
-            this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
+            this.scene.scale(this.scale_x, this.scale_x / 1.5, this.scale_z);
             this.bluePiece.display();
             this.scene.popMatrix();
         }
@@ -241,7 +241,7 @@ class MyAuxiliarBoard extends CGFobject {
         for (let i = 0; i < this.player_stash[2]; i++) {
             this.scene.pushMatrix();
             this.scene.translate(this.tiles_width / 4, i * this.tiles_width / 6, 0);
-            this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
+            this.scene.scale(this.scale_x, this.scale_x / 1.5, this.scale_z);
             this.yellowPiece.display();
             this.scene.popMatrix();
         }

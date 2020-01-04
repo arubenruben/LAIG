@@ -88,7 +88,7 @@ class MyTile extends CGFobject {
 
         if (this.piece != null) {
             this.scene.translate(0, 0.01 * this.scale_x, 0);
-            this.scene.scale(this.scale_x, this.scale_x / 2, this.scale_z);
+            this.scene.scale(this.scale_x, this.scale_x / 1.5, this.scale_z);
 
 
 

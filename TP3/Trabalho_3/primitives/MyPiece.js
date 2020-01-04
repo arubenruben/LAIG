@@ -27,24 +27,45 @@ class MyPiece extends CGFobject {
         this.animation2 = null;
 
         this.red = new CGFappearance(this.scene);
-        this.red.setShininess(200);
+        this.red.setShininess(150);
         this.red.setAmbient(1, 0, 0, 1);
         this.red.setDiffuse(1, 0, 0, 1);
         this.red.setSpecular(1, 0, 0, 1);
 
+        this.darkred = new CGFappearance(this.scene);
+        this.darkred.setShininess(100);
+        this.darkred.setAmbient(0.5, 0, 0, 1);
+        this.darkred.setDiffuse(0.5, 0, 0, 1);
+        this.darkred.setSpecular(0.5, 0, 0, 1);
+
         this.blue = new CGFappearance(this.scene);
-        this.blue.setShininess(200);
+        this.blue.setShininess(150);
         this.blue.setAmbient(0.1, 0.1, 1, 1);
         this.blue.setDiffuse(0.1, 0.1, 1, );
         this.blue.setSpecular(0.1, 0.1, 1, 1);
 
+        this.darkblue = new CGFappearance(this.scene);
+        this.darkblue.setShininess(100);
+        this.darkblue.setAmbient(0, 0, 0.5, 1);
+        this.darkblue.setDiffuse(0, 0, 0.5, 1);
+        this.darkblue.setSpecular(0, 0, 0.5, 1);
+
         this.yellow = new CGFappearance(this.scene);
-        this.yellow.setShininess(200);
+        this.yellow.setShininess(150);
         this.yellow.setAmbient(1, 1, 0, 1);
         this.yellow.setDiffuse(1, 1, 0, 1);
         this.yellow.setSpecular(1, 1, 0, 1);
         this.x = x;
         this.y = y;
+
+
+        this.darkyellow = new CGFappearance(this.scene);
+        this.darkyellow.setShininess(100);
+        this.darkyellow.setAmbient(0.5, 0.5, 0, 1);
+        this.darkyellow.setDiffuse(0.5, 0.5, 0, 1);
+        this.darkyellow.setSpecular(0.5, 0.5, 0, 1);
+
+
     }
 
     display() {
@@ -69,6 +90,13 @@ class MyPiece extends CGFobject {
         this.scene.scale(1, 1, 0);
         this.sphere.display();
         this.scene.popMatrix();
+
+        if (this.color == 'red') {
+            this.darkred.apply();
+        } else if (this.color == 'blue') {
+            this.darkblue.apply();
+        } else
+            this.darkyellow.apply();
 
         this.cylinder.display();
 
