@@ -201,12 +201,118 @@ class MyGameBoard extends CGFobject {
                     arrayOfKeyframes = [keyframe1, keyframe2, keyframe3, keyframe4];
                     arrayOfKeyframes2 = [keyframe1, keyframe2, keyframe5, keyframe6];
 
-
+                    this.matrixBoard[i][j].piece.animation.arrayOfKeyframes = arrayOfKeyframes;
                     this.matrixBoard[i][j].piece.animation.parse_keyframes(arrayOfKeyframes);
+
+                    this.matrixBoard[i][j].piece.animation2.arrayOfKeyframes2 = arrayOfKeyframes2;
                     this.matrixBoard[i][j].piece.animation2.parse_keyframes(arrayOfKeyframes2);
+
                 }
             }
         }
+    }
+
+    helperSequence() {
+
+        let keyframe1, keyframe2, keyframe3, keyframe4, keyframe5, keyframe6;
+        let arrayOfKeyframes, arrayOfKeyframes2;
+        let positionTileXRelative, positionTileZRelative;
+        let positionTileXAbsolute, positionTileZAbsolute;
+        let positionTileAuxiliarBoard1X, positionTileAuxiliarBoard1Z;
+        let positionTileAuxiliarBoard2X, positionTileAuxiliarBoard2Z;
+        let pieceColorAnimation;
+
+        for (let i = 0; i < this.n_lines; i++) {
+
+            if (i % 2 == 0) {
+                this.translation_x = this.tiles_width / 4;
+                this.translation_z = -1 * this.tiles_height / 2;
+                this.aux = this.counter * this.tiles_width / 2;
+
+                this.counter++;
+            } else {
+                this.translation_x = 0;
+                this.translation_z = 0;
+            }
+            for (let j = 0; j < this.n_columns; j++) {
+                positionTileXRelative = i * this.tiles_width + this.translation_x - this.aux;
+                positionTileZRelative = -1 * j * this.tiles_height + this.translation_z;
+
+                if (this.matrixBoard[i][j].piece != null) {
+
+                    positionTileXAbsolute = i * this.tiles_width + this.translation_x - this.aux + this.x1
+                    positionTileZAbsolute = -1 * j * this.tiles_height + this.translation_z + this.z1;
+
+                    positionTileAuxiliarBoard1X = Math.abs(this.x2 - positionTileXAbsolute);
+                    positionTileAuxiliarBoard1Z = Math.abs(this.z2 - positionTileZAbsolute);
+
+                    positionTileAuxiliarBoard2X = Math.abs(this.x1 - positionTileXAbsolute);
+                    positionTileAuxiliarBoard2Z = Math.abs(this.z1 - positionTileZAbsolute);
+
+                    this.matrixBoard[i][j].piece.animation = new MyAnimation(this.scene);
+                    this.matrixBoard[i][j].piece.animation2 = new MyAnimation(this.scene);
+                    keyframe1 = new MyKeyFrameAnimation(this.orchestrator.scene);
+                    keyframe1.instant = 0;
+                    keyframe1.translate_vec = [0, 0, 0];
+                    keyframe1.rotate_vec = [0, 0, 0];
+                    keyframe1.scale_vec = [1, 1, 1];
+
+
+                    keyframe2 = new MyKeyFrameAnimation(this.orchestrator.scene);
+                    keyframe2.instant = 2.5;
+                    keyframe2.translate_vec = [0, this.boardLenghtX / 2, 0];
+                    keyframe2.rotate_vec = [0, 0, 0];
+                    keyframe2.scale_vec = [1, 1, 1];
+
+
+                    if (this.matrixBoard[i][j].piece.color == 'red') {
+                        pieceColorAnimation = 1.2 * this.tiles_width;
+                    } else if (this.matrixBoard[i][j].piece.color=='blue') {
+                        pieceColorAnimation = 0;
+                    } else if (this.matrixBoard[i][j].piece.color=='yellow') {
+                        pieceColorAnimation = -1.2 * this.tiles_width;
+                    }
+
+                    keyframe3 = new MyKeyFrameAnimation(this.orchestrator.scene);
+                    keyframe3.instant = 5;
+                    keyframe3.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width - pieceColorAnimation, this.boardLenghtX / 2, -positionTileAuxiliarBoard1Z - 2 * this.tiles_height];
+                    keyframe3.rotate_vec = [0, 0, 0];
+                    keyframe3.scale_vec = [1, 1, 1];
+
+                    keyframe4 = new MyKeyFrameAnimation(this.orchestrator.scene);
+                    keyframe4.instant = 7.5;
+                    keyframe4.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width - pieceColorAnimation, 0, -positionTileAuxiliarBoard1Z - 2 * this.tiles_height];
+                    keyframe4.rotate_vec = [0, 90, 0];
+                    keyframe4.scale_vec = [1, 1, 1];
+
+                    keyframe5 = new MyKeyFrameAnimation(this.orchestrator.scene);
+                    keyframe5.instant = 5;
+                    keyframe5.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width + pieceColorAnimation, this.boardLenghtX / 2, positionTileAuxiliarBoard2Z + 2 * this.tiles_height];
+                    keyframe5.rotate_vec = [0, 0, 0];
+                    keyframe5.scale_vec = [1, 1, 1];
+
+                    keyframe6 = new MyKeyFrameAnimation(this.orchestrator.scene);
+                    keyframe6.instant = 7.5;
+                    keyframe6.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width + pieceColorAnimation, 0, positionTileAuxiliarBoard2Z + 2 * this.tiles_height];
+                    keyframe6.rotate_vec = [0, 90, 0];
+                    keyframe6.scale_vec = [1, 1, 1];
+
+                    arrayOfKeyframes = [keyframe1, keyframe2, keyframe3, keyframe4];
+                    arrayOfKeyframes2 = [keyframe1, keyframe2, keyframe5, keyframe6];
+
+                    this.matrixBoard[i][j].piece.animation.arrayOfKeyframes = arrayOfKeyframes;
+                    this.matrixBoard[i][j].piece.animation.parse_keyframes(arrayOfKeyframes);
+
+                    this.matrixBoard[i][j].piece.animation2.arrayOfKeyframes2 = arrayOfKeyframes2;
+                    this.matrixBoard[i][j].piece.animation2.parse_keyframes(arrayOfKeyframes2);
+
+                }
+            }
+        }
+
+
+
+
     }
 
     display() {
@@ -317,9 +423,9 @@ class MyGameBoard extends CGFobject {
             for (let i = 0; i < this.n_lines; i++) {
                 for (let j = 0; j < this.n_columns; j++) {
                     //TILES ARE PICKABLE
-                    if (this.matrixBoard[i][j] != null) {
-                        this.scene.registerForPick((i + 1) * 100 + j, this.matrixBoard[i][j]);
-                        this.matrixBoard[i][j].display();
+                    if (this.orchestrator.gameboard.matrixBoard[i][j] != null) {
+                        this.scene.registerForPick((i + 1) * 100 + j, this.orchestrator.gameboard.matrixBoard[i][j]);
+                        this.orchestrator.gameboard.matrixBoard[i][j].display();
                     }
                 }
             }

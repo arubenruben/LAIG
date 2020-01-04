@@ -949,16 +949,18 @@
             </materials>
             <texture id="dirt" length_s="0.5" length_t="0.5" />
             <children>
+                <!--
 
-                <componentref id="underground" />
-                <componentref id="floor" />
-                <componentref id="sides" />
-                <componentref id="pool" />
-                <componentref id="spot_pub" />
-                <componentref id="fence_core" />
-                <componentref id="slider_ladder" />
-                <componentref id="slider_ladder_2" />
-                <componentref id="chairsAndTable"/>
+                    <componentref id="floor" />
+                    <componentref id="sides" />
+                    <componentref id="pool" />
+                    <componentref id="spot_pub" />
+                    <componentref id="fence_core" />
+                    <componentref id="slider_ladder" />
+                    <componentref id="slider_ladder_2" />
+                    <componentref id="chairsAndTable"/>
+                    <componentref id="underground" />
+                -->
                 <componentref id="gameBoard"/>
                 <componentref id="gameBoard1"/>
                 <componentref id="chairsAndTable1"/>

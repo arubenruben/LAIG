@@ -21,7 +21,10 @@ class MyGameSequence {
 
         if (
             this.orchestrator.gameStateControl.currentState == this.orchestrator.states.ROTATE_CAMERA ||
-            this.orchestrator.scene.cameraAnimation == true || this.orchestrator.requestAtive == true
+            this.orchestrator.gameStateControl.currentState == this.orchestrator.states.ANIMATING_PIECE ||
+            this.orchestrator.scene.cameraAnimation == true || this.orchestrator.requestAtive == true||
+            this.orchestrator.pieceAnimation == true
+
         ) {
             return false;
         }
@@ -67,7 +70,8 @@ class MyGameSequence {
         }
         scoreArray[pieceToInsertNumeric]--;
 
-        gameMove.orchestrator.gameboard = gameMove.storeBoard;
+        this.orchestrator.gameboard = gameMove.storeBoard;
+        this.orchestrator.gameboard.matrixBoard=gameMove.storeBoard.matrixBoard;
         
         this.timeoutUndo=window.setTimeout(
             function(){
