@@ -16,7 +16,6 @@ class MyGameOrchestrator {
         this.scene = scene;
         this.orchestrator = this;
 
-        //TODO:COMPLETAR OS STATES
         this.states = {
             INITIALIZING: 0,
             SET_THE_GAME_TYPE: 1,
@@ -29,18 +28,13 @@ class MyGameOrchestrator {
             PICK_ACTIVE: 8,
             PICK_REPLY: 9,
             //WIN MUST BE THE LAST BECUASE OF NEXT STATE:
-            /*TODO:TRATAR
             ROTATING_CAMERA: 10,
-            UNDO_PROGRESS: 11,
-            GAME_OVER: 12,
-            MOVIE_REPLY: 13,
-            WIN_PLAYER1: 14,
-            WIN_PLAYER2: 15
-            */
-            ROTATING_CAMERA: 12,
-            WIN_PLAYER1: 13,
-            WIN_PLAYER2: 14,
-            ANIMATING_PIECE: 15,
+            ANIMATING_PIECE: 12,
+            UNDO_PROGRESS: 13,
+            GAME_OVER: 14,
+            MOVIE_REPLY: 15,
+            WIN_PLAYER1: 16,
+            WIN_PLAYER2: 17
         };
         this.gameStateControl = new MyGameStateControler(this);
         this.initialBoardRaw = new Array();
@@ -76,26 +70,17 @@ class MyGameOrchestrator {
         this.pieceAnimationIndexI = null;
         this.pieceAnimationIndexJ = null;
         this.prologResponseReceived = false;
-
-
     }
 
     buildInitialBoard() {
         this.gameboardSet = true;
         this.gameboard.updateMatrixOfTiles();
-        // if (this.gameboard == null) {
-        //     console.log('erro');
-        // }
-        // this.gameboard.updateMatrix();
-
         this.player1_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 1);
         this.player2_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 2);
     }
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
-        /*TODO:TRATAR
-        let pieceRemoved = null;
-        */
+
         for (let i = 0; i < this.gameboard.matrixBoard.length; i++) {
             for (let j = 0; j < this.gameboard.matrixBoard[i].length; j++) {
                 //Se existir uma peca e que vale a pena retirar
@@ -104,36 +89,18 @@ class MyGameOrchestrator {
                         this.pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         let newGameMove = new MyGameMove(this.orchestrator, obj, this.pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
-                        /*TODO:TRATAR
                         this.orchestrator.pieceAnimation = true;
-                        */
                         this.orchestrator.pieceAnimationIndexI = i;
                         this.orchestrator.pieceAnimationIndexJ = j;
-                        //this.gameboard.matrixBoard[i][j].piece = null;
-                    } else {
-                        let newGameMove = new MyGameMove(this.orchestrator, obj, null)
-                        this.orchestrator.gameSequence.addGameMove(newGameMove);
                     }
                 }
             }
         }
-        /*
-        this.gameStateControl.updateScores(pieceRemoved);
-        if (this.gameStateControl.currentState < this.states.GAME_OVER) {
-            */
-
-        // faço apenas quando a animação acabar e não aqui
-
-        //this.gameStateControl.updateScores(pieceRemoved);
-
-            let orchestratorVar = this.orchestrator;
-            this.cameraSeqId = window.setTimeout(function () {
-                orchestratorVar.scene.cameraAnimation = true;
-            }, 2000);
-        /*}*/
+        //TODO:TIREI UM UPDATE SCORES DAQUI DETETAR GAMEOVER E EXEQUIVEL AINDA ????
+        
         this.gameStateControl.playDone = true;
         this.gameboardSet = true;
-        this.gameStateControl.playPending = false;
+        this.orchestrator.currentState == this.orchestrator.states.UNDO_PROGRESS
     }
 
     updateBoardBotMove(coordX, coordY) {
@@ -161,41 +128,29 @@ class MyGameOrchestrator {
         }
 
         this.gameboardSet = true;
-        
+
         if (this.scene.gameType == 'Player vs AI' && this.gameStateControl.currentPlayer == 2 ||
-        this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 1
+            this.scene.gameType == 'AI vs Player' && this.gameStateControl.currentPlayer == 1
         ) {
             this.gameStateControl.playDone = false;
         } else {
             this.gameStateControl.playDone = true;
         }
-        
-        if (this.gameStateControl.currentState < this.states.GAME_OVER) {
-    
-            let orchestratorVar = this.orchestrator;
-            this.cameraSeqId = window.setTimeout(function () {
-                orchestratorVar.scene.cameraAnimation = true;
-            }, 2000);
-        }
-        
+
         this.gameStateControl.playPending = false;
     }
-    
+
     orchestrate() {
-        
+
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:
-
                 if (this.gameboardSet == true) {
                     this.gameStateControl.nextState();
                 }
                 break;
 
             case this.states.SET_THE_GAME_TYPE:
-                //TODO:CREATE HTML TO APPEAR A BOX IN THE TOP DECENT
-                //alert('Inserir o game type');
-
                 if (this.scene.gameType != null && (this.scene.gameType == 'AI vs Player' || this.scene.gameType == '1vs1' || this.scene.gameType == 'AI vs AI' || this.scene.gameType == 'Player vs AI')) {
                     this.gameStateControl.nextState();
                 }
@@ -224,36 +179,29 @@ class MyGameOrchestrator {
             case this.states.WAIT_PLAYER_2_MOVE:
 
                 if (this.gameStateControl.handlePlayerWait(this.scene.gameType) == true) {
-
                     this.gameStateControl.nextState();
                 }
                 break;
             case this.states.WAIT_BOT_1_MOVE:
-                
+
                 /*TODO:TRATAR if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                 */
-                this.mutex = true;
-                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true && this.prologResponseReceived) {
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
                     this.prologResponseReceived = false;
                     this.gameStateControl.nextState();
                 }
                 break;
-
-            case this.states.ANIMATING_PIECE:
-                this.mutex = true;
-                if (!this.pieceAnimation) {
-                    this.gameStateControl.nextState();
-                }
-                break;
-
 
 
             case this.states.WAIT_BOT_2_MOVE:
                 /*TODO:TRATAR if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
-                */
-                this.mutex = true;
-                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true && this.prologResponseReceived) {
-                    this.prologResponseReceived = false;
+                    */
+                if (this.gameStateControl.handleBotWait(this.scene.gameType) == true) {
+                    this.gameStateControl.nextState();
+                }
+                break;
+            case this.states.ANIMATING_PIECE:
+                if (!this.pieceAnimation) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -298,7 +246,6 @@ class MyGameOrchestrator {
                     this.scene.cameraAnimationDone = false;
                     this.gameStateControl.nextState();
                 }
-
                 break;
             case this.states.GAME_OVER:
 
@@ -347,22 +294,6 @@ class MyGameOrchestrator {
     update(currentTime) {
         this.currentTime = currentTime;
         this.timeBoard.update(currentTime);
-
-    /*TODO:TRATAR display() {
-        if (this.gameboardSet == true) {
-            /* this.theme.display();
-            this.animator.display();*/
-            /*
-            this.gameboard.display();
-            if ((this.orchestrator.scene.gameType == '1vs1' ||
-                this.orchestrator.scene.gameType == 'Player vs AI' && this.orchestrator.gameStateControl.currentPlayer == 1 ||
-                this.orchestrator.scene.gameType == 'AI vs Player' && this.orchestrator.gameStateControl.currentPlayer == 2)
-            ) {
-                this.timeBoard.display();
-            }
-            this.player1_stash.display();
-            this.player2_stash.display();
-        */
         if (this.pieceAnimation && this.pieceAnimationIndexI != null && this.pieceAnimationIndexJ != null) {
             if (this.orchestrator.gameStateControl.currentPlayer == 1) {
                 this.gameboard.matrixBoard[this.pieceAnimationIndexI][this.pieceAnimationIndexJ].piece.animation.update(currentTime);

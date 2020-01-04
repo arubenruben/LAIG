@@ -135,10 +135,6 @@ class MyGameBoard extends CGFobject {
                 positionTileZRelative = -1 * j * this.tiles_height + this.translation_z;
                 this.matrixBoard[i][j] = new MyTile(this.orchestrator, positionTileXRelative, positionTileZRelative, this.tiles_width, this.tiles_height, i, j);
 
-
-
-
-
                 let initialPiece = this.orchestrator.initialBoardRaw[i][j];
                 if (initialPiece > 0 && initialPiece < 4) {
 
@@ -208,11 +204,6 @@ class MyGameBoard extends CGFobject {
 
                     this.matrixBoard[i][j].piece.animation.parse_keyframes(arrayOfKeyframes);
                     this.matrixBoard[i][j].piece.animation2.parse_keyframes(arrayOfKeyframes2);
-
-
-
-
-
                 }
             }
         }

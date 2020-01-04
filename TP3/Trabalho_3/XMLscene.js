@@ -260,20 +260,13 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.graph.numLights; i++) {
             this.lights[i].update();
         }
-
-
-
+        
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
-
             // Displays the scene (MySceneGraph function).
-
             this.graph.displayScene();
         }
-
-
-
         this.popMatrix();
         // ---- END Background, camera and axis setup
     }
