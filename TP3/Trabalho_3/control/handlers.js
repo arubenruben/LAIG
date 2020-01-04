@@ -67,11 +67,6 @@ class handlerPrologReplys {
             } else {
                 this.orchestrator.scene.setPickEnabled(true);
             }
-            let orchestratorVar = this.orchestrator;
-            window.setTimeout(function () {
-                orchestratorVar.scene.cameraAnimation = true;
-            }, 2000);
-            
             this.orchestrator.gameStateControl.playDone = true;
         }
         this.orchestrator.gameStateControl.pickPending = false;

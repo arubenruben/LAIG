@@ -202,6 +202,7 @@ class MyGameOrchestrator {
                 break;
             case this.states.ANIMATING_PIECE:
                 if (!this.pieceAnimation) {
+                    console.log('Next animation');
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -244,6 +245,7 @@ class MyGameOrchestrator {
             case this.states.ROTATING_CAMERA:
                 if (this.scene.cameraAnimationDone) {
                     this.scene.cameraAnimationDone = false;
+                    console.log('Camera next');
                     this.gameStateControl.nextState();
                 }
                 break;

@@ -76,66 +76,28 @@ class MyGameStateControler {
                 break;
 
             case this.orchestrator.states.WAIT_PLAYER_1_MOVE:
-
                 this.orchestrator.scene.setPickEnabled(false);
-
-                if (!this.orchestrator.pieceAnimation) {
-
-                    this.orchestrator.scene.cameraAnimationDone = false;
-                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                    let orchestratorVar=this.orchestrator;
-                    window.setTimeout(function () {
-                        orchestratorVar.scene.cameraAnimation = true;
-                    }, 2000);
-                } else {
-                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
-                }
+                this.orchestrator.scene.cameraAnimationDone = false;
+                this.currentState = this.orchestrator.states.ANIMATING_PIECE;
                 break;
 
 
             case this.orchestrator.states.WAIT_PLAYER_2_MOVE:
-
                 this.orchestrator.scene.setPickEnabled(false);
-                
-                if (!this.orchestrator.pieceAnimation) {
-                    this.orchestrator.scene.cameraAnimationDone = false;
-                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                    let orchestratorVar=this.orchestrator;
-                    window.setTimeout(function () {
-                        orchestratorVar.scene.cameraAnimation = true;
-                    }, 2000);
-                } else {
-                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
-                }
+                this.orchestrator.scene.cameraAnimationDone = false;
+                this.currentState = this.orchestrator.states.ANIMATING_PIECE;
                 break;
 
             case this.orchestrator.states.WAIT_BOT_1_MOVE:
                 this.orchestrator.scene.setPickEnabled(false);
-
-                if (!this.orchestrator.pieceAnimation) {
-                    this.orchestrator.scene.cameraAnimationDone = false;
-                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                    let orchestratorVar=this.orchestrator;
-                    window.setTimeout(function () {
-                        orchestratorVar.scene.cameraAnimation = true;
-                    }, 2000);
-                } else if (this.orchestrator.pieceAnimation) {
-                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
-                }
+                this.orchestrator.scene.cameraAnimationDone = false;
+                this.currentState = this.orchestrator.states.ANIMATING_PIECE;                
                 break;
 
             case this.orchestrator.states.WAIT_BOT_2_MOVE:
                 this.orchestrator.scene.setPickEnabled(false);
-                if (!this.orchestrator.pieceAnimation) {
-                    this.orchestrator.scene.cameraAnimationDone = false;
-                    this.currentState = this.orchestrator.states.ROTATING_CAMERA;
-                    let orchestratorVar=this.orchestrator;
-                    window.setTimeout(function () {
-                        orchestratorVar.scene.cameraAnimation = true;
-                    }, 2000);
-                }else if (this.orchestrator.pieceAnimation) {
-                    this.currentState = this.orchestrator.states.ANIMATING_PIECE;
-                }
+                this.orchestrator.scene.cameraAnimationDone = false;
+                this.currentState = this.orchestrator.states.ANIMATING_PIECE;
                 break;
             
             case this.orchestrator.states.ANIMATING_PIECE:
