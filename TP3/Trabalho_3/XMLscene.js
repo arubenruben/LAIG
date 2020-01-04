@@ -62,7 +62,9 @@ class XMLscene extends CGFscene {
          */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
-        this.interface.setActiveCamera(this.camera);
+        if (this.selectedCamera != this.graph.boardCameraId) {
+            this.interface.setActiveCamera(this.camera);
+        }
     }
 
 
@@ -75,7 +77,7 @@ class XMLscene extends CGFscene {
             // is stationed precisely looking at the board
             this.boardCameraOrbitValue = this.boardCameraOrbitValue + this.boardCameraDelta;
             if (this.boardCameraOrbitValue > Math.PI) {
-                this.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
+                this.graph.Views[this.graph.boardCameraId].orbit(vec3.fromValues(0, 1, 0), Math.PI - this.lastBoardCameraOrbitValue);
 
                 this.boardCameraOrbitValue = 0;
                 // In case the selected camera isn't the baord camera we still have to rotate the one in the graph
@@ -83,12 +85,12 @@ class XMLscene extends CGFscene {
                 this.cameraAnimationDone = true;
 
             } else if (this.boardCameraOrbitValue == Math.PI) {
-                this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.graph.Views[this.graph.boardCameraId].orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
                 this.boardCameraOrbitValue = 0;
                 this.cameraAnimation = false;
                 this.cameraAnimationDone = true;
             } else {
-                this.camera.orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
+                this.graph.Views[this.graph.boardCameraId].orbit(vec3.fromValues(0, 1, 0), this.boardCameraDelta);
             }
 
             // used for the last transition to make sure it rotates always PI rad
@@ -103,7 +105,9 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.selectedCamera = this.graph.view_default;
         this.camera = this.graph.Views[this.selectedCamera];
-        this.interface.setActiveCamera(this.camera);
+        if (this.selectedCamera != this.graph.boardCameraId) {
+            this.interface.setActiveCamera(this.camera);
+        }
     }
 
 
@@ -186,6 +190,7 @@ class XMLscene extends CGFscene {
         this.initLights();
         this.initCameras();
         this.interface.gui_add_lights(this, this.graph.Lights);
+        this.interface.gui_add_camera(this, this.graph.Views);
         //Time in ms
         this.setUpdatePeriod(this.UPDATE_PERIOD);
 
@@ -232,6 +237,7 @@ class XMLscene extends CGFscene {
 
             // Apply transformations corresponding to the camera position relative to the origin
             this.applyViewMatrix();
+
         }
 
         this.pushMatrix();
@@ -248,7 +254,8 @@ class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
-            //this.graph.displayScene();
+
+            this.graph.displayScene();
         }
 
         this.orchestrator.display();

@@ -101,7 +101,7 @@ class MyGameSequence {
                 }
             }, 3500);
 
-            let id = window.setInterval(function () {
+            let id = window.setInterval(function() {
                 if (arrayVar.length == 0) {
                     window.clearInterval(id);
                 } else {
@@ -138,11 +138,9 @@ class MyGameSequence {
             }
             if (pieceRemoved.color == 'red') {
                 pieceToInsertNumeric = 0;
-            }
-            else if (pieceRemoved.color == 'blue') {
+            } else if (pieceRemoved.color == 'blue') {
                 pieceToInsertNumeric = 1;
-            }
-            else if (pieceRemoved.color == 'yellow') {
+            } else if (pieceRemoved.color == 'yellow') {
                 pieceToInsertNumeric = 2;
             }
             scoreArray[pieceToInsertNumeric]++;

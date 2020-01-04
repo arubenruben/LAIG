@@ -17,7 +17,7 @@ class MyGameBoard extends CGFobject {
     constructor(orchestrator, x1, z1, x2, z2) {
 
         if (orchestrator == null || x1 == null || z1 == null || x2 == null || z2 == null) {
-            console.error('Parameters null on the board constructor')
+            console.error('Parameters null on the board constructor');
         }
         super(orchestrator.scene);
         this.orchestrator = orchestrator;
@@ -101,7 +101,14 @@ class MyGameBoard extends CGFobject {
 
         this.aux = 0;
         this.counter = 0;
+        this.tilesAreDefined = false;
 
+        //this.updateMatrixOfTiles();
+    }
+
+    updateMatrixOfTiles() {
+
+        this.tilesAreDefined = true;
         //MATRIX WITH THE TILE
         for (let i = 0; i < this.n_lines; i++) {
             this.matrixBoard[i] = new Array();
@@ -124,30 +131,6 @@ class MyGameBoard extends CGFobject {
             }
         }
     }
-
-    // updateMatrixOfTiles() {
-    //     //MATRIX WITH THE TILE
-    //     for (let i = 0; i < this.n_lines; i++) {
-    //         this.matrixBoard[i] = new Array();
-    //         if (i % 2 == 0) {
-    //             this.translation_x = this.tiles_width / 4;
-    //             this.translation_z = -1 * this.tiles_height / 2;
-    //             this.aux = this.counter * this.tiles_width / 2;
-
-    //             this.counter++;
-    //         } else {
-    //             this.translation_x = 0;
-    //             this.translation_z = 0;
-    //         }
-    //         for (let j = 0; j < this.n_columns; j++) {
-    //             this.matrixBoard[i][j] = new MyTile(this.orchestrator, i * this.tiles_width + this.translation_x - this.aux, -1 * j * this.tiles_height + this.translation_z, this.tiles_width, this.tiles_height, i, j);
-    //             let initialPiece = this.orchestrator.initialBoardRaw[i][j];
-    //             if (initialPiece > 0 && initialPiece < 4) {
-    //                 this.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.matrixBoard[i][j], j, i);
-    //             }
-    //         }
-    //     }
-    // }
 
     display() {
 
@@ -257,12 +240,15 @@ class MyGameBoard extends CGFobject {
         this.scene.pushMatrix();
 
         this.scene.translate(this.x1, 0.02 * this.tiles_width, this.z1);
-
-        for (let i = 0; i < this.n_lines; i++) {
-            for (let j = 0; j < this.n_columns; j++) {
-                //TILES ARE PICKABLE
-                this.scene.registerForPick((i + 1) * 100 + j, this.matrixBoard[i][j]);
-                this.matrixBoard[i][j].display();
+        if (this.tilesAreDefined) {
+            for (let i = 0; i < this.n_lines; i++) {
+                for (let j = 0; j < this.n_columns; j++) {
+                    //TILES ARE PICKABLE
+                    if (this.matrixBoard[i][j] != null) {
+                        this.scene.registerForPick((i + 1) * 100 + j, this.matrixBoard[i][j]);
+                        this.matrixBoard[i][j].display();
+                    }
+                }
             }
         }
 
