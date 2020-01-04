@@ -46,7 +46,7 @@ class XMLscene extends CGFscene {
             this.gameMovie = function() {
                 this.orchestrator.gameSequence.gameMovie();
             }
-            this.reset=function(){
+            this.reset = function() {
                 this.orchestrator.gameSequence.reset();
             }
             this.cameraAnimation = false;
@@ -260,7 +260,7 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.graph.numLights; i++) {
             this.lights[i].update();
         }
-        
+
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();

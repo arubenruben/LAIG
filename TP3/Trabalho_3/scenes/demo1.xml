@@ -2,12 +2,13 @@
     <scene root="terrain" axis_length="5" />
 
     <!-- VIEWS/CAMERAS USED IN THE SCENE -->
-    <views default="testSideCamera" boardCamera="testSideCamera">
+    <views default="frontSideCamera" boardCamera="boardCamera">
 
-        <perspective id="testSideCamera" near="0.1" far="500" angle="45">
+        <!-- <perspective id="testSideCamera" near="0.1" far="500" angle="45">
             <from x="3" y="5" z="0" />
             <to x="0" y="0" z="0" />
-        </perspective>
+        </perspective> -->
+        
         <perspective id="frontSideCamera" near="0.1" far="500" angle="45">
             <from x="7" y="12" z="35" />
             <to x="7" y="-4" z="0" />
@@ -983,7 +984,7 @@
             <texture id="dirt" length_s="0.5" length_t="0.5" />
             <children>
 
-                <!-- <componentref id="underground" />
+                <componentref id="underground" />
                 <componentref id="floor" />
                 <componentref id="sides" />
                 <componentref id="pool" />
@@ -994,10 +995,10 @@
                 <componentref id="chairsAndTable"/>
                 <componentref id="gameBoard"/>
                 <componentref id="gameBoard1"/>
-                <componentref id="chairsAndTable1"/> -->
+                <componentref id="chairsAndTable1"/>
 
 
-                <componentref id="gameBoardAux"/>
+                <!-- <componentref id="gameBoardAux"/> -->
 
             </children>
         </component>

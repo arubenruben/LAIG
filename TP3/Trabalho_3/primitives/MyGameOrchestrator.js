@@ -54,14 +54,6 @@ class MyGameOrchestrator {
         */
         this.requestAtive = true;
         this.undoPending = false;
-        this.prolog.getPrologRequest(
-            'start',
-            function (data) {
-                handlerVAR.handleInitialBoard(data.target.response);
-            },
-            function (data) {
-                handlerVAR.handlerError(data.target.response);
-            });
         this.gameSequence = new MyGameSequence(this);
         this.gameboard = null;
 
@@ -97,7 +89,7 @@ class MyGameOrchestrator {
             }
         }
         //TODO:TIREI UM UPDATE SCORES DAQUI DETETAR GAMEOVER E EXEQUIVEL AINDA ????
-        
+
         this.gameStateControl.playDone = true;
         this.gameboardSet = true;
         this.orchestrator.currentState == this.orchestrator.states.UNDO_PROGRESS
@@ -193,7 +185,7 @@ class MyGameOrchestrator {
                 }
                 break;
             case this.states.ANIMATING_PIECE:
-                if (!this.pieceAnimation&&this.orchestrator.requestAtive==false) {
+                if (!this.pieceAnimation && this.orchestrator.requestAtive == false) {
                     this.gameStateControl.nextState();
                 }
                 break;
@@ -210,10 +202,10 @@ class MyGameOrchestrator {
                 this.requestAtive = true;
                 this.prolog.getPrologRequest(
                     stringRequest,
-                    function (data) {
+                    function(data) {
                         handlerVAR.handleMove(data.target.response, obj, id);
                     },
-                    function (data) {
+                    function(data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
