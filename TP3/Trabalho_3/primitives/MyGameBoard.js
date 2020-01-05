@@ -160,7 +160,7 @@ class MyGameBoard extends CGFobject {
 
 
                     keyframe2 = new MyKeyFrameAnimation(this.orchestrator.scene);
-                    keyframe2.instant = 2.5;
+                    keyframe2.instant = 1.5;
                     keyframe2.translate_vec = [0, this.boardLenghtX / 2, 0];
                     keyframe2.rotate_vec = [0, 0, 0];
                     keyframe2.scale_vec = [1, 1, 1];
@@ -175,25 +175,25 @@ class MyGameBoard extends CGFobject {
                     }
 
                     keyframe3 = new MyKeyFrameAnimation(this.orchestrator.scene);
-                    keyframe3.instant = 5;
+                    keyframe3.instant = 3.5;
                     keyframe3.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width - pieceColorAnimation, this.boardLenghtX / 2, -positionTileAuxiliarBoard1Z - 2 * this.tiles_height];
                     keyframe3.rotate_vec = [0, 0, 0];
                     keyframe3.scale_vec = [1, 1, 1];
 
                     keyframe4 = new MyKeyFrameAnimation(this.orchestrator.scene);
-                    keyframe4.instant = 7.5;
+                    keyframe4.instant = 5;
                     keyframe4.translate_vec = [positionTileAuxiliarBoard1X - this.tiles_width - pieceColorAnimation, 0, -positionTileAuxiliarBoard1Z - 2 * this.tiles_height];
                     keyframe4.rotate_vec = [0, 90, 0];
                     keyframe4.scale_vec = [1, 1, 1];
 
                     keyframe5 = new MyKeyFrameAnimation(this.orchestrator.scene);
-                    keyframe5.instant = 5;
+                    keyframe5.instant = 3.5;
                     keyframe5.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width + pieceColorAnimation, this.boardLenghtX / 2, positionTileAuxiliarBoard2Z + 2 * this.tiles_height];
                     keyframe5.rotate_vec = [0, 0, 0];
                     keyframe5.scale_vec = [1, 1, 1];
 
                     keyframe6 = new MyKeyFrameAnimation(this.orchestrator.scene);
-                    keyframe6.instant = 7.5;
+                    keyframe6.instant = 5;
                     keyframe6.translate_vec = [-positionTileAuxiliarBoard2X + this.tiles_width + pieceColorAnimation, 0, positionTileAuxiliarBoard2Z + 2 * this.tiles_height];
                     keyframe6.rotate_vec = [0, 90, 0];
                     keyframe6.scale_vec = [1, 1, 1];

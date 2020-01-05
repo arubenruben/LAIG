@@ -83,11 +83,67 @@
     <lights>
         <omni id="meio_dia" enabled="1">
             <location x="7" y="5" z="10" w="1.0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
-            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
-            <specular r="0.7" g="0.7" b="0.7" a="1.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0.0" />
+        </omni>
+
+
+        <spot id="spotGameBoard" enabled="0" angle="90" exponent="5">
+            <location x="11.6" y="3" z="19.9" w="1.0" />
+            <target x="11.6" y="1.05" z="19.9" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="0" linear="0.5" quadratic="0.0" />
+        </spot>
+
+        <spot id="spotGameBoard1" enabled="0" angle="90" exponent="5">
+            <location x="3.6" y="3" z="20.0" w="1.0" />
+            <target x="3.6" y="1.05" z="20.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="0" linear="0.5" quadratic="0.0" />
+        </spot>
+
+        <omni id="por_do_sol" enabled="0">
+            <location x="7" y="5" z="10" w="1.0" />
+            <ambient r="0.9" g="0.5" b="0" a="1.0" />
+            <diffuse r="0.9" g="0.5" b="0" a="1.0" />
+            <specular r="0.9" g="0.5" b="0" a="1.0" />
             <attenuation constant="1.0" linear="0" quadratic="0.0" />
         </omni>
+
+
+        <spot id="spotLightBillboard1" enabled="0" angle="90" exponent="5">
+            <location x="5" y="3" z="2" w="1.0" />
+            <target x="4" y="5" z="0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="0" linear="0.5" quadratic="0.0" />
+        </spot>
+
+        <spot id="spotLightBillboard12" enabled="0" angle="90" exponent="5">
+            <location x="9" y="3" z="2" w="1.0" />
+            <target x="9" y="4" z="0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="0" linear="0.5" quadratic="0.0" />
+        </spot>
+
+
+        <spot id="spot_esperguicadeira" enabled="0" angle="90" exponent="1">
+            <location x="9" y="5" z="12" w="1.0" />
+            <target x="13" y="1" z="12" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0.0" />
+        </spot>
 
 
 
@@ -980,7 +1036,6 @@
             <texture id="none"/>
             <children>
                 <primitiveref id="gameBoardPrimitive"/>
- 
             </children>
         </component> 
 
@@ -1529,9 +1584,6 @@
                 <primitiveref id="chair_legs"/>
             </children>
         </component>
-
-
-
 
 
 
