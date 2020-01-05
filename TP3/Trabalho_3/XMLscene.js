@@ -50,6 +50,9 @@ class XMLscene extends CGFscene {
             this.reset = function() {
                 this.orchestrator.gameSequence.reset();
             }
+            this.loadScene=function(){
+                
+            }
             this.cameraAnimation = false;
             //JUST AFTER GameType Selected
             this.setPickEnabled(false);
