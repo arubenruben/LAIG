@@ -21,49 +21,49 @@ class XMLscene extends CGFscene {
      */
     init(application) {
 
-            super.init(application);
-            this.sceneInited = false;
-            this.enableTextures(true);
-            this.gl.clearDepth(100.0);
-            this.gl.enable(this.gl.DEPTH_TEST);
-            this.gl.enable(this.gl.CULL_FACE);
-            this.gl.depthFunc(this.gl.LEQUAL);
-            this.axis = new CGFaxis(this);
-            this.UPDATE_PERIOD = 30;
-            this.displayAxis = true;
-            this.displayNormals = false;
-            this.selectedCamera = 0;
-            this.gameType = null;
-            this.ai1Dificulty = null;
-            this.ai2Dificulty = null;
-            this.string=null;
-            this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
-            this.ai1Dificulties = [0, 1, 2];
-            this.ai2Dificulties = [0, 1, 2];
-            this.orchestrator = new MyGameOrchestrator(this);
-            this.undo = function() {
-                this.orchestrator.gameSequence.undo();
-            }
-            this.gameMovie = function() {
-                this.orchestrator.gameSequence.gameMovie();
-            }
-            this.reset = function() {
-                this.orchestrator.gameSequence.reset();
-            }
-            this.loadScene=function(){
-                
-            }
-            this.cameraAnimation = false;
-            //JUST AFTER GameType Selected
-            this.setPickEnabled(false);
-            this.boardCameraDelta = Math.PI / 60;
-            this.boardCameraOrbitValue = 0;
-            this.lastBoardCameraOrbitValue = 0;
-            this.cameraAnimationDone = false;
+        super.init(application);
+        this.sceneInited = false;
+        this.enableTextures(true);
+        this.gl.clearDepth(100.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.CULL_FACE);
+        this.gl.depthFunc(this.gl.LEQUAL);
+        this.axis = new CGFaxis(this);
+        this.UPDATE_PERIOD = 30;
+        this.displayAxis = true;
+        this.displayNormals = false;
+        this.selectedCamera = 0;
+        this.gameType = null;
+        this.ai1Dificulty = null;
+        this.ai2Dificulty = null;
+        this.string = null;
+        this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
+        this.ai1Dificulties = [0, 1, 2];
+        this.ai2Dificulties = [0, 1, 2];
+        this.orchestrator = new MyGameOrchestrator(this);
+        this.undo = function () {
+            this.orchestrator.gameSequence.undo();
         }
-        /**
-         * updates the scene camera
-         */
+        this.gameMovie = function () {
+            this.orchestrator.gameSequence.gameMovie();
+        }
+        this.reset = function () {
+            this.orchestrator.gameSequence.reset();
+        }
+        this.loadScene = function () {
+            this.orchestrator.loadNewScene();
+        }
+        this.cameraAnimation = false;
+        //JUST AFTER GameType Selected
+        this.setPickEnabled(false);
+        this.boardCameraDelta = Math.PI / 60;
+        this.boardCameraOrbitValue = 0;
+        this.lastBoardCameraOrbitValue = 0;
+        this.cameraAnimationDone = false;
+    }
+    /**
+     * updates the scene camera
+     */
     updateCamera() {
         this.camera = this.graph.Views[this.selectedCamera];
         if (this.selectedCamera != this.graph.boardCameraId) {
@@ -195,20 +195,24 @@ class XMLscene extends CGFscene {
 
         this.orchestrator.prolog.getPrologRequest(
             'start',
-            function(data) {
+            function (data) {
                 handlerVAR.handleInitialBoard(data.target.response);
             },
-            function(data) {
+            function (data) {
                 handlerVAR.handlerError(data.target.response);
             });
 
-
+        this.orchestrator.loadedPending=false;
+        this.orchestrator.loadedScene=true;
+        
         this.initLights();
         this.initCameras();
         this.interface.gui_add_lights(this, this.graph.Lights);
         this.interface.gui_add_camera(this, this.graph.Views);
         //Time in ms
         this.setUpdatePeriod(this.UPDATE_PERIOD);
+
+        this.updateCamera();
 
         this.sceneInited = true;
     }
@@ -227,7 +231,7 @@ class XMLscene extends CGFscene {
         }
 
         //TODO:Para fazer o update no my game orchestrator
-        if(this.orchestrator.loaded==true){
+        if (this.orchestrator.loaded == true) {
             this.orchestrator.update(t);
         }
         this.updateBoardCamera();
@@ -240,40 +244,45 @@ class XMLscene extends CGFscene {
     display() {
         // ---- BEGIN Background, camera and axis setup
         this.orchestrator.orchestrate();
-        //PICKABLE
-        this.orchestrator.managePick(this.pickMode, this.pickResults);
-        this.clearPickRegistration();
+        if (this.orchestrator.loadedPending == false) {
 
-        // Clear image and depth buffer everytime we update the scene
-        if (this.sceneInited) {
-            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+            //PICKABLE
+            this.orchestrator.managePick(this.pickMode, this.pickResults);
+            this.clearPickRegistration();
 
-            // Initialize Model-View matrix as identity (no transformation
-            this.updateProjectionMatrix();
-            this.loadIdentity();
+            // Clear image and depth buffer everytime we update the scene
+            if (this.sceneInited) {
+                this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-            // Apply transformations corresponding to the camera position relative to the origin
-            this.applyViewMatrix();
+                // Initialize Model-View matrix as identity (no transformation
+                this.updateProjectionMatrix();
+                this.loadIdentity();
 
+                // Apply transformations corresponding to the camera position relative to the origin
+                this.applyViewMatrix();
+
+            }
+
+            this.pushMatrix();
+
+            if (this.displayAxis)
+                this.axis.display();
+
+            for (var i = 0; i < this.graph.numLights; i++) {
+                this.lights[i].update();
+            }
+
+            if (this.sceneInited) {
+                // Draw axis
+                this.setDefaultAppearance();
+                // Displays the scene (MySceneGraph function).
+                this.graph.displayScene();
+            }
+            this.popMatrix();
+            // ---- END Background, camera and axis setup
+        }else{
+            console.log('Aqui');
         }
-
-        this.pushMatrix();
-
-        if (this.displayAxis)
-            this.axis.display();
-
-        for (var i = 0; i < this.graph.numLights; i++) {
-            this.lights[i].update();
-        }
-
-        if (this.sceneInited) {
-            // Draw axis
-            this.setDefaultAppearance();
-            // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
-        }
-        this.popMatrix();
-        // ---- END Background, camera and axis setup
     }
 }

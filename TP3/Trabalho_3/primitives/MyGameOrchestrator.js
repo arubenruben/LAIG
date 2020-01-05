@@ -31,10 +31,11 @@ class MyGameOrchestrator {
             ROTATING_CAMERA: 10,
             ANIMATING_PIECE: 12,
             UNDO_PROGRESS: 13,
-            GAME_OVER: 14,
-            MOVIE_REPLY: 15,
-            WIN_PLAYER1: 16,
-            WIN_PLAYER2: 17
+            LOAD_SCENE: 14,
+            GAME_OVER: 15,
+            MOVIE_REPLY: 16,
+            WIN_PLAYER1: 17,
+            WIN_PLAYER2: 18
         };
         this.gameStateControl = new MyGameStateControler(this);
         this.initialBoardRaw = new Array();
@@ -42,7 +43,7 @@ class MyGameOrchestrator {
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
-        this.oneTime=false;
+        this.oneTime = false;
         this.currentTime = Date.now()
         this.cameraSeqId = null;
         /*
@@ -53,12 +54,16 @@ class MyGameOrchestrator {
         this.undoPending = false;
         this.gameSequence = new MyGameSequence(this);
         this.gameboard = null;
+        this.loadedSceneId=1;
 
 
         this.pieceAnimation = false;
         this.pieceAnimationIndexI = null;
         this.pieceAnimationIndexJ = null;
         this.prologResponseReceived = false;
+
+        this.loadedScene=false;
+        this.loadedPending=false;
     }
 
     buildInitialBoard() {
@@ -67,7 +72,7 @@ class MyGameOrchestrator {
         this.player1_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 1);
         this.player2_stash = new MyAuxiliarBoard(this, this.gameboard.x1, this.gameboard.z1, this.gameboard.x2, this.gameboard.z2, this.gameboard.tiles_width, this.gameboard.tiles_height, 2);
         this.timeBoard = new MyTimeBoard(this, 1, this.gameboard.boardLenghtZ * 0.08);
-        this.loaded=true;
+        this.loaded = true;
     }
     updateBoard(incomingArray, obj, id) {
         this.gameboardSet = false;
@@ -200,10 +205,10 @@ class MyGameOrchestrator {
                 this.requestAtive = true;
                 this.prolog.getPrologRequest(
                     stringRequest,
-                    function(data) {
+                    function (data) {
                         handlerVAR.handleMove(data.target.response, obj, id);
                     },
-                    function(data) {
+                    function (data) {
                         handlerVAR.handlerError(data.target.response, obj, id);
                     });
 
@@ -223,6 +228,13 @@ class MyGameOrchestrator {
                 }
                 break;
 
+            case this.states.LOAD_SCENE:
+                if (this.loadedScene == true&&this.loadedPending==false) {
+                    this.gameStateControl.nextState();
+                }
+                break;
+
+
             case this.states.ROTATING_CAMERA:
                 if (this.scene.cameraAnimationDone) {
                     this.scene.cameraAnimationDone = false;
@@ -230,28 +242,28 @@ class MyGameOrchestrator {
                 }
                 break;
             case this.states.GAME_OVER:
-                if(this.oneTime==false){
-                    this.oneTime=true;
-                    this.orchestrator.scene.string='GAME OVER';
-                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene,'string').name('');
-                    this.orchestrator.scene.gui.gui.closed=false;
+                if (this.oneTime == false) {
+                    this.oneTime = true;
+                    this.orchestrator.scene.string = 'GAME OVER';
+                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene, 'string').name('');
+                    this.orchestrator.scene.gui.gui.closed = false;
                 }
                 break;
             case this.states.WIN_PLAYER1:
-                if(this.oneTime==false){
-                    this.oneTime=true;
-                    this.orchestrator.scene.string='Player 1 WON';
-                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene,'string').name('');
-                    this.orchestrator.scene.gui.gui.closed=false;
+                if (this.oneTime == false) {
+                    this.oneTime = true;
+                    this.orchestrator.scene.string = 'Player 1 WON';
+                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene, 'string').name('');
+                    this.orchestrator.scene.gui.gui.closed = false;
                 }
                 break;
 
             case this.states.WIN_PLAYER2:
-                if(this.oneTime==false){
-                    this.oneTime=true;
-                    this.orchestrator.scene.string='Player 2 WON';
-                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene,'string').name('');
-                    this.orchestrator.scene.gui.gui.closed=false;
+                if (this.oneTime == false) {
+                    this.oneTime = true;
+                    this.orchestrator.scene.string = 'Player 2 WON';
+                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene, 'string').name('');
+                    this.orchestrator.scene.gui.gui.closed = false;
                 }
                 break;
         }
@@ -279,6 +291,28 @@ class MyGameOrchestrator {
             if (piece != null)
                 this.gameStateControl.pickActive(obj, id);
         }
+    }
+
+    loadNewScene(){
+        this.orchestrator.loadedScene=false;
+        this.orchestrator.loadedPending=true;
+        let resumeState=this.orchestrator.gameStateControl.currentState;
+        this.orchestrator.gameStateControl.currentState=this.states.LOAD_SCENE;
+        let filename=null;
+        if(this.loadedSceneId==1){
+            this.loadedSceneId=2;
+            filename='demo1.xml';
+            
+        }else{
+            this.loadedSceneId=1;
+            filename='demo.xml';
+        }
+        this.scene.gui.gui.destroy();
+        //this.scene.light=null;
+        //this.scene
+        let nothing= new MySceneGraph(filename, this.orchestrator.scene);
+        this.scene.interface.build(this.scene);
+        this.orchestrator.gameStateControl.currentState=resumeState;
     }
 
     update(currentTime) {

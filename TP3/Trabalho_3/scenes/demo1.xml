@@ -8,14 +8,14 @@
             <from x="3" y="5" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
-        
+
         <perspective id="frontSideCamera" near="0.1" far="500" angle="45">
             <from x="7" y="12" z="35" />
             <to x="7" y="-4" z="0" />
         </perspective>
-        
 
-      
+
+
         <perspective id="boardCamera" near="0.1" far="500" angle="45">
             <from x="11.6" y="2.5" z="18.9" />
             <to x="10.6" y="1.05" z="19.9" />
@@ -25,7 +25,7 @@
             <from x="15.4" y="4" z="15.1" />
             <to x="5.5" y="1.15" z="20.0" />
         </perspective>
-        
+
 
         <perspective id="backSideCamera" near="0.1" far="500" angle="45">
             <from x="7" y="10" z="-10" />
@@ -983,9 +983,9 @@
             <cylinder2 base="0.05" top="0.05" height="2" slices="10" stacks="10" />
         </primitive>
 
-    <primitive id="gameBoardPrimitive">
-        <gameboard x1="-0.5" z1="0.5" x2="0.5" z2="-0.5"/>
-    </primitive>
+        <primitive id="gameBoardPrimitive">
+            <gameboard x1="-0.5" z1="0.5" x2="0.5" z2="-0.5"/>
+        </primitive>
 
 
     </primitives>
@@ -994,7 +994,7 @@
     <!-- COMPONENTS USED IN THE SCENE -->
     <components>
 
-        
+
         <!-- ROOT of the xml, represents the scene itself-->
         <component id="terrain">
             <transformation>
@@ -1005,22 +1005,22 @@
             </materials>
             <texture id="dirt" length_s="0.5" length_t="0.5" />
             <children>
-                <!--
 
-                    <componentref id="floor" />
-                    <componentref id="sides" />
-                    <componentref id="pool" />
-                    <componentref id="spot_pub" />
-                    <componentref id="fence_core" />
-                    <componentref id="slider_ladder" />
-                    <componentref id="slider_ladder_2" />
-                    <componentref id="chairsAndTable"/>
-                    <componentref id="underground" />
-                -->
+
+                <componentref id="floor" />
+                <componentref id="sides" />
+                <componentref id="pool" />
+                <componentref id="spot_pub" />
+                <componentref id="fence_core" />
+                <componentref id="slider_ladder" />
+                <componentref id="slider_ladder_2" />
+                <componentref id="chairsAndTable"/>
+                <componentref id="underground" />
+
                 <componentref id="gameBoard"/>
                 <componentref id="gameBoard1"/>
                 <componentref id="chairsAndTable1"/>
-                 <!-- <componentref id="gameBoardAux"/> -->
+                <!-- <componentref id="gameBoardAux"/> -->
 
             </children>
         </component>
@@ -1037,7 +1037,7 @@
             <children>
                 <primitiveref id="gameBoardPrimitive"/>
             </children>
-        </component> 
+        </component>
 
         <component id="chairsAndTable1">
             <transformation>
@@ -1055,7 +1055,7 @@
                 <componentref id="chair1"/>
                 <componentref id="board_table"/>
             </children>
-        </component> 
+        </component>
 
         <component id="chairsAndTable">
             <transformation>
@@ -1091,7 +1091,7 @@
             </children>
         </component>
 
-         
+
         <component id="board_table_mid">
             <transformation>
                 <translate x="1.5" y="0" z="0.25"/>
@@ -1103,41 +1103,41 @@
 
             <texture id="whitechair" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="board_table_mid"/>    
+                <primitiveref id="board_table_mid"/>
             </children>
-    </component>
+        </component>
 
-          
-    <component id="board_table_bottom">
-        <transformation>
-            <translate x="1.5" y="0" z="0.25"/>
-            <rotate axis="x" angle="-90"/>
-        </transformation>
-        <materials>
-            <material id="demoMaterial"/>
-        </materials>
 
-        <texture id="blackchair" length_s="1" length_t="1"/>
-        <children>
-            <primitiveref id="board_table_bottom"/>    
-        </children>
-</component>
-            <component id="board_table_top">
-                <transformation>
-                    <translate x="1.5" y="1" z="0.25"/>
-                    <rotate axis="x" angle="90"/>
-                    <translate x="0" y="0" z="0" />
-                </transformation>
-                <materials>
-                    <material id="demoMaterial"/>
-                </materials>
-    
-                <texture id="none"/>
-                <children>
-                    <primitiveref id="board_table_top"/>
-                    <componentref id="board_table_top1"/>
-                    <componentref id="board_table_top2"/>     
-                </children>
+        <component id="board_table_bottom">
+            <transformation>
+                <translate x="1.5" y="0" z="0.25"/>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
+
+            <texture id="blackchair" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="board_table_bottom"/>
+            </children>
+        </component>
+        <component id="board_table_top">
+            <transformation>
+                <translate x="1.5" y="1" z="0.25"/>
+                <rotate axis="x" angle="90"/>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
+
+            <texture id="none"/>
+            <children>
+                <primitiveref id="board_table_top"/>
+                <componentref id="board_table_top1"/>
+                <componentref id="board_table_top2"/>
+            </children>
         </component>
 
         <component id="board_table_top1">
@@ -1150,25 +1150,25 @@
 
             <texture id="plastic2" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="board_table_top1"/>   
+                <primitiveref id="board_table_top1"/>
             </children>
-    </component>
+        </component>
 
 
-    <component id="board_table_top2">
-        <transformation>
-            <translate x="0" y="0" z="0.1"/>
-            <scale x="1" y="1" z="0"/>
-        </transformation>
-        <materials>
-            <material id="demoMaterial"/>
-        </materials>
+        <component id="board_table_top2">
+            <transformation>
+                <translate x="0" y="0" z="0.1"/>
+                <scale x="1" y="1" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial"/>
+            </materials>
 
-        <texture id="plastic2" length_s="1" length_t="1"/>
-        <children>
-            <primitiveref id="board_table_top1"/>   
-        </children>
-</component>
+            <texture id="plastic2" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="board_table_top1"/>
+            </children>
+        </component>
 
 
 
@@ -1191,7 +1191,7 @@
             </children>
         </component>
 
-        
+
         <component id="chair">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -1220,15 +1220,15 @@
             <children>
                 <componentref id="leg1"/>
                 <componentref id="leg2"/>
-               <componentref id="leg3"/>
-               <componentref id="leg4"/>
-               <componentref id="legsupport1"/>
-               <componentref id="legsupport2"/>
-               <componentref id="legsupport3"/>
+                <componentref id="leg3"/>
+                <componentref id="leg4"/>
+                <componentref id="legsupport1"/>
+                <componentref id="legsupport2"/>
+                <componentref id="legsupport3"/>
             </children>
         </component>
 
-        
+
         <component id="legsupport1">
             <transformation>
                 <translate x="0" y="0.20" z="0"/>
@@ -1289,7 +1289,7 @@
                 <componentref id="chair_side2_block3"/>
                 <componentref id="chair_side2_block4"/>
                 <componentref id="chair_side2_block5"/>
-                
+
 
             </children>
         </component>
@@ -1316,7 +1316,7 @@
                 <componentref id="chair_padding_right"/>
                 <componentref id="chair_padding_front"/>
             </children>
-          
+
         </component>
 
 
@@ -1382,7 +1382,7 @@
                 <componentref id="chair_padding_back"/>
             </children>
         </component>
-        
+
         <component id="chair_side2_block5">
             <transformation>
                 <translate x="-0.05" y="0.7" z="-0.05"/>
@@ -1404,7 +1404,7 @@
             </children>
         </component>
 
-        
+
 
         <component id="chair_side1">
             <transformation>
@@ -1504,7 +1504,7 @@
             </children>
         </component>
 
-        
+
         <component id="chair_padding_front">
             <transformation>
                 <translate x="0.55" y="0.5" z="-0.05"/>
@@ -2219,9 +2219,9 @@
             </children>
         </component>
 
-        
-     
-        
+
+
+
         <component id="grupo_fence_esq_21">
             <transformation>
                 <translate x="-20.5" y="0" z="0" />
@@ -2235,7 +2235,7 @@
                 <componentref id="grupo_3_fences_generico" />
             </children>
         </component>
-        
+
         <component id="grupo_fence_esq_20">
             <transformation>
                 <translate x="-20" y="0" z="0" />
@@ -2250,7 +2250,7 @@
             </children>
         </component>
 
-    
+
 
         <component id="grupo_fence_esq_19">
             <transformation>
@@ -3057,7 +3057,7 @@
             </children>
         </component>
 
-        
+
         <component id="aux2">
             <transformation>
                 <translate x="0" y="0" z="2" />

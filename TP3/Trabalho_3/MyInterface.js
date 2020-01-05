@@ -26,7 +26,7 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
         this.gui.add(this.scene, 'displayNormals').name("Display Normals");
         this.gui.add(this.scene, 'gameType', this.scene.gameTypes).name('Game Type');
-        this.gui.add(this.scene,'loadScene').name('Load Scene');
+        this.gui.add(this.scene, 'loadScene').name('Load Scene');
         this.gui.add(this.scene, 'undo').name('Undo');
         this.gui.add(this.scene, 'gameMovie').name('Game Movie');
         this.gui.add(this.scene, 'reset').name('Reset');
@@ -105,9 +105,24 @@ class MyInterface extends CGFinterface {
         this.gui.add(scene, 'displayAxis').name("Display axis");
         this.gui.add(scene, 'displayNormals').name("Display Normals");
         this.gui.add(scene, 'gameType', scene.gameTypes).name('Game Type');
+        this.gui.add(scene,'loadScene').name('Load Scene');
         this.gui.add(scene, 'undo').name('Undo');
         this.gui.add(scene, 'gameMovie').name('Game Movie');
         this.gui.add(scene, 'reset').name('Reset');
+    }
+
+    build(scene){
+
+        this.gui = new dat.GUI();
+        scene.gui.gui = this.gui;
+        this.gui.add(scene, 'displayAxis').name("Display axis");
+        this.gui.add(scene, 'displayNormals').name("Display Normals");
+        this.gui.add(scene, 'gameType', scene.gameTypes).name('Game Type');
+        this.gui.add(scene,'loadScene').name('Load Scene');
+        this.gui.add(scene, 'undo').name('Undo');
+        this.gui.add(scene, 'gameMovie').name('Game Movie');
+        this.gui.add(scene, 'reset').name('Reset');
+
     }
 
 
