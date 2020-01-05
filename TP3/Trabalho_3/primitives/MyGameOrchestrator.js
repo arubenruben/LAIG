@@ -77,13 +77,9 @@ class MyGameOrchestrator {
                 //Se existir uma peca e que vale a pena retirar
                 if (this.gameboard.matrixBoard[i][j].piece != null) {
                     if (incomingArray[i][j] == 0) {
-                        
-                        console.log(i);
-                        console.log(j);
                         this.pieceRemoved = this.gameboard.matrixBoard[i][j].piece;
                         let newGameMove = new MyGameMove(this.orchestrator, obj, this.pieceRemoved)
                         this.orchestrator.gameSequence.addGameMove(newGameMove);
-                        console.log(this.orchestrator.gameSequence.arrayGameSequence);
                         this.orchestrator.pieceAnimationIndexI = i;
                         this.orchestrator.pieceAnimationIndexJ = j;
                         this.orchestrator.pieceAnimation = true;
@@ -136,7 +132,6 @@ class MyGameOrchestrator {
     }
 
     orchestrate() {
-        console.log(this.gameboard);
         switch (this.gameStateControl.currentState) {
 
             case this.states.INITIALIZING:

@@ -81,7 +81,6 @@ class MyAnimation {
                         this.segmentTime_active--;
                         if (this.scene.orchestrator.pieceAnimation) {
                             this.scene.orchestrator.pieceAnimation = false;
-                            console.log('RemovePiece');
                             this.scene.orchestrator.gameboard.matrixBoard[this.scene.orchestrator.pieceAnimationIndexI][this.scene.orchestrator.pieceAnimationIndexJ].piece = null;
                             this.scene.orchestrator.gameStateControl.updateScores();
                         }

@@ -154,27 +154,22 @@ class MyGameSequence {
     }
 
     reset() {
-        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.INITIALIZING;
-        this.orchestrator.scene.interface = new MyInterface();
-        this.orchestrator.scene.interface.reset(this.orchestrator.scene);
+        this.orchestrator.scene.setPickEnabled(false);
         this.orchestrator.scene.gameType = null;
         this.orchestrator.scene.ai1Dificulty = null;
         this.orchestrator.scene.ai2Dificulty = null;
+        this.orchestrator.gameStateControl.currentState = this.orchestrator.states.INITIALIZING;
+        this.orchestrator.scene.interface = new MyInterface();
+        this.orchestrator.scene.interface.reset(this.orchestrator.scene);
         if (this.orchestrator.gameStateControl.currentPlayer == 2) {
             this.scene.cameraAnimation = true;
         }
         this.orchestrator.gameStateControl.currentPlayer = 1;
         this.orchestrator.currentTime = Date.now();
         this.orchestrator.gameStateControl = new MyGameStateControler(this.orchestrator);
-
-        for (let i = 0; i < this.orchestrator.gameboard.matrixBoard.length; i++) {
-            for (let j = 0; j < this.orchestrator.gameboard.matrixBoard[i].length; j++) {
-                let initialPiece = this.orchestrator.initialBoardRaw[i][j];
-                if (initialPiece > 0 && initialPiece < 4) {
-                    this.orchestrator.gameboard.matrixBoard[i][j].piece = new MyPiece(this.orchestrator, initialPiece, this.orchestrator.gameboard.matrixBoard[i][j], j, i);
-                }
-            }
-        }
-        this.orchestrator.gameboard.helperSequence();
+        let storeBoard=new MyGameBoard(this.orchestrator,this.orchestrator.gameboard.x1,this.orchestrator.gameboard.z1,this.orchestrator.gameboard.x2,this.orchestrator.gameboard.z2);
+        this.orchestrator.gameboard=storeBoard;
+        this.orchestrator.gameboard.updateMatrixOfTiles();
+        
     }
 }
