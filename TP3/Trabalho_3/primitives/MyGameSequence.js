@@ -175,5 +175,6 @@ class MyGameSequence {
                 }
             }
         }
+        this.orchestrator.gameboard.helperSequence();
     }
 }
