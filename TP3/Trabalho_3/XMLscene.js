@@ -36,6 +36,7 @@ class XMLscene extends CGFscene {
             this.gameType = null;
             this.ai1Dificulty = null;
             this.ai2Dificulty = null;
+            this.string=null;
             this.gameTypes = ['1vs1', 'Player vs AI', 'AI vs Player', 'AI vs AI'];
             this.ai1Dificulties = [0, 1, 2];
             this.ai2Dificulties = [0, 1, 2];

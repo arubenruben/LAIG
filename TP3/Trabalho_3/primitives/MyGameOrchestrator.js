@@ -42,7 +42,7 @@ class MyGameOrchestrator {
         this.prolog = new MyPrologInterface(this);
         this.handler = new handlerPrologReplys(this);
         this.imagesAssets = new MyImageStorage(this);
-
+        this.oneTime=false;
         this.currentTime = Date.now()
         this.cameraSeqId = null;
         /*
@@ -230,21 +230,29 @@ class MyGameOrchestrator {
                 }
                 break;
             case this.states.GAME_OVER:
-
-                //TODO:Disable Picking.
-                //TODO: GameoverMenu;
-                console.log('Game Over');
+                if(this.oneTime==false){
+                    this.oneTime=true;
+                    this.orchestrator.scene.string='GAME OVER';
+                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene,'string').name('');
+                    this.orchestrator.scene.gui.gui.closed=false;
+                }
                 break;
             case this.states.WIN_PLAYER1:
-                //TODO:Disable Picking.
-                //TODO: Win Menu;
-                console.log('Player 1 Won');
+                if(this.oneTime==false){
+                    this.oneTime=true;
+                    this.orchestrator.scene.string='Player 1 WON';
+                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene,'string').name('');
+                    this.orchestrator.scene.gui.gui.closed=false;
+                }
                 break;
 
             case this.states.WIN_PLAYER2:
-                //TODO:Disable Picking.
-                //TODO: Win Menu;
-                console.log('Player 2 Won');
+                if(this.oneTime==false){
+                    this.oneTime=true;
+                    this.orchestrator.scene.string='Player 2 WON';
+                    this.orchestrator.scene.interface.gui.add(this.orchestrator.scene,'string').name('');
+                    this.orchestrator.scene.gui.gui.closed=false;
+                }
                 break;
         }
     }

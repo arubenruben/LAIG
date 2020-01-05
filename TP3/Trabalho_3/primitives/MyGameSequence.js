@@ -158,9 +158,12 @@ class MyGameSequence {
         this.orchestrator.scene.gameType = null;
         this.orchestrator.scene.ai1Dificulty = null;
         this.orchestrator.scene.ai2Dificulty = null;
+        this.orchestrator.oneTime=false;
         this.orchestrator.gameStateControl.currentState = this.orchestrator.states.INITIALIZING;
         this.orchestrator.scene.interface = new MyInterface();
         this.orchestrator.scene.interface.reset(this.orchestrator.scene);
+        this.orchestrator.scene.interface.gui_add_lights(this.orchestrator.scene,this.orchestrator.scene.graph.Lights);
+        this.orchestrator.scene.interface.gui_add_camera(this.orchestrator.scene,this.orchestrator.scene.graph.Views);
         if (this.orchestrator.gameStateControl.currentPlayer == 2) {
             this.scene.cameraAnimation = true;
         }

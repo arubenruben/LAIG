@@ -29,6 +29,7 @@ class MyGameStateControler {
                     //TODO:Improve this solution
                     this.playDone = false;
                     this.stateTime = Date.now();
+                    this.orchestrator.scene.gui.gui.closed=true;
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
                     //Picking avaiable
                     this.orchestrator.scene.setPickEnabled(true);
@@ -51,6 +52,7 @@ class MyGameStateControler {
             case this.orchestrator.states.SET_THE_AI_1_DIF:
                 //THE BOT 0 JUST CAN BE TRIGGER IN THIS SITUATIONS
                 if (this.orchestrator.scene.gameType == 'AI vs Player') {
+                    this.orchestrator.scene.gui.gui.closed=true;
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
                     return;
                 }
@@ -70,8 +72,10 @@ class MyGameStateControler {
                     this.orchestrator.scene.setPickEnabled(true);
                     this.stateTime = Date.now();
                     this.currentState = this.orchestrator.states.WAIT_PLAYER_1_MOVE;
+                    this.orchestrator.scene.gui.gui.closed=true;
                 } else if (this.orchestrator.scene.gameType == 'AI vs AI') {
                     this.currentState = this.orchestrator.states.WAIT_BOT_1_MOVE;
+                    this.orchestrator.scene.gui.gui.closed=true;
                 }
                 break;
 
@@ -192,11 +196,11 @@ class MyGameStateControler {
 
                 break;
             case this.orchestrator.states.WIN_PLAYER1:
-                //TODO:MENU VITORIA
+                
                 break;
 
             case this.orchestrator.states.WIN_PLAYER2:
-                //TODO:MENU VITORIA
+                
                 break;
         }
     }
