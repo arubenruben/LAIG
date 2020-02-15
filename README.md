@@ -6,9 +6,9 @@
 >
 > **Projects developed by:** José Guerra ([LockDownPT](https://github.com/LockDownPT)), and Rúben Almeida ([arubenruben](https://github.com/arubenruben))
 >
-> **Project 1 Grade**: 19 / 20
+> **Project 1 Grade**: 19.6 / 20
 >
-> **Project 2 Grade**: 19 / 20
+> **Project 2 Grade**: 19.7 / 20
 >
 > **Project 3 Grade**: 17 / 20
 
